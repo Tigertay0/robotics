@@ -1,9 +1,69 @@
+I'll read the game table PDF and the seeding scoresheet, then build a strategy around the actual scoring rules. Let me load the Botball strategy skill first.
+
+The scoresheet gives me the full scoring model. Now let me look at the table drawings to understand the layout.
+
+The scoresheet is the whole game here (the PDF is only the table build drawings, so counts and start positions for some pieces come from the CAD views, and a few things I had to assume; list at the end). The key fact: everything you score gets multiplied by the number of zones holding exactly one small duck, from 1x to 5x. So the strategy is "place five ducks, then collect the cheapest points around that".
+
+How the scoring works
+
+| Item | Points |
+|---|---|
+| Zones with exactly one small duck | multiplier on the whole score: 2 zones = x2, 3 = x3, 4 = x4, 5 = x5 (0 or 1 zone = x1) |
+| Mystery red pom alone on the platform | 50 |
+| Each cup upright on its base (2 cups) | 20 each |
+| Cups nested | 20 |
+| Pom zone with 5 different colors, or 5 of one color | 25 |
+| Pom zone with 4 / 3 / 2 different colors | 16 / 9 / 4 |
+| Pom zone with 1 to 4 of the same color | 1 to 4 (nearly worthless) |
+| Ring on a bottle neck / ring touching a bottle | 15 / 3 |
+| Botguy on the platform | 15 |
+| Big duck at Botguy's start | 15 |
+| Pickleball under the platform (4 balls) | 7 each |
+| Small duck under the platform | 3 each (bait, see below) |
+| Any object on the board and off the black tape | 1 each |
+
+Why the ducks dominate: take a decent subtotal of 150. With 0 or 1 duck placed it stays 150. With 2 it becomes 300, 3 gives 450, 4 gives 600, 5 gives 750. From the second duck onward each duck is worth 150 points, three times the red pom, which is the most valuable single object otherwise. A team that does everything on the sheet perfectly but ignores the ducks tops out around 240 to 250. A team that places 5 ducks and only flips the cups and sweeps the poms off the tape already beats that (roughly 65 x 5 = 325).
+
+Duck rules that can wreck a run:
+1. Exactly one. Two ducks in a zone and that zone counts zero. Drop each duck in the middle of its zone, well clear of the tape (a duck touching tape is probably in no zone).
+2. One duck alone does nothing, the floor is x1. The second duck is the first one that pays, so dispensing reliability matters more than speed.
+3. The 3 points for a duck under the platform are bait. Never leave one there unless you have more than 5 and the extras have nowhere else to go.
+4. No robot should drive through a zone after its duck is placed. Route the second robot so each zone is closed once its duck is in.
+
+Recommended split: one robot does ducks only, the other does everything else.
+
 Robot 1 (ducks): collect all five in one go with a low tray or hopper, then do a single loop through the five zones and release one duck per zone with a servo gate. One loop beats five round trips on both time and reliability. Budget about 20 s to collect and 40 to 50 s for the loop, re-aligning on the tape lines or the PVC walls before each drop. With the time left, sweep the 15 cluster poms on the left half of the line off the tape (15 base points, 75 effective) into a zone that will not get the singles.
 
 Robot 2 (points), in this order:
+1. Cups: flip both upright (20 each) and nudge them off the tape (+1 each). Nesting is also 20 but needs a carry, only worth it if the rules let a nested pair count as two uprights plus nested (60).
+2. Mystery red pom alone on the platform (50). The big duck has to leave the platform first: push it off (it earns +1 on the floor; carry it to Botguy's start later for 15 if time remains).
+3. The five single poms on the right half of the line are already one of each color. Sweep them into a pile and push the pile into one zone: 25 plus 5 base. Keep them away from the cluster poms, one duplicate color drops the zone from 25 to about 3.
+4. The pickleball on the bottom border at the center line is right next to the platform: knock it off the post and push it under (7). The other three balls are far away and roll unpredictably, chase them only with spare seconds.
+5. Big duck to Botguy's start, Botguy onto the platform, rings on bottle necks: 15 each, all slow or needing a lift. Rings are the hardest (lift over an 8 inch post, then drop over a neck). Fallback: drop a ring touching a bottle for 3.
 
-Cups: flip both upright (20 each) and nudge them off the tape (+1 each). Nesting is also 20 but needs a carry, only worth it if the rules let a nested pair count as two uprights plus nested (60).
-Mystery red pom alone on the platform (50). The big duck has to leave the platform first: push it off (it earns +1 on the floor; carry it to Botguy’s start later for 15 if time remains).
-The five single poms on the right half of the line are already one of each color. Sweep them into a pile and push the pile into one zone: 25 plus 5 base. Keep them away from the cluster poms, one duplicate color drops the zone from 25 to about 3.
-The pickleball on the bottom border at the center line is right next to the platform: knock it off the post and push it under (7). The other three balls are far away and roll unpredictably, chase them only with spare seconds.
-Big duck to Botguy’s start, Botguy onto the platform, rings on bottle necks: 15 each, all slow or needing a lift. Rings are the hardest (lift over an 8 inch post, then drop over a neck). Fallback: drop a ring touching a bottle for 3.
+Expected results at x5:
+- Core plan (ducks, cups, red pom, poms off tape, singles zone, one ball): subtotal about 150, score about 750.
+- Same plan with only 3 ducks landing: about 450, still above a perfect no-duck run.
+- Everything on the sheet: subtotal about 240, score about 1,200. Splitting the cluster poms into one-of-each-color zones would add up to 75 more subtotal, but that is a sorting task; treat it as a stretch goal.
+
+Timeline (120 s, two robots, assuming the small box between the center line and the platform is the start box):
+
+| Time | Robot 1 (ducks) | Robot 2 (points) |
+|---|---|---|
+| 0-20 s | collect 5 ducks | flip lower cup, nudge off tape |
+| 20-40 s | drop in middle-right, then top-right | flip upper cup, nudge off tape |
+| 40-70 s | top-left, middle-left, bottom-left | bottom pickleball under platform; big duck off platform; red pom onto platform |
+| 70-90 s | sweep left clusters off the tape into top-left | sweep singles right, push pile into middle-right, on the opposite side from that zone's duck |
+| 90-120 s | park, stop | optional: big duck to Botguy's start, then park |
+
+The robots are never on the same side at the same time and nothing re-enters a zone after its duck is down. If the tournament counts your best seeding run, run the core plan first and only add optional tasks in later runs once the core has scored.
+
+What I assumed, and what I need from the actual rules document to tighten this:
+1. Where the 5 small ducks start and how many there are. They don't appear in the drawings; my guess is under the platform, which would make the 3-point line the "do nothing" option.
+2. What the five zones are. My reading: the five tape rectangles (top-left, top-right, middle-left, middle-right, bottom-left), with the small box next to the platform as the start box.
+3. How the mystery red pom is placed (hidden under a cup, random spot, etc.).
+4. Whether Botguy on the platform breaks "isolated alone" for the pom. If it does, the pom wins (50 vs 15).
+5. Number of rings, and how a mixed-color pom zone is scored.
+6. Match length (I assumed 120 s) and number of robots (I assumed 2).
+
+Send me the rules or game review PDF plus a note on what your robots can do (claw, lift, plow), and I'll lock the numbers, then write the final plan with a timeline and pseudocode into your robotics project.
