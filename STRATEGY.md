@@ -126,10 +126,18 @@ Servos used: A 2 + B 2 = 4 of 5; micro servos A 1 + B 1 = 2 of 2; motors 4 + 2 =
 7. The old "53 pts/s" and "singles pom zone" ideas are gone (they were based on misread
    drawings).
 
-## 8. Open items
+## 8. Code
+
+`code/robot_a/main.c` and `code/robot_b/main.c` are first versions of both Wombat programs following
+this timeline, with the calibration numbers from last season. See `code/README.md`.
+
+## 9. Open items
 
 - Rules v1.0 says 2 + 3 hidden poms; the GLB shows 4 under the upper cup and 1 under the lower.
   Ask on the Discord FAQ which is right (it only changes how many loose poms B leaves behind).
-- Exact mecanum wheel diameter and motor speed: measure, then update `WHEEL_D`/speeds in the
-  scripts and the per-segment times above.
+- Last season's notes (`Botball robotics 2025_26 .pdf`) give the encoder constant (1870 ticks per
+  wheel turn), 3" wheels on last year's robot, the servo positions of the arm and claw, the
+  starting-light threshold (analog < 770) and the camera's red channel. They are used in `code/`.
+  Still to measure: the mecanum and Solarbotics wheel diameters and the actual speed at 80% power,
+  then update the per-segment times above.
 - Submit the STL of any 3D-printed part before the tournament (none used so far).
