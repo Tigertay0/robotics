@@ -250,6 +250,66 @@ for f in range(0, END * FPS + 1):
     set_world(RED_POM, red_pom(t)); key(O[RED_POM], f)
     set_world(BALL1, ball1(t)); key(O[BALL1], f)
 
+
+# ---------------------------------------------------------------- mechanisms on the robots
+def child(root, prefix):
+    return next(o for o in root.children if o.name.startswith(prefix))
+def flap_state(o, f, open_):
+    """1x5 horn flap pivoting at its top end: closed hangs down, open swings forward/up"""
+    x0, y0 = o["rest_x"], o["rest_y"]
+    o.rotation_euler = (0, 0.0 if open_ else math.pi / 2, math.pi / 2)
+    o.location = (x0 + (1.5 if open_ else 0.0), y0, 2.8 if open_ else 1.3)
+    key(o, f)
+FLAPS = {n: child(A_ROOT, f"Flap horn {n}") for n in ("intake C", "pin B", "exit A")}
+for o in FLAPS.values():
+    o["rest_x"], o["rest_y"] = o.location.x, o.location.y
+def gate_open(name, t):
+    if name == "intake C":
+        return t < 41.5
+    if name == "exit A":
+        return any(td - 0.5 <= t < td + 1.5 for td in DROPS)
+    if name == "pin B":
+        return not any(td - 1.0 <= t < td + 2.0 for td in DROPS)
+HOOK = [child(B_ROOT, "Hook strap"), child(B_ROOT, "Hook tip")]
+for o in HOOK:
+    o["rest"] = tuple(o.location)
+def hook_down(t):
+    return 50 <= t < 58.5 or 95.5 <= t < 98
+CLAWS = [child(B_ROOT, "Claw finger L"), child(B_ROOT, "Claw finger R")]
+def claw_closed(t):
+    return 61.5 <= t < 111.0
+# arm: parent the arm parts to a pivot at the shoulder so the whole thing lifts for the platform
+ARM = bpy.data.objects.new("ARM_pivot", None)
+scene.collection.objects.link(ARM)
+ARM.parent = B_ROOT
+ARM.location = (3.2, 1.6, 1.0 + 2.0)
+bpy.context.view_layer.update()
+for o in list(B_ROOT.children):
+    if o.name.startswith(("Paralleling arm", "Servo horn shoulder", "Servo bracket claw", "Servo claw", "Claw finger")):
+        mw = o.matrix_world.copy()
+        o.parent = ARM
+        o.matrix_parent_inverse = ARM.matrix_world.inverted()
+        o.matrix_world = mw
+def arm_angle(t):
+    if t < 105.5: return 0.0
+    if t < 109.5: return -math.radians(50) * (t - 105.5) / 4.0
+    if t < 112.5: return -math.radians(50)
+    return -math.radians(50) * max(0.0, 1 - (t - 112.5) / 2.0)
+for f in range(0, END * FPS + 1):
+    t = f / FPS
+    for n, o in FLAPS.items():
+        flap_state(o, f, gate_open(n, t))
+    for o in HOOK:
+        rx, ry, rz = o["rest"]
+        o.rotation_euler = (0, math.radians(55) if hook_down(t) else 0.0, 0)
+        o.location = (rx, ry, rz - (0.9 if hook_down(t) else 0.0))
+        key(o, f)
+    for o, sgn in zip(CLAWS, (1, -1)):
+        o.rotation_euler = (0, 0, sgn * math.radians(6 if claw_closed(t) else 25))
+        key(o, f)
+    ARM.rotation_euler = (0, arm_angle(t), 0)
+    key(ARM, f)
+
 # ---------------------------------------------------------------- collision check (2D footprints from the built envelopes)
 def rect(cx, cy, h, xmin, xmax, ymin, ymax):
     c, s = math.cos(h), math.sin(h)
@@ -293,7 +353,7 @@ if os.environ.get("NO_RENDER"):
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "fall_game_2026_animated.blend")); print("DONE (no render)"); sys.exit(0)
 HUD = bpy.data.collections.new("HUD"); scene.collection.children.link(HUD)
 hud_mat = bpy.data.materials.new("HUD text"); hud_mat.diffuse_color = (0.02, 0.02, 0.02, 1)
-cam = O["Cam top"]; cam.data.ortho_scale = 112; cam.location = (46.5, 14.0, 150); scene.camera = cam
+cam = O["Cam top"]; cam.data.ortho_scale = 112; cam.location = (46.5, 14.0, 150); scene.camera = cam; cam_top_saved = cam
 def hud_text(body, loc, size, name):
     bpy.ops.object.text_add(location=loc)
     o = bpy.context.object; o.name = name
@@ -322,9 +382,34 @@ scene.render.image_settings.file_format = 'FFMPEG'
 scene.render.ffmpeg.format = 'MPEG4'; scene.render.ffmpeg.codec = 'H264'; scene.render.ffmpeg.constant_rate_factor = 'MEDIUM'
 scene.render.filepath = os.path.join(OUT, "strategy_animation.mp4")
 bpy.ops.render.render(animation=True)
+
+# ---------------------------------------------------------------- close-up videos following each robot
+def follow_cam(name, root, offset, target):
+    cam = bpy.data.objects.new(name, bpy.data.cameras.new(name)); scene.collection.objects.link(cam)
+    cam.parent = root
+    cam.location = offset
+    cam.rotation_euler = (Vector(target) - Vector(offset)).to_track_quat('-Z', 'Y').to_euler()
+    cam.data.lens = 32; cam.data.clip_end = 2000
+    return cam
+camA = follow_cam("Cam follow A", A_ROOT, (-13, -17, 10), (0, 0, 1.0))
+camB = follow_cam("Cam follow B", B_ROOT, (-9, -15, 9), (3, 0, 2.0))
+scene.render.image_settings.media_type = 'VIDEO'; scene.render.image_settings.file_format = 'FFMPEG'
+for cam, t0, t1, fname in ((camA, 20, 60, "closeup_robot_A_ducks.mp4"), (camB, 48, 66, "closeup_robot_B_cup_and_red_pom.mp4"), (camB, 94, 114, "closeup_robot_B_ball_and_platform.mp4")):
+    scene.camera = cam
+    scene.frame_start, scene.frame_end = t0 * FPS, t1 * FPS
+    scene.render.filepath = os.path.join(OUT, fname)
+    bpy.ops.render.render(animation=True)
+scene.frame_start, scene.frame_end = 0, END * FPS
+scene.camera = cam_top_saved
 scene.render.image_settings.media_type = 'IMAGE'; scene.render.image_settings.file_format = 'PNG'
 for f, name in ((30 * FPS, "anim_30s"), (57 * FPS, "anim_57s"), (76 * FPS, "anim_76s"), (110 * FPS, "anim_110s")):
     scene.frame_set(f); scene.render.filepath = os.path.join(OUT, f"{name}.png"); bpy.ops.render.render(write_still=True)
-scene.frame_set(0)
+scene.frame_set(0); scene.camera = cam_top_saved
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type == 'VIEW_3D':
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    space.region_3d.view_perspective = 'CAMERA'
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "fall_game_2026_animated.blend"))
 print("DONE")
