@@ -1,0 +1,30 @@
+{
+ "lane_front": {
+  "mm": [
+   201.8,
+   121.1,
+   71.2
+  ],
+  "whole_in": [
+   8,
+   5,
+   3
+  ],
+  "volume_cm3": 119.0,
+  "fits_mid_size_220x220x80": true
+ },
+ "lane_rear": {
+  "mm": [
+   180.0,
+   119.7,
+   71.2
+  ],
+  "whole_in": [
+   8,
+   5,
+   3
+  ],
+  "volume_cm3": 108.1,
+  "fits_mid_size_220x220x80": true
+ }
+}

@@ -30,6 +30,13 @@ Total if all printed: 6 small (2 claw pads, 1 hook, 2 end caps, 1 flap pad), 2 m
    Design the lift first (a second servo on the paralleling arm, or a rack from the LEGO gear rack
    parts); the fork is the easy part.
 
+## The lane, designed
+
+`prints/build_lane.py` generates the two halves as STLs (`prints/out/lane_front.stl`,
+`prints/out/lane_rear.stl`) with the funnel, the three servo pockets, the flap slots, the
+touch-switch window, the bolt slots to the chassis and the joint tabs. See `prints/README.md`
+for sizes, mounting and print settings.
+
 ## Submission
 
 Every STL must be submitted before the tournament, on the schedule posted on the Team Home Base.
