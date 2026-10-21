@@ -1,0 +1,678 @@
+{
+ "SHOWCASE_A": [
+  {
+   "name": "Angle bracket lane L.001",
+   "source": "kit-stl",
+   "kit": "Metal: Angle Bracket (2)",
+   "note": ""
+  },
+  {
+   "name": "Angle bracket lane R.001",
+   "source": "kit-stl",
+   "kit": "Metal: Angle Bracket (2)",
+   "note": ""
+  },
+  {
+   "name": "Battery.002",
+   "source": "estimate",
+   "kit": "Electronics: Wombat Battery (2)",
+   "note": ""
+  },
+  {
+   "name": "Chassis.002",
+   "source": "kit-stl",
+   "kit": "Metal: Chassis (2)",
+   "note": "raised on standoffs"
+  },
+  {
+   "name": "ET rangefinder (wall).001",
+   "source": "estimate",
+   "kit": "Electronics: ET rangefinder (2)",
+   "note": ""
+  },
+  {
+   "name": "Flap horn exit A.001",
+   "source": "kit-stl",
+   "kit": "Metal: 1 x 5 Servo Horn (4)",
+   "note": "flap: horn rotates 90deg to open"
+  },
+  {
+   "name": "Flap horn intake C.001",
+   "source": "kit-stl",
+   "kit": "Metal: 1 x 5 Servo Horn (4)",
+   "note": "flap: horn rotates 90deg to open"
+  },
+  {
+   "name": "Flap horn pin B.001",
+   "source": "kit-stl",
+   "kit": "Metal: 1 x 5 Servo Horn (4)",
+   "note": "flap: horn rotates 90deg to open"
+  },
+  {
+   "name": "Funnel strap 1x10 L.001",
+   "source": "kit-stl",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": "bolted to the wall end, flared 35deg"
+  },
+  {
+   "name": "Funnel strap 1x10 R.001",
+   "source": "kit-stl",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": "bolted to the wall end, flared 35deg"
+  },
+  {
+   "name": "Gear motor -1-1.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Gear motor -11.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Gear motor 1-1.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Gear motor 11.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Lane wall plate L1.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "on edge; overlap 2.5in, bolted together"
+  },
+  {
+   "name": "Lane wall plate L2.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "on edge; overlap 2.5in, bolted together"
+  },
+  {
+   "name": "Lane wall plate R1.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "on edge; overlap 2.5in, bolted together"
+  },
+  {
+   "name": "Lane wall plate R2.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "on edge; overlap 2.5in, bolted together"
+  },
+  {
+   "name": "Light sensor (start).002",
+   "source": "estimate",
+   "kit": "Electronics: Light (3)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.009",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.010",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.011",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.012",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.013",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.014",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.015",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.016",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL roller.017",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FL.001",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.009",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.010",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.011",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.012",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.013",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.014",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.015",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.016",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR roller.017",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum FR.001",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.009",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.010",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.011",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.012",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.013",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.014",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.015",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.016",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL roller.017",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RL.001",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.009",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.010",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.011",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.012",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.013",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.014",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.015",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.016",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR roller.017",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Mecanum RR.001",
+   "source": "estimate",
+   "kit": "Electronics: Mecanum Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Micro servo mount pin B.001",
+   "source": "kit-stl",
+   "kit": "Metal: Micro Servo Mount (2)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket motor -1-1.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket motor -11.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket motor 1-1.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket motor 11.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo gate exit A.001",
+   "source": "estimate",
+   "kit": "Electronics: Servo (5)",
+   "note": ""
+  },
+  {
+   "name": "Servo gate intake C.001",
+   "source": "estimate",
+   "kit": "Electronics: Servo (5)",
+   "note": ""
+  },
+  {
+   "name": "Servo gate pin B.001",
+   "source": "estimate",
+   "kit": "Electronics: Micro Servo (2)",
+   "note": ""
+  },
+  {
+   "name": "Standoff 1in -1-1.001",
+   "source": "estimate",
+   "kit": "Metal: Standoff 8-32 x 1\" (7)",
+   "note": ""
+  },
+  {
+   "name": "Standoff 1in -11.001",
+   "source": "estimate",
+   "kit": "Metal: Standoff 8-32 x 1\" (7)",
+   "note": ""
+  },
+  {
+   "name": "Standoff 1in 1-1.001",
+   "source": "estimate",
+   "kit": "Metal: Standoff 8-32 x 1\" (7)",
+   "note": ""
+  },
+  {
+   "name": "Standoff 1in 11.001",
+   "source": "estimate",
+   "kit": "Metal: Standoff 8-32 x 1\" (7)",
+   "note": ""
+  },
+  {
+   "name": "Strap 1x10 splice L.001",
+   "source": "kit-stl",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": ""
+  },
+  {
+   "name": "Strap 1x10 splice R.001",
+   "source": "kit-stl",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": ""
+  },
+  {
+   "name": "Tophat (tape edge) 2.001",
+   "source": "estimate",
+   "kit": "Electronics: Tophat (4)",
+   "note": ""
+  },
+  {
+   "name": "Tophat (tape edge).001",
+   "source": "estimate",
+   "kit": "Electronics: Tophat (4)",
+   "note": ""
+  },
+  {
+   "name": "Touch (lane full).001",
+   "source": "estimate",
+   "kit": "Electronics: Small Touch (4)",
+   "note": ""
+  },
+  {
+   "name": "Wombat controller.002",
+   "source": "estimate",
+   "kit": "Electronics: Wombat (2)",
+   "note": ""
+  },
+  {
+   "name": "Wombat screen.002",
+   "source": "estimate",
+   "kit": "Electronics: Wombat (2)",
+   "note": ""
+  }
+ ],
+ "SHOWCASE_B": [
+  {
+   "name": "Battery.003",
+   "source": "estimate",
+   "kit": "Electronics: Wombat Battery (2)",
+   "note": ""
+  },
+  {
+   "name": "Camera mast channel 3x8.001",
+   "source": "kit-stl",
+   "kit": "Metal: Channel 3 x 8 (3)",
+   "note": ""
+  },
+  {
+   "name": "Camera.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Camera (1)",
+   "note": ""
+  },
+  {
+   "name": "Caster ball.001",
+   "source": "estimate",
+   "kit": "Metal: Caster (2)",
+   "note": ""
+  },
+  {
+   "name": "Caster housing.001",
+   "source": "estimate",
+   "kit": "Metal: Caster (2)",
+   "note": ""
+  },
+  {
+   "name": "Chassis.003",
+   "source": "kit-stl",
+   "kit": "Metal: Chassis (2)",
+   "note": ""
+  },
+  {
+   "name": "Claw finger L.001",
+   "source": "kit-stl",
+   "kit": "Lego: liftarms",
+   "note": ""
+  },
+  {
+   "name": "Claw finger R.001",
+   "source": "kit-stl",
+   "kit": "Lego: liftarms",
+   "note": ""
+  },
+  {
+   "name": "ET rangefinder.001",
+   "source": "estimate",
+   "kit": "Electronics: ET rangefinder (2)",
+   "note": ""
+  },
+  {
+   "name": "Gear motor L.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Gear motor R.001",
+   "source": "estimate",
+   "kit": "Electronics: Black Gear Motor (8)",
+   "note": ""
+  },
+  {
+   "name": "Hook strap 1x10.001",
+   "source": "kit-stl",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": "bent 90deg 1.5in from the end: tip points down under the cup rim"
+  },
+  {
+   "name": "Hook tip (same strap, bent).001",
+   "source": "estimate",
+   "kit": "Metal: Strap 1 x 10 (6, bendable)",
+   "note": ""
+  },
+  {
+   "name": "Lever switch (plow).001",
+   "source": "estimate",
+   "kit": "Electronics: Lever (2)",
+   "note": ""
+  },
+  {
+   "name": "Light sensor (start).003",
+   "source": "estimate",
+   "kit": "Electronics: Light (3)",
+   "note": ""
+  },
+  {
+   "name": "Paralleling arm liftarm 1x11 1.001",
+   "source": "kit-stl",
+   "kit": "Lego: liftarms",
+   "note": ""
+  },
+  {
+   "name": "Paralleling arm liftarm 1x11 2.001",
+   "source": "kit-stl",
+   "kit": "Lego: liftarms",
+   "note": ""
+  },
+  {
+   "name": "Plow wing L.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "bent 90deg 2.5in from one end; short leg bolted to the chassis flange"
+  },
+  {
+   "name": "Plow wing R.001",
+   "source": "kit-stl",
+   "kit": "Metal: Plate 4 x 12 (4, bendable)",
+   "note": "bent 90deg 2.5in from one end; short leg bolted to the chassis flange"
+  },
+  {
+   "name": "Servo bracket claw.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket hook.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo bracket shoulder.001",
+   "source": "kit-stl",
+   "kit": "Metal: Servo Bracket (8)",
+   "note": ""
+  },
+  {
+   "name": "Servo claw (micro).001",
+   "source": "estimate",
+   "kit": "Electronics: Micro Servo (2)",
+   "note": ""
+  },
+  {
+   "name": "Servo cup hook.001",
+   "source": "estimate",
+   "kit": "Electronics: Servo (5)",
+   "note": ""
+  },
+  {
+   "name": "Servo horn shoulder.001",
+   "source": "kit-stl",
+   "kit": "Metal: 1 x 5 Servo Horn (4)",
+   "note": ""
+  },
+  {
+   "name": "Servo shoulder.001",
+   "source": "estimate",
+   "kit": "Electronics: Servo (5)",
+   "note": ""
+  },
+  {
+   "name": "Solarbotics wheel L.001",
+   "source": "estimate",
+   "kit": "Electronics: Solarbotics Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Solarbotics wheel R.001",
+   "source": "estimate",
+   "kit": "Electronics: Solarbotics Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Tophat L.001",
+   "source": "estimate",
+   "kit": "Electronics: Tophat (4)",
+   "note": ""
+  },
+  {
+   "name": "Tophat R.001",
+   "source": "estimate",
+   "kit": "Electronics: Tophat (4)",
+   "note": ""
+  },
+  {
+   "name": "Wheel hub L.001",
+   "source": "estimate",
+   "kit": "Electronics: Solarbotics Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Wheel hub R.001",
+   "source": "estimate",
+   "kit": "Electronics: Solarbotics Wheel (4)",
+   "note": ""
+  },
+  {
+   "name": "Wombat controller.003",
+   "source": "estimate",
+   "kit": "Electronics: Wombat (2)",
+   "note": ""
+  },
+  {
+   "name": "Wombat screen.003",
+   "source": "estimate",
+   "kit": "Electronics: Wombat (2)",
+   "note": ""
+  }
+ ]
+}

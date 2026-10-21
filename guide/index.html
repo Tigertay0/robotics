@@ -1,0 +1,304 @@
+<meta charset="utf-8">
+<title>Rochambotics Build Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* layout: a sticky 3D viewer on the left, the step list on the right; stacks on phones */
+:root {
+  --bg: #f3f2ee; --surface: #ffffff; --fg: #1b1d22; --muted: #5d6270; --line: #d8d6cf;
+  --accent: #c8431f; --accent-ink: #ffffff; --soft: #fbe9e2; --ok: #2d7a4f;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171b; --surface: #1f2228; --fg: #ebe9e3; --muted: #a4a8b3; --line: #343842;
+  --accent: #ff7a4d; --accent-ink: #1b1d22; --soft: #3a2a22; --ok: #5fc08a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171b; --surface: #1f2228; --fg: #ebe9e3; --muted: #a4a8b3; --line: #343842;
+  --accent: #ff7a4d; --accent-ink: #1b1d22; --soft: #3a2a22; --ok: #5fc08a; color-scheme: dark }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; padding-inline: 16px; padding-block: 0 48px }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0 }
+header { max-width: 1240px; margin: 0 auto; padding-block: 20px 12px; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; border-bottom: 1px solid var(--line) }
+header h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.01em }
+header p { margin: 4px 0 0; color: var(--muted); max-width: 60ch }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap }
+.tab { font-family: var(--display); font-weight: 700; font-size: 15px; padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; cursor: pointer }
+.tab[aria-selected="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.tab:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+main { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 24px; padding-top: 20px }
+@media (max-width: 860px) { main { grid-template-columns: 1fr } }
+.viewer { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); align-self: start; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 0 }
+@media (max-width: 860px) { .viewer { position: static } }
+.viewer canvas { display: block; width: 100%; height: auto }
+.stage { width: 100%; aspect-ratio: 4 / 3; max-width: 100%; position: relative; background: linear-gradient(180deg, var(--surface), var(--bg)) }
+.stage .hint { position: absolute; left: 12px; bottom: 10px; font-size: 12px; color: var(--muted); font-family: var(--mono) }
+.stage .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-family: var(--mono); font-size: 13px }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line) }
+.controls .step-now { font-family: var(--display); font-weight: 700; font-size: 15px; margin-right: auto }
+.btn { font-family: var(--display); font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.btn:disabled { opacity: 0.45; cursor: default }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 0 12px 10px; font-size: 13px; color: var(--muted) }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; background: var(--line) }
+.legend .new::before { background: var(--accent) }
+.steps { min-width: 0 }
+.specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px }
+.spec { border-top: 2px solid var(--line); padding-top: 6px }
+.spec b { display: block; font-family: var(--mono); font-size: 18px; font-weight: 600 }
+.spec span { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em }
+ol.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px }
+.step { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 12px 14px; cursor: pointer; min-width: 0 }
+.step[aria-current="step"] { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent) }
+.step .head { display: flex; gap: 10px; align-items: baseline }
+.step .num { font-family: var(--mono); font-size: 13px; color: var(--muted); min-width: 2.2em }
+.step h3 { font-size: 17px; font-weight: 700 }
+.step .body { display: none; margin-top: 8px }
+.step[aria-current="step"] .body { display: block }
+.step p { margin: 0 0 8px }
+.step ul { margin: 0 0 8px; padding-left: 20px }
+.parts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px }
+.parts code { font-family: var(--mono); font-size: 12px; padding: 2px 7px; border-radius: 4px; background: var(--soft); color: var(--fg) }
+.hw { font-size: 14px; color: var(--muted) }
+.hw b { color: var(--fg); font-weight: 600 }
+.ref { font-size: 13px; color: var(--muted) }
+.check { color: var(--ok); font-weight: 600 }
+section.prints { max-width: 1240px; margin: 36px auto 0; border-top: 1px solid var(--line); padding-top: 20px }
+section.prints h2 { font-size: 24px; margin-bottom: 6px }
+section.prints p { max-width: 70ch; margin: 0 0 12px }
+.table-wrap { overflow-x: auto }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 640px }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font-family: var(--display); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted) }
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<header>
+  <div>
+    <h1>Rochambotics Build Guide</h1>
+    <p>Both robots for the 2026 Fall Game, built only from the 2026 kit. Click a step to see those parts appear on the model; drag to orbit, scroll to zoom.</p>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-a" aria-selected="true" data-robot="a">Robot A · Duck Runner</button>
+    <button class="tab" role="tab" id="tab-b" aria-selected="false" data-robot="b">Robot B · Point Scorer</button>
+  </div>
+</header>
+
+<main>
+  <div class="viewer">
+    <div class="stage" id="stage"><div class="loading" id="loading">loading model…</div><div class="hint">drag · scroll · right-drag to pan</div></div>
+    <div class="legend"><span class="new">added in this step</span><span>already built</span></div>
+    <div class="controls">
+      <div class="step-now" id="stepNow">Step 1</div>
+      <button class="btn" id="prev">Previous</button>
+      <button class="btn primary" id="next">Next step</button>
+      <button class="btn" id="all">Show finished robot</button>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="specs" id="specs"></div>
+    <ol class="list" id="list"></ol>
+  </div>
+</main>
+
+<section class="prints">
+  <h2>Do 3D-printed parts help?</h2>
+  <p>The rules allow PLA or PETG prints in grey only: 6 small parts (60 × 60 × 20 mm), 2 mid-size (220 × 220 × 80 mm) and 1 large (220 × 220 × 250 mm), with every STL submitted before the tournament. Prints don't score by themselves. They matter where a part's shape decides whether a high-value item works. Ranked by the points they protect:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Print</th><th>Size class</th><th>Replaces</th><th>Why</th><th>Points at stake (×5)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Duck lane</b>, two 160 mm halves</td><td class="n">2 mid-size</td><td>4 plates, 2 straps, 2 angle brackets, funnel straps</td><td>Exact 1.8" channel, no bolt heads inside, funnel and flap mounts built in. Every jam or double drop costs a multiplier step.</td><td class="n">the ×5 itself</td></tr>
+      <tr><td><b>Claw pads</b> shaped for a 1.6" pom</td><td class="n">2 small</td><td>bare liftarm fingers</td><td>A pom slips out of flat fingers; the red pom is grabbed once and is worth 250.</td><td class="n">255</td></tr>
+      <tr><td><b>Cup hook</b> with a lip for the 5.1" rim</td><td class="n">1 small</td><td>bent 1×10 strap</td><td>Catches the rim at any approach angle.</td><td class="n">210</td></tr>
+      <tr><td><b>Plow end caps</b></td><td class="n">2 small</td><td>bare plate edges</td><td>Keeps a pushed pom stack together as one group (8 pts) instead of splitting it.</td><td class="n">200</td></tr>
+      <tr><td><b>Flap pad</b> for the intake gate</td><td class="n">1 small</td><td>bare servo horn</td><td>Wider flap face so no duck squeezes past.</td><td class="n">part of the lane</td></tr>
+      <tr><td><b>Ring fork</b>, 200 mm</td><td class="n">1 large</td><td>nothing exists yet</td><td>Lifts a stack of 3 rings off a post to drop over a bottle neck (15 each, tiebreaker #1). Needs a ~9" lift the servo arm can't give: a new mechanism, not just a print.</td><td class="n">up to 480</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Order:</b> print the lane first (it is the only print that touches the multiplier), then the claw pads and the cup hook. Leave the ring fork until the core plan scores 500+ three times in a row. Full write-up in <code>3D_PRINTS.md</code>.</p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const ROBOTS = {
+  a: {
+    file: "robot_a.json",
+    specs: [["17.9 × 9.1 × 6.5 in", "size (limit 21.1 × 11.25 × 12)"], ["4 motors · 2 servos · 1 micro", "motion"], ["≈ 3.0 lb", "est. weight"], ["12.5 in", "duck lane"]],
+    steps: [
+      { t: "Chassis", add: ["Chassis"], hw: "none yet",
+        txt: "Take one KIPR chassis (the 9.2 × 5 in tray with the two tall flanges). The long flanges face up. Mark the front: the end where the lane mouth and funnel will be. Everything on this robot hangs below the floor, so the tray stays empty until step 9.",
+        ref: "KIPR Base Mecanum Demobot Build, slide 2" },
+      { t: "Four servo brackets on 1 in standoffs", add: ["Servo bracket motor", "Standoff 1in"], hw: "4 × standoff 8-32 × 1 in, 8 × screw 8-32 × 1/2 in, 8 × keps nut",
+        txt: "The demobot bolts its motor brackets flat on the flanges; this robot needs the floor 2.9 in off the ground so ducks (1.6 in tall) pass underneath. Screw a 1 in standoff into the flange holes 3 in ahead of and behind the chassis centre on both sides, then hang a servo bracket from each standoff with its open side outward.",
+        ref: "KIPR Base Mecanum Demobot Build, slides 2–3 (bracket placement), standoffs from the metal parts list" },
+      { t: "Gear motors into the brackets", add: ["Gear motor"], hw: "8 × screw 8-32 × 1/2 in, 8 × keps nut",
+        txt: "Slide a black gear motor into each bracket, wire end first, spline pointing away from the chassis centre. Pull the wire up through the gap between bracket and flange. Fix with two medium (1/2 in) bolts each. Front-right is motor port 0, front-left 1, rear-right 2, rear-left 3, matching the code.",
+        ref: "KIPR Base Mecanum Demobot Build, slides 4–5" },
+      { t: "Mecanum wheels", add: ["Mecanum"], hw: "4 × M3 mecanum wheel screws (silver, in the wheel bag)",
+        txt: "There are two mirror-image wheel types. Mount them so the rollers' diagonals point toward the centre of the robot when seen from above (an X pattern). Secure each with the small silver M3 screw into the motor spline. Spin each wheel by hand: nothing should rub the bracket.",
+        ref: "KIPR Base Mecanum Demobot Build, slides 6–7" },
+      { t: "Lane walls from four 4×12 plates", add: ["Lane wall plate", "Strap 1x10 splice"], hw: "8 × screw 8-32 × 1/4 in, 8 × keps nut",
+        txt: "Each wall is two 4 × 12 plates stood on their long edge, overlapping 2.5 in in the middle and bolted together through the overlapping holes with a 1 × 10 strap as a splice. Finished wall: 12.5 in long, 2.5 in tall. The inside faces must be smooth: bolt heads go on the outside, nuts outside too, so put the screws through from the inside. Keep the two walls exactly 1.8 in apart inside; a duck is 1.2 in wide.",
+        ref: "Plates may be bent, not cut (Construction Rules)" },
+      { t: "Hang the lane under the floor", add: ["Angle bracket lane"], hw: "2 × angle bracket, 4 × screw 8-32 × 1/2 in, 4 × keps nut",
+        txt: "Centre the two walls under the chassis, parallel to the long axis, 1.75 in overhanging at the front and the rear. Bolt an angle bracket between the top edge of each wall and the chassis floor at the middle hole row. The walls' bottom edge sits 0.15 in above the table: ducks slide on the table, not on the robot.",
+        ref: "" },
+      { t: "Intake funnel", add: ["Funnel strap"], hw: "2 × strap 1 × 10, 4 × screw 8-32 × 1/4 in, 4 × keps nut",
+        txt: "Bolt a 1 × 10 strap to the front end of each wall through two holes, then bend the free part outward by 35°. The funnel mouth ends up 5.5 in wide, so a duck up to 2 in off the tape line still gets guided in. Check the robot is still under 21.1 in long (17.9 in with the funnel).",
+        ref: "Straps may be bent (Construction Rules)" },
+      { t: "Three gate flaps", add: ["Servo gate", "Micro servo mount", "Flap horn"], hw: "2 × servo, 1 × micro servo in its micro servo mount, 3 × 1×5 servo horn with their M3 horn screws, 6 × screw 8-32 × 1/2 in, 6 × keps nut",
+        txt: "Gate C (intake) is a regular servo on the left wall top, 0.4 in behind the funnel; gate A (exit) is a regular servo at the rear end of the same wall; gate B (the pin) is the micro servo in its mount on the right wall, 2.6 in from the rear. Each servo carries a 1 × 5 servo horn pointing straight down across the lane; a 90° turn swings it up out of the way. Set the horns at the CLOSED position before tightening: A closed, C open, B open is the starting state in the code.",
+        ref: "KIPR Servo Demobot Build, slides 3–4 (servo in bracket, horn alignment)" },
+      { t: "Wombat and battery", add: ["Wombat", "Battery"], hw: "2 × screw 8-32 × 1/4 in, 2 × keps nut",
+        txt: "Line up the holes on the back of the Wombat with the rear flange holes and fix with two small (1/4 in) bolts. The battery sits behind it in the Wombat's back slot. Route the four motor wires to ports 0–3 and the three servo wires to servo ports 0 (gate C), 1 (gate B), 2 (gate A).",
+        ref: "KIPR Base Demobot Build, slides 11–13" },
+      { t: "Sensors", add: ["Tophat", "ET rangefinder", "Touch", "Light sensor"], hw: "sensor extension cables as needed, mounting dots or 1/4 in screws",
+        txt: "Two tophats at the lane mouth, one each side, 0.3 in above the table, looking down: they keep the mouth on the centre tape (analog 0 and 1). The ET rangefinder on the front flange looks forward (analog 2) to stop short of the east wall. A small touch switch at the rear end of the right wall is pressed by the fifth duck (digital 0). The light sensor on top of the Wombat starts the run (analog 3); shield it from room lights with a bit of black tape.",
+        ref: "Sensor ports match code/robot_a/main.c" },
+      { t: "Check and calibrate", add: [], hw: "",
+        txt: "Measure: length ≤ 21.1 in, width ≤ 11.25 in, height ≤ 12 in. Push five ducks through the lane by hand with the gates open: they must slide without catching. Then run drop_one_duck() fifty times on the bench; exactly one duck must come out every time. Only then calibrate TICKS_PER_INCH, STRAFE_FACTOR and the tape threshold.",
+        ref: "code/README.md" }
+    ]
+  },
+  b: {
+    file: "robot_b.json",
+    specs: [["14.4 × 9.2 × 8.7 in", "size (limit 21.1 × 11.25 × 12)"], ["2 motors · 2 servos · 1 micro", "motion"], ["≈ 2.6 lb", "est. weight"], ["8.4 in", "claw reach"]],
+    steps: [
+      { t: "Chassis and drive motors", add: ["Chassis", "Gear motor"], hw: "4 × screw 8-32 × 1/2 in, 4 × keps nut",
+        txt: "This is the KIPR base demobot. Lay the second chassis flanges-up. Put a gear motor inside the tray at each rear corner, wire end first, with the spline pointing out through the flange hole. Two medium (1/2 in) bolts each. Left motor is port 0, right motor is port 2.",
+        ref: "KIPR Base Demobot Build, slides 2–4" },
+      { t: "Solarbotics wheels", add: ["Solarbotics wheel", "Wheel hub"], hw: "2 × small black motor bolts (in the motor bag)",
+        txt: "Slightly enlarge the centre hole of each Solarbotics wheel with the screwdriver, push it onto the motor spline and fix it with the small black bolt. The wheels end up 2.75 in in diameter: that number goes into WHEEL_DIAM_IN in the code.",
+        ref: "KIPR Base Demobot Build, slide 5" },
+      { t: "Caster at the front", add: ["Caster"], hw: "2 × 2-56 × 1 in caster screws, thick and thin spacers, 2 small nuts (caster bag), 2 × standoff 8-32 × 1/2 in",
+        txt: "Build the caster assembly exactly as in the demobot guide (two long bolts through the holder, a 1 × 9 liftarm with a thin 1 × 3, spacers, two 1/2 in standoffs) and bolt it to the front end of the chassis. The robot now rolls level: wheels at the rear, caster at the front.",
+        ref: "KIPR Base Demobot Build, slides 7–12" },
+      { t: "Wombat and battery", add: ["Wombat", "Battery"], hw: "2 × screw 8-32 × 1/4 in",
+        txt: "Line up the Wombat's rear holes with the rear flange holes and fix with two small bolts; the battery goes in its back slot. Servo ports: 1 shoulder, 2 claw, 3 cup hook. Motor ports 0 and 2.",
+        ref: "KIPR Base Demobot Build, slides 11–13" },
+      { t: "Shoulder servo", add: ["Servo bracket shoulder", "Servo shoulder", "Servo horn shoulder"], hw: "1 × servo bracket, 1 × 1×5 servo horn with M3 screw and washer, 4 × screw 8-32 × 1/2 in, 4 × keps nut",
+        txt: "Bolt a servo bracket to the front flange, left of centre, and slide a regular servo in with the spline toward the front. Fit the 1 × 5 servo horn: turn the servo to its limit with the horn away from the robot, then set the horn so it points as far down as it goes. That is ARM_DOWN (≈1750); ARM_UP is ≈860, both measured last season on the same servo type.",
+        ref: "KIPR Servo Demobot Build, slides 2–4" },
+      { t: "Paralleling arm", add: ["Paralleling arm liftarm"], hw: "2 × 1×11 liftarm, 2 × 1×7 liftarm, 4 LEGO pins, 2 × screw 8-32 × 3/4 in, 2 × keps nut",
+        txt: "Pin two 1 × 11 liftarms to the sides of two 1 × 7 liftarms to make a parallelogram, mount its base on the H-pin on the chassis and drive it from the servo horn with a 1 × 7 link in the 5th hole from the top. The parallelogram keeps the claw level as the arm rises: that is what lets it set the red pom down flat on the 5.7 in platform.",
+        ref: "KIPR Paralleling Arm Demobot Build, slides 3–6" },
+      { t: "Claw", add: ["Servo bracket claw", "Servo claw", "Claw finger"], hw: "1 × servo bracket, 1 × micro servo, 2 × 1×9 bent liftarms, 2 blue axle pins + 1 black pin, 2 × screw 8-32 × 3/4 in",
+        txt: "A servo bracket at the end of the top liftarms holds the micro servo; each bent liftarm finger pins to the servo horn and the bracket as in the servo demobot. Closed ≈1200, open ≈2000. The fingers must close on a 1.6 in pom without crushing it: stop at the value where the pom is held but still springs back.",
+        ref: "KIPR Servo Demobot Build, slides 9–13" },
+      { t: "V plow", add: ["Plow wing"], hw: "2 × plate 4 × 12 (bent), 4 × screw 8-32 × 1/2 in, 4 × keps nut",
+        txt: "Bend each 4 × 12 plate 90° at 2.5 in from one end. Bolt the short leg to the outside of a front chassis corner so the long leg points forward and outward at 32°. The two wings form a V 10 in wide and 2.5 in tall with its tip 7.6 in ahead of the chassis centre. It pushes pom stacks and the pickleball, and its left wing rolls the upper cup upright.",
+        ref: "Plates may be bent (Construction Rules)" },
+      { t: "Cup hook", add: ["Servo bracket hook", "Servo cup hook", "Hook strap", "Hook tip"], hw: "1 × servo bracket, 1 × strap 1 × 10 (bent), 2 × screw 8-32 × 1/2 in, 1 × round servo horn",
+        txt: "A regular servo in a bracket on the right flange, 0.8 in ahead of centre, carries a 1 × 10 strap pointing forward at 2.2 in height with its last 1.5 in bent down. Lowered, the tip slides under the rim of an upside-down cup; as the robot keeps driving, the cup rolls over onto its base. The same tip sweeps pickleball 1 off its post.",
+        ref: "" },
+      { t: "Camera mast", add: ["Camera mast", "Camera"], hw: "1 × channel 3 × 8, 2 × screw 8-32 × 1/2 in, mounting dots for the camera",
+        txt: "Stand a 3 × 8 channel on the rear-left of the chassis and bolt it through the floor. The camera clips to its top, tilted 35° down, 6.5 in above the table, looking over the claw. Total height stays under 9 in; the 12 in limit applies in the start box.",
+        ref: "Camera is the only USB device allowed on the robot (Kit Rules)" },
+      { t: "Sensors", add: ["Tophat", "ET rangefinder", "Lever switch", "Light sensor"], hw: "sensor extension cables, mounting dots",
+        txt: "Two tophats under the front of the chassis (analog 0, 1) find tape lines. The ET rangefinder on the front flange, right side (analog 2). A lever switch at the plow tip (digital 0) confirms contact with a cup or ball. The light sensor on the Wombat (analog 3) starts the run.",
+        ref: "Sensor ports match code/robot_b/main.c" },
+      { t: "Check and calibrate", add: [], hw: "",
+        txt: "Measure: length ≤ 21.1 in, width ≤ 11.25 in, height ≤ 12 in. Turn the robot 360° with turn_deg(360, 50) and adjust TICKS_PER_DEG until it ends facing the same way. Flip an upside-down cup ten times with the hook; place a pom on the platform edge ten times. Then run the full program on the table.",
+        ref: "code/README.md" }
+    ]
+  }
+};
+
+let robot = "a", step = 0, showAll = false;
+let scene, camera, renderer, controls, model = null, parts = [];
+const stage = document.getElementById("stage");
+const listEl = document.getElementById("list"), specsEl = document.getElementById("specs");
+const loadingEl = document.getElementById("loading");
+const ACCENT = () => new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#c8431f");
+
+function initThree() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(35, 4 / 3, 0.1, 1000);
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a8a, 0.9));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.8); sun.position.set(10, 20, 12); scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-12, 6, -8); scene.add(fill);
+  const grid = new THREE.GridHelper(40, 40, 0x999999, 0xcccccc); grid.material.opacity = 0.35; grid.material.transparent = true; scene.add(grid);
+  resize(); window.addEventListener("resize", resize);
+  (function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+}
+function resize() {
+  const w = stage.clientWidth, h = Math.round(w * 0.75);
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+function loadRobot(key) {
+  loadingEl.hidden = false; loadingEl.textContent = "loading model…";
+  if (model) { scene.remove(model); model = null; }
+  new THREE.GLTFLoader().load(ROBOTS[key].file, g => {
+    model = g.scene; parts = [];
+    model.traverse(o => { if (o.isMesh) { o.material = o.material.clone(); parts.push(o); } });
+    // name of the part = the ancestor that is a direct child of the robot root node
+    const rootNode = model.getObjectByName(key === "a" ? "SHOWCASE_A" : "SHOWCASE_B") || model.children[0];
+    parts.forEach(m => { let n = m; while (n.parent && n.parent !== rootNode && n.parent !== model) n = n.parent; m.userData.part = n.name.replace(/\.\d{3}$/, ""); });
+    const box = new THREE.Box3().setFromObject(model), c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
+    model.position.sub(c); model.position.y += s.y / 2;
+    scene.add(model);
+    const r = Math.max(s.x, s.y, s.z);
+    camera.position.set(r * 1.3, r * 0.9, r * 1.4); controls.target.set(0, s.y * 0.45, 0); controls.update();
+    loadingEl.hidden = true; applyStep();
+  }, undefined, () => { loadingEl.textContent = "the model could not be loaded"; });
+}
+function partMatches(name, prefixes) { return prefixes.some(p => name.startsWith(p)); }
+function applyStep() {
+  const R = ROBOTS[robot];
+  const built = new Set(), current = new Set();
+  R.steps.forEach((st, i) => { if (showAll || i <= step) st.add.forEach(p => { built.add(p); if (!showAll && i === step) current.add(p); }); });
+  parts.forEach(m => {
+    const name = m.userData.part || m.name;
+    const on = partMatches(name, [...built]);
+    m.visible = on;
+    const isNew = partMatches(name, [...current]);
+    m.material.emissive = isNew ? ACCENT() : new THREE.Color(0x000000);
+    m.material.emissiveIntensity = isNew ? 0.55 : 0;
+  });
+  document.getElementById("stepNow").textContent = showAll ? "Finished robot" : `Step ${step + 1} of ${R.steps.length}`;
+  document.getElementById("prev").disabled = showAll || step === 0;
+  document.getElementById("next").disabled = showAll || step === R.steps.length - 1;
+  document.getElementById("all").textContent = showAll ? "Back to steps" : "Show finished robot";
+  [...listEl.children].forEach((li, i) => { li.setAttribute("aria-current", !showAll && i === step ? "step" : "false"); });
+  const cur = listEl.children[step]; if (cur && !showAll && window.innerWidth > 860) cur.scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+function renderList() {
+  const R = ROBOTS[robot];
+  specsEl.innerHTML = R.specs.map(([v, l]) => `<div class="spec"><b>${v}</b><span>${l}</span></div>`).join("");
+  listEl.innerHTML = R.steps.map((st, i) => `
+    <li class="step" data-i="${i}" tabindex="0" aria-current="false">
+      <div class="head"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${st.t}</h3></div>
+      <div class="body">
+        <p>${st.txt}</p>
+        ${st.hw ? `<p class="hw"><b>Hardware:</b> ${st.hw}</p>` : ""}
+        ${st.add.length ? `<div class="parts">${st.add.map(p => `<code>${p}</code>`).join("")}</div>` : `<p class="check">No new parts: checks only.</p>`}
+        ${st.ref ? `<p class="ref">Reference: ${st.ref}</p>` : ""}
+      </div>
+    </li>`).join("");
+  [...listEl.children].forEach(li => {
+    const go = () => { step = +li.dataset.i; showAll = false; applyStep(); };
+    li.addEventListener("click", go);
+    li.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+}
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
+  robot = t.dataset.robot; step = 0; showAll = false; renderList(); loadRobot(robot);
+}));
+document.getElementById("prev").addEventListener("click", () => { step = Math.max(0, step - 1); applyStep(); });
+document.getElementById("next").addEventListener("click", () => { step = Math.min(ROBOTS[robot].steps.length - 1, step + 1); applyStep(); });
+document.getElementById("all").addEventListener("click", () => { showAll = !showAll; applyStep(); });
+document.addEventListener("keydown", e => { if (e.target.tagName === "LI") return; if (e.key === "ArrowRight") document.getElementById("next").click(); if (e.key === "ArrowLeft") document.getElementById("prev").click(); });
+
+initThree(); renderList(); loadRobot(robot);
+</script>
