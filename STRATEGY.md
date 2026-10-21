@@ -62,27 +62,27 @@ Botguy's start (+15). The animation leaves B parked at 110 s; ball 2 is the firs
 
 ## 4. Timeline (both robots, collision-checked in `blender/animate_strategy.py`)
 
-Robot A starts in the small start box at (53.3, 5.6) facing east. Robot B starts in zone 5 at
-(40, 6) facing north.
+Robot A starts in the small start box at (54.3, 5.6) facing east. Robot B starts in zone 5 at
+(33, 5.6) facing east. Times are what the animation uses; measured speeds will shift them.
 
 | Time | Robot A, Duck Runner | Robot B, Point Scorer |
 |---|---|---|
-| 0-13 | Waits (B must clear the upper cup from A's line-up spot) | Drives north, then east to (48.5, 17.5) |
-| 8-13 | | Flips the upper cup and pushes it north-east to (60, 34) in zone 2 |
-| 13-21 | North out of the box, lines up on the centre lane at x = 44 facing east | Backs off to (66, 35) and waits for A to pass |
-| 21-38 | Line-follows east, intake open; red, green, purple, blue, yellow enter the lane | |
-| 38-48 | Zone 2 (TR): drop at (76, 34.5), then 4" forward | Drives south along x = 66 to the lower tape |
-| 48-56 | Zone 4 (MR): drop at (76.7, 23.5), 4" forward | Heads west on the lower tape, flips the lower cup, pushes it to (20, 7) in zone 5; the 3 hidden poms spill with it |
-| 56-71 | West along y = 17, holds at (56, 17) | Picks the red pom with the claw (camera) |
-| 71-81 | West along y = 19.5; zone 3 (ML): drop at (28, 19.5), 4" forward | Pushes the pom stacks north off the tape into zone 1, one at a time, east to west: x = 41, 33, 25, 17, 9 |
-| 81-97 | East to x = 48, north to y = 34.6, west; zone 1 (TL): drop at (28, 34.6), 4" forward | same |
-| 97-112 | East to x = 48, south to y = 5.6, west; zone 5 (BL): drop at (28.2, 5.6), 4" forward, stop | 83-96: south at x = 30, east along the bottom wall; knocks pickleball 1 off its post |
-| 112-120 | Stopped | 96-104: pushes the ball under the platform; 104-110: places the red pom on the platform, stops |
+| 0-16 | Waits: B must clear the upper cup from A's line-up spot first | Arcs north-east out of zone 5; the left plow wing flips the upper cup and pushes it to (59.5, 34) in zone 2 |
+| 16-24 | North out of the box, lines up on the centre lane at x = 44 facing east | Loops down the east side to (68, 16), faces west, waits |
+| 24-41 | Line-follows east, intake open; red, green, lavender, blue, yellow enter the lane | waits (A passes in front of it) |
+| 41-51 | Zone 2: drop at (72, 34.5), creeps 1.5" forward | waits |
+| 51-59 | Zone 4: drop at (73.6, 23.5), creeps forward | pushes the lower cup west with the right wing and hook (50-58): cup ends upright at (18.5, 7.3) in zone 5, the hidden poms spill |
+| 59-74 | West along y = 17, holds at (56, 17) while B works | grabs the red pom with the claw (camera, 58-63) |
+| 74-84 | West along y = 19.5; zone 3: drop at (26.5, 19.5), creeps forward | pushes the pom stacks north off the tape into zone 1, one at a time, east to west (66-86): x = 40, 32, 24, 16, 8 |
+| 84-100 | East to x = 48, north up the centre column to y = 34.6, west; zone 1: drop at (26.5, 34.6), creeps forward | same |
+| 100-117 | East to x = 48, south down the centre column to y = 5.6, west; zone 5: drop at (26.7, 5.6), creeps forward, stops | 86-97: back east along y = 14, down to the bottom wall; the hook knocks pickleball 1 off its post (96) |
+| 117-120 | Stopped | 97-104: pushes the ball under the platform; 105-112: lifts the red pom onto the platform edge, stops |
 
 Rules the routes obey: a robot never crosses a zone's duck drop point after that duck is down;
-A always moves **forward** after a drop (the lane opens at the rear); every pom group ends more
-than 1" from tape; both robots keep ≥0.3" clearance from each other at every frame (the script
-checks footprints every 1/12 s and reports violations).
+A always creeps **forward** after a drop (the lane opens at the rear); every pom group ends more
+than 1" from tape; Robot B only turns in place where its 14" length has room (never within 11"
+of a wall or the platform); both robots keep clear of each other at every frame (the script checks
+footprints every 1/12 s and reports violations).
 
 ## 5. Failure plans
 
@@ -96,20 +96,21 @@ checks footprints every 1/12 s and reports violations).
 
 ## 6. Build notes (kit parts only)
 
-Robot A: chassis, 4 gear motors in 4 servo brackets dropped on 2" standoffs so the chassis
-floor sits 3" up, 4 mecanum wheels, 4 × Plate 4×12 on edge as lane walls (two per side,
-joined with Strap 1×10), 2 × Channel 3×8 cross-members, 2 servos + 1 micro servo with 1×5 servo
-horns as the flaps, 1 tophat (tape edge), 1 light sensor (start), 1 touch (lane full), ET
-rangefinder (wall distance before drops), Wombat + battery on the chassis.
-Size 12.5 × 10 × 7 in.
+Robot A: chassis raised to a 2.9" floor on four servo brackets hung from 1" standoffs, 4 gear
+motors, 4 mecanum wheels, lane of 4 × Plate 4×12 on edge (two per side spliced with Strap 1×10)
+held by the 2 angle brackets, 2 × Strap 1×10 flared as the funnel, 2 servos + 1 micro servo with
+1×5 servo horns as the flaps, 2 tophats (tape edges), ET rangefinder, touch switch (lane full),
+light sensor (start), Wombat + battery on the floor. Size 17.9 × 9.1 × 6.5 in. The printed lane
+in `prints/` replaces the plates, straps and brackets.
 
-Robot B: base demobot (chassis, 2 motors, 2 Solarbotics wheels, caster) + servo demobot arm
-with the paralleling-arm extension and the claw, 2 × Plate 4×12 bent into a V plow on the
-front, 1 servo with a bent Strap 1×19 as the cup hook on the right side, camera on a Channel
-3×12 mast, 2 tophats, 1 light sensor, 1 lever switch bumper, Wombat + battery.
-Size 10 × 8 × 11 in (mast folded for the start-box height limit).
+Robot B: base demobot (chassis, 2 motors, 2 Solarbotics wheels, caster) + servo demobot shoulder
+with the paralleling-arm extension and the liftarm claw (micro servo), 2 × Plate 4×12 bent into a
+V plow on the front, 1 servo with a bent Strap 1×10 as the cup hook on the right side, camera on
+a Channel 3×8 mast, 2 tophats, ET rangefinder, lever switch on the plow, light sensor, Wombat +
+battery. Size 14.4 × 9.2 × 8.7 in.
 
 Servos used: A 2 + B 2 = 4 of 5; micro servos A 1 + B 1 = 2 of 2; motors 4 + 2 = 6 of 8.
+Step-by-step assembly with the 3D model: `guide/index.html`.
 
 ## 7. What changed since the first strategy
 
@@ -140,4 +141,4 @@ this timeline, with the calibration numbers from last season. See `code/README.m
   starting-light threshold (analog < 770) and the camera's red channel. They are used in `code/`.
   Still to measure: the mecanum and Solarbotics wheel diameters and the actual speed at 80% power,
   then update the per-segment times above.
-- Submit the STL of any 3D-printed part before the tournament (none used so far).
+- Submit the STLs of the printed lane (`prints/out/`) before the tournament deadline.
