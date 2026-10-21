@@ -155,12 +155,13 @@ def duck_center(i, t):
 
 # pom stacks: pushed north by B's plow, one at a time
 STACK_T = [66.5, 70, 74.5, 79, 83.5]     # start of each push (red, green, lavender, turquoise, gold)
+STACK_END = [68, 72.5, 77, 81.5, 86]     # B stops pushing here and backs away
 def stack_center(k, t):
     c0 = R[STACKS[k]][2]
     t0 = STACK_T[k]
     if t < t0:
         return c0
-    bx, by, bh = pose_B(min(t, t0 + 2.5))
+    bx, by, bh = pose_B(min(t, STACK_END[k]))
     y = max(c0.y, by + B_PLOW + 1.2)
     return Vector((c0.x, y, c0.z))
 
