@@ -11,6 +11,7 @@
  *****************************************************************************/
 #include <kipr/wombat.h>
 #include <stdio.h>
+#include <stdlib.h>    /* abs, labs */
 #include <math.h>
 
 /* ---------------------------------------------------------------- ports */
@@ -32,7 +33,7 @@
 #define WHEEL_DIAM_IN   2.36                 /* CALIBRATE: 60 mm mecanum; last year's wheels were 3.0 */
 #define TICKS_PER_INCH  (TICKS_PER_REV / (M_PI * WHEEL_DIAM_IN))
 #define STRAFE_FACTOR   1.15                 /* CALIBRATE: mecanum wheels slip sideways */
-#define TAPE_THRESHOLD  2700                 /* CALIBRATE: analog10 < this = black (last year 2700) */
+#define TAPE_THRESHOLD  2700                 /* CALIBRATE: analog (12-bit) < this = black (last year 2700) */
 #define LIGHT_ON        770                  /* CALIBRATE: analog < this = light on (last year 770) */
 #define SPEED_FAST      80
 #define SPEED_LINE      45                   /* line-following speed while swallowing ducks */
@@ -46,14 +47,26 @@
 /* ---------------------------------------------------------------- mecanum base */
 /* vx: + forward (east at start), vy: + left (north at start), w: + counter-clockwise */
 static void mecanum(int vx, int vy, int w) {
-    motor(FL, vx - vy - w);
-    motor(FR, vx + vy + w);
-    motor(BL, vx + vy - w);
-    motor(BR, vx - vy + w);
+    /* Each wheel is a sum of up to three terms, so a mix can exceed motor()'s -100..100
+       range. Scale all four together rather than letting motor() clip them one by one:
+       clipping per wheel would silently bend the commanded direction. */
+    int m[4] = { vx - vy - w, vx + vy + w, vx + vy - w, vx - vy + w };   /* FL, FR, BL, BR */
+    int peak = 0;
+    for (int i = 0; i < 4; i++)
+        if (abs(m[i]) > peak) peak = abs(m[i]);
+    if (peak > 100)
+        for (int i = 0; i < 4; i++) m[i] = m[i] * 100 / peak;
+    motor(FL, m[0]);
+    motor(FR, m[1]);
+    motor(BL, m[2]);
+    motor(BR, m[3]);
 }
 static void stop_all(void) { ao(); }
 
-/* drive a straight distance in inches; dx forward, dy left (one of them 0) */
+/* Drive a straight distance in inches; dx forward, dy left. Pass exactly one non-zero:
+   direction is quantised to the sign of dx/dy and the tick target is |dx|+|dy|, so a
+   diagonal call drives 45 deg for a Manhattan distance and misses the waypoint. Split
+   diagonals into two calls at the call site. */
 static void move_in(double dx, double dy, int speed) {
     double dist = fabs(dx) + fabs(dy);
     double factor = (dy != 0) ? STRAFE_FACTOR : 1.0;
@@ -63,22 +76,30 @@ static void move_in(double dx, double dy, int speed) {
     mecanum(vx * speed, vy * speed, 0);
     while (labs(gmpc(FL)) < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
+    if (labs(gmpc(FL)) < target)   /* ran out of match clock: say so, or the rest of the run
+                                      silently no-ops and the log shows nothing wrong */
+        printf("move_in(%.1f, %.1f) stopped at %ld/%ld ticks, t=%.1f s\n",
+               dx, dy, labs(gmpc(FL)), target, seconds());
     msleep(150);
 }
 
-/* keep the lane mouth on the centre tape while creeping east */
+/* keep the lane mouth on the centre tape while creeping east, until the lane is full */
 static void follow_tape_east(double inches, int speed) {
     long target = (long)(inches * TICKS_PER_INCH);
     cmpc(FL);
-    while (labs(gmpc(FL)) < target && seconds() < MATCH_END_S) {
-        int l = analog10(TOPHAT_L) < TAPE_THRESHOLD;
-        int r = analog10(TOPHAT_R) < TAPE_THRESHOLD;
+    /* the touch switch at the rear of the lane is the real stop condition; the distance
+       is only the backstop for a switch that never trips */
+    while (labs(gmpc(FL)) < target && !digital(TOUCH_LANE) && seconds() < MATCH_END_S) {
+        int l = analog(TOPHAT_L) < TAPE_THRESHOLD;
+        int r = analog(TOPHAT_R) < TAPE_THRESHOLD;
         if (l && !r)      mecanum(speed, +20, 0);   /* drifted right: nudge left  */
         else if (r && !l) mecanum(speed, -20, 0);   /* drifted left: nudge right  */
         else              mecanum(speed, 0, 0);
         msleep(10);
     }
     stop_all();
+    printf("follow_tape_east: %ld/%ld ticks, lane full=%d, t=%.1f s\n",
+           labs(gmpc(FL)), target, digital(TOUCH_LANE), seconds());
 }
 
 /* ---------------------------------------------------------------- escapement */
@@ -114,7 +135,11 @@ int main(void) {
 
     /* 16-24 s: north out of the small box, then onto the centre tape at x = 44 */
     move_in(0, 13.9, SPEED_FAST);            /* (54.3, 5.6) -> (54.3, 19.5) */
-    move_in(-10.3, 6.1, SPEED_FAST);         /* -> (44, 25.6): split into two moves if diagonal slips */
+    /* two axis-aligned legs, not one diagonal: move_in() quantises direction to the sign of
+       dx/dy, so a diagonal drives at a fixed 45 deg for a Manhattan tick target and lands
+       somewhere else entirely. West first keeps us south of the tape, clear of the ducks. */
+    move_in(-10.3, 0, SPEED_FAST);           /* -> (44, 19.5) */
+    move_in(0, 6.1, SPEED_FAST);             /* -> (44, 25.6), at the lane mouth */
 
     /* 24-41 s: swallow the five ducks, line-following east */
     follow_tape_east(36.0, SPEED_LINE);      /* until the touch switch, or 36 in */
@@ -134,8 +159,8 @@ int main(void) {
     while (seconds() < 74) msleep(50);
 
     /* zone 3 (ML) */
-    move_in(-2.0, 2.5, SPEED_FAST);
-    move_in(-20.2, 0, SPEED_FAST);                                 /* -> (33.8, 19.5) */
+    move_in(0, 2.5, SPEED_FAST);                                   /* -> (56, 19.5) */
+    move_in(-22.2, 0, SPEED_FAST);                                 /* -> (33.8, 19.5) */
     drop_one_duck();                                               /* duck at ~(26.5, 19.5) */
 
     /* up the centre column to y = 34.6, west, zone 1 (TL) */
