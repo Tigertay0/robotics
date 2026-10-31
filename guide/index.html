@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <meta charset="utf-8">
 <title>Rochambotics Build Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -81,12 +83,12 @@ td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space
     <p>Both robots for the 2026 Fall Game, built only from the 2026 kit. Click a step to see those parts appear on the model; drag to orbit, scroll to zoom.</p>
   </div>
   <div class="tabs" role="tablist">
-    <button class="tab" role="tab" id="tab-a" aria-selected="true" data-robot="a">Robot A · Duck Runner</button>
-    <button class="tab" role="tab" id="tab-b" aria-selected="false" data-robot="b">Robot B · Point Scorer</button>
+    <button class="tab" role="tab" id="tab-a" aria-selected="true" aria-controls="panel" data-robot="a">Robot A · Duck Runner</button>
+    <button class="tab" role="tab" id="tab-b" aria-selected="false" aria-controls="panel" data-robot="b">Robot B · Point Scorer</button>
   </div>
 </header>
 
-<main>
+<main id="panel" role="tabpanel" aria-labelledby="tab-a">
   <div class="viewer">
     <div class="stage" id="stage"><div class="loading" id="loading">loading model…</div><div class="hint">drag · scroll · right-drag to pan</div></div>
     <div class="legend"><span class="new">added in this step</span><span>already built</span></div>
@@ -210,9 +212,15 @@ const ROBOTS = {
 
 let robot = "a", step = 0, showAll = false;
 let scene, camera, renderer, controls, model = null, parts = [];
+let loadToken = 0;                 // only the newest loadRobot() call may touch the scene
+let viewerReady = false;           // false when three.js failed to load: steps still work
 const stage = document.getElementById("stage");
 const listEl = document.getElementById("list"), specsEl = document.getElementById("specs");
 const loadingEl = document.getElementById("loading");
+const panelEl = document.getElementById("panel");
+const stepNowEl = document.getElementById("stepNow");
+const prevBtn = document.getElementById("prev"), nextBtn = document.getElementById("next");
+const allBtn = document.getElementById("all");
 const ACCENT = () => new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#c8431f");
 
 function initThree() {
@@ -236,9 +244,12 @@ function resize() {
   renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
 }
 function loadRobot(key) {
+  const myToken = ++loadToken;
   loadingEl.hidden = false; loadingEl.textContent = "loading model…";
   if (model) { scene.remove(model); model = null; }
+  parts = [];                      // never leave the previous robot's meshes addressable
   new THREE.GLTFLoader().load(ROBOTS[key].file, g => {
+    if (myToken !== loadToken) return;   // a newer tab switch has already taken over
     model = g.scene; parts = [];
     model.traverse(o => { if (o.isMesh) { o.material = o.material.clone(); parts.push(o); } });
     // name of the part = the ancestor that is a direct child of the robot root node
@@ -250,8 +261,15 @@ function loadRobot(key) {
     const r = Math.max(s.x, s.y, s.z);
     camera.position.set(r * 1.3, r * 0.9, r * 1.4); controls.target.set(0, s.y * 0.45, 0); controls.update();
     loadingEl.hidden = true; applyStep();
-  }, undefined, () => { loadingEl.textContent = "the model could not be loaded"; });
+  }, undefined, err => {
+    if (myToken !== loadToken) return;
+    console.error("GLTFLoader could not load", ROBOTS[key].file, err);
+    loadingEl.textContent = "the model could not be loaded";
+    applyStep();                   // keep the controls in step with the list we just rendered
+  });
 }
+// Prefix match against the step's `add` names. This relies on no step's prefix being a
+// prefix of a part belonging to a different step — check that invariant when adding parts.
 function partMatches(name, prefixes) { return prefixes.some(p => name.startsWith(p)); }
 function applyStep() {
   const R = ROBOTS[robot];
@@ -265,10 +283,10 @@ function applyStep() {
     m.material.emissive = isNew ? ACCENT() : new THREE.Color(0x000000);
     m.material.emissiveIntensity = isNew ? 0.55 : 0;
   });
-  document.getElementById("stepNow").textContent = showAll ? "Finished robot" : `Step ${step + 1} of ${R.steps.length}`;
-  document.getElementById("prev").disabled = showAll || step === 0;
-  document.getElementById("next").disabled = showAll || step === R.steps.length - 1;
-  document.getElementById("all").textContent = showAll ? "Back to steps" : "Show finished robot";
+  stepNowEl.textContent = showAll ? "Finished robot" : `Step ${step + 1} of ${R.steps.length}`;
+  prevBtn.disabled = showAll || step === 0;
+  nextBtn.disabled = showAll || step === R.steps.length - 1;
+  allBtn.textContent = showAll ? "Back to steps" : "Show finished robot";
   [...listEl.children].forEach((li, i) => { li.setAttribute("aria-current", !showAll && i === step ? "step" : "false"); });
   const cur = listEl.children[step]; if (cur && !showAll && window.innerWidth > 860) cur.scrollIntoView({ block: "nearest", behavior: "smooth" });
 }
@@ -288,17 +306,34 @@ function renderList() {
   [...listEl.children].forEach(li => {
     const go = () => { step = +li.dataset.i; showAll = false; applyStep(); };
     li.addEventListener("click", go);
-    li.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    li.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); nextBtn.click(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); prevBtn.click(); }
+    });
   });
 }
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
   document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
-  robot = t.dataset.robot; step = 0; showAll = false; renderList(); loadRobot(robot);
+  panelEl.setAttribute("aria-labelledby", t.id);
+  robot = t.dataset.robot; step = 0; showAll = false; renderList();
+  if (viewerReady) loadRobot(robot); else applyStep();
 }));
-document.getElementById("prev").addEventListener("click", () => { step = Math.max(0, step - 1); applyStep(); });
-document.getElementById("next").addEventListener("click", () => { step = Math.min(ROBOTS[robot].steps.length - 1, step + 1); applyStep(); });
-document.getElementById("all").addEventListener("click", () => { showAll = !showAll; applyStep(); });
-document.addEventListener("keydown", e => { if (e.target.tagName === "LI") return; if (e.key === "ArrowRight") document.getElementById("next").click(); if (e.key === "ArrowLeft") document.getElementById("prev").click(); });
+prevBtn.addEventListener("click", () => { step = Math.max(0, step - 1); applyStep(); });
+nextBtn.addEventListener("click", () => { step = Math.min(ROBOTS[robot].steps.length - 1, step + 1); applyStep(); });
+allBtn.addEventListener("click", () => { showAll = !showAll; applyStep(); });
+document.addEventListener("keydown", e => { if (e.target.tagName === "LI") return; if (e.key === "ArrowRight") nextBtn.click(); if (e.key === "ArrowLeft") prevBtn.click(); });
 
-initThree(); renderList(); loadRobot(robot);
+// The step list and the print table need no three.js, so render them even if the CDN is
+// unreachable; otherwise one ReferenceError leaves the whole guide blank and silent.
+try {
+  initThree();
+  viewerReady = true;
+} catch (e) {
+  console.error("three.js did not load, so the 3D viewer is disabled", e);
+  loadingEl.textContent = "3D viewer unavailable (three.js could not be loaded)";
+}
+renderList();
+if (viewerReady) loadRobot(robot); else applyStep();
 </script>
+</html>

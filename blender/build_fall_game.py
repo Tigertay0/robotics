@@ -18,6 +18,7 @@ import bpy, math, os, sys, json, glob
 from mathutils import Vector, Matrix
 
 OUT = sys.argv[sys.argv.index("--") + 1]
+os.makedirs(OUT, exist_ok=True)                      # pieces.json is written long before the renders
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(HERE)                     # ~/BOTBALL
 GLB = os.path.join(ROOT_DIR, "Fall_Game_Table.glb")
@@ -101,7 +102,15 @@ def find_stl(basename):
         hits = glob.glob(os.path.join(d, "**", basename), recursive=True)
         if hits:
             return hits[0]
-    raise FileNotFoundError(basename)
+    raise FileNotFoundError(f"{basename} not found under any of {STL_DIRS}; extract 'STL Parts' next to {ROOT_DIR}")
+
+def glb_object(name, what):
+    """Look an object up by its name in the imported GLB, with a message that says what broke."""
+    o = bpy.data.objects.get(name)
+    if o is None:
+        raise RuntimeError(f"expected {what} named {name!r} in {GLB}; the official table asset's "
+                           f"node naming may have changed, so this script needs updating")
+    return o
 
 _stl_cache = {}
 def stl_part(name, basename, loc, material, collection, rot=(0, 0, 0), origin="bottom", kit=None, **props):
@@ -154,12 +163,15 @@ FIELD = coll("Field (official Fall_Game_Table.glb)")
 before = set(bpy.data.objects)
 bpy.ops.import_scene.gltf(filepath=GLB)
 imported = [o for o in bpy.data.objects if o not in before]
-glb_root = next(o for o in imported if o.parent is None and o.name == "Root")
+glb_root = next((o for o in imported if o.parent is None and o.name == "Root"), None)
+if glb_root is None:
+    raise RuntimeError(f"no parentless object named 'Root' among the {len(imported)} objects imported "
+                       f"from {GLB}; the official table asset's node naming may have changed")
 for o in imported:
     relink(o, FIELD)
 for o in [o for o in imported if o.type in ('CAMERA', 'LIGHT')]:
     bpy.data.objects.remove(o)
-imported = [o for o in imported if o.name in bpy.data.objects and bpy.data.objects[o.name] is o] if False else [o for o in bpy.data.objects if o.users_collection and o.users_collection[0] is FIELD]
+imported = [o for o in bpy.data.objects if o.users_collection and o.users_collection[0] is FIELD]
 # metres, Y-up (already converted by the importer) -> inches in the field frame:
 # field x = CENTER_X - y_glb ; field y = TOP_BOARD_Y + x_glb ; z = z_glb - FRP top
 # the importer already converts metres to the scene unit (inches)
@@ -167,7 +179,7 @@ glb_root.rotation_mode = 'XYZ'
 glb_root.rotation_euler = (0, 0, math.pi / 2)
 glb_root.location = (CENTER_X, TOP_BOARD_Y, 0)
 bpy.context.view_layer.update()
-frp = bpy.data.objects["FRP - 4x8-1 - Part"]
+frp = glb_object("FRP - 4x8-1 - Part", "the FRP table top")
 z_top = world_bbox(frp)[1].z
 glb_root.location.z = -z_top
 bpy.context.view_layer.update()
@@ -193,7 +205,7 @@ if bd:
     cs = [piece_center(o.name) for o in bd]
     mn = Vector(map(min, cs[0][1], cs[1][1])); mx = Vector(map(max, cs[0][2], cs[1][2]))
     PIECES["Big duck"] = {"center": [round(v, 3) for v in ((mn + mx) / 2)], "min": [round(v, 3) for v in mn], "max": [round(v, 3) for v in mx], "empties": [o.name for o in bd]}
-plat = bpy.data.objects["12.5x24 No Holes-3 - Part"]
+plat = glb_object("12.5x24 No Holes-3 - Part", "the scoring platform top")
 pmn, pmx = world_bbox(plat)
 PIECES["Platform top"] = {"min": [round(v, 3) for v in pmn], "max": [round(v, 3) for v in pmx]}
 with open(os.path.join(OUT, "pieces.json"), "w") as f:
@@ -239,6 +251,9 @@ WOMBAT = (5.5, 4.0, 1.3)
 BATT = (3.2, 1.4, 1.0)
 MEC_D, MEC_W = 2.36, 1.1       # 60 mm mecanum
 SOL_D, SOL_W = 2.75, 0.5       # Solarbotics wheel
+TOPHAT_SZ = (0.6, 0.45, 0.5)
+LIGHT_SZ = (0.5, 0.5, 0.4)
+ET_SZ = (0.3, 1.1, 0.6)
 
 def wombat(C, x, y, z, yaw=0):
     a = est("box", "Wombat controller", (x, y, z + WOMBAT[2] / 2), WOMBAT, M["wombat"], kit="wombat", collection=C, rot=(0, 0, yaw))
@@ -303,10 +318,10 @@ for name, x, micro, sy in (("intake C", LANE_L / 2 - 0.4, False, 1), ("pin B", -
                       rot=(0, math.pi / 2, math.pi / 2), origin="center", kit=KIT["horn"], note="flap: horn rotates 90deg to open"))
 A += wombat(RA, -0.4, 0, FLOOR_A + 1.2, yaw=0)
 A.append(est("box", "Battery", (-3.6, 0, FLOOR_A + 1.2 + 0.5), (BATT[1], BATT[0], BATT[2]), M["battery"], kit="battery", collection=RA))
-A.append(est("box", "Tophat (tape edge)", (LANE_L / 2 + 0.3, -(LANE_W / 2 + 0.6), 0.45), (0.6, 0.45, 0.5), M["sensor"], kit="tophat", collection=RA))
-A.append(est("box", "Tophat (tape edge) 2", (LANE_L / 2 + 0.3, LANE_W / 2 + 0.6, 0.45), (0.6, 0.45, 0.5), M["sensor"], kit="tophat", collection=RA))
-A.append(est("box", "Light sensor (start)", (2.6, -2.0, FLOOR_A + 1.2 + 0.2), (0.5, 0.5, 0.4), M["sensor"], kit="light", collection=RA))
-A.append(est("box", "ET rangefinder (wall)", (CH_L / 2 + 0.2, 1.8, FLOOR_A + 0.6), (0.3, 1.1, 0.6), M["sensor"], kit="et", collection=RA))
+A.append(est("box", "Tophat (tape edge)", (LANE_L / 2 + 0.3, -(LANE_W / 2 + 0.6), 0.45), TOPHAT_SZ, M["sensor"], kit="tophat", collection=RA))
+A.append(est("box", "Tophat (tape edge) 2", (LANE_L / 2 + 0.3, LANE_W / 2 + 0.6, 0.45), TOPHAT_SZ, M["sensor"], kit="tophat", collection=RA))
+A.append(est("box", "Light sensor (start)", (2.6, -2.0, FLOOR_A + 1.2 + 0.2), LIGHT_SZ, M["sensor"], kit="light", collection=RA))
+A.append(est("box", "ET rangefinder (wall)", (CH_L / 2 + 0.2, 1.8, FLOOR_A + 0.6), ET_SZ, M["sensor"], kit="et", collection=RA))
 A.append(est("box", "Touch (lane full)", (-LANE_L / 2 + 1.3, -(LANE_W / 2 - 0.15), 0.9), (0.45, 0.2, 0.4), M["sensor"], kit="touch", collection=RA))
 rootA = bpy.data.objects.new("ROBOT_A_root", None)
 RA.objects.link(rootA)
@@ -355,11 +370,11 @@ Bp.append(est("box", "Hook tip (same strap, bent)", (1.3 + 6.3, -(CH_W / 2 + 1.4
 # camera mast
 Bp.append(stl_part("Camera mast channel 3x8", "Channel 3x8.STL", (-3.3, 1.9, FLOOR_B + 0.05), M["metal"], RB, rot=(0, math.pi / 2, 0), origin="bottom", kit=KIT["ch8"]))
 Bp.append(est("box", "Camera", (-3.0, 1.9, FLOOR_B + 5.0 + 0.5), (1.0, 2.9, 1.1), M["camera"], kit="camera", collection=RB, rot=(0, math.radians(-35), 0)))
-Bp.append(est("box", "Tophat L", (3.0, 1.0, 0.45), (0.6, 0.45, 0.5), M["sensor"], kit="tophat", collection=RB))
-Bp.append(est("box", "Tophat R", (3.0, -1.0, 0.45), (0.6, 0.45, 0.5), M["sensor"], kit="tophat", collection=RB))
-Bp.append(est("box", "Light sensor (start)", (-3.3, -1.8, FLOOR_B + 1.25 + WOMBAT[2] + 0.2), (0.5, 0.5, 0.4), M["sensor"], kit="light", collection=RB))
+Bp.append(est("box", "Tophat L", (3.0, 1.0, 0.45), TOPHAT_SZ, M["sensor"], kit="tophat", collection=RB))
+Bp.append(est("box", "Tophat R", (3.0, -1.0, 0.45), TOPHAT_SZ, M["sensor"], kit="tophat", collection=RB))
+Bp.append(est("box", "Light sensor (start)", (-3.3, -1.8, FLOOR_B + 1.25 + WOMBAT[2] + 0.2), LIGHT_SZ, M["sensor"], kit="light", collection=RB))
 Bp.append(est("box", "Lever switch (plow)", (7.6, 0, 0.9), (0.3, 1.0, 0.5), M["sensor"], kit="lever", collection=RB))
-Bp.append(est("box", "ET rangefinder", (CH_L / 2 + 0.2, -1.6, FLOOR_B + 0.7), (0.3, 1.1, 0.6), M["sensor"], kit="et", collection=RB))
+Bp.append(est("box", "ET rangefinder", (CH_L / 2 + 0.2, -1.6, FLOOR_B + 0.7), ET_SZ, M["sensor"], kit="et", collection=RB))
 rootB = bpy.data.objects.new("ROBOT_B_root", None)
 RB.objects.link(rootB)
 for o in Bp:
@@ -424,7 +439,6 @@ shots = [
     ("robot_B", camera("Cam robot B", (55 + 18, -16 - 16, 15), (55, -16, 3.0), lens=50)),
     ("start_box", camera("Cam start box", (50, -14, 26), (50, 8, 2), lens=40)),
 ]
-os.makedirs(OUT, exist_ok=True)
 for fname, cam in shots:
     scene.camera = cam
     scene.render.filepath = os.path.join(OUT, f"{fname}.png")
