@@ -13,6 +13,7 @@
  *****************************************************************************/
 #include <kipr/wombat.h>
 #include <stdio.h>
+#include <stdlib.h>    /* labs */
 #include <math.h>
 
 /* ---------------------------------------------------------------- ports */
@@ -33,7 +34,7 @@
 #define WHEEL_DIAM_IN   2.75               /* CALIBRATE: Solarbotics wheel; last year's were 3.0 */
 #define TICKS_PER_INCH  (TICKS_PER_REV / (M_PI * WHEEL_DIAM_IN))
 #define TICKS_PER_DEG   13.0               /* CALIBRATE: last year's pivot constant (angle * 13) */
-#define TAPE_THRESHOLD  2700
+#define TAPE_THRESHOLD  2700               /* CALIBRATE: analog (12-bit) < this = black */
 #define LIGHT_ON        770
 #define SPEED_FAST      80
 #define SPEED_PUSH      45
@@ -58,6 +59,10 @@ static void forward_in(double inches, int speed) {
     drive(s, s);
     while (labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
+    if (labs(gmpc(LEFT)) < target)   /* ran out of match clock: say so, or every later move
+                                        silently no-ops and the log shows nothing wrong */
+        printf("forward_in(%.1f) stopped at %ld/%ld ticks, t=%.1f s\n",
+               inches, labs(gmpc(LEFT)), target, seconds());
     msleep(150);
 }
 /* positive = counter-clockwise (turn left), in place */
@@ -67,6 +72,9 @@ static void turn_deg(double deg, int speed) {
     if (deg > 0) drive(-speed, speed); else drive(speed, -speed);
     while (labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
+    if (labs(gmpc(LEFT)) < target)
+        printf("turn_deg(%.1f) stopped at %ld/%ld ticks, t=%.1f s\n",
+               deg, labs(gmpc(LEFT)), target, seconds());
     msleep(200);
 }
 /* gentle arc: inner wheel at half speed. sign of deg = direction as in turn_deg */
@@ -76,12 +84,22 @@ static void arc_in(double inches, double deg, int speed) {
     if (deg > 0) drive(speed / 2, speed); else drive(speed, speed / 2);
     while ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
+    if ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target)
+        printf("arc_in(%.1f, %.1f) stopped short, t=%.1f s\n", inches, deg, seconds());
+    msleep(150);                 /* settle, as forward_in and turn_deg do */
 }
-/* drive forward until a tophat sees tape, then stop */
-static void forward_to_tape(int speed) {
+/* drive forward until a tophat sees tape, then stop. max_in bounds the blind drive so a
+   missed line does not push the robot into a wall for the rest of the match. */
+static void forward_to_tape(int speed, double max_in) {
+    long target = (long)(fabs(max_in) * TICKS_PER_INCH);
+    cmpc(LEFT);
     drive(speed, speed);
-    while (analog10(TOPHAT_L) >= TAPE_THRESHOLD && analog10(TOPHAT_R) >= TAPE_THRESHOLD && seconds() < MATCH_END_S) msleep(5);
+    while (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD
+           && labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
+    if (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD)
+        printf("forward_to_tape: no tape within %.1f in, t=%.1f s\n", max_in, seconds());
+    msleep(150);
 }
 
 /* ---------------------------------------------------------------- tools */
@@ -94,14 +112,20 @@ static void flip_cup_with_right_wing(double push_in) {
     set_servo_position(SERVO_HOOK, HOOK_UP);
 }
 
-/* find the red pom with the camera, centre on it, grab it. returns 1 on success */
+/* Find the red pom with the camera, centre on it, grab it. Returns 1 on success.
+   Everything after this call is dead reckoning from the pre-scan pose, so the scan
+   rotation and the approach are both undone before returning, on success and failure
+   alike. Without that, a pom that is a few degrees off frame leaves the robot facing
+   an arbitrary direction for the whole rest of the match. */
 static int grab_red_pom(void) {
     set_servo_position(SERVO_CLAW, CLAW_OPEN);
     set_servo_position(SERVO_ARM, ARM_DOWN);
     msleep(400);
     camera_open();
+    const int CAM_TRIES = 40;                                /* x 100 ms = ~4 s budget */
     int found = 0;
-    for (int tries = 0; tries < 40 && !found; tries++) {   /* ~4 s budget */
+    cmpc(LEFT);                                              /* net scan rotation, in ticks */
+    for (int tries = 0; tries < CAM_TRIES && !found; tries++) {
         camera_update();
         if (get_object_count(CAM_RED) > 0) {
             int x = get_object_center_x(CAM_RED, 0);        /* 0..159 */
@@ -115,13 +139,27 @@ static int grab_red_pom(void) {
     }
     camera_close();
     stop_all();
-    if (!found) { set_servo_position(SERVO_ARM, ARM_UP); return 0; }
-    forward_in(2.0, 30);
-    set_servo_position(SERVO_CLAW, CLAW_CLOSED);
-    msleep(400);
-    set_servo_position(SERVO_ARM, ARM_UP);
-    msleep(400);
-    return 1;
+    long spun = gmpc(LEFT);                                  /* signed: which way we turned */
+    if (found) {
+        forward_in(2.0, 30);
+        set_servo_position(SERVO_CLAW, CLAW_CLOSED);
+        msleep(400);
+        set_servo_position(SERVO_ARM, ARM_UP);
+        msleep(400);
+        forward_in(-2.0, 30);                                /* undo the approach */
+    } else {
+        printf("red pom not seen in %d camera frames\n", CAM_TRIES);
+        set_servo_position(SERVO_ARM, ARM_UP);
+    }
+    /* unwind the scan rotation back to the heading the caller assumes */
+    if (labs(spun) > 20) {
+        cmpc(LEFT);
+        if (spun > 0) drive(25, -25); else drive(-25, 25);
+        while (labs(gmpc(LEFT)) < labs(spun) && seconds() < MATCH_END_S) msleep(5);
+        stop_all();
+        msleep(200);
+    }
+    return found;
 }
 
 /* push one pom stack north off the tape: start 3.5 in south of the stack line */
@@ -166,7 +204,7 @@ int main(void) {
     /* 63-86 s: five pom stacks, east to west, each pushed north into zone 1 */
     forward_in(-10.0, SPEED_FAST);              /* back east to x ~ 39.8 */
     turn_deg(+90, SPEED_FAST);                  /* face north */
-    forward_to_tape(SPEED_FAST);                /* lower tape: y ~ 12 */
+    forward_to_tape(SPEED_FAST, 10.0);          /* lower tape: y ~ 12; give up after 10 in */
     forward_in(3.5, SPEED_FAST);                /* -> y ~ 15.5 */
     for (int k = 0; k < 5; k++) {
         push_stack_north();

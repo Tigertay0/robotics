@@ -11,9 +11,19 @@ import bpy, math, os, sys, json
 from mathutils import Vector, Matrix
 
 OUT = sys.argv[sys.argv.index("--") + 1]
+
+def load_built(basename):
+    """Read one of build_fall_game.py's outputs, saying so when the build step has not been run."""
+    path = os.path.join(OUT, basename)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise SystemExit(f"{path} is missing: run build_fall_game.py with the same output dir first")
+
 bpy.ops.wm.open_mainfile(filepath=os.path.join(OUT, "fall_game_2026.blend"))
-PIECES = json.load(open(os.path.join(OUT, "pieces.json")))
-ENV = json.load(open(os.path.join(OUT, "envelopes.json")))
+PIECES = load_built("pieces.json")
+ENV = load_built("envelopes.json")
 
 FPS = 12
 bpy.context.preferences.edit.keyframe_new_interpolation_type = 'LINEAR'
@@ -62,6 +72,9 @@ def path_pose(wps, t):
                 ut = min(1.0, max(0.0, (t - (t1 - tw)) / tw))
                 return x0, y0, h0 + d * ut
             return lerp(x0, x1, u), lerp(y0, y1, u), h1
+    # unreachable for strictly increasing waypoint times; hold the last pose rather than
+    # returning None, which would blow up as a TypeError inside the per-frame bake loop
+    return wps[-1][1], wps[-1][2], filled[-1][2]
 
 # Robot A (mecanum: heading fixed east, strafes freely). Lane mouth at +6.25, exit at -7.3.
 A_WPS = [
@@ -128,6 +141,7 @@ def collect_time(i):
         ax, ay, _ = pose_A(t)
         if abs(ay - TAPE_Y) < 0.5 and ax + A_MOUTH >= dx:
             return t
+    print(f"WARNING: collect_time found no pass over duck {i} at x={dx:.1f}; falling back to t=40 s")
     return 40
 T_COLLECT = [collect_time(i) for i in range(5)]
 DROP_POS = {}
@@ -161,7 +175,7 @@ def stack_center(k, t):
     t0 = STACK_T[k]
     if t < t0:
         return c0
-    bx, by, bh = pose_B(min(t, STACK_END[k]))
+    _, by, _ = pose_B(min(t, STACK_END[k]))
     y = max(c0.y, by + B_PLOW + 1.2)
     return Vector((c0.x, y, c0.z))
 
@@ -213,7 +227,7 @@ def ball1(t):
     if t < 96: return c0
     land = Vector((pose_B(97.5)[0] + B_PLOW + r + 0.3, 5.3, r))
     if t < 97.5: return c0.lerp(land, (t - 96) / 1.5)
-    bx, by, bh = pose_B(min(t, 103.5))
+    bx, _, _ = pose_B(min(t, 103.5))
     return Vector((bx + B_PLOW + r + 0.3, 5.3, r))
 
 # ---------------------------------------------------------------- score
