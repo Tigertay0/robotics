@@ -4,7 +4,6 @@ TEAM RULE (2026-11-03): 4 printed parts in total, any size up to the printer bed
 (Ender 3 V3 SE, 220 x 220 x 250 mm); a moving assembly printed in one go counts as 1.
 
     python tools/blender/build_parts.py            # the 4 team prints -> parts/team4
-    python tools/blender/build_parts.py --alt      # the older 9-part alternative set -> parts/out
     python tools/blender/build_parts.py --blender "C:/path/blender.exe"   # or set BLENDER
 
 Writes parts/out/<part>.stl/.png/_top.png/_under.png/.json and parts/out/budget.md.
@@ -33,16 +32,6 @@ TEAM4 = [
     ("p4_cup_hook.py", "4/4", "B", 1, "team"),
 ]
 TEAM_BUDGET = {"team": 4}
-ALT = [
-    ("claw_palm.py", "L1", "B", 1, "large"),
-    ("duck_cage.py", "M1", "A", 1, "mid"),
-    ("claw_jaw.py", "M2", "B", 1, "mid"),
-    ("small_parts.py:camera_mount", "S1", "B", 1, "small"),
-    ("small_parts.py:tophat_bracket", "S2-S3", "A+B", 2, "small"),
-    ("small_parts.py:light_shroud", "S4-S5", "A+B", 2, "small"),
-    ("small_parts.py:ring_fork", "S6", "B (stretch)", 1, "small"),
-]
-ALT_BUDGET = {"large": 1, "mid": 2, "small": 6}   # rule summary p.12 classes (superseded by TEAM4)
 MIN_PRINT_GAP = 0.35          # mm, between print-in-place bodies at every checked pose
 RUN_ERRORS = (RuntimeError, subprocess.TimeoutExpired, OSError, ValueError, KeyError)
 
@@ -95,11 +84,10 @@ def check_report(rep: dict, planned: str, bodies: int = 1) -> list[str]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--blender", default=DEFAULT_BLENDER)
-    ap.add_argument("--alt", action="store_true", help="build the older 9-part alternative set")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
-    plan, budget = (ALT, ALT_BUDGET) if args.alt else (TEAM4, TEAM_BUDGET)
-    args.out = args.out or str(ROOT / "parts" / ("out" if args.alt else "team4"))
+    plan, budget = TEAM4, TEAM_BUDGET
+    args.out = args.out or str(ROOT / "parts" / "team4")
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     if not Path(args.blender).exists():
@@ -143,7 +131,7 @@ def main() -> int:
         *rows,
         "",
         "Checks = manifold, expected number of bodies, positive volume, fits the size box in mm as exported, >= 1 mm margin."
-        + ("" if args.alt else " Team rule: 4 parts total, each within 220 x 220 x 250 mm; print-in-place counts as 1."),
+        + " Team rule: 4 parts total, each within 220 x 220 x 250 mm; print-in-place counts as 1.",
         "",
         "Budget used: " + ", ".join(f"{used.get(k, 0)}/{v} {k}" for k, v in budget.items()),
         "",

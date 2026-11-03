@@ -37,4 +37,4 @@ That writes `parts/team4/<part>.stl` (millimetres, slicer-ready), previews, and 
 
 ### History
 
-The first version of this file ranked 9 parts for the old class rule: a duck lane in 2 halves, claw pads ×2, cup hook, plow end caps ×2, flap pad and the ring fork. The 9-part alternative from `docs/strategy-alt.md` can still be generated with `python tools/blender/build_parts.py --alt`, but it is over the 4-part limit.
+The first version of this file ranked 9 parts for the old class rule: a duck lane in 2 halves, claw pads ×2, cup hook, plow end caps ×2, flap pad and the ring fork. Those designs and the KIPR example STLs were deleted from the repo because we print only these 4 (they remain in the git history).

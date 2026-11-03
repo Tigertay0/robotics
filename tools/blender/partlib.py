@@ -4,7 +4,7 @@ Units: 1 Blender unit = 1 mm. STL files are written in mm (what slicers expect).
 
 Usage from a part script (run headless):
     "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup \
-        --python tools/blender/parts/<part>.py -- --out parts/out
+        --python tools/blender/parts/<part>.py -- --out parts/team4
 
 Each part script should:
     sys.path.insert(0, <tools/blender>); import partlib as pl
@@ -52,7 +52,7 @@ def script_args():
     return sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 
 
-def out_dir_from_args(default="parts/out"):
+def out_dir_from_args(default="parts/team4"):
     args = script_args()
     if "--out" in args and args.index("--out") + 1 < len(args):
         out = os.path.abspath(args[args.index("--out") + 1])
