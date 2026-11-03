@@ -68,26 +68,22 @@ Everything else: flips both cups, pushes the 5 pom stacks into zone 1, grabs the
 | Light sensor (Electronics) | 1 | Starts the robot on the starting light |
 | Wombat controller + battery (Electronics) | 1 + 1 | Brain and power (2 of 8 kit motor ports unused) |
 
-## 3D-printed parts
+## 3D-printed parts (4 total: team rule)
 
-Allowance (rules p.12): **6 small** (≤ 60 × 60 × 20 mm), **2 mid** (≤ 220 × 220 × 80 mm), **1 large** (≤ 220 × 220 × 250 mm); PLA/PETG, grey; STL submitted before the event. The **team's print plan** is [3D_PRINTS.md](../3D_PRINTS.md):
+We may print **4 parts in total, any size** up to the 220 × 220 × 250 mm bed; a moving assembly printed in one go counts as 1. Full detail: [3D_PRINTS.md](../3D_PRINTS.md). STLs: [parts/team4](../parts/team4).
 
-| Slot | Part | Robot | What it does |
-|---|---|---|---|
-| 2 mid | Duck lane, two 160 mm halves | A | Exact 1.8" channel, smooth walls, built-in funnel and the three gate-servo mounts (replaces the bent plates and straps) |
-| 2 small | Claw pads | B | Cup-shaped pads that grip the 1.6" soft red pom |
-| 1 small | Cup hook | B | Lipped hook that catches the cup rim at any approach angle |
-| 2 small | Plow end caps | B | Round the plow tips so a pushed pom stack stays one group |
-| 1 small | Flap pad | A | Wider intake gate face so ducks can't squeeze past |
-| 1 large | Ring fork (stretch) | B | Slides under 3 rings on a post and lifts them onto a bottle neck (needs a lift the arm doesn't have yet) |
-
-Ready-made STLs from the Blender generator (`python tools/blender/build_parts.py`, files in [parts/out](../parts/out), size check in [parts/out/budget.md](../parts/out/budget.md)): `duck_cage`, `claw_palm`, `claw_jaw`, `camera_mount`, `tophat_bracket` ×2, `light_shroud` ×2, `ring_fork`. They go with the alternative plan ([strategy-alt.md](strategy-alt.md), described in [parts.md](parts.md)); the same generator can produce the parts above.
+| # | Part | Robot | Replaces | What it does |
+|---|---|---|---|---|
+| 1 | Chassis with built-in duck lane | A | metal chassis, 4 standoffs, 4 motor brackets, rear of the metal lane | Deck 46 mm up, lane walls 4 mm off the floor, gate slots, motor windows, Wombat holes, 448 accessory holes at the front, rear and on the deck |
+| 2 | Geared claw (print-in-place) | B | LEGO claw fingers + micro servo bracket | One micro servo opens both fingers through printed gears; pads cup the red pom |
+| 3 | Pocket plow | B | two bent 4×12 plates | Keeps each pushed pom stack as one group; lever-switch pocket |
+| 4 | Cup hook | B | bent 1×10 strap | Lipped tip catches the cup rim for the flip |
 
 ## Is a chassis printed?
 
 No: both robots use the **kit metal chassis** (2 in the 2026 kit). Reasons, and when that would change:
 
 - A printed part must fit one Ender 3 V3 SE bed: **220 × 220 mm (8.7")** footprint at most. Robot A is 17.9" long, so a printed chassis can't be one piece, and splitting it into parts counts as one part (anti-circumvention rule).
-- Only the **1 large + 2 mid** slots can hold a part that size, and they are already used (duck lane, ring fork).
+- We print only **4 parts**, and all 4 go to mechanisms that protect points (lane, claw, plow, hook); a chassis would take one of them.
 - The kit chassis is free, stiff and has the standard hole pattern.
 - **Risk to check:** the rules ban "the old KIPR aluminum chassis" and don't say which one the 2026 kit chassis is. If the Head Judge says it's not allowed, a printed base plate (≤ 8.7" square, mounting the Wombat on its 112.7 × 83.8 mm hole pattern) becomes the fallback for Robot B.

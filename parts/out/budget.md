@@ -10,7 +10,7 @@
 | S4-S5 | `light_shroud` | A+B | 2 | small | 38 x 26 x 18 | 2 x 2 x 1 | 2.0 | 4.78 | pass |
 | S6 | `ring_fork` | B (stretch) | 1 | small | 58 x 58 x 4 | 3 x 3 x 1 | 2.0 | 5.97 | pass |
 
-Checks = manifold, one piece, positive volume, fits the class box in mm as exported, >= 1 mm margin.
+Checks = manifold, expected number of bodies, positive volume, fits the size box in mm as exported, >= 1 mm margin.
 
 Budget used: 1/1 large, 2/2 mid, 6/6 small
 

@@ -1,6 +1,6 @@
 # Parts — Blender CLI part generator
 
-> **The team's print plan is [3D_PRINTS.md](../3D_PRINTS.md).** This file documents `tools/blender/build_parts.py`: parametric part scripts plus an automatic check against KIPR's size classes (watertight, one piece, ≥ 1 mm margin, 1/2/6 budget). The parts below go with the alternative plan in [strategy-alt.md](strategy-alt.md); the same library (`tools/blender/partlib.py`) can generate the parts listed in 3D_PRINTS.md.
+> **The team prints 4 parts in total** (team rule, Nov 3): see [3D_PRINTS.md](../3D_PRINTS.md); `python tools/blender/build_parts.py` builds them into `parts/team4/`. The 9 parts below are the older alternative set for [strategy-alt.md](strategy-alt.md) (`--alt`, into `parts/out/`); they exceed the 4-part limit and are kept only as reference designs. The checks described here (watertight, body count, print-in-place clearance via `partlib.min_gaps`, ≥ 1 mm margin, budget) apply to both sets.
 
 Every printed part is a parametric Blender Python script. One command rebuilds all of them, checks each STL is watertight, checks the KIPR print-size classes, and writes previews:
 

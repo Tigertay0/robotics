@@ -32,6 +32,9 @@ PRINT_CLASSES = {
     "small": {"count": 6, "dims_mm": (60.0, 60.0, 20.0)},
     "mid": {"count": 2, "dims_mm": (220.0, 220.0, 80.0)},
     "large": {"count": 1, "dims_mm": (220.0, 220.0, 250.0)},
+    # Team rule (2026-11-03): 4 printed parts in total, any size up to the printer bed;
+    # a moving assembly printed in one go counts as one part.
+    "team": {"count": 4, "dims_mm": (220.0, 220.0, 250.0)},
 }
 # A single part may never exceed the Ender 3 V3 SE build volume.
 PRINTER_MAX_MM = (220.0, 220.0, 250.0)
@@ -148,6 +151,34 @@ def wedge(length, width, h0, h1, center=(0, 0, 0), name="wedge"):
     return _link(bm, name)
 
 
+def prism(points_xy, z0, z1, name="prism"):
+    """Vertical prism from a convex XY polygon (counter-clockwise), between z0 and z1."""
+    bm = bmesh.new()
+    lo = [bm.verts.new((x, y, z0)) for x, y in points_xy]
+    hi = [bm.verts.new((x, y, z1)) for x, y in points_xy]
+    n = len(points_xy)
+    bm.faces.new(list(reversed(lo)))
+    bm.faces.new(hi)
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new((lo[i], lo[j], hi[j], hi[i]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return _link(bm, name)
+
+
+def hole_grid(obj, centers, d, depth, axis="Z", segments=24):
+    """Cut many holes in ONE boolean (fast). centers = [(x, y, z), ...]; holes run along `axis`."""
+    if not centers:
+        return obj
+    bm = bmesh.new()
+    rot = _axis_matrix(axis)
+    for c in centers:
+        bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=segments,
+                              radius1=d / 2, radius2=d / 2, depth=depth,
+                              matrix=Matrix.Translation(Vector(c)) @ rot)
+    return difference(obj, _link(bm, "hole_grid"))
+
+
 def hole_row(obj, n, pitch, d, start, axis="Z", depth=30, direction=(1, 0, 0)):
     """Cut n holes of diameter d, `pitch` apart along `direction`, starting at `start`."""
     sx, sy, sz = start
@@ -192,6 +223,7 @@ def _apply_boolean(target, other, op):
     """
     manifold = is_manifold(target)[0] and is_manifold(other)[0]
     overlaps = _bbox_overlap(target, other)
+    obox = bbox_mm(other) if overlaps else None
     before = (len(target.data.vertices), len(target.data.polygons))
     mod = target.modifiers.new(name="bool", type="BOOLEAN")
     mod.operation = op
@@ -205,7 +237,8 @@ def _apply_boolean(target, other, op):
     if other_mesh.users == 0:
         bpy.data.meshes.remove(other_mesh)
     if overlaps and before == after:
-        raise RuntimeError(f"boolean {op} on '{target.name}' was a no-op (solver {mod.solver})")
+        raise RuntimeError(f"boolean {op} on {target.name!r} was a no-op (solver {mod.solver}); "
+                           f"operand bbox {[tuple(round(v, 1) for v in c) for c in obox]}")
     return target
 
 
@@ -349,6 +382,71 @@ def check_print_class(dims, cls):
     }
 
 
+def _overlap_volume(a, b):
+    """Volume (mm^3) shared by two bodies, via an EXACT boolean on throwaway copies."""
+    ca, cb = a.copy(), b.copy()
+    ca.data, cb.data = a.data.copy(), b.data.copy()
+    for c in (ca, cb):
+        bpy.context.scene.collection.objects.link(c)
+    try:
+        mod = ca.modifiers.new(name="isect", type="BOOLEAN")
+        mod.operation, mod.object, mod.solver = "INTERSECT", cb, "EXACT"
+        bpy.context.view_layer.objects.active = ca
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bm = bmesh.new()
+        bm.from_mesh(ca.data)
+        vol = abs(bm.calc_volume()) if bm.faces else 0.0
+        bm.free()
+        return vol
+    finally:
+        for c in (ca, cb):
+            m = c.data
+            bpy.data.objects.remove(c, do_unlink=True)
+            bpy.data.meshes.remove(m)
+
+
+def _surface_points(obj, step=0.25, max_per_edge=400):
+    """Every vertex plus points every `step` mm along every edge (world space).
+
+    Vertex-only sampling misses edge-to-edge and face-to-edge contacts; edges don't.
+    """
+    mw = obj.matrix_world
+    vs = [mw @ v.co for v in obj.data.vertices]
+    yield from vs
+    for e in obj.data.edges:
+        p, q = vs[e.vertices[0]], vs[e.vertices[1]]
+        n = min(int((q - p).length / step), max_per_edge)
+        for k in range(1, n):
+            yield p.lerp(q, k / n)
+
+
+def min_gaps(objs):
+    """Smallest distance (mm) between each pair of separate bodies; 0.0 if they overlap.
+
+    For print-in-place parts: anything under the print clearance fuses on the bed.
+    Overlap is measured with an exact boolean (volume > 0.001 mm^3); the gap by
+    sampling each body's vertices AND edges against the other's surface.
+    """
+    from mathutils.bvhtree import BVHTree
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    trees = [BVHTree.FromObject(o, depsgraph) for o in objs]
+    result = {}
+    for i in range(len(objs)):
+        for j in range(i + 1, len(objs)):
+            key = f"{objs[i].name}~{objs[j].name}"
+            if _overlap_volume(objs[i], objs[j]) > 1e-3:
+                result[key] = 0.0
+                continue
+            best = float("inf")
+            for a, tb in ((objs[i], trees[j]), (objs[j], trees[i])):
+                for p in _surface_points(a):
+                    hit = tb.find_nearest(p)
+                    if hit[0] is not None and hit[3] < best:
+                        best = hit[3]
+            result[key] = round(best, 3)
+    return result
+
+
 # ------------------------------------------------------------------- output
 
 def join(objs, name):
@@ -414,7 +512,7 @@ def render_preview(obj, path, size=900, view=(1.0, -1.25, 0.9)):
     bpy.data.objects.remove(cam, do_unlink=True)
 
 
-def finish(obj, name, out_dir, print_class=None, notes="", render=True):
+def finish(obj, name, out_dir, print_class=None, notes="", render=True, extra=None):
     """Export STL + preview PNG + JSON report for one printable part."""
     os.makedirs(out_dir, exist_ok=True)
     drop_to_bed(obj)
@@ -430,6 +528,7 @@ def finish(obj, name, out_dir, print_class=None, notes="", render=True):
         "non_manifold_edges": bad,
         "triangles": sum(len(p.vertices) - 2 for p in obj.data.polygons),
         "notes": notes,
+        **(extra or {}),
     }
     if print_class:
         report["print_check"] = check_print_class(dims_mm(obj, ndigits=None), print_class)
