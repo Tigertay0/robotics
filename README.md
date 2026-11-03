@@ -2,8 +2,13 @@
 
 - **[STRATEGY.md](STRATEGY.md)**: the plan (scoring analysis, robot roles, 120 s timeline, failure plans, build notes), checked against the official rule summary and table model.
 - **[blender/](blender/README.md)**: 3D model of the official table and both proposed robots (kit parts only), plus the animated plan with a live score. Open `blender/out/fall_game_2026_animated.blend` in Blender and press Space.
+- **[docs/ROBOTS.md](docs/ROBOTS.md)**: how each robot should look (renders), every part and what it does, printed vs kit parts, chassis note.
 - **[guide/](guide/index.html)**: the interactive assembly guide (open `index.html` in a browser; the 3D model builds up step by step). **[3D_PRINTS.md](3D_PRINTS.md)**: which 3D-printed parts are worth it.
 - **[code/](code/README.md)**: first Wombat programs for both robots.
 - `docs/`: the 2026 rule summary and kit part lists the plan is based on.
+- **[docs/rules-digest.md](docs/rules-digest.md)**: every rule that matters, the ambiguous ones and the questions to send KIPR (Zone 5 multiplier first). Also [field-map.md](docs/field-map.md) (every piece, zone and clearance in inches, renders in `docs/renders/`), [hardware.md](docs/hardware.md), [prior-art.md](docs/prior-art.md).
+- **`tools/score.py`**: exact scorer with a switch for each ambiguous rule. `python tools/score.py data/scenarios/plan_t1_core.json` (add `--conservative` or `--sensitivity`); tests: `python tools/test_score.py`.
+- **`tools/blender/`**: parametric 3D-print part generator. `python tools/blender/build_parts.py` writes STLs to `parts/out/` and fails if a part breaks KIPR's size classes or the 1 large / 2 mid / 6 small budget ([docs/parts.md](docs/parts.md)).
+- [docs/strategy-alt.md](docs/strategy-alt.md): a second, independently derived plan kept for comparison; STRATEGY.md is the team plan.
 - `Fall_Game_Table.glb`, `STL Parts.zip`: official table and part geometry from the KIPR Team Home Base (needed to rebuild the model).
 - `Botball_Fall_Seeding_Scoresheet.xlsx`, `Fall_Game_Table.pdf`, `Botball Inventory.xlsx`: original uploads.
