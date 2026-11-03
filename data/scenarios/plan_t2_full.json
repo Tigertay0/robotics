@@ -1,0 +1,12 @@
+{
+  "name": "plan_t2_full",
+  "description": "OUR PLAN, Tier 2 (full target without rings): Tier 1 + Botguy to platform, Big Duck to Botguy's start, visible red stack pushed into zone 1 and green stack into zone 3.",
+  "zones": {"1": {"ducks": 1, "poms": {"red": 4}}, "2": {"ducks": 1}, "3": {"ducks": 1, "poms": {"green": 4}}, "4": {"ducks": 1}, "5": {"ducks": 1}},
+  "platform": {"poms": {"red": 1}, "mystery_red_pom": true},
+  "pickleballs": {"under_platform": 1},
+  "cups": {"nested": false, "pieces": [
+    {"upright": true, "on_tape": false, "touching_board": true},
+    {"upright": false, "on_tape": true, "touching_board": true}]},
+  "botguy": "platform",
+  "big_duck": "botguy_start"
+}

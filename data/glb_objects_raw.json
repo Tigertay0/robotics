@@ -1,0 +1,3360 @@
+[
+ {
+  "name": "1.75 inch pvc-1 - Part",
+  "parent": "1.75 inch pvc-1",
+  "min": [
+   -1.2151,
+   -1.1811,
+   0.0254
+  ],
+  "max": [
+   -1.1821,
+   -1.1366,
+   0.0584
+  ],
+  "verts": 392,
+  "mats": [
+   "white satin finish plastic.005"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "1.75 inch pvc-11 - Part",
+  "parent": "1.75 inch pvc-11",
+  "min": [
+   -1.1747,
+   1.1821,
+   0.0254
+  ],
+  "max": [
+   -1.1303,
+   1.2151,
+   0.0584
+  ],
+  "verts": 392,
+  "mats": [
+   "white satin finish plastic.042"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "1.75 inch pvc-2 - Part",
+  "parent": "1.75 inch pvc-2",
+  "min": [
+   -0.9388,
+   -1.1811,
+   0.0254
+  ],
+  "max": [
+   -0.9058,
+   -1.1366,
+   0.0584
+  ],
+  "verts": 392,
+  "mats": [
+   "white satin finish plastic.017"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "1.75 inch pvc-4 - Part",
+  "parent": "1.75 inch pvc-4",
+  "min": [
+   -0.161,
+   -0.21,
+   0.0254
+  ],
+  "max": [
+   -0.128,
+   -0.1656,
+   0.0584
+  ],
+  "verts": 392,
+  "mats": [
+   "white satin finish plastic.034"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "10 inch pvc-1 - Part",
+  "parent": "10 inch pvc-1",
+  "min": [
+   -0.1676,
+   -0.127,
+   0.0188
+  ],
+  "max": [
+   -0.1214,
+   0.127,
+   0.065
+  ],
+  "verts": 292,
+  "mats": [
+   "white satin finish plastic.028"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "12 inch pvc-1 - Part",
+  "parent": "12 inch pvc-1",
+  "min": [
+   -0.8572,
+   1.1821,
+   0.0254
+  ],
+  "max": [
+   -0.5524,
+   1.2151,
+   0.0584
+  ],
+  "verts": 296,
+  "mats": [
+   "white satin finish plastic.054"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "12.5x24 No Holes-3 - Part",
+  "parent": "12.5x24 No Holes-3",
+  "min": [
+   -1.2192,
+   -1.2192,
+   0.161
+  ],
+  "max": [
+   -0.9017,
+   -0.6096,
+   0.1657
+  ],
+  "verts": 24,
+  "mats": [
+   "white soft touch plastic"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "12.875 inch pvc-2 - Part",
+  "parent": "12.875 inch pvc-2",
+  "min": [
+   -0.161,
+   0.1619,
+   0.0255
+  ],
+  "max": [
+   -0.128,
+   0.489,
+   0.0583
+  ],
+  "verts": 276,
+  "mats": [
+   "white satin finish plastic.050"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "13.875 inch pvc-1 - Part",
+  "parent": "13.875 inch pvc-1",
+  "min": [
+   -0.9049,
+   -1.2151,
+   0.0255
+  ],
+  "max": [
+   -0.5524,
+   -1.1821,
+   0.0583
+  ],
+  "verts": 276,
+  "mats": [
+   "white satin finish plastic.053"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "14 inch pvc-5 - Part",
+  "parent": "14 inch pvc-5",
+  "min": [
+   -0.5175,
+   -1.2151,
+   0.0255
+  ],
+  "max": [
+   -0.1619,
+   -1.1821,
+   0.0583
+  ],
+  "verts": 276,
+  "mats": [
+   "white satin finish plastic.030"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "14 inch pvc-7 - Part",
+  "parent": "14 inch pvc-7",
+  "min": [
+   -0.5175,
+   1.1821,
+   0.0255
+  ],
+  "max": [
+   -0.1619,
+   1.2151,
+   0.0583
+  ],
+  "verts": 276,
+  "mats": [
+   "white satin finish plastic.039"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "17.625 inch pvc-1 - Part",
+  "parent": "17.625 inch pvc-1",
+  "min": [
+   -1.2151,
+   -1.0954,
+   0.0254
+  ],
+  "max": [
+   -1.1821,
+   -0.6477,
+   0.0584
+  ],
+  "verts": 260,
+  "mats": [
+   "white satin finish plastic.006"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "17.625 inch pvc-2 - Part",
+  "parent": "17.625 inch pvc-2",
+  "min": [
+   -0.9425,
+   -1.0954,
+   0.0217
+  ],
+  "max": [
+   -0.9022,
+   -0.6477,
+   0.062
+  ],
+  "verts": 260,
+  "mats": [
+   "white satin finish plastic.015"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-1 - Part",
+  "parent": "2.5 inch pvc-1",
+  "min": [
+   -1.2151,
+   -1.1293,
+   0.0594
+  ],
+  "max": [
+   -1.1821,
+   -1.0963,
+   0.1229
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.007"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-10 - Part",
+  "parent": "2.5 inch pvc-10",
+  "min": [
+   -0.8912,
+   1.1176,
+   0.0254
+  ],
+  "max": [
+   -0.8582,
+   1.1811,
+   0.0584
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.045"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-2 - Part",
+  "parent": "2.5 inch pvc-2",
+  "min": [
+   -1.2151,
+   -0.6467,
+   0.0594
+  ],
+  "max": [
+   -1.1821,
+   -0.6137,
+   0.1229
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.008"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-3 - Part",
+  "parent": "2.5 inch pvc-3",
+  "min": [
+   -0.9388,
+   -0.6467,
+   0.0594
+  ],
+  "max": [
+   -0.9058,
+   -0.6137,
+   0.1229
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.014"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-4 - Part",
+  "parent": "2.5 inch pvc-4",
+  "min": [
+   -0.9388,
+   -1.1293,
+   0.0594
+  ],
+  "max": [
+   -0.9058,
+   -1.0963,
+   0.1229
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.016"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "2.5 inch pvc-9 - Part",
+  "parent": "2.5 inch pvc-9",
+  "min": [
+   -1.1293,
+   1.1176,
+   0.0254
+  ],
+  "max": [
+   -1.0963,
+   1.1811,
+   0.0584
+  ],
+  "verts": 376,
+  "mats": [
+   "white satin finish plastic.044"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "21.125 inch pvc-1 - Part",
+  "parent": "21.125 inch pvc-1",
+  "min": [
+   -1.2151,
+   0.6445,
+   0.0254
+  ],
+  "max": [
+   -1.1821,
+   1.1811,
+   0.0584
+  ],
+  "verts": 264,
+  "mats": [
+   "white satin finish plastic.043"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "23.375 inch pvc-1 - Part",
+  "parent": "23.375 inch pvc-1",
+  "min": [
+   -1.2198,
+   -0.6128,
+   0.0208
+  ],
+  "max": [
+   -1.1774,
+   -0.019,
+   0.063
+  ],
+  "verts": 244,
+  "mats": [
+   "white satin finish plastic.026"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "23.375 inch pvc-3 - Part",
+  "parent": "23.375 inch pvc-3",
+  "min": [
+   -1.2151,
+   0.0159,
+   0.0255
+  ],
+  "max": [
+   -1.1821,
+   0.6096,
+   0.0583
+  ],
+  "verts": 244,
+  "mats": [
+   "white satin finish plastic.025"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "25.875 inch pvc-1 - Part",
+  "parent": "25.875 inch pvc-1",
+  "min": [
+   -0.1666,
+   -1.1811,
+   0.0197
+  ],
+  "max": [
+   -0.1223,
+   -0.5239,
+   0.0641
+  ],
+  "verts": 244,
+  "mats": [
+   "white satin finish plastic.035"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "25.875 inch pvc-3 - Part",
+  "parent": "25.875 inch pvc-3",
+  "min": [
+   -0.1673,
+   0.5239,
+   0.019
+  ],
+  "max": [
+   -0.1216,
+   1.1811,
+   0.0648
+  ],
+  "verts": 244,
+  "mats": [
+   "white satin finish plastic.038"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "5.5x24-1 - Part",
+  "parent": "5.5x24-1",
+  "min": [
+   -0.9017,
+   -1.2192,
+   0.0213
+  ],
+  "max": [
+   -0.8969,
+   -0.6096,
+   0.161
+  ],
+  "verts": 38,
+  "mats": [
+   "white soft touch plastic.001"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "8 inch pvc-10 - Part",
+  "parent": "8 inch pvc-10",
+  "min": [
+   -1.0954,
+   1.0836,
+   0.0254
+  ],
+  "max": [
+   -0.8922,
+   1.1166,
+   0.0583
+  ],
+  "verts": 308,
+  "mats": [
+   "white satin finish plastic.048"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "8 inch pvc-18 - Part",
+  "parent": "8 inch pvc-18",
+  "min": [
+   -1.2192,
+   0.6064,
+   0.0594
+  ],
+  "max": [
+   -1.1779,
+   0.6477,
+   0.2626
+  ],
+  "verts": 308,
+  "mats": [
+   "white satin finish plastic.055"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "8 inch pvc-19 - Part",
+  "parent": "8 inch pvc-19",
+  "min": [
+   -0.5514,
+   1.1821,
+   0.0594
+  ],
+  "max": [
+   -0.5185,
+   1.2151,
+   0.2626
+  ],
+  "verts": 308,
+  "mats": [
+   "white satin finish plastic.056"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "8 inch pvc-4 - Part",
+  "parent": "8 inch pvc-4",
+  "min": [
+   -1.0954,
+   1.1821,
+   0.0254
+  ],
+  "max": [
+   -0.8922,
+   1.2151,
+   0.0583
+  ],
+  "verts": 308,
+  "mats": [
+   "white satin finish plastic.024"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "9.5 inch pvc-1 - Part",
+  "parent": "9.5 inch pvc-1",
+  "min": [
+   -1.1811,
+   -0.6467,
+   0.1238
+  ],
+  "max": [
+   -0.9398,
+   -0.6137,
+   0.1568
+  ],
+  "verts": 292,
+  "mats": [
+   "white satin finish plastic.011"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "9.5 inch pvc-2 - Part",
+  "parent": "9.5 inch pvc-2",
+  "min": [
+   -1.1811,
+   -1.1293,
+   0.1238
+  ],
+  "max": [
+   -0.9398,
+   -1.0963,
+   0.1568
+  ],
+  "verts": 292,
+  "mats": [
+   "white satin finish plastic.012"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "9.5 inch pvc-3 - Part",
+  "parent": "9.5 inch pvc-3",
+  "min": [
+   -1.1811,
+   -1.2151,
+   0.0254
+  ],
+  "max": [
+   -0.9398,
+   -1.1821,
+   0.0584
+  ],
+  "verts": 292,
+  "mats": [
+   "white satin finish plastic.013"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "9.5 inch pvc-6 - Part",
+  "parent": "9.5 inch pvc-6",
+  "min": [
+   -0.161,
+   -0.489,
+   0.0254
+  ],
+  "max": [
+   -0.128,
+   -0.2476,
+   0.0584
+  ],
+  "verts": 292,
+  "mats": [
+   "white satin finish plastic.033"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Black duct tape 12 in-1 - Part",
+  "parent": "Black duct tape 12 in-1",
+  "min": [
+   -1.2011,
+   -0.6096,
+   0.0213
+  ],
+  "max": [
+   -0.8963,
+   -0.562,
+   0.0215
+  ],
+  "verts": 24,
+  "mats": [
+   "pw-mt11150.003"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "name": "Black duct tape 41.5 in-1 - Part",
+  "parent": "Black duct tape 41.5 in-1",
+  "min": [
+   -1.2151,
+   -0.0254,
+   0.0213
+  ],
+  "max": [
+   -0.161,
+   0.0222,
+   0.0215
+  ],
+  "verts": 24,
+  "mats": [
+   "pw-mt11150.002"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "name": "Black duct tape 89.5 in-1 - Part",
+  "parent": "Black duct tape 89.5 in-1",
+  "min": [
+   -0.8963,
+   -1.1821,
+   0.0213
+  ],
+  "max": [
+   -0.8487,
+   1.0912,
+   0.0215
+  ],
+  "verts": 24,
+  "mats": [
+   "pw-mt11150"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "name": "Black duct tape 93.5 in-2 - Part",
+  "parent": "Black duct tape 93.5 in-2",
+  "min": [
+   -0.5598,
+   -1.1821,
+   0.0213
+  ],
+  "max": [
+   -0.5121,
+   1.1928,
+   0.0215
+  ],
+  "verts": 24,
+  "mats": [
+   "pw-mt11150.001"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "name": "Blue Bottle-1 - Part",
+  "parent": "Blue Bottle-1",
+  "min": [
+   -0.956,
+   1.1135,
+   0.0213
+  ],
+  "max": [
+   -0.8918,
+   1.1777,
+   0.147
+  ],
+  "verts": 25906,
+  "mats": [
+   "blue polypropylene"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.23
+  ]
+ },
+ {
+  "name": "Blue Bottle-2 - Part",
+  "parent": "Blue Bottle-2",
+  "min": [
+   -1.0258,
+   1.1135,
+   0.0213
+  ],
+  "max": [
+   -0.9617,
+   1.1777,
+   0.147
+  ],
+  "verts": 25906,
+  "mats": [
+   "blue polypropylene.001"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.23
+  ]
+ },
+ {
+  "name": "Blue Bottle-3 - Part",
+  "parent": "Blue Bottle-3",
+  "min": [
+   -1.0957,
+   1.1135,
+   0.0213
+  ],
+  "max": [
+   -1.0315,
+   1.1777,
+   0.147
+  ],
+  "verts": 25906,
+  "mats": [
+   "blue polypropylene.002"
+  ],
+  "color": [
+   0.0,
+   0.0,
+   0.23
+  ]
+ },
+ {
+  "name": "Cup - Black-1 - Part",
+  "parent": "Cup - Black-1",
+  "min": [
+   -0.9369,
+   -0.0641,
+   0.0213
+  ],
+  "max": [
+   -0.8096,
+   0.0633,
+   0.166
+  ],
+  "verts": 2178,
+  "mats": [
+   "black medium gloss plastic-2"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Cup - Black-2 - Part",
+  "parent": "Cup - Black-2",
+  "min": [
+   -0.5995,
+   -0.0649,
+   0.0213
+  ],
+  "max": [
+   -0.4722,
+   0.0624,
+   0.166
+  ],
+  "verts": 2178,
+  "mats": [
+   "black medium gloss plastic-2.001"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Cut-Extrude2 - Part",
+  "parent": "Cut-Extrude2",
+  "min": [
+   -0.127,
+   -0.0867,
+   0.0202
+  ],
+  "max": [
+   -0.0635,
+   0.0867,
+   0.0847
+  ],
+  "verts": 3096,
+  "mats": [
+   "grey cotton.003"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "Cut-Extrude2 - Part 2",
+  "parent": "Cut-Extrude2",
+  "min": [
+   -0.128,
+   -0.0376,
+   0.0344
+  ],
+  "max": [
+   -0.0645,
+   0.0376,
+   0.136
+  ],
+  "verts": 2072,
+  "mats": [
+   "red low gloss plastic.001"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Cut-Extrude2 - Part 3",
+  "parent": "Cut-Extrude2",
+  "min": [
+   -0.128,
+   -0.0196,
+   0.0509
+  ],
+  "max": [
+   -0.1264,
+   0.0208,
+   0.1073
+  ],
+  "verts": 324,
+  "mats": [
+   "color"
+  ],
+  "color": [
+   0.6,
+   0.65,
+   0.86
+  ]
+ },
+ {
+  "name": "Elbow Connector-1 - Part",
+  "parent": "Elbow Connector-1",
+  "min": [
+   -1.2192,
+   -1.2192,
+   0.0213
+  ],
+  "max": [
+   -1.1557,
+   -1.1557,
+   0.0625
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.001"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-22 - Part",
+  "parent": "Elbow Connector-22",
+  "min": [
+   -1.2192,
+   1.1557,
+   0.0213
+  ],
+  "max": [
+   -1.1557,
+   1.2192,
+   0.0625
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.040"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-23 - Part",
+  "parent": "Elbow Connector-23",
+  "min": [
+   -0.9176,
+   1.0795,
+   0.0213
+  ],
+  "max": [
+   -0.8541,
+   1.143,
+   0.0625
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.046"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-24 - Part",
+  "parent": "Elbow Connector-24",
+  "min": [
+   -1.1335,
+   1.0795,
+   0.0213
+  ],
+  "max": [
+   -1.07,
+   1.143,
+   0.0625
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.047"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-3 - Part",
+  "parent": "Elbow Connector-3",
+  "min": [
+   -1.2192,
+   -0.6509,
+   0.0975
+  ],
+  "max": [
+   -1.1557,
+   -0.6096,
+   0.161
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.009"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-4 - Part",
+  "parent": "Elbow Connector-4",
+  "min": [
+   -1.2192,
+   -1.1335,
+   0.0975
+  ],
+  "max": [
+   -1.1557,
+   -1.0922,
+   0.161
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.010"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-5 - Part",
+  "parent": "Elbow Connector-5",
+  "min": [
+   -0.9652,
+   -1.1335,
+   0.0975
+  ],
+  "max": [
+   -0.9017,
+   -1.0922,
+   0.161
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.020"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-6 - Part",
+  "parent": "Elbow Connector-6",
+  "min": [
+   -0.9652,
+   -0.6509,
+   0.0975
+  ],
+  "max": [
+   -0.9017,
+   -0.6096,
+   0.161
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.021"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Elbow Connector-7 - Part",
+  "parent": "Elbow Connector-7",
+  "min": [
+   -0.943,
+   -0.6731,
+   0.0213
+  ],
+  "max": [
+   -0.9017,
+   -0.6096,
+   0.0848
+  ],
+  "verts": 8948,
+  "mats": [
+   "white satin finish plastic.022"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Extrude7 - Part",
+  "parent": "Extrude7",
+  "min": [
+   -0.1404,
+   -0.0385,
+   0.1594
+  ],
+  "max": [
+   -0.128,
+   0.0384,
+   0.1761
+  ],
+  "verts": 234,
+  "mats": [
+   "cotton white 2d"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "Extrude8[1] - Part",
+  "parent": "Extrude8[1]",
+  "min": [
+   -0.1407,
+   0.0032,
+   0.1634
+  ],
+  "max": [
+   -0.128,
+   0.0159,
+   0.1761
+  ],
+  "verts": 258,
+  "mats": [
+   "grey cotton"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "Extrude8[2] - Part",
+  "parent": "Extrude8[2]",
+  "min": [
+   -0.1407,
+   -0.0159,
+   0.1634
+  ],
+  "max": [
+   -0.128,
+   -0.0032,
+   0.1761
+  ],
+  "verts": 258,
+  "mats": [
+   "grey cotton.001"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "FRP - 4x8-1 - Part",
+  "parent": "FRP - 4x8-1",
+  "min": [
+   -1.2192,
+   -1.2192,
+   0.0193
+  ],
+  "max": [
+   0.0,
+   1.2192,
+   0.0213
+  ],
+  "verts": 24,
+  "mats": [
+   "white-pw-mt11050"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Mirror3 - Part",
+  "parent": "Mirror3",
+  "min": [
+   -1.0473,
+   -0.6479,
+   0.2404
+  ],
+  "max": [
+   -1.0401,
+   -0.6369,
+   0.2523
+  ],
+  "verts": 215,
+  "mats": [
+   "black medium gloss plastic.001"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Mirror3 - Part 2",
+  "parent": "Mirror3",
+  "min": [
+   -1.0731,
+   -0.7484,
+   0.1643
+  ],
+  "max": [
+   -1.0126,
+   -0.6241,
+   0.2774
+  ],
+  "verts": 9065,
+  "mats": [
+   "yellow medium gloss plastic.001"
+  ],
+  "color": [
+   1.0,
+   0.86,
+   0.01
+  ]
+ },
+ {
+  "name": "Mirror3 - Part 3",
+  "parent": "Mirror3",
+  "min": [
+   -1.0731,
+   -0.6334,
+   0.2255
+  ],
+  "max": [
+   -1.0516,
+   -0.6129,
+   0.2476
+  ],
+  "verts": 1236,
+  "mats": [
+   "light grey medium gloss plastic.001"
+  ],
+  "color": [
+   0.81,
+   0.17,
+   0.0
+  ]
+ },
+ {
+  "name": "Mirror3 - Part 4",
+  "parent": "Mirror3",
+  "min": [
+   -1.0454,
+   -0.6421,
+   0.2473
+  ],
+  "max": [
+   -1.0436,
+   -0.6395,
+   0.2504
+  ],
+  "verts": 77,
+  "mats": [
+   "white medium gloss plastic.001"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Particle board - 4x8-1 - Part",
+  "parent": "Particle board - 4x8-1",
+  "min": [
+   -1.2192,
+   -1.2192,
+   0.0003
+  ],
+  "max": [
+   0.0,
+   1.2192,
+   0.0193
+  ],
+  "verts": 24,
+  "mats": [
+   "chipboard"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "pickle ball 2-1 - Part",
+  "parent": "pickle ball 2-1",
+  "min": [
+   -0.1879,
+   -0.2714,
+   0.0717
+  ],
+  "max": [
+   -0.1011,
+   -0.189,
+   0.1613
+  ],
+  "verts": 29426,
+  "mats": [
+   "color-2"
+  ],
+  "color": [
+   1.0,
+   0.16,
+   0.72
+  ]
+ },
+ {
+  "name": "pickle ball 2-2 - Part",
+  "parent": "pickle ball 2-2",
+  "min": [
+   -0.1855,
+   -0.547,
+   0.08
+  ],
+  "max": [
+   -0.1034,
+   -0.4658,
+   0.153
+  ],
+  "verts": 29426,
+  "mats": [
+   "color-2.001"
+  ],
+  "color": [
+   1.0,
+   0.16,
+   0.72
+  ]
+ },
+ {
+  "name": "pickle ball 2-3 - Part",
+  "parent": "pickle ball 2-3",
+  "min": [
+   -0.5807,
+   -1.244,
+   0.0807
+  ],
+  "max": [
+   -0.4893,
+   -1.1532,
+   0.1538
+  ],
+  "verts": 29426,
+  "mats": [
+   "color-2.002"
+  ],
+  "color": [
+   1.0,
+   0.16,
+   0.72
+  ]
+ },
+ {
+  "name": "pickle ball 2-4 - Part",
+  "parent": "pickle ball 2-4",
+  "min": [
+   -1.2376,
+   -0.0402,
+   0.08
+  ],
+  "max": [
+   -1.1595,
+   0.037,
+   0.153
+  ],
+  "verts": 29426,
+  "mats": [
+   "color-2.003"
+  ],
+  "color": [
+   1.0,
+   0.16,
+   0.72
+  ]
+ },
+ {
+  "name": "pom-gold-4 - Part",
+  "parent": "pom-gold-4",
+  "min": [
+   -0.555,
+   0.9598,
+   0.0524
+  ],
+  "max": [
+   -0.5169,
+   0.9979,
+   0.0905
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-gold.004"
+  ],
+  "color": [
+   1.0,
+   0.75,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-gold-5 - Part",
+  "parent": "pom-gold-5",
+  "min": [
+   -0.5747,
+   0.9428,
+   0.0213
+  ],
+  "max": [
+   -0.5309,
+   0.9867,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-gold.001"
+  ],
+  "color": [
+   1.0,
+   0.75,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-gold-6 - Part",
+  "parent": "pom-gold-6",
+  "min": [
+   -0.5333,
+   -0.0289,
+   0.0213
+  ],
+  "max": [
+   -0.4952,
+   0.0092,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-gold"
+  ],
+  "color": [
+   1.0,
+   0.75,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-gold-6 2 - Part",
+  "parent": "pom-gold-6 2",
+  "min": [
+   -0.5343,
+   0.9523,
+   0.0213
+  ],
+  "max": [
+   -0.4962,
+   0.9903,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-gold.002"
+  ],
+  "color": [
+   1.0,
+   0.75,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-gold-7 - Part",
+  "parent": "pom-gold-7",
+  "min": [
+   -0.5678,
+   0.9784,
+   0.0138
+  ],
+  "max": [
+   -0.5116,
+   1.0227,
+   0.0669
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-gold.003"
+  ],
+  "color": [
+   1.0,
+   0.75,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-green-4 - Part",
+  "parent": "pom-green-4",
+  "min": [
+   -0.555,
+   0.3502,
+   0.0524
+  ],
+  "max": [
+   -0.5169,
+   0.3883,
+   0.0905
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215.004"
+  ],
+  "color": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-green-5 - Part",
+  "parent": "pom-green-5",
+  "min": [
+   -0.5737,
+   -0.0384,
+   0.0213
+  ],
+  "max": [
+   -0.5298,
+   0.0055,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215"
+  ],
+  "color": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-green-5 2 - Part",
+  "parent": "pom-green-5 2",
+  "min": [
+   -0.5748,
+   0.3332,
+   0.0213
+  ],
+  "max": [
+   -0.5309,
+   0.3771,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215.001"
+  ],
+  "color": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-green-6 - Part",
+  "parent": "pom-green-6",
+  "min": [
+   -0.5343,
+   0.3426,
+   0.0213
+  ],
+  "max": [
+   -0.4962,
+   0.3807,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215.002"
+  ],
+  "color": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-green-7 - Part",
+  "parent": "pom-green-7",
+  "min": [
+   -0.5679,
+   0.3688,
+   0.0137
+  ],
+  "max": [
+   -0.5116,
+   0.4131,
+   0.0669
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215.003"
+  ],
+  "color": [
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ {
+  "name": "pom-lavender-4 - Part",
+  "parent": "pom-lavender-4",
+  "min": [
+   -0.555,
+   0.5534,
+   0.0524
+  ],
+  "max": [
+   -0.5169,
+   0.5915,
+   0.0905
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-lavender.004"
+  ],
+  "color": [
+   0.72,
+   0.11,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-lavender-5 - Part",
+  "parent": "pom-lavender-5",
+  "min": [
+   -0.5747,
+   0.5364,
+   0.0213
+  ],
+  "max": [
+   -0.5309,
+   0.5803,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-lavender.001"
+  ],
+  "color": [
+   0.72,
+   0.11,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-lavender-6 - Part",
+  "parent": "pom-lavender-6",
+  "min": [
+   -0.5343,
+   0.5459,
+   0.0213
+  ],
+  "max": [
+   -0.4962,
+   0.5839,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-lavender.002"
+  ],
+  "color": [
+   0.72,
+   0.11,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-lavender-7 - Part",
+  "parent": "pom-lavender-7",
+  "min": [
+   -0.5668,
+   -0.0028,
+   0.0138
+  ],
+  "max": [
+   -0.5106,
+   0.0415,
+   0.0669
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-lavender"
+  ],
+  "color": [
+   0.72,
+   0.11,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-lavender-7 2 - Part",
+  "parent": "pom-lavender-7 2",
+  "min": [
+   -0.5678,
+   0.572,
+   0.0138
+  ],
+  "max": [
+   -0.5116,
+   0.6163,
+   0.0669
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-lavender.003"
+  ],
+  "color": [
+   0.72,
+   0.11,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-red-1 - Part",
+  "parent": "pom-red-1",
+  "min": [
+   -0.5748,
+   0.13,
+   0.0213
+  ],
+  "max": [
+   -0.5309,
+   0.1739,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215-2"
+  ],
+  "color": [
+   1.0,
+   0.0,
+   0.01
+  ]
+ },
+ {
+  "name": "pom-red-1 2 - Part",
+  "parent": "pom-red-1 2",
+  "min": [
+   -0.8988,
+   -0.0146,
+   0.0213
+  ],
+  "max": [
+   -0.8607,
+   0.0235,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215-2.004"
+  ],
+  "color": [
+   1.0,
+   0.0,
+   0.01
+  ]
+ },
+ {
+  "name": "pom-red-2 - Part",
+  "parent": "pom-red-2",
+  "min": [
+   -0.5343,
+   0.1394,
+   0.0213
+  ],
+  "max": [
+   -0.4962,
+   0.1775,
+   0.0594
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215-2.001"
+  ],
+  "color": [
+   1.0,
+   0.0,
+   0.01
+  ]
+ },
+ {
+  "name": "pom-red-3 - Part",
+  "parent": "pom-red-3",
+  "min": [
+   -0.5679,
+   0.1656,
+   0.0137
+  ],
+  "max": [
+   -0.5116,
+   0.2099,
+   0.0669
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215-2.002"
+  ],
+  "color": [
+   1.0,
+   0.0,
+   0.01
+  ]
+ },
+ {
+  "name": "pom-red-4 - Part",
+  "parent": "pom-red-4",
+  "min": [
+   -0.555,
+   0.147,
+   0.0524
+  ],
+  "max": [
+   -0.5169,
+   0.1851,
+   0.0905
+  ],
+  "verts": 5004,
+  "mats": [
+   "pw-mt11215-2.003"
+  ],
+  "color": [
+   1.0,
+   0.0,
+   0.01
+  ]
+ },
+ {
+  "name": "pom-turquoise-4 - Part",
+  "parent": "pom-turquoise-4",
+  "min": [
+   -0.5539,
+   -0.0214,
+   0.0524
+  ],
+  "max": [
+   -0.5158,
+   0.0167,
+   0.0905
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-turquoise"
+  ],
+  "color": [
+   0.0,
+   0.37,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-turquoise-4 2 - Part",
+  "parent": "pom-turquoise-4 2",
+  "min": [
+   -0.555,
+   0.7566,
+   0.0524
+  ],
+  "max": [
+   -0.5169,
+   0.7947,
+   0.0905
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-turquoise.004"
+  ],
+  "color": [
+   0.0,
+   0.37,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-turquoise-5 - Part",
+  "parent": "pom-turquoise-5",
+  "min": [
+   -0.5747,
+   0.7396,
+   0.0213
+  ],
+  "max": [
+   -0.5309,
+   0.7835,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-turquoise.001"
+  ],
+  "color": [
+   0.0,
+   0.37,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-turquoise-6 - Part",
+  "parent": "pom-turquoise-6",
+  "min": [
+   -0.5343,
+   0.7491,
+   0.0213
+  ],
+  "max": [
+   -0.4962,
+   0.7871,
+   0.0594
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-turquoise.002"
+  ],
+  "color": [
+   0.0,
+   0.37,
+   1.0
+  ]
+ },
+ {
+  "name": "pom-turquoise-7 - Part",
+  "parent": "pom-turquoise-7",
+  "min": [
+   -0.5678,
+   0.7752,
+   0.0138
+  ],
+  "max": [
+   -0.5116,
+   0.8195,
+   0.0669
+  ],
+  "verts": 1664,
+  "mats": [
+   "pw-mt11215-turquoise.003"
+  ],
+  "color": [
+   0.0,
+   0.37,
+   1.0
+  ]
+ },
+ {
+  "name": "Revolve2 - Part",
+  "parent": "Revolve2",
+  "min": [
+   -0.1407,
+   -0.0461,
+   0.1518
+  ],
+  "max": [
+   -0.0899,
+   0.046,
+   0.2376
+  ],
+  "verts": 1864,
+  "mats": [
+   "grey cotton.002"
+  ],
+  "color": [
+   0.8,
+   0.8,
+   0.8
+  ]
+ },
+ {
+  "name": "Revolve2 - Part 2",
+  "parent": "Revolve2",
+  "min": [
+   -0.128,
+   -0.0381,
+   0.136
+  ],
+  "max": [
+   -0.0645,
+   0.0381,
+   0.2254
+  ],
+  "verts": 2772,
+  "mats": [
+   "red low gloss plastic"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-1 - Part",
+  "parent": "Ring 1.75in-1",
+  "min": [
+   -0.5695,
+   1.1641,
+   0.0839
+  ],
+  "max": [
+   -0.5005,
+   1.233,
+   0.093
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.001"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-2 - Part",
+  "parent": "Ring 1.75in-2",
+  "min": [
+   -0.5695,
+   1.1641,
+   0.093
+  ],
+  "max": [
+   -0.5005,
+   1.233,
+   0.1021
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.003"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-3 - Part",
+  "parent": "Ring 1.75in-3",
+  "min": [
+   -0.5695,
+   1.1641,
+   0.1022
+  ],
+  "max": [
+   -0.5005,
+   1.233,
+   0.1113
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.004"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-4 - Part",
+  "parent": "Ring 1.75in-4",
+  "min": [
+   -1.2288,
+   0.5968,
+   0.0839
+  ],
+  "max": [
+   -1.1683,
+   0.6573,
+   0.093
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.002"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-5 - Part",
+  "parent": "Ring 1.75in-5",
+  "min": [
+   -1.2288,
+   0.5968,
+   0.093
+  ],
+  "max": [
+   -1.1683,
+   0.6573,
+   0.1021
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.005"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Ring 1.75in-6 - Part",
+  "parent": "Ring 1.75in-6",
+  "min": [
+   -1.2288,
+   0.5968,
+   0.1022
+  ],
+  "max": [
+   -1.1683,
+   0.6573,
+   0.1113
+  ],
+  "verts": 4712,
+  "mats": [
+   "red low gloss plastic-2.006"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Blue 2.25in-1 - Part",
+  "parent": "Rubber Duck Blue 2.25in-1",
+  "min": [
+   -0.5544,
+   -0.8055,
+   0.0213
+  ],
+  "max": [
+   -0.5174,
+   -0.7532,
+   0.0583
+  ],
+  "verts": 9050,
+  "mats": [
+   "blue low gloss plastic"
+  ],
+  "color": [
+   0.0,
+   0.04,
+   0.65
+  ]
+ },
+ {
+  "name": "Rubber Duck Blue 225in-1 - Part 2",
+  "parent": "Rubber Duck Blue 2.25in-1",
+  "min": [
+   -0.5405,
+   -0.8108,
+   0.0468
+  ],
+  "max": [
+   -0.5314,
+   -0.8045,
+   0.0495
+  ],
+  "verts": 706,
+  "mats": [
+   "yellow low gloss plastic"
+  ],
+  "color": [
+   0.97,
+   0.51,
+   0.23
+  ]
+ },
+ {
+  "name": "Rubber Duck Blue 225in-1 - Part 3",
+  "parent": "Rubber Duck Blue 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.8038,
+   0.052
+  ],
+  "max": [
+   -0.5287,
+   -0.8001,
+   0.0559
+  ],
+  "verts": 100,
+  "mats": [
+   "white soft touch plastic.002"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Rubber Duck Blue 225in-1 - Part 4",
+  "parent": "Rubber Duck Blue 2.25in-1",
+  "min": [
+   -0.5418,
+   -0.8026,
+   0.0533
+  ],
+  "max": [
+   -0.53,
+   -0.8013,
+   0.0547
+  ],
+  "verts": 480,
+  "mats": [
+   "black low gloss plastic"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Blue 225in-1 - Part 5",
+  "parent": "Rubber Duck Blue 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.8038,
+   0.0518
+  ],
+  "max": [
+   -0.5286,
+   -0.7999,
+   0.056
+  ],
+  "verts": 600,
+  "mats": [
+   "black low gloss plastic.001"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Green 2.25in-1 - Part",
+  "parent": "Rubber Duck Green 2.25in-1",
+  "min": [
+   -0.5544,
+   -0.3991,
+   0.0213
+  ],
+  "max": [
+   -0.5174,
+   -0.3468,
+   0.0583
+  ],
+  "verts": 9058,
+  "mats": [
+   "green low gloss plastic"
+  ],
+  "color": [
+   0.06,
+   0.4,
+   0.09
+  ]
+ },
+ {
+  "name": "Rubber Duck Green 225in-1 - Part 2",
+  "parent": "Rubber Duck Green 2.25in-1",
+  "min": [
+   -0.5405,
+   -0.4044,
+   0.0468
+  ],
+  "max": [
+   -0.5314,
+   -0.3981,
+   0.0495
+  ],
+  "verts": 722,
+  "mats": [
+   "yellow low gloss plastic.001"
+  ],
+  "color": [
+   0.97,
+   0.51,
+   0.23
+  ]
+ },
+ {
+  "name": "Rubber Duck Green 225in-1 - Part 3",
+  "parent": "Rubber Duck Green 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.3974,
+   0.052
+  ],
+  "max": [
+   -0.5287,
+   -0.3937,
+   0.0559
+  ],
+  "verts": 100,
+  "mats": [
+   "white soft touch plastic.003"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Rubber Duck Green 225in-1 - Part 4",
+  "parent": "Rubber Duck Green 2.25in-1",
+  "min": [
+   -0.5418,
+   -0.3962,
+   0.0533
+  ],
+  "max": [
+   -0.53,
+   -0.3949,
+   0.0547
+  ],
+  "verts": 480,
+  "mats": [
+   "black low gloss plastic.002"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Green 225in-1 - Part 5",
+  "parent": "Rubber Duck Green 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.3974,
+   0.0518
+  ],
+  "max": [
+   -0.5286,
+   -0.3935,
+   0.056
+  ],
+  "verts": 600,
+  "mats": [
+   "black low gloss plastic.003"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Lavender 2.25in-2 - Part",
+  "parent": "Rubber Duck Lavender 2.25in-2",
+  "min": [
+   -0.5544,
+   -0.6023,
+   0.0213
+  ],
+  "max": [
+   -0.5174,
+   -0.55,
+   0.0583
+  ],
+  "verts": 8379,
+  "mats": [
+   "matte rubber"
+  ],
+  "color": [
+   0.43,
+   0.0,
+   0.54
+  ]
+ },
+ {
+  "name": "Rubber Duck Lavender 225in-2 - Part 2",
+  "parent": "Rubber Duck Lavender 2.25in-2",
+  "min": [
+   -0.5405,
+   -0.6076,
+   0.0468
+  ],
+  "max": [
+   -0.5314,
+   -0.6013,
+   0.0495
+  ],
+  "verts": 685,
+  "mats": [
+   "yellow low gloss plastic-3"
+  ],
+  "color": [
+   0.97,
+   0.51,
+   0.23
+  ]
+ },
+ {
+  "name": "Rubber Duck Lavender 225in-2 - Part 3",
+  "parent": "Rubber Duck Lavender 2.25in-2",
+  "min": [
+   -0.5432,
+   -0.6006,
+   0.052
+  ],
+  "max": [
+   -0.5287,
+   -0.5969,
+   0.0559
+  ],
+  "verts": 100,
+  "mats": [
+   "white low gloss plastic-3"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Rubber Duck Lavender 225in-2 - Part 4",
+  "parent": "Rubber Duck Lavender 2.25in-2",
+  "min": [
+   -0.5418,
+   -0.5994,
+   0.0533
+  ],
+  "max": [
+   -0.53,
+   -0.5981,
+   0.0547
+  ],
+  "verts": 480,
+  "mats": [
+   "black low gloss plastic-5"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Lavender 225in-2 - Part 5",
+  "parent": "Rubber Duck Lavender 2.25in-2",
+  "min": [
+   -0.5432,
+   -0.6006,
+   0.0518
+  ],
+  "max": [
+   -0.5286,
+   -0.5967,
+   0.056
+  ],
+  "verts": 600,
+  "mats": [
+   "black low gloss plastic-6"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Red 2.25in-1 - Part",
+  "parent": "Rubber Duck Red 2.25in-1",
+  "min": [
+   -0.5544,
+   -0.1959,
+   0.0213
+  ],
+  "max": [
+   -0.5174,
+   -0.1436,
+   0.0583
+  ],
+  "verts": 9054,
+  "mats": [
+   "red low gloss plastic-2"
+  ],
+  "color": [
+   0.45,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Red 225in-1 - Part 2",
+  "parent": "Rubber Duck Red 2.25in-1",
+  "min": [
+   -0.5405,
+   -0.2012,
+   0.0468
+  ],
+  "max": [
+   -0.5314,
+   -0.1949,
+   0.0495
+  ],
+  "verts": 708,
+  "mats": [
+   "yellow low gloss plastic.002"
+  ],
+  "color": [
+   0.97,
+   0.51,
+   0.23
+  ]
+ },
+ {
+  "name": "Rubber Duck Red 225in-1 - Part 3",
+  "parent": "Rubber Duck Red 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.1942,
+   0.052
+  ],
+  "max": [
+   -0.5287,
+   -0.1905,
+   0.0559
+  ],
+  "verts": 100,
+  "mats": [
+   "white soft touch plastic.004"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Rubber Duck Red 225in-1 - Part 4",
+  "parent": "Rubber Duck Red 2.25in-1",
+  "min": [
+   -0.5418,
+   -0.193,
+   0.0533
+  ],
+  "max": [
+   -0.53,
+   -0.1917,
+   0.0547
+  ],
+  "verts": 480,
+  "mats": [
+   "black low gloss plastic.004"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Red 225in-1 - Part 5",
+  "parent": "Rubber Duck Red 2.25in-1",
+  "min": [
+   -0.5432,
+   -0.1942,
+   0.0518
+  ],
+  "max": [
+   -0.5286,
+   -0.1903,
+   0.056
+  ],
+  "verts": 600,
+  "mats": [
+   "black low gloss plastic.005"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Yellow 2.25in-1 - Part",
+  "parent": "Rubber Duck Yellow 2.25in-1",
+  "min": [
+   -0.5544,
+   -1.0087,
+   0.0213
+  ],
+  "max": [
+   -0.5174,
+   -0.9564,
+   0.0583
+  ],
+  "verts": 8379,
+  "mats": [
+   "yellow low gloss plastic-5"
+  ],
+  "color": [
+   1.0,
+   0.87,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Yellow 225in-1 - Part 2",
+  "parent": "Rubber Duck Yellow 2.25in-1",
+  "min": [
+   -0.5405,
+   -1.014,
+   0.0468
+  ],
+  "max": [
+   -0.5314,
+   -1.0077,
+   0.0495
+  ],
+  "verts": 685,
+  "mats": [
+   "yellow low gloss plastic-6"
+  ],
+  "color": [
+   0.97,
+   0.51,
+   0.23
+  ]
+ },
+ {
+  "name": "Rubber Duck Yellow 225in-1 - Part 3",
+  "parent": "Rubber Duck Yellow 2.25in-1",
+  "min": [
+   -0.5432,
+   -1.007,
+   0.052
+  ],
+  "max": [
+   -0.5287,
+   -1.0033,
+   0.0559
+  ],
+  "verts": 100,
+  "mats": [
+   "white low gloss plastic-5"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "Rubber Duck Yellow 225in-1 - Part 4",
+  "parent": "Rubber Duck Yellow 2.25in-1",
+  "min": [
+   -0.5418,
+   -1.0058,
+   0.0533
+  ],
+  "max": [
+   -0.53,
+   -1.0045,
+   0.0547
+  ],
+  "verts": 480,
+  "mats": [
+   "black low gloss plastic-9"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Rubber Duck Yellow 225in-1 - Part 5",
+  "parent": "Rubber Duck Yellow 2.25in-1",
+  "min": [
+   -0.5432,
+   -1.007,
+   0.0518
+  ],
+  "max": [
+   -0.5286,
+   -1.0031,
+   0.056
+  ],
+  "verts": 600,
+  "mats": [
+   "black low gloss plastic-10"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Split Line2 - Part",
+  "parent": "Split Line2",
+  "min": [
+   -1.1062,
+   -0.6479,
+   0.2404
+  ],
+  "max": [
+   -1.099,
+   -0.6369,
+   0.2523
+  ],
+  "verts": 203,
+  "mats": [
+   "black medium gloss plastic"
+  ],
+  "color": [
+   0.01,
+   0.01,
+   0.01
+  ]
+ },
+ {
+  "name": "Split Line2 - Part 2",
+  "parent": "Split Line2",
+  "min": [
+   -1.1337,
+   -0.7484,
+   0.1643
+  ],
+  "max": [
+   -1.0731,
+   -0.6241,
+   0.2774
+  ],
+  "verts": 8831,
+  "mats": [
+   "yellow medium gloss plastic"
+  ],
+  "color": [
+   1.0,
+   0.86,
+   0.01
+  ]
+ },
+ {
+  "name": "Split Line2 - Part 3",
+  "parent": "Split Line2",
+  "min": [
+   -1.0946,
+   -0.6334,
+   0.2255
+  ],
+  "max": [
+   -1.0731,
+   -0.6129,
+   0.2476
+  ],
+  "verts": 1228,
+  "mats": [
+   "light grey medium gloss plastic"
+  ],
+  "color": [
+   0.81,
+   0.17,
+   0.0
+  ]
+ },
+ {
+  "name": "Split Line2 - Part 4",
+  "parent": "Split Line2",
+  "min": [
+   -1.1026,
+   -0.6421,
+   0.2473
+  ],
+  "max": [
+   -1.1008,
+   -0.6395,
+   0.2504
+  ],
+  "verts": 75,
+  "mats": [
+   "white medium gloss plastic"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-1 - Part",
+  "parent": "T Connector-1",
+  "min": [
+   -1.2192,
+   -0.0445,
+   0.0213
+  ],
+  "max": [
+   -1.1779,
+   0.0413,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-10 - Part",
+  "parent": "T Connector-10",
+  "min": [
+   -0.1651,
+   -0.1873,
+   0.0213
+  ],
+  "max": [
+   -0.1016,
+   -0.1016,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.029"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-12 - Part",
+  "parent": "T Connector-12",
+  "min": [
+   -0.1651,
+   -0.2731,
+   0.0213
+  ],
+  "max": [
+   -0.1238,
+   -0.1873,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.031"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-13 - Part",
+  "parent": "T Connector-13",
+  "min": [
+   -0.1651,
+   -0.5493,
+   0.0213
+  ],
+  "max": [
+   -0.1238,
+   -0.4636,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.032"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-14 - Part",
+  "parent": "T Connector-14",
+  "min": [
+   -0.1651,
+   0.1016,
+   0.0213
+  ],
+  "max": [
+   -0.1016,
+   0.1873,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.036"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-16 - Part",
+  "parent": "T Connector-16",
+  "min": [
+   -0.1873,
+   1.1557,
+   0.0213
+  ],
+  "max": [
+   -0.1016,
+   1.2192,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.037"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-2 - Part",
+  "parent": "T Connector-2",
+  "min": [
+   -1.2192,
+   0.5842,
+   0.0213
+  ],
+  "max": [
+   -1.1779,
+   0.6699,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.002"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-3 - Part",
+  "parent": "T Connector-3",
+  "min": [
+   -1.2192,
+   -0.6731,
+   0.0213
+  ],
+  "max": [
+   -1.1779,
+   -0.5874,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.003"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-30 - Part",
+  "parent": "T Connector-30",
+  "min": [
+   -1.1557,
+   1.1557,
+   0.0213
+  ],
+  "max": [
+   -1.07,
+   1.2192,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.041"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-39 - Part",
+  "parent": "T Connector-39",
+  "min": [
+   -0.1651,
+   0.4635,
+   0.0213
+  ],
+  "max": [
+   -0.1016,
+   0.5493,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.049"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-4 - Part",
+  "parent": "T Connector-4",
+  "min": [
+   -1.2192,
+   -1.1557,
+   0.0213
+  ],
+  "max": [
+   -1.1779,
+   -1.07,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.004"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-43 - Part",
+  "parent": "T Connector-43",
+  "min": [
+   -0.5778,
+   1.1779,
+   0.0213
+  ],
+  "max": [
+   -0.4921,
+   1.2192,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.051"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-44 - Part",
+  "parent": "T Connector-44",
+  "min": [
+   -0.5778,
+   -1.2192,
+   0.0213
+  ],
+  "max": [
+   -0.4921,
+   -1.1779,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.052"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-6 - Part",
+  "parent": "T Connector-6",
+  "min": [
+   -0.943,
+   -1.1557,
+   0.0213
+  ],
+  "max": [
+   -0.9017,
+   -1.07,
+   0.0848
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.018"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-7 - Part",
+  "parent": "T Connector-7",
+  "min": [
+   -0.9652,
+   -1.2192,
+   0.0213
+  ],
+  "max": [
+   -0.8795,
+   -1.1557,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.019"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-8 - Part",
+  "parent": "T Connector-8",
+  "min": [
+   -0.9176,
+   1.1557,
+   0.0213
+  ],
+  "max": [
+   -0.8318,
+   1.2192,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.023"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "name": "T Connector-9 - Part",
+  "parent": "T Connector-9",
+  "min": [
+   -0.1873,
+   -1.2192,
+   0.0213
+  ],
+  "max": [
+   -0.1016,
+   -1.1557,
+   0.0625
+  ],
+  "verts": 8000,
+  "mats": [
+   "white satin finish plastic.027"
+  ],
+  "color": [
+   1.0,
+   1.0,
+   1.0
+  ]
+ }
+]

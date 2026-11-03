@@ -1,0 +1,2926 @@
+{
+ "units": "inch",
+ "convention": "X=(1.2192-y)/0.0254, Y=(x+1.2192)/0.0254, Z=(z-0.0213)/0.0254",
+ "objects": [
+  {
+   "name": "1.75 inch pvc-1 - Part",
+   "parent": "1.75 inch pvc-1",
+   "min_in": [
+    92.75,
+    0.162,
+    0.161
+   ],
+   "max_in": [
+    94.5,
+    1.462,
+    1.46
+   ],
+   "centroid_in": [
+    93.625,
+    0.832,
+    0.81
+   ],
+   "verts": 392
+  },
+  {
+   "name": "1.75 inch pvc-11 - Part",
+   "parent": "1.75 inch pvc-11",
+   "min_in": [
+    0.162,
+    1.75,
+    0.161
+   ],
+   "max_in": [
+    1.462,
+    3.5,
+    1.46
+   ],
+   "centroid_in": [
+    0.793,
+    2.625,
+    0.81
+   ],
+   "verts": 392
+  },
+  {
+   "name": "1.75 inch pvc-2 - Part",
+   "parent": "1.75 inch pvc-2",
+   "min_in": [
+    92.75,
+    11.038,
+    0.161
+   ],
+   "max_in": [
+    94.5,
+    12.338,
+    1.46
+   ],
+   "centroid_in": [
+    93.625,
+    11.707,
+    0.81
+   ],
+   "verts": 392
+  },
+  {
+   "name": "1.75 inch pvc-4 - Part",
+   "parent": "1.75 inch pvc-4",
+   "min_in": [
+    54.518,
+    41.662,
+    0.161
+   ],
+   "max_in": [
+    56.268,
+    42.963,
+    1.46
+   ],
+   "centroid_in": [
+    55.393,
+    42.332,
+    0.81
+   ],
+   "verts": 392
+  },
+  {
+   "name": "10 inch pvc-1 - Part",
+   "parent": "10 inch pvc-1",
+   "min_in": [
+    43.0,
+    41.664,
+    0.162
+   ],
+   "max_in": [
+    53.0,
+    42.961,
+    1.46
+   ],
+   "centroid_in": [
+    48.0,
+    42.317,
+    0.804
+   ],
+   "verts": 292
+  },
+  {
+   "name": "12 inch pvc-1 - Part",
+   "parent": "12 inch pvc-1",
+   "min_in": [
+    0.162,
+    14.25,
+    0.161
+   ],
+   "max_in": [
+    1.462,
+    26.25,
+    1.46
+   ],
+   "centroid_in": [
+    0.788,
+    20.25,
+    0.811
+   ],
+   "verts": 296
+  },
+  {
+   "name": "12.5x24 No Holes-3 - Part",
+   "parent": "12.5x24 No Holes-3",
+   "min_in": [
+    72.0,
+    -0.0,
+    5.498
+   ],
+   "max_in": [
+    96.0,
+    12.5,
+    5.686
+   ],
+   "centroid_in": [
+    84.0,
+    6.25,
+    5.592
+   ],
+   "verts": 24
+  },
+  {
+   "name": "12.875 inch pvc-2 - Part",
+   "parent": "12.875 inch pvc-2",
+   "min_in": [
+    28.75,
+    41.662,
+    0.164
+   ],
+   "max_in": [
+    41.625,
+    42.963,
+    1.458
+   ],
+   "centroid_in": [
+    35.187,
+    42.321,
+    0.81
+   ],
+   "verts": 276
+  },
+  {
+   "name": "13.875 inch pvc-1 - Part",
+   "parent": "13.875 inch pvc-1",
+   "min_in": [
+    94.538,
+    12.375,
+    0.164
+   ],
+   "max_in": [
+    95.838,
+    26.25,
+    1.458
+   ],
+   "centroid_in": [
+    95.196,
+    19.313,
+    0.81
+   ],
+   "verts": 276
+  },
+  {
+   "name": "14 inch pvc-5 - Part",
+   "parent": "14 inch pvc-5",
+   "min_in": [
+    94.538,
+    27.625,
+    0.164
+   ],
+   "max_in": [
+    95.838,
+    41.625,
+    1.458
+   ],
+   "centroid_in": [
+    95.196,
+    34.625,
+    0.81
+   ],
+   "verts": 276
+  },
+  {
+   "name": "14 inch pvc-7 - Part",
+   "parent": "14 inch pvc-7",
+   "min_in": [
+    0.162,
+    27.625,
+    0.164
+   ],
+   "max_in": [
+    1.462,
+    41.625,
+    1.458
+   ],
+   "centroid_in": [
+    0.821,
+    34.625,
+    0.81
+   ],
+   "verts": 276
+  },
+  {
+   "name": "17.625 inch pvc-1 - Part",
+   "parent": "17.625 inch pvc-1",
+   "min_in": [
+    73.5,
+    0.162,
+    0.161
+   ],
+   "max_in": [
+    91.125,
+    1.462,
+    1.461
+   ],
+   "centroid_in": [
+    82.313,
+    0.802,
+    0.81
+   ],
+   "verts": 260
+  },
+  {
+   "name": "17.625 inch pvc-2 - Part",
+   "parent": "17.625 inch pvc-2",
+   "min_in": [
+    73.5,
+    11.039,
+    0.162
+   ],
+   "max_in": [
+    91.125,
+    12.336,
+    1.46
+   ],
+   "centroid_in": [
+    82.313,
+    11.689,
+    0.821
+   ],
+   "verts": 260
+  },
+  {
+   "name": "2.5 inch pvc-1 - Part",
+   "parent": "2.5 inch pvc-1",
+   "min_in": [
+    91.163,
+    0.163,
+    1.498
+   ],
+   "max_in": [
+    92.463,
+    1.462,
+    3.998
+   ],
+   "centroid_in": [
+    91.792,
+    0.813,
+    2.748
+   ],
+   "verts": 376
+  },
+  {
+   "name": "2.5 inch pvc-10 - Part",
+   "parent": "2.5 inch pvc-10",
+   "min_in": [
+    1.5,
+    12.913,
+    0.161
+   ],
+   "max_in": [
+    4.0,
+    14.212,
+    1.461
+   ],
+   "centroid_in": [
+    2.75,
+    13.563,
+    0.831
+   ],
+   "verts": 376
+  },
+  {
+   "name": "2.5 inch pvc-2 - Part",
+   "parent": "2.5 inch pvc-2",
+   "min_in": [
+    72.163,
+    0.163,
+    1.498
+   ],
+   "max_in": [
+    73.463,
+    1.462,
+    3.998
+   ],
+   "centroid_in": [
+    72.792,
+    0.813,
+    2.748
+   ],
+   "verts": 376
+  },
+  {
+   "name": "2.5 inch pvc-3 - Part",
+   "parent": "2.5 inch pvc-3",
+   "min_in": [
+    72.163,
+    11.038,
+    1.498
+   ],
+   "max_in": [
+    73.463,
+    12.337,
+    3.998
+   ],
+   "centroid_in": [
+    72.792,
+    11.688,
+    2.748
+   ],
+   "verts": 376
+  },
+  {
+   "name": "2.5 inch pvc-4 - Part",
+   "parent": "2.5 inch pvc-4",
+   "min_in": [
+    91.163,
+    11.038,
+    1.498
+   ],
+   "max_in": [
+    92.463,
+    12.337,
+    3.998
+   ],
+   "centroid_in": [
+    91.792,
+    11.688,
+    2.748
+   ],
+   "verts": 376
+  },
+  {
+   "name": "2.5 inch pvc-9 - Part",
+   "parent": "2.5 inch pvc-9",
+   "min_in": [
+    1.5,
+    3.538,
+    0.161
+   ],
+   "max_in": [
+    4.0,
+    4.837,
+    1.461
+   ],
+   "centroid_in": [
+    2.75,
+    4.188,
+    0.831
+   ],
+   "verts": 376
+  },
+  {
+   "name": "21.125 inch pvc-1 - Part",
+   "parent": "21.125 inch pvc-1",
+   "min_in": [
+    1.5,
+    0.162,
+    0.162
+   ],
+   "max_in": [
+    22.625,
+    1.462,
+    1.46
+   ],
+   "centroid_in": [
+    12.063,
+    0.839,
+    0.811
+   ],
+   "verts": 264
+  },
+  {
+   "name": "23.375 inch pvc-1 - Part",
+   "parent": "23.375 inch pvc-1",
+   "min_in": [
+    48.75,
+    0.164,
+    0.161
+   ],
+   "max_in": [
+    72.125,
+    1.461,
+    1.46
+   ],
+   "centroid_in": [
+    60.438,
+    0.801,
+    0.815
+   ],
+   "verts": 244
+  },
+  {
+   "name": "23.375 inch pvc-3 - Part",
+   "parent": "23.375 inch pvc-3",
+   "min_in": [
+    24.0,
+    0.162,
+    0.164
+   ],
+   "max_in": [
+    47.375,
+    1.462,
+    1.457
+   ],
+   "centroid_in": [
+    35.688,
+    0.8,
+    0.811
+   ],
+   "verts": 244
+  },
+  {
+   "name": "25.875 inch pvc-1 - Part",
+   "parent": "25.875 inch pvc-1",
+   "min_in": [
+    68.625,
+    41.663,
+    0.162
+   ],
+   "max_in": [
+    94.5,
+    42.962,
+    1.46
+   ],
+   "centroid_in": [
+    81.563,
+    42.318,
+    0.803
+   ],
+   "verts": 244
+  },
+  {
+   "name": "25.875 inch pvc-3 - Part",
+   "parent": "25.875 inch pvc-3",
+   "min_in": [
+    1.5,
+    41.664,
+    0.161
+   ],
+   "max_in": [
+    27.375,
+    42.961,
+    1.46
+   ],
+   "centroid_in": [
+    14.438,
+    42.306,
+    0.804
+   ],
+   "verts": 244
+  },
+  {
+   "name": "5.5x24-1 - Part",
+   "parent": "5.5x24-1",
+   "min_in": [
+    72.0,
+    12.5,
+    -0.002
+   ],
+   "max_in": [
+    96.0,
+    12.687,
+    5.498
+   ],
+   "centroid_in": [
+    87.865,
+    12.599,
+    2.436
+   ],
+   "verts": 38
+  },
+  {
+   "name": "8 inch pvc-10 - Part",
+   "parent": "8 inch pvc-10",
+   "min_in": [
+    4.038,
+    4.875,
+    0.163
+   ],
+   "max_in": [
+    5.338,
+    12.875,
+    1.459
+   ],
+   "centroid_in": [
+    4.698,
+    8.875,
+    0.811
+   ],
+   "verts": 308
+  },
+  {
+   "name": "8 inch pvc-18 - Part",
+   "parent": "8 inch pvc-18",
+   "min_in": [
+    22.663,
+    0.163,
+    1.498
+   ],
+   "max_in": [
+    23.962,
+    1.462,
+    9.498
+   ],
+   "centroid_in": [
+    23.316,
+    0.822,
+    5.498
+   ],
+   "verts": 308
+  },
+  {
+   "name": "8 inch pvc-19 - Part",
+   "parent": "8 inch pvc-19",
+   "min_in": [
+    0.162,
+    26.29,
+    1.498
+   ],
+   "max_in": [
+    1.462,
+    27.585,
+    9.498
+   ],
+   "centroid_in": [
+    0.823,
+    26.937,
+    5.498
+   ],
+   "verts": 308
+  },
+  {
+   "name": "8 inch pvc-4 - Part",
+   "parent": "8 inch pvc-4",
+   "min_in": [
+    0.162,
+    4.875,
+    0.163
+   ],
+   "max_in": [
+    1.462,
+    12.875,
+    1.459
+   ],
+   "centroid_in": [
+    0.823,
+    8.875,
+    0.811
+   ],
+   "verts": 308
+  },
+  {
+   "name": "9.5 inch pvc-1 - Part",
+   "parent": "9.5 inch pvc-1",
+   "min_in": [
+    72.163,
+    1.5,
+    4.036
+   ],
+   "max_in": [
+    73.463,
+    11.0,
+    5.336
+   ],
+   "centroid_in": [
+    72.822,
+    6.25,
+    4.685
+   ],
+   "verts": 292
+  },
+  {
+   "name": "9.5 inch pvc-2 - Part",
+   "parent": "9.5 inch pvc-2",
+   "min_in": [
+    91.163,
+    1.5,
+    4.036
+   ],
+   "max_in": [
+    92.463,
+    11.0,
+    5.336
+   ],
+   "centroid_in": [
+    91.822,
+    6.25,
+    4.685
+   ],
+   "verts": 292
+  },
+  {
+   "name": "9.5 inch pvc-3 - Part",
+   "parent": "9.5 inch pvc-3",
+   "min_in": [
+    94.538,
+    1.5,
+    0.161
+   ],
+   "max_in": [
+    95.838,
+    11.0,
+    1.461
+   ],
+   "centroid_in": [
+    95.197,
+    6.25,
+    0.81
+   ],
+   "verts": 292
+  },
+  {
+   "name": "9.5 inch pvc-6 - Part",
+   "parent": "9.5 inch pvc-6",
+   "min_in": [
+    57.75,
+    41.662,
+    0.161
+   ],
+   "max_in": [
+    67.25,
+    42.963,
+    1.461
+   ],
+   "centroid_in": [
+    62.5,
+    42.303,
+    0.81
+   ],
+   "verts": 292
+  },
+  {
+   "name": "Black duct tape 12 in-1 - Part",
+   "parent": "Black duct tape 12 in-1",
+   "min_in": [
+    70.125,
+    0.713,
+    -0.002
+   ],
+   "max_in": [
+    72.0,
+    12.713,
+    0.008
+   ],
+   "centroid_in": [
+    71.062,
+    6.713,
+    0.003
+   ],
+   "verts": 24
+  },
+  {
+   "name": "Black duct tape 41.5 in-1 - Part",
+   "parent": "Black duct tape 41.5 in-1",
+   "min_in": [
+    47.125,
+    0.162,
+    -0.002
+   ],
+   "max_in": [
+    49.0,
+    41.663,
+    0.008
+   ],
+   "centroid_in": [
+    48.062,
+    20.913,
+    0.003
+   ],
+   "verts": 24
+  },
+  {
+   "name": "Black duct tape 89.5 in-1 - Part",
+   "parent": "Black duct tape 89.5 in-1",
+   "min_in": [
+    5.038,
+    12.713,
+    -0.002
+   ],
+   "max_in": [
+    94.537,
+    14.588,
+    0.008
+   ],
+   "centroid_in": [
+    49.788,
+    13.65,
+    0.003
+   ],
+   "verts": 24
+  },
+  {
+   "name": "Black duct tape 93.5 in-2 - Part",
+   "parent": "Black duct tape 93.5 in-2",
+   "min_in": [
+    1.037,
+    25.963,
+    -0.002
+   ],
+   "max_in": [
+    94.538,
+    27.838,
+    0.008
+   ],
+   "centroid_in": [
+    47.787,
+    26.9,
+    0.003
+   ],
+   "verts": 24
+  },
+  {
+   "name": "Blue Bottle-1 - Part",
+   "parent": "Blue Bottle-1",
+   "min_in": [
+    1.635,
+    10.364,
+    -0.002
+   ],
+   "max_in": [
+    4.16,
+    12.888,
+    4.948
+   ],
+   "centroid_in": [
+    2.908,
+    11.624,
+    2.126
+   ],
+   "verts": 25906
+  },
+  {
+   "name": "Blue Bottle-2 - Part",
+   "parent": "Blue Bottle-2",
+   "min_in": [
+    1.635,
+    7.614,
+    -0.002
+   ],
+   "max_in": [
+    4.16,
+    10.138,
+    4.948
+   ],
+   "centroid_in": [
+    2.908,
+    8.874,
+    2.126
+   ],
+   "verts": 25906
+  },
+  {
+   "name": "Blue Bottle-3 - Part",
+   "parent": "Blue Bottle-3",
+   "min_in": [
+    1.635,
+    4.864,
+    -0.002
+   ],
+   "max_in": [
+    4.16,
+    7.388,
+    4.948
+   ],
+   "centroid_in": [
+    2.908,
+    6.124,
+    2.126
+   ],
+   "verts": 25906
+  },
+  {
+   "name": "Cup - Black-1 - Part",
+   "parent": "Cup - Black-1",
+   "min_in": [
+    46.204,
+    11.809,
+    -0.002
+   ],
+   "max_in": [
+    49.827,
+    15.432,
+    5.698
+   ],
+   "centroid_in": [
+    48.023,
+    13.614,
+    3.707
+   ],
+   "verts": 2178
+  },
+  {
+   "name": "Cup - Black-2 - Part",
+   "parent": "Cup - Black-2",
+   "min_in": [
+    46.239,
+    25.093,
+    -0.002
+   ],
+   "max_in": [
+    49.862,
+    28.716,
+    5.698
+   ],
+   "centroid_in": [
+    48.058,
+    26.898,
+    3.707
+   ],
+   "verts": 2178
+  },
+  {
+   "name": "Cut-Extrude2 - Part",
+   "parent": "Cut-Extrude2",
+   "min_in": [
+    44.586,
+    43.001,
+    -0.042
+   ],
+   "max_in": [
+    51.414,
+    45.501,
+    2.497
+   ],
+   "centroid_in": [
+    48.001,
+    44.252,
+    1.187
+   ],
+   "verts": 3096
+  },
+  {
+   "name": "Cut-Extrude2 - Part 2",
+   "parent": "Cut-Extrude2",
+   "min_in": [
+    46.519,
+    42.962,
+    0.515
+   ],
+   "max_in": [
+    49.481,
+    45.463,
+    4.515
+   ],
+   "centroid_in": [
+    47.995,
+    44.044,
+    2.413
+   ],
+   "verts": 2072
+  },
+  {
+   "name": "Cut-Extrude2 - Part 3",
+   "parent": "Cut-Extrude2",
+   "min_in": [
+    47.183,
+    42.962,
+    1.165
+   ],
+   "max_in": [
+    48.773,
+    43.022,
+    3.385
+   ],
+   "centroid_in": [
+    47.832,
+    42.998,
+    2.093
+   ],
+   "verts": 324
+  },
+  {
+   "name": "Elbow Connector-1 - Part",
+   "parent": "Elbow Connector-1",
+   "min_in": [
+    93.5,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    96.0,
+    2.5,
+    1.623
+   ],
+   "centroid_in": [
+    94.685,
+    1.316,
+    0.814
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-22 - Part",
+   "parent": "Elbow Connector-22",
+   "min_in": [
+    -0.0,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    2.5,
+    2.5,
+    1.623
+   ],
+   "centroid_in": [
+    1.315,
+    1.316,
+    0.808
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-23 - Part",
+   "parent": "Elbow Connector-23",
+   "min_in": [
+    3.0,
+    11.875,
+    -0.002
+   ],
+   "max_in": [
+    5.5,
+    14.375,
+    1.623
+   ],
+   "centroid_in": [
+    4.185,
+    13.059,
+    0.808
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-24 - Part",
+   "parent": "Elbow Connector-24",
+   "min_in": [
+    3.0,
+    3.375,
+    -0.002
+   ],
+   "max_in": [
+    5.5,
+    5.875,
+    1.623
+   ],
+   "centroid_in": [
+    4.185,
+    4.691,
+    0.814
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-3 - Part",
+   "parent": "Elbow Connector-3",
+   "min_in": [
+    72.0,
+    -0.0,
+    2.998
+   ],
+   "max_in": [
+    73.625,
+    2.5,
+    5.498
+   ],
+   "centroid_in": [
+    72.809,
+    1.316,
+    4.184
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-4 - Part",
+   "parent": "Elbow Connector-4",
+   "min_in": [
+    91.0,
+    -0.0,
+    2.998
+   ],
+   "max_in": [
+    92.625,
+    2.5,
+    5.498
+   ],
+   "centroid_in": [
+    91.809,
+    1.316,
+    4.184
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-5 - Part",
+   "parent": "Elbow Connector-5",
+   "min_in": [
+    91.0,
+    10.0,
+    2.998
+   ],
+   "max_in": [
+    92.625,
+    12.5,
+    5.498
+   ],
+   "centroid_in": [
+    91.816,
+    11.184,
+    4.184
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-6 - Part",
+   "parent": "Elbow Connector-6",
+   "min_in": [
+    72.0,
+    10.0,
+    2.998
+   ],
+   "max_in": [
+    73.625,
+    12.5,
+    5.498
+   ],
+   "centroid_in": [
+    72.816,
+    11.184,
+    4.184
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Elbow Connector-7 - Part",
+   "parent": "Elbow Connector-7",
+   "min_in": [
+    72.0,
+    10.875,
+    -0.002
+   ],
+   "max_in": [
+    74.5,
+    12.5,
+    2.498
+   ],
+   "centroid_in": [
+    73.316,
+    11.684,
+    1.313
+   ],
+   "verts": 8948
+  },
+  {
+   "name": "Extrude7 - Part",
+   "parent": "Extrude7",
+   "min_in": [
+    46.487,
+    42.472,
+    5.438
+   ],
+   "max_in": [
+    49.516,
+    42.962,
+    6.093
+   ],
+   "centroid_in": [
+    47.999,
+    42.715,
+    5.768
+   ],
+   "verts": 234
+  },
+  {
+   "name": "Extrude8[1] - Part",
+   "parent": "Extrude8[1]",
+   "min_in": [
+    47.373,
+    42.462,
+    5.593
+   ],
+   "max_in": [
+    47.873,
+    42.962,
+    6.093
+   ],
+   "centroid_in": [
+    47.621,
+    42.712,
+    5.843
+   ],
+   "verts": 258
+  },
+  {
+   "name": "Extrude8[2] - Part",
+   "parent": "Extrude8[2]",
+   "min_in": [
+    48.128,
+    42.462,
+    5.593
+   ],
+   "max_in": [
+    48.628,
+    42.962,
+    6.093
+   ],
+   "centroid_in": [
+    48.376,
+    42.712,
+    5.843
+   ],
+   "verts": 258
+  },
+  {
+   "name": "FRP - 4x8-1 - Part",
+   "parent": "FRP - 4x8-1",
+   "min_in": [
+    -0.0,
+    -0.0,
+    -0.077
+   ],
+   "max_in": [
+    96.0,
+    48.0,
+    -0.002
+   ],
+   "centroid_in": [
+    48.0,
+    24.0,
+    -0.039
+   ],
+   "verts": 24
+  },
+  {
+   "name": "Mirror3 - Part",
+   "parent": "Mirror3",
+   "min_in": [
+    73.076,
+    6.767,
+    8.626
+   ],
+   "max_in": [
+    73.508,
+    7.052,
+    9.096
+   ],
+   "centroid_in": [
+    73.271,
+    6.905,
+    8.881
+   ],
+   "verts": 215
+  },
+  {
+   "name": "Mirror3 - Part 2",
+   "parent": "Mirror3",
+   "min_in": [
+    72.572,
+    5.751,
+    5.631
+   ],
+   "max_in": [
+    77.464,
+    8.135,
+    10.083
+   ],
+   "centroid_in": [
+    74.851,
+    7.052,
+    7.532
+   ],
+   "verts": 9065
+  },
+  {
+   "name": "Mirror3 - Part 3",
+   "parent": "Mirror3",
+   "min_in": [
+    72.131,
+    5.751,
+    8.038
+   ],
+   "max_in": [
+    72.936,
+    6.597,
+    8.91
+   ],
+   "centroid_in": [
+    72.435,
+    6.063,
+    8.342
+   ],
+   "verts": 1236
+  },
+  {
+   "name": "Mirror3 - Part 4",
+   "parent": "Mirror3",
+   "min_in": [
+    73.179,
+    6.841,
+    8.898
+   ],
+   "max_in": [
+    73.278,
+    6.912,
+    9.02
+   ],
+   "centroid_in": [
+    73.23,
+    6.878,
+    8.962
+   ],
+   "verts": 77
+  },
+  {
+   "name": "Particle board - 4x8-1 - Part",
+   "parent": "Particle board - 4x8-1",
+   "min_in": [
+    -0.0,
+    -0.0,
+    -0.827
+   ],
+   "max_in": [
+    96.0,
+    48.0,
+    -0.077
+   ],
+   "centroid_in": [
+    48.0,
+    24.0,
+    -0.452
+   ],
+   "verts": 24
+  },
+  {
+   "name": "pickle ball 2-1 - Part",
+   "parent": "pickle ball 2-1",
+   "min_in": [
+    55.608,
+    40.857,
+    2.292
+   ],
+   "max_in": [
+    58.517,
+    43.768,
+    5.205
+   ],
+   "centroid_in": [
+    57.041,
+    42.307,
+    3.766
+   ],
+   "verts": 29426
+  },
+  {
+   "name": "pickle ball 2-2 - Part",
+   "parent": "pickle ball 2-2",
+   "min_in": [
+    66.482,
+    40.856,
+    2.31
+   ],
+   "max_in": [
+    69.393,
+    43.769,
+    5.187
+   ],
+   "centroid_in": [
+    67.918,
+    42.311,
+    3.769
+   ],
+   "verts": 29426
+  },
+  {
+   "name": "pickle ball 2-3 - Part",
+   "parent": "pickle ball 2-3",
+   "min_in": [
+    93.731,
+    25.493,
+    2.34
+   ],
+   "max_in": [
+    96.644,
+    28.382,
+    5.217
+   ],
+   "centroid_in": [
+    95.17,
+    26.929,
+    3.799
+   ],
+   "verts": 29426
+  },
+  {
+   "name": "pickle ball 2-4 - Part",
+   "parent": "pickle ball 2-4",
+   "min_in": [
+    46.613,
+    -0.643,
+    2.31
+   ],
+   "max_in": [
+    49.512,
+    2.268,
+    5.187
+   ],
+   "centroid_in": [
+    48.043,
+    0.81,
+    3.769
+   ],
+   "verts": 29426
+  },
+  {
+   "name": "pom-gold-4 - Part",
+   "parent": "pom-gold-4",
+   "min_in": [
+    8.713,
+    26.15,
+    1.225
+   ],
+   "max_in": [
+    10.212,
+    27.65,
+    2.723
+   ],
+   "centroid_in": [
+    9.47,
+    26.889,
+    1.969
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-gold-5 - Part",
+   "parent": "pom-gold-5",
+   "min_in": [
+    9.268,
+    25.486,
+    0.001
+   ],
+   "max_in": [
+    10.768,
+    26.985,
+    1.498
+   ],
+   "centroid_in": [
+    10.008,
+    26.227,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-gold-6 - Part",
+   "parent": "pom-gold-6",
+   "min_in": [
+    47.64,
+    27.004,
+    0.001
+   ],
+   "max_in": [
+    49.138,
+    28.504,
+    1.498
+   ],
+   "centroid_in": [
+    48.396,
+    27.743,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-gold-6 2 - Part",
+   "parent": "pom-gold-6 2",
+   "min_in": [
+    9.01,
+    26.963,
+    0.001
+   ],
+   "max_in": [
+    10.509,
+    28.463,
+    1.498
+   ],
+   "centroid_in": [
+    9.767,
+    27.702,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-gold-7 - Part",
+   "parent": "pom-gold-7",
+   "min_in": [
+    7.86,
+    26.001,
+    -0.001
+   ],
+   "max_in": [
+    9.358,
+    27.501,
+    1.496
+   ],
+   "centroid_in": [
+    8.615,
+    26.738,
+    0.75
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-green-4 - Part",
+   "parent": "pom-green-4",
+   "min_in": [
+    32.712,
+    26.15,
+    1.223
+   ],
+   "max_in": [
+    34.212,
+    27.65,
+    2.723
+   ],
+   "centroid_in": [
+    33.463,
+    26.883,
+    1.972
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-green-5 - Part",
+   "parent": "pom-green-5",
+   "min_in": [
+    47.898,
+    25.527,
+    -0.002
+   ],
+   "max_in": [
+    49.397,
+    27.027,
+    1.498
+   ],
+   "centroid_in": [
+    48.631,
+    26.274,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-green-5 2 - Part",
+   "parent": "pom-green-5 2",
+   "min_in": [
+    33.268,
+    25.486,
+    -0.002
+   ],
+   "max_in": [
+    34.768,
+    26.986,
+    1.498
+   ],
+   "centroid_in": [
+    34.002,
+    26.233,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-green-6 - Part",
+   "parent": "pom-green-6",
+   "min_in": [
+    33.01,
+    26.963,
+    -0.002
+   ],
+   "max_in": [
+    34.51,
+    28.463,
+    1.498
+   ],
+   "centroid_in": [
+    33.76,
+    27.697,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-green-7 - Part",
+   "parent": "pom-green-7",
+   "min_in": [
+    31.86,
+    26.001,
+    -0.001
+   ],
+   "max_in": [
+    33.359,
+    27.501,
+    1.498
+   ],
+   "centroid_in": [
+    32.607,
+    26.735,
+    0.754
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-lavender-4 - Part",
+   "parent": "pom-lavender-4",
+   "min_in": [
+    24.713,
+    26.15,
+    1.225
+   ],
+   "max_in": [
+    26.212,
+    27.65,
+    2.723
+   ],
+   "centroid_in": [
+    25.47,
+    26.889,
+    1.969
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-lavender-5 - Part",
+   "parent": "pom-lavender-5",
+   "min_in": [
+    25.268,
+    25.486,
+    0.001
+   ],
+   "max_in": [
+    26.768,
+    26.985,
+    1.498
+   ],
+   "centroid_in": [
+    26.008,
+    26.227,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-lavender-6 - Part",
+   "parent": "pom-lavender-6",
+   "min_in": [
+    25.011,
+    26.963,
+    0.001
+   ],
+   "max_in": [
+    26.509,
+    28.463,
+    1.498
+   ],
+   "centroid_in": [
+    25.767,
+    27.702,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-lavender-7 - Part",
+   "parent": "pom-lavender-7",
+   "min_in": [
+    46.489,
+    26.042,
+    -0.001
+   ],
+   "max_in": [
+    47.988,
+    27.542,
+    1.496
+   ],
+   "centroid_in": [
+    47.244,
+    26.779,
+    0.75
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-lavender-7 2 - Part",
+   "parent": "pom-lavender-7 2",
+   "min_in": [
+    23.86,
+    26.001,
+    -0.001
+   ],
+   "max_in": [
+    25.358,
+    27.501,
+    1.496
+   ],
+   "centroid_in": [
+    24.615,
+    26.738,
+    0.75
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-red-1 - Part",
+   "parent": "pom-red-1",
+   "min_in": [
+    41.268,
+    25.486,
+    -0.002
+   ],
+   "max_in": [
+    42.768,
+    26.986,
+    1.498
+   ],
+   "centroid_in": [
+    42.002,
+    26.233,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-red-1 2 - Part",
+   "parent": "pom-red-1 2",
+   "min_in": [
+    47.075,
+    12.614,
+    -0.002
+   ],
+   "max_in": [
+    48.575,
+    14.114,
+    1.498
+   ],
+   "centroid_in": [
+    47.825,
+    13.347,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-red-2 - Part",
+   "parent": "pom-red-2",
+   "min_in": [
+    41.01,
+    26.963,
+    -0.002
+   ],
+   "max_in": [
+    42.51,
+    28.463,
+    1.498
+   ],
+   "centroid_in": [
+    41.76,
+    27.697,
+    0.747
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-red-3 - Part",
+   "parent": "pom-red-3",
+   "min_in": [
+    39.86,
+    26.001,
+    -0.001
+   ],
+   "max_in": [
+    41.359,
+    27.501,
+    1.498
+   ],
+   "centroid_in": [
+    40.607,
+    26.735,
+    0.754
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-red-4 - Part",
+   "parent": "pom-red-4",
+   "min_in": [
+    40.712,
+    26.15,
+    1.223
+   ],
+   "max_in": [
+    42.212,
+    27.65,
+    2.723
+   ],
+   "centroid_in": [
+    41.463,
+    26.883,
+    1.972
+   ],
+   "verts": 5004
+  },
+  {
+   "name": "pom-turquoise-4 - Part",
+   "parent": "pom-turquoise-4",
+   "min_in": [
+    47.342,
+    26.191,
+    1.225
+   ],
+   "max_in": [
+    48.841,
+    27.691,
+    2.723
+   ],
+   "centroid_in": [
+    48.099,
+    26.93,
+    1.969
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-turquoise-4 2 - Part",
+   "parent": "pom-turquoise-4 2",
+   "min_in": [
+    16.713,
+    26.15,
+    1.225
+   ],
+   "max_in": [
+    18.212,
+    27.65,
+    2.723
+   ],
+   "centroid_in": [
+    17.47,
+    26.889,
+    1.969
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-turquoise-5 - Part",
+   "parent": "pom-turquoise-5",
+   "min_in": [
+    17.268,
+    25.486,
+    0.001
+   ],
+   "max_in": [
+    18.768,
+    26.985,
+    1.498
+   ],
+   "centroid_in": [
+    18.008,
+    26.227,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-turquoise-6 - Part",
+   "parent": "pom-turquoise-6",
+   "min_in": [
+    17.011,
+    26.963,
+    0.001
+   ],
+   "max_in": [
+    18.509,
+    28.463,
+    1.498
+   ],
+   "centroid_in": [
+    17.767,
+    27.702,
+    0.745
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "pom-turquoise-7 - Part",
+   "parent": "pom-turquoise-7",
+   "min_in": [
+    15.86,
+    26.001,
+    -0.001
+   ],
+   "max_in": [
+    17.358,
+    27.501,
+    1.496
+   ],
+   "centroid_in": [
+    16.615,
+    26.738,
+    0.75
+   ],
+   "verts": 1664
+  },
+  {
+   "name": "Revolve2 - Part",
+   "parent": "Revolve2",
+   "min_in": [
+    46.188,
+    42.462,
+    5.138
+   ],
+   "max_in": [
+    49.815,
+    44.461,
+    8.515
+   ],
+   "centroid_in": [
+    48.002,
+    43.246,
+    6.741
+   ],
+   "verts": 1864
+  },
+  {
+   "name": "Revolve2 - Part 2",
+   "parent": "Revolve2",
+   "min_in": [
+    46.5,
+    42.962,
+    4.515
+   ],
+   "max_in": [
+    49.5,
+    45.463,
+    8.035
+   ],
+   "centroid_in": [
+    48.0,
+    44.209,
+    5.861
+   ],
+   "verts": 2772
+  },
+  {
+   "name": "Ring 1.75in-1 - Part",
+   "parent": "Ring 1.75in-1",
+   "min_in": [
+    -0.253,
+    25.871,
+    2.463
+   ],
+   "max_in": [
+    1.879,
+    28.004,
+    2.823
+   ],
+   "centroid_in": [
+    0.824,
+    26.934,
+    2.643
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Ring 1.75in-2 - Part",
+   "parent": "Ring 1.75in-2",
+   "min_in": [
+    -0.253,
+    25.871,
+    2.823
+   ],
+   "max_in": [
+    1.879,
+    28.004,
+    3.183
+   ],
+   "centroid_in": [
+    0.824,
+    26.934,
+    3.003
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Ring 1.75in-3 - Part",
+   "parent": "Ring 1.75in-3",
+   "min_in": [
+    -0.253,
+    25.871,
+    3.183
+   ],
+   "max_in": [
+    1.879,
+    28.004,
+    3.543
+   ],
+   "centroid_in": [
+    0.824,
+    26.934,
+    3.363
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Ring 1.75in-4 - Part",
+   "parent": "Ring 1.75in-4",
+   "min_in": [
+    22.246,
+    -0.254,
+    2.463
+   ],
+   "max_in": [
+    24.378,
+    1.879,
+    2.823
+   ],
+   "centroid_in": [
+    23.324,
+    0.811,
+    2.643
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Ring 1.75in-5 - Part",
+   "parent": "Ring 1.75in-5",
+   "min_in": [
+    22.246,
+    -0.254,
+    2.823
+   ],
+   "max_in": [
+    24.378,
+    1.879,
+    3.183
+   ],
+   "centroid_in": [
+    23.324,
+    0.811,
+    3.003
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Ring 1.75in-6 - Part",
+   "parent": "Ring 1.75in-6",
+   "min_in": [
+    22.246,
+    -0.254,
+    3.183
+   ],
+   "max_in": [
+    24.378,
+    1.879,
+    3.543
+   ],
+   "centroid_in": [
+    23.324,
+    0.811,
+    3.363
+   ],
+   "verts": 4712
+  },
+  {
+   "name": "Rubber Duck Blue 2.25in-1 - Part",
+   "parent": "Rubber Duck Blue 2.25in-1",
+   "min_in": [
+    77.654,
+    26.172,
+    -0.002
+   ],
+   "max_in": [
+    79.713,
+    27.628,
+    1.455
+   ],
+   "centroid_in": [
+    78.93,
+    26.895,
+    0.628
+   ],
+   "verts": 9050
+  },
+  {
+   "name": "Rubber Duck Blue 225in-1 - Part 2",
+   "parent": "Rubber Duck Blue 2.25in-1",
+   "min_in": [
+    79.674,
+    26.721,
+    1.005
+   ],
+   "max_in": [
+    79.921,
+    27.079,
+    1.111
+   ],
+   "centroid_in": [
+    79.842,
+    26.899,
+    1.063
+   ],
+   "verts": 706
+  },
+  {
+   "name": "Rubber Duck Blue 225in-1 - Part 3",
+   "parent": "Rubber Duck Blue 2.25in-1",
+   "min_in": [
+    79.498,
+    26.616,
+    1.21
+   ],
+   "max_in": [
+    79.644,
+    27.184,
+    1.363
+   ],
+   "centroid_in": [
+    79.573,
+    26.9,
+    1.287
+   ],
+   "verts": 100
+  },
+  {
+   "name": "Rubber Duck Blue 225in-1 - Part 4",
+   "parent": "Rubber Duck Blue 2.25in-1",
+   "min_in": [
+    79.546,
+    26.668,
+    1.26
+   ],
+   "max_in": [
+    79.597,
+    27.132,
+    1.314
+   ],
+   "centroid_in": [
+    79.573,
+    26.9,
+    1.287
+   ],
+   "verts": 480
+  },
+  {
+   "name": "Rubber Duck Blue 225in-1 - Part 5",
+   "parent": "Rubber Duck Blue 2.25in-1",
+   "min_in": [
+    79.491,
+    26.613,
+    1.203
+   ],
+   "max_in": [
+    79.646,
+    27.187,
+    1.365
+   ],
+   "centroid_in": [
+    79.567,
+    26.9,
+    1.288
+   ],
+   "verts": 600
+  },
+  {
+   "name": "Rubber Duck Green 2.25in-1 - Part",
+   "parent": "Rubber Duck Green 2.25in-1",
+   "min_in": [
+    61.654,
+    26.172,
+    -0.002
+   ],
+   "max_in": [
+    63.713,
+    27.628,
+    1.455
+   ],
+   "centroid_in": [
+    62.929,
+    26.895,
+    0.628
+   ],
+   "verts": 9058
+  },
+  {
+   "name": "Rubber Duck Green 225in-1 - Part 2",
+   "parent": "Rubber Duck Green 2.25in-1",
+   "min_in": [
+    63.674,
+    26.721,
+    1.005
+   ],
+   "max_in": [
+    63.921,
+    27.079,
+    1.111
+   ],
+   "centroid_in": [
+    63.844,
+    26.9,
+    1.063
+   ],
+   "verts": 722
+  },
+  {
+   "name": "Rubber Duck Green 225in-1 - Part 3",
+   "parent": "Rubber Duck Green 2.25in-1",
+   "min_in": [
+    63.498,
+    26.616,
+    1.21
+   ],
+   "max_in": [
+    63.644,
+    27.184,
+    1.363
+   ],
+   "centroid_in": [
+    63.573,
+    26.9,
+    1.287
+   ],
+   "verts": 100
+  },
+  {
+   "name": "Rubber Duck Green 225in-1 - Part 4",
+   "parent": "Rubber Duck Green 2.25in-1",
+   "min_in": [
+    63.546,
+    26.668,
+    1.26
+   ],
+   "max_in": [
+    63.597,
+    27.132,
+    1.314
+   ],
+   "centroid_in": [
+    63.573,
+    26.9,
+    1.287
+   ],
+   "verts": 480
+  },
+  {
+   "name": "Rubber Duck Green 225in-1 - Part 5",
+   "parent": "Rubber Duck Green 2.25in-1",
+   "min_in": [
+    63.491,
+    26.613,
+    1.203
+   ],
+   "max_in": [
+    63.646,
+    27.187,
+    1.365
+   ],
+   "centroid_in": [
+    63.567,
+    26.9,
+    1.288
+   ],
+   "verts": 600
+  },
+  {
+   "name": "Rubber Duck Lavender 2.25in-2 - Part",
+   "parent": "Rubber Duck Lavender 2.25in-2",
+   "min_in": [
+    69.654,
+    26.172,
+    -0.002
+   ],
+   "max_in": [
+    71.713,
+    27.628,
+    1.455
+   ],
+   "centroid_in": [
+    70.903,
+    26.899,
+    0.613
+   ],
+   "verts": 8379
+  },
+  {
+   "name": "Rubber Duck Lavender 225in-2 - Part 2",
+   "parent": "Rubber Duck Lavender 2.25in-2",
+   "min_in": [
+    71.674,
+    26.721,
+    1.005
+   ],
+   "max_in": [
+    71.921,
+    27.079,
+    1.111
+   ],
+   "centroid_in": [
+    71.852,
+    26.901,
+    1.059
+   ],
+   "verts": 685
+  },
+  {
+   "name": "Rubber Duck Lavender 225in-2 - Part 3",
+   "parent": "Rubber Duck Lavender 2.25in-2",
+   "min_in": [
+    71.498,
+    26.616,
+    1.21
+   ],
+   "max_in": [
+    71.644,
+    27.184,
+    1.363
+   ],
+   "centroid_in": [
+    71.569,
+    26.901,
+    1.287
+   ],
+   "verts": 100
+  },
+  {
+   "name": "Rubber Duck Lavender 225in-2 - Part 4",
+   "parent": "Rubber Duck Lavender 2.25in-2",
+   "min_in": [
+    71.546,
+    26.668,
+    1.26
+   ],
+   "max_in": [
+    71.597,
+    27.132,
+    1.314
+   ],
+   "centroid_in": [
+    71.573,
+    26.9,
+    1.287
+   ],
+   "verts": 480
+  },
+  {
+   "name": "Rubber Duck Lavender 225in-2 - Part 5",
+   "parent": "Rubber Duck Lavender 2.25in-2",
+   "min_in": [
+    71.491,
+    26.613,
+    1.203
+   ],
+   "max_in": [
+    71.646,
+    27.187,
+    1.365
+   ],
+   "centroid_in": [
+    71.567,
+    26.9,
+    1.288
+   ],
+   "verts": 600
+  },
+  {
+   "name": "Rubber Duck Red 2.25in-1 - Part",
+   "parent": "Rubber Duck Red 2.25in-1",
+   "min_in": [
+    53.654,
+    26.172,
+    -0.002
+   ],
+   "max_in": [
+    55.713,
+    27.628,
+    1.455
+   ],
+   "centroid_in": [
+    54.929,
+    26.895,
+    0.628
+   ],
+   "verts": 9054
+  },
+  {
+   "name": "Rubber Duck Red 225in-1 - Part 2",
+   "parent": "Rubber Duck Red 2.25in-1",
+   "min_in": [
+    55.674,
+    26.721,
+    1.005
+   ],
+   "max_in": [
+    55.921,
+    27.079,
+    1.111
+   ],
+   "centroid_in": [
+    55.842,
+    26.9,
+    1.063
+   ],
+   "verts": 708
+  },
+  {
+   "name": "Rubber Duck Red 225in-1 - Part 3",
+   "parent": "Rubber Duck Red 2.25in-1",
+   "min_in": [
+    55.498,
+    26.616,
+    1.21
+   ],
+   "max_in": [
+    55.644,
+    27.184,
+    1.363
+   ],
+   "centroid_in": [
+    55.573,
+    26.9,
+    1.287
+   ],
+   "verts": 100
+  },
+  {
+   "name": "Rubber Duck Red 225in-1 - Part 4",
+   "parent": "Rubber Duck Red 2.25in-1",
+   "min_in": [
+    55.546,
+    26.668,
+    1.26
+   ],
+   "max_in": [
+    55.597,
+    27.132,
+    1.314
+   ],
+   "centroid_in": [
+    55.573,
+    26.9,
+    1.287
+   ],
+   "verts": 480
+  },
+  {
+   "name": "Rubber Duck Red 225in-1 - Part 5",
+   "parent": "Rubber Duck Red 2.25in-1",
+   "min_in": [
+    55.491,
+    26.613,
+    1.203
+   ],
+   "max_in": [
+    55.646,
+    27.187,
+    1.365
+   ],
+   "centroid_in": [
+    55.567,
+    26.9,
+    1.288
+   ],
+   "verts": 600
+  },
+  {
+   "name": "Rubber Duck Yellow 2.25in-1 - Part",
+   "parent": "Rubber Duck Yellow 2.25in-1",
+   "min_in": [
+    85.654,
+    26.172,
+    -0.002
+   ],
+   "max_in": [
+    87.713,
+    27.628,
+    1.455
+   ],
+   "centroid_in": [
+    86.903,
+    26.899,
+    0.613
+   ],
+   "verts": 8379
+  },
+  {
+   "name": "Rubber Duck Yellow 225in-1 - Part 2",
+   "parent": "Rubber Duck Yellow 2.25in-1",
+   "min_in": [
+    87.674,
+    26.721,
+    1.005
+   ],
+   "max_in": [
+    87.921,
+    27.079,
+    1.111
+   ],
+   "centroid_in": [
+    87.852,
+    26.901,
+    1.059
+   ],
+   "verts": 685
+  },
+  {
+   "name": "Rubber Duck Yellow 225in-1 - Part 3",
+   "parent": "Rubber Duck Yellow 2.25in-1",
+   "min_in": [
+    87.498,
+    26.616,
+    1.21
+   ],
+   "max_in": [
+    87.644,
+    27.184,
+    1.363
+   ],
+   "centroid_in": [
+    87.569,
+    26.901,
+    1.287
+   ],
+   "verts": 100
+  },
+  {
+   "name": "Rubber Duck Yellow 225in-1 - Part 4",
+   "parent": "Rubber Duck Yellow 2.25in-1",
+   "min_in": [
+    87.546,
+    26.668,
+    1.26
+   ],
+   "max_in": [
+    87.597,
+    27.132,
+    1.314
+   ],
+   "centroid_in": [
+    87.573,
+    26.9,
+    1.287
+   ],
+   "verts": 480
+  },
+  {
+   "name": "Rubber Duck Yellow 225in-1 - Part 5",
+   "parent": "Rubber Duck Yellow 2.25in-1",
+   "min_in": [
+    87.491,
+    26.613,
+    1.203
+   ],
+   "max_in": [
+    87.646,
+    27.187,
+    1.365
+   ],
+   "centroid_in": [
+    87.567,
+    26.9,
+    1.288
+   ],
+   "verts": 600
+  },
+  {
+   "name": "Split Line2 - Part",
+   "parent": "Split Line2",
+   "min_in": [
+    73.076,
+    4.449,
+    8.626
+   ],
+   "max_in": [
+    73.508,
+    4.734,
+    9.096
+   ],
+   "centroid_in": [
+    73.272,
+    4.596,
+    8.883
+   ],
+   "verts": 203
+  },
+  {
+   "name": "Split Line2 - Part 2",
+   "parent": "Split Line2",
+   "min_in": [
+    72.572,
+    3.366,
+    5.631
+   ],
+   "max_in": [
+    77.464,
+    5.751,
+    10.083
+   ],
+   "centroid_in": [
+    74.848,
+    4.44,
+    7.536
+   ],
+   "verts": 8831
+  },
+  {
+   "name": "Split Line2 - Part 3",
+   "parent": "Split Line2",
+   "min_in": [
+    72.131,
+    4.905,
+    8.038
+   ],
+   "max_in": [
+    72.936,
+    5.751,
+    8.91
+   ],
+   "centroid_in": [
+    72.437,
+    5.433,
+    8.342
+   ],
+   "verts": 1228
+  },
+  {
+   "name": "Split Line2 - Part 4",
+   "parent": "Split Line2",
+   "min_in": [
+    73.179,
+    4.589,
+    8.898
+   ],
+   "max_in": [
+    73.278,
+    4.66,
+    9.02
+   ],
+   "centroid_in": [
+    73.23,
+    4.623,
+    8.961
+   ],
+   "verts": 75
+  },
+  {
+   "name": "T Connector-1 - Part",
+   "parent": "T Connector-1",
+   "min_in": [
+    46.375,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    49.75,
+    1.625,
+    2.498
+   ],
+   "centroid_in": [
+    48.064,
+    0.814,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-10 - Part",
+   "parent": "T Connector-10",
+   "min_in": [
+    52.0,
+    41.5,
+    -0.002
+   ],
+   "max_in": [
+    55.375,
+    44.0,
+    1.623
+   ],
+   "centroid_in": [
+    53.686,
+    42.835,
+    0.812
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-12 - Part",
+   "parent": "T Connector-12",
+   "min_in": [
+    55.375,
+    41.5,
+    -0.002
+   ],
+   "max_in": [
+    58.75,
+    43.125,
+    2.498
+   ],
+   "centroid_in": [
+    57.064,
+    42.314,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-13 - Part",
+   "parent": "T Connector-13",
+   "min_in": [
+    66.25,
+    41.5,
+    -0.002
+   ],
+   "max_in": [
+    69.625,
+    43.125,
+    2.498
+   ],
+   "centroid_in": [
+    67.939,
+    42.314,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-14 - Part",
+   "parent": "T Connector-14",
+   "min_in": [
+    40.625,
+    41.5,
+    -0.002
+   ],
+   "max_in": [
+    44.0,
+    44.0,
+    1.623
+   ],
+   "centroid_in": [
+    42.314,
+    42.835,
+    0.809
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-16 - Part",
+   "parent": "T Connector-16",
+   "min_in": [
+    -0.0,
+    40.625,
+    -0.002
+   ],
+   "max_in": [
+    2.5,
+    44.0,
+    1.623
+   ],
+   "centroid_in": [
+    1.335,
+    42.314,
+    0.812
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-2 - Part",
+   "parent": "T Connector-2",
+   "min_in": [
+    21.625,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    25.0,
+    1.625,
+    2.498
+   ],
+   "centroid_in": [
+    23.314,
+    0.814,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-3 - Part",
+   "parent": "T Connector-3",
+   "min_in": [
+    71.125,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    74.5,
+    1.625,
+    2.498
+   ],
+   "centroid_in": [
+    72.814,
+    0.814,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-30 - Part",
+   "parent": "T Connector-30",
+   "min_in": [
+    -0.0,
+    2.5,
+    -0.002
+   ],
+   "max_in": [
+    2.5,
+    5.875,
+    1.623
+   ],
+   "centroid_in": [
+    1.335,
+    4.189,
+    0.812
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-39 - Part",
+   "parent": "T Connector-39",
+   "min_in": [
+    26.375,
+    41.5,
+    -0.002
+   ],
+   "max_in": [
+    29.75,
+    44.0,
+    1.623
+   ],
+   "centroid_in": [
+    28.064,
+    42.835,
+    0.809
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-4 - Part",
+   "parent": "T Connector-4",
+   "min_in": [
+    90.125,
+    -0.0,
+    -0.002
+   ],
+   "max_in": [
+    93.5,
+    1.625,
+    2.498
+   ],
+   "centroid_in": [
+    91.814,
+    0.814,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-43 - Part",
+   "parent": "T Connector-43",
+   "min_in": [
+    -0.0,
+    25.25,
+    -0.002
+   ],
+   "max_in": [
+    1.625,
+    28.625,
+    2.498
+   ],
+   "centroid_in": [
+    0.811,
+    26.939,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-44 - Part",
+   "parent": "T Connector-44",
+   "min_in": [
+    94.375,
+    25.25,
+    -0.002
+   ],
+   "max_in": [
+    96.0,
+    28.625,
+    2.498
+   ],
+   "centroid_in": [
+    95.186,
+    26.939,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-6 - Part",
+   "parent": "T Connector-6",
+   "min_in": [
+    90.125,
+    10.875,
+    -0.002
+   ],
+   "max_in": [
+    93.5,
+    12.5,
+    2.498
+   ],
+   "centroid_in": [
+    91.814,
+    11.689,
+    1.333
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-7 - Part",
+   "parent": "T Connector-7",
+   "min_in": [
+    93.5,
+    10.0,
+    -0.002
+   ],
+   "max_in": [
+    96.0,
+    13.375,
+    1.623
+   ],
+   "centroid_in": [
+    94.665,
+    11.689,
+    0.809
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-8 - Part",
+   "parent": "T Connector-8",
+   "min_in": [
+    -0.0,
+    11.875,
+    -0.002
+   ],
+   "max_in": [
+    2.5,
+    15.25,
+    1.623
+   ],
+   "centroid_in": [
+    1.335,
+    13.564,
+    0.812
+   ],
+   "verts": 8000
+  },
+  {
+   "name": "T Connector-9 - Part",
+   "parent": "T Connector-9",
+   "min_in": [
+    93.5,
+    40.625,
+    -0.002
+   ],
+   "max_in": [
+    96.0,
+    44.0,
+    1.623
+   ],
+   "centroid_in": [
+    94.665,
+    42.314,
+    0.809
+   ],
+   "verts": 8000
+  }
+ ]
+}

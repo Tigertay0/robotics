@@ -1,0 +1,9 @@
+{
+  "name": "plan_t0_floor",
+  "description": "OUR PLAN, Tier 0 (first runnable version): ducks nudged into zones 2 and 4 only, PB4 under the platform, Cup 1 flipped.",
+  "zones": {"2": {"ducks": 1}, "4": {"ducks": 1}},
+  "pickleballs": {"under_platform": 1},
+  "cups": {"nested": false, "pieces": [
+    {"upright": true, "on_tape": false, "touching_board": true},
+    {"upright": false, "on_tape": true, "touching_board": true}]}
+}

@@ -1,0 +1,52 @@
+{
+  "name": "camera_mount",
+  "dims_mm": [
+    58.0,
+    31.0,
+    19.0
+  ],
+  "islands": 1,
+  "volume_cm3": 8.45,
+  "manifold": true,
+  "non_manifold_edges": 0,
+  "triangles": 1154,
+  "notes": "",
+  "print_check": {
+    "class": "small",
+    "part_dims_mm": [
+      58.0,
+      31.0,
+      19.0
+    ],
+    "part_dims_rounded_in": [
+      3,
+      2,
+      1
+    ],
+    "part_volume_rounded_in3": 6,
+    "class_dims_mm": [
+      60.0,
+      60.0,
+      20.0
+    ],
+    "class_dims_rounded_in": [
+      3,
+      3,
+      1
+    ],
+    "margin_mm": [
+      2.0,
+      29.0,
+      1.0
+    ],
+    "low_margin": false,
+    "fits_printer": true,
+    "pass_strict": true,
+    "pass_inch_box": true,
+    "pass_lenient": true
+  },
+  "stl": "C:\\Users\\Tigre\\robotics\\parts\\out\\camera_mount.stl",
+  "preview": "C:\\Users\\Tigre\\robotics\\parts\\out\\camera_mount.png",
+  "preview_top": "C:\\Users\\Tigre\\robotics\\parts\\out\\camera_mount_top.png",
+  "preview_under": "C:\\Users\\Tigre\\robotics\\parts\\out\\camera_mount_under.png"
+}

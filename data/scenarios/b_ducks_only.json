@@ -1,0 +1,11 @@
+{
+  "name": "b_ducks_only",
+  "description": "Ducks only: one small duck off tape in each of the 5 numbered zones (5x). Nothing else is touched; Botguy stays at his start position, which earns Base 1 under the literal written rule (unmoved_botguy_scores_base). Result is 30 under the default ruling, 25 if unmoved Botguy earns nothing, 20 if zone 5 does not count for the multiplier. Shows that the multiplier is only as good as the subtotal it multiplies.",
+  "zones": {
+    "1": {"ducks": 1},
+    "2": {"ducks": 1},
+    "3": {"ducks": 1},
+    "4": {"ducks": 1},
+    "5": {"ducks": 1}
+  }
+}

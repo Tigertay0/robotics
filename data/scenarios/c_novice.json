@@ -1,0 +1,15 @@
+{
+  "name": "c_novice",
+  "description": "HYPOTHETICAL novice run, one robot, two simple scripted tasks: (1) flip both cups upright where they start (they sit on the tape crossings, so they earn the 20 flat/upright bonus each but no Base); (2) shove two ducks off the center lane into zone 2 and zone 4, one each (2x). Botguy untouched (+1 Base, written-rule reading). Not a measurement; chosen as 'robot leaves the box and does two reliable things'.",
+  "zones": {
+    "2": {"ducks": 1},
+    "4": {"ducks": 1}
+  },
+  "cups": {
+    "nested": false,
+    "pieces": [
+      {"upright": true, "on_tape": true, "touching_board": true},
+      {"upright": true, "on_tape": true, "touching_board": true}
+    ]
+  }
+}

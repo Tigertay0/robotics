@@ -1,0 +1,688 @@
+--- page 1 ---
+Fall Game 2026
+2026 Botball Fall Game Review
+Version 1.0
+
+--- page 2 ---
+Contents
+Virtual Fall Game.............................................................................................................3
+Scoring Pieces & Starting Positions.................................................................................4
+Scoring Rules...................................................................................................................5
+Definitions........................................................................................................................7
+Tie Breakers & Special Scoring Conditions......................................................................8
+Gameplay.........................................................................................................................9
+Tournament Structure...................................................................................................11
+Construction Rules.........................................................................................................11
+Overall Winner Calculations...........................................................................................14
+
+--- page 3 ---
+Virtual Fall Game
+Teams earn points by participating in the seasonal game rules—such as sorting and moving 
+designated objects and Botguy to different areas.
+Virtual Tournaments requirements
+
+Participating teams must have a competition game board that meets the requirements 
+specified in the table build document.
+
+Access to the internet 
+
+Two cameras for competition day: one static overview camera showing the entire game 
+board, and one movable camera for judge's robot inspection and point verification.
+
+Minor differences related to game board setup may be accommodated by the Head Judge at 
+his or her discretion.
+
+An adult must be present for the entire tournament and will attest to the specification of the 
+game board, robots, and game pieces being used. 
+Game Board Areas
+The board this year uses five black-tape-delineated zones, plus a Raised Platform, the area 
+beneath it, and a separate Bottle/Ring enclosure.
+
+Zone 1: Top-left zone.
+
+Zone 2: Top-right zone.
+
+Zone 3: Middle-left zone (pom side).
+
+Zone 4: Middle-right zone (duck side).
+
+Zone 5: Lower-left zone — doubles as the larger Starting Box.
+Excluded from the Overall Multiplier count (see Scoring Rules): the Starting Box, the Raised 
+Platform, the area beneath the Raised Platform, and the Bottle/Ring enclosure (a distinct area 
+bordering, but not part of, zone 5).
+The starting box is 11.25" × 21.125" with a virtual height limit of 12".
+
+--- page 4 ---
+Scoring Pieces & Starting Positions
+Pieces
+
+Botguy: 1 piece. Starts centered left-to-right at the far top edge of the table.
+
+Big Duck: 1 piece, distinct from and larger than the small ducks. Starts on top of the Raised 
+Platform.
+
+Rubber Ducks (small): 5 pieces, 5 colors.
+
+Poms (visible): 5 colors × 4 each, arranged in stacks of 3 with 1 on top, positioned along 
+the center lane.
+
+Poms (hidden): 5 pieces, 1 of each color, hidden beneath the two cups, which start flipped 
+upside down (2 poms under one cup, 3 under the other).
+
+Mystery Red Pom: The hidden red pom must be freed from its starting group to score its 
+special bonus (see Scoring Rules). The red pom will be placed with two other poms in the 
+cup closest to the starting box.
+
+Cups: 2 pieces (green, teal). Start upside-down, each hiding a group of the hidden poms.
+
+Blue Bottles: Located in the bottle/ring enclosure that borders zone 5.
+
+Rings: 6 total (3 per post, 2 posts: the far-left post and the post near the blue bottles).
+
+Pickleballs: 4 pieces, mounted on posts.
+Piece Summary Table
+Piece
+Count
+Starts
+Scores
+Botguy
+1
+Top-center, far top edge
+On top of Raised Platform 
+— 15 pts
+Big Duck
+1
+On top of Raised Platform
+At Botguy's starting 
+position — 15 pts
+Rubber Ducks (small)
+5
+Center lane
+Base 1 pt; under-platform 
+3 pts; multiplier zones
+
+--- page 5 ---
+Piece
+Count
+Starts
+Scores
+Poms (visible)
+20 (5×4)
+Center lane, stacked 3+1
+Base 1 pt; see Pom 
+scoring algorithm
+Poms (hidden)
+5
+Under the 2 cups
+Must be freed to join 
+visible stacks
+Mystery Red Pom
+1 (of the 5 hidden)
+Under a cup
+Isolated alone on 
+platform — 50 pts 
+(multiplied)
+Cups
+2
+Upside-down, hiding 
+poms
+See Cup scoring — up to 
+60 pts
+Blue Bottles
+—
+Lower-left
+Rings score onto these
+Rings
+6
+2 posts (3 each)
+3 pts (touching) / 15 pts 
+(neck volume)
+Pickleballs
+4
+Mounted on posts
+Under Raised Platform — 
+7 pts each
+Scoring Rules
+Foundational Rules
+
+Black Tape Rule: Any game piece touching black tape does not score, except cups (cups 
+are exempt from this rule only for their Nesting and Flat/Upright bonuses — a cup touching 
+tape still fails to earn Base Score).
+
+General Scoring Rule: A game piece must touch the surface of the scoring area to score, 
+except pieces following the Volume Rule.
+
+Volume Rule (Ring/Bottle only): To score a ring on a bottle at the 15-point level, the 
+bottle neck must break the interior volume of the ring.
+
+Highest Scoring Rule: A game piece can only score in one scoring area and will be scored 
+as if it is in the highest scoring area, as determined by base score without multipliers.
+
+Robot Rule: A robot is defined minimally as a KIPR Robot Controller with at least two 
+motors connected to it that leaves the Starting Box. A robot with 2 controllers counts as a 
+single robot.
+
+Final Scoring Rule: The score is determined by final object location, not by how it got 
+there. Judges will wait until any scoring objects still in motion have come to rest before 
+scoring a game.
+Base Score
+Every scoring piece touching the board surface, off black tape, scores 1 point. This applies in 
+addition to any special scoring described below — Base Score and special scoring are additive, 
+not exclusive.
+Pom Scoring
+For each group of poms found together in a single zone, apply the following:
+
+Same color, sorted, 1–4 poms: linear — 1, 2, 3, or 4 points.
+
+Same color, sorted, all 5 poms of that color together (a Complete Set) and no other colors 
+present: flat 25-point bonus. There are exactly 5 poms of each color (4 visible + 1 hidden), 
+so no duplicate-color ambiguity is possible.
+
+--- page 6 ---
+
+All different colors present, no duplicates, n poms: n² points (e.g., 2 poms/2 colors = 4, 3/3 
+= 9, 4/4 = 16, 5/5 = 25).
+
+Mixed group (some duplicate colors, some unique, neither fully sorted nor fully unique): falls 
+back to Base Score only — 1 point per pom, no additional bonus.
+Mystery Red Pom
+One of the 5 hidden poms is red. If that red pom, and only that pom, ends up isolated on top of 
+the Raised Platform (no other poms with it), it scores a flat 50-point bonus. This bonus is 
+multiplied by the Overall Multiplier (see below). Any other pom present with it voids the bonus 
+— this discourages simply dumping all poms onto the platform.
+Duck Scoring
+
+Base Score: 1 point per duck, off tape (as with any piece).
+
+Under the Raised Platform: 3 points per duck.
+
+Ducks do not break sorts and have no color-sorting bonus of their own.
+Overall Multiplier
+Each of the 5 numbered zones that contains exactly 1 duck (no more, no fewer) adds +1 to a 
+single, game-wide multiplier. This multiplier applies to the entire round's score — the full Round 
+Subtotal, including the Mystery Red Pom bonus.
+
+0 or 1 qualifying zone: multiplier is 1x (no effect).
+
+2 qualifying zones: 2x. 3: 3x. And so on, up to a maximum of 5x.
+The smaller Starting Box, the Raised Platform, the area beneath the Raised Platform, and the 
+Bottle/Ring enclosure do not count toward this multiplier.
+Cup Scoring
+
+Touching black tape, no special condition: 0 points.
+
+Off tape, on board, no special condition: 1 point (Base Score).
+
+Nested (one cup inside the other's volume), regardless of tape: 20 points.
+
+Flat/upright on the board (per cup, regardless of nesting or tape): 20 points each.
+
+Both cups nested and both flat/upright at once: 20 + 20 + 20 = 60 points.
+Cups are the one piece exempt from the Black Tape Rule, but only for the Nesting and 
+Flat/Upright bonuses above — a cup on tape still earns 0 toward Base Score.
+Ring & Bottle Scoring
+
+Ring touching the bottle, not on the neck: 3 points.
+
+Ring on the bottle neck (bottle neck breaks the ring's interior volume): 15 points.
+Pickleball Scoring
+
+Under the Raised Platform: 7 points each.
+Botguy & Big Duck
+
+Botguy on top of the Raised Platform: 15 points.
+
+Big Duck at Botguy's starting position: 15 points.
+
+--- page 7 ---
+Scoresheet
+Item
+Area
+Count
+Pts.
+Subtotal
+1. Base Score
+Objects touching 
+board, off black tape
+1
+2. Pickleball
+Under raised platform
+7
+3. Rings
+Touching bottle, not 
+over neck
+3
+3. Rings
+On bottle neck 
+(breaking volume)
+15
+4. Ducks
+Under raised platform
+3
+5. Cups
+One nested in other 
+(1=Yes, 0=No)
+20
+5. Cups
+Flat and upright on the 
+base
+20
+6. Botguy
+On top of raised 
+platform
+15
+7. Big Duck
+At Botguy's starting 
+position
+15
+8. Hidden Red Pom
+Alone on raised 
+platform
+50
+9. Poms: Same color, 
+1–4 poms
+Numbered zones
+1
+9. Poms: All 5 of 1 
+color
+Numbered zones
+25
+9. Poms: All 
+different colors
+Numbered zones
+count × count
+9. Poms: Any other 
+mix
+Numbered zones
+1
+Subtotal
+× Zones with exactly 1 duck
+= Total
+Definitions
+Board & Zones
+Unless otherwise noted, all zones are delineated by the inner edge of the black tape and the 
+vertical projection of any PVC borders.
+
+Black Tape: The boundary marking that, when touched by a scoring piece (except cups' 
+Nesting/Flat bonuses), disqualifies that piece from scoring.
+
+Starting Box: The two designated boxes (one larger, one smaller) robots must start within; 
+robots must individually fit within the smaller box, though one may start in the larger.
+
+Multiplier Zone: One of the 5 numbered zones that, when containing exactly one duck, 
+adds +1 to the Overall Multiplier.
+
+Raised Platform: The elevated scoring area where Botguy and the Mystery Red Pom can 
+score. Delineated by the edges of the corrugated plastic.
+
+Area Under the Raised Platform: A separate scoring zone beneath the platform, where 
+pickleballs and ducks score.
+
+Bottle/Ring Enclosure: The post area holding rings and blue bottles; distinct from, and 
+bordering, but not part of, zone 5.
+
+--- page 8 ---
+Pieces
+
+Botguy: The robot supervisor piece, starting at the top-center, far edge of the table.
+
+Big Duck: The distinct, larger duck piece, starting atop the Raised Platform.
+
+Pickleball: Scoring piece (4 total), mounted on posts.
+
+Pom: Small scoring piece; 5 colors of 5 each (4 visible + 1 hidden).
+
+Mystery Pom: The specific hidden red pom, starting beneath a cup.
+
+Cup: Scoring piece (green, teal); can nest inside another cup and/or stand flat/upright.
+
+Blue Bottle: Scoring piece; rings score by breaking its neck's interior volume.
+
+Ring: Scoring piece (6 total, 3 per post); scores by touching or capturing a bottle neck.
+
+Rubber Duck: 5 small colored ducks; contribute to multiplier zones and under-platform 
+scoring.
+Scoring Mechanics
+
+Base Score: The flat 1-point award for any piece touching the board surface, off black tape.
+
+Nesting: One cup placed inside another cup's volume.
+
+Flat/Upright: A cup resting with its bottom flat against the board surface.
+
+Complete Set: All 5 poms of a single color together, alone, in one zone.
+
+Breaking the Volume: When one piece's relevant feature passes into another piece's open 
+interior (used directionally for rings/bottles).
+Tie Breakers & Special Scoring Conditions
+Two disqualifying conditions apply, in this order of priority:
+1. A robot must leave the Starting Box during the round; a robot that never breaks the Starting 
+Box boundary (including the 12" ceiling) loses / scores 0 for the round.
+2. A robot must stop driving its motors and stop servo motion by the end of the round; failure 
+to do so results in automatic disqualification for that round (see End of Game).
+Seeding Rounds
+Seeding is not head-to-head. Each team earns an individual score; there is no winner, loser, or 
+tie.
+Double Elimination Rounds (Non-Finals)
+If two teams' scores are tied:
+1. Replay the match once.
+2. If still tied, work through this ordered tiebreaker list:
+
+Most rings on bottle necks
+
+Most complete pom sets
+
+Most ducks counted toward the Overall Multiplier
+
+Most cups flipped (flat/upright)
+
+Most pickleballs moved (scored under the platform)
+
+Scoring the red Mystery Pom
+
+Closest to Botguy (measured from the nearest corner of the robot's Wombat controller to 
+Botguy)
+All tiebreakers are measured entirely within each team's own single-sided board — none 
+depend on an opponent's robot or pieces being present.
+Double Elimination Finals
+Tiebreakers are not used in the Finals. The match will be replayed until one team scores strictly 
+more points than the other.
+
+--- page 9 ---
+Gameplay
+Fair Play and Spirit of Botball
+Botball is about the development of student skills. All adults supervising a team should 
+understand that responsible Botball mentorship does not include working on the robot entries 
+or programming the robot entries for the students but does allow for appropriate mentor 
+guidance of the team. Virtual Events require an adult to be present for the entire tournament 
+and who will attest to the specifications of the game board and game pieces being used.
+Spirit of Botball: This is a 100% student-driven experience. Students know this, 
+and adults know better!
+Inspections
+A virtual judge may ask for a part count or to view robots in a zoomed-in view on the camera. 
+The mentoring adult/coach will help the judge with the inspection and attest to the compliance 
+of the robot.
+Setup — Before Hands-Off
+
+Up to two students from a team may bring the team's robot(s) to the tournament table and 
+perform setup.
+
+Teams will have 90 seconds to complete setup and calibration, placing robot(s) within their 
+Starting Box(es) as desired.
+
+Starting light rules: lights are positioned on the outside edge of the game table; teams must 
+adjust sensor mounts to match; lights must be aimed at the team's sensors or the floor; 
+lights may not break the vertical projection of the board inside its PVC boundary; two 
+connected starting lights per team, one per controller; teams cannot touch starting lights or 
+any part of the table after Hands-Off.
+
+Teams must notify table judges before the end of "Hands-Off" if they believe the table is not 
+set up properly or if there is something else they need to adjust. The team will receive 
+confirmation from the judge, make the adjustment, and then — Hands-Off!
+
+If judges determine a team is taking too long to calibrate, they will issue a warning and set a 
+60-second timer. A team not ready after 60 seconds may be disqualified from the round. 
+Maximum setup time (extendable at judges' discretion) is 90 seconds.
+Timeout
+Each team is granted a single timeout for the entire tournament, functioning the same as an in-
+person timeout, but without a physical card — teams notify the judge when they wish to use it. 
+Timeouts may only be requested while the team is at the table before "Hands-Off." Once 
+granted, the team receives a 3-minute timeout, which may be used to make adjustments to 
+their robot, but not to practice runs at the table — however, teams may practice the starting 
+light sequence during this time. Teams are advised to save their timeout for the Double 
+Elimination rounds, as Seeding rounds are the best 2 out of 3.
+If a robot is deemed to have an illegal part during Seeding rounds, a team may use their 
+timeout to remove the offending part. If a robot is deemed to have an illegal part during Double 
+Elimination rounds, the robot will be disqualified.
+If any parts are added or modified during the timeout period, the Head Judge may ask to have 
+the robot re-inspected once the timeout ends.
+Before the Game Begins — After Hands-Off
+Once "Hands-Off" has been declared, team members will position themselves so as not to block 
+the judge's or the overview camera's view of the game table. No part of a team's robot(s) may 
+leave the Starting Box(es) until the round has begun. Movement is okay so long as the Starting 
+
+--- page 10 ---
+Box(es) boundary isn't violated. If a moving violation happens, the judges will call a fault on the 
+team. Team members may not move the starting lights at any time after Hands-Off. Team 
+members may not signal to their robots after "Hands-Off" to start their robots. If a team 
+member at the table is wearing a shirt with large solid colors similar to game pieces on the 
+table, they will be asked to crouch or reposition during the round so as not to interfere with the 
+robot's camera.
+Teams are responsible for controlling outside light sources at their home table to prevent 
+accidental triggering of the light sensors before the round starts. This may include shielding 
+light sensors from windows, room lighting, or other environmental sources as needed to ensure 
+a reliable start.
+After the Game Begins — Lights On
+Once the starting lights have turned on, the round counts unless a judge rules otherwise. At the 
+start of the game, the starting lights turn on and robots are then allowed to leave the Starting 
+Box.
+The round lasts two minutes (120 seconds). The lighting sequence is:
+
+0 seconds: lights turn on; robots can leave starting boxes
+
+5 seconds: lights turn off
+
+120 seconds: game over; robots must turn off motors and freeze/power down servos
+Because this is a virtual tournament, teams may use a simpler home light-triggering setup and 
+are not required to have an end-of-round light warning (e.g., a blink sequence). The 120-second 
+time limit is enforced regardless of whether a team's home lighting reflects the end of the 
+round — teams are responsible for tracking the round timer independently to ensure their robot 
+stops on time.
+End of Game
+Robots must stop driving their motors and stop servo motion by the end of the round. Failure to 
+do so results in automatic disqualification for that round. Incidental motion from a servo holding 
+a position under load is OK.
+If a team never breaks the boundary of their Starting Box during the round, that results in a 
+score of 0 for the round (Seeding) — see Tie Breakers & Special Scoring Conditions for the 
+equivalent Double Elimination handling.
+Scoring is based on the location of pieces at the end of the round, not how the pieces got there. 
+Scoring takes place once the round has ended and all items have come to rest.
+If all motion has stopped before 120 seconds, the judge may ask the team if their robot is done. 
+If the team agrees, the round may be ended early.
+Final Scoring and Rulings
+If a team does not agree with the score as calculated, they must immediately notify the judge 
+before leaving the table and before any items have been moved. If they do not agree with the 
+judge's ruling, they may ask to speak with the Head Judge. The Head Judge will spend no more 
+than 5 minutes on the decision. Teams must initial the score sheet before leaving the table, 
+signifying acceptance of the ruling. If they do not agree with the ruling, the Head Judge can sign 
+for the team to progress the event forward.
+There are no instant replays. No external videos will be used for replay scoring. If a team 
+disagrees with a judge's decision, only the two team members at the table may politely discuss 
+the issue with the table judge and/or Head Judge. Issues with the scoring after the teams and 
+judges have agreed may not be considered.
+
+--- page 11 ---
+The Head Judge reserves the right to make rulings on specific rules or wording in the game 
+review that will be in effect for the remainder of the tournament.
+Spirit of Botball: Mentors, spectators, and team members should respect teams' 
+and judges' final decisions. A Head Judge may overrule any previous rule or 
+loophole that they believe to violate the Spirit of Botball.
+Acknowledgements
+The KIPR Robot Controller is a powerful device, but the use of threading can cause 
+unpredictable results, such as the robot not stopping when utilizing the shutdown in function. 
+Teams are encouraged to limit their use of threading and to make sure they take precautionary 
+steps to stop their robot within the time limit of the game.
+Tournament Structure
+Seeding Rounds
+There will be three Seeding rounds, single-sided. A team's Seed Score is the average of their 
+best two of three runs. Seed scores of less than 0 are counted as 0.
+Double Elimination (DE) Rounds
+A team is out of the Double Elimination tournament when it has lost two games. Teams 
+compete virtually and simultaneously on their own single-sided boards; scores are compared to 
+determine the winner of each match.
+Not part of this game: Documentation scoring, Double Seeding, Alliance Matches, and Tiered 
+Double Elimination rounds.
+Virtual Tournaments
+Virtual Tournaments require the team to have a competition game board that meets 
+requirements, access to the internet, and two cameras: one static overview camera showing 
+the whole game board, and one moveable camera for robot inspection and point verification on 
+each run. Some exceptions to rules related to game board setup may be accommodated by the 
+Head Judge.
+Construction Rules
+The official construction rules for the 2026 Botball Fall Game consist of the latest revision of this 
+2026 Botball Fall Game Review document and any updated game rules posted on the FAQ.
+Kit Rules
+
+Sensors from the 2017, 2018, 2019, and 2020-2026 kits may be used so long as they don't 
+exceed the type or number in the 2026 kit.
+
+Teams may use two cameras.
+
+KIPR Metal Parts — Aluminum chassis (old KIPR chassis) is not allowed.
+
+Robots may be constructed out of any or all of this year's kit parts except: boxes, bags, 
+wrapping or packing material, chargers, download cables, wrenches, screwdriver, and color 
+stickers. The included camera is the only USB device that may be plugged into a robot 
+during the game.
+
+Small removable mounting dots/strips (Glue Dots, UGlu, Scotch Restickable Dots/Strips, blue 
+tack) may be used for construction. Hot melt glue or other adhesives are not allowed.
+
+Zip ties used solely for wire management may be used as needed, without limit. Zip ties 
+used for any other purpose (structural, mounting, etc.) are limited to five (5) total. Teams 
+
+--- page 12 ---
+are limited to the standard 4" white zip ties included in the kit for both purposes; damaged 
+ties may be replaced with ones of equivalent size (black or white).
+
+Up to 100cm of thread, string, or fishing line (max diameter 1mm, non-metallic only) may be 
+used, except for offensive measures such as entanglement.
+
+Paper (max 20#), foam board, or corrugated plastic, up to one standard letter/A4 sheet 
+each, may be added; must be black or white/grayscale only.
+
+Up to 10 standard office rubber bands (max size #19) may be used; may not be glued or 
+melted.
+
+Up to 10 metal paper clips (1"–1.5") may be used; cannot be cut, broken, or plugged into 
+wiring.
+
+Coins, up to 250 grams, may be used as a counterweight only.
+
+The light sensors in the kit do not require a light guide unless there is significant direct 
+sunlight in the room.
+
+Lego parts cannot be physically modified, except threading axle holes with screws.
+
+Metal parts may not be cut or broken to a smaller size; only straps and plates may be bent. 
+Brackets cannot be bent.
+
+Teams are limited to using only 4' of the ABS plastic rods they receive.
+3D Print Rules
+
+Allowed filaments: PLA or PETG.
+
+All printed parts must be grayscale-colored, regardless of material.
+
+Parts are measured by their total exterior bounding box volume, calculated in whole-inch 
+units only — each dimension (height, length, width) is rounded up to the next whole inch 
+before multiplying.
+
+Small parts #6 (60mm × 60mm × 20mm)
+
+Mid-size parts #2 (220mm × 220mm × 80mm).
+
+Large parts #1 (220mm × 220mm × 250mm).
+
+Anti-circumvention clause: Splitting, segmenting, or otherwise designing parts with the 
+intent of circumventing these volume-based limits — including assemblies of smaller prints 
+that combine (by tethering, adjacency, or assembly) into a functionally or physically 
+monolithic part — will be evaluated by the Head Judge as a single combined part for rule 
+purposes. Judges retain full discretion to disqualify or require modification of any print 
+determined to violate the intent of this rule.
+
+A single part cannot exceed the print volume of an Ender 3 V3 SE (220mm × 220mm × 
+250mm).
+
+An STL file must be submitted for each part in use prior to the tournament, per the schedule 
+posted on the Team Homebase.
+Robot Logistics
+
+Each robot, if named, can only have a name (G-rated) approved by an adult team leader 
+before the tournament.
+
+Multiple processors (such as two KIPR robot controllers) may exist on a single robot.
+
+You may only use the Wombat controllers.
+
+It is not necessary to use all the parts in a kit.
+
+Interim rule: every robot must fit within the footprint of the smaller Starting Box, 11.25" × 
+21.125" × 12".
+
+All elements of a team's entry must be within the volume of a Starting Box at game start.
+
+After the game starts, robots are allowed to expand in size.
+
+Starting light sensors may be shielded as needed; neither the sensor nor shielding may 
+extend outside the Starting Box.
+
+All independent structures not under computer control should be clearly marked with the 
+team's number.
+
+Robot teams can have a maximum of 4 independent structures on the game table at a time.
+
+--- page 13 ---
+
+The ABS Plastic Rod must be permanently affixed to a robot by at least one end and may 
+not be used as a projectile or independent structure.
+
+No electrical modifications may be made to any KIPR robot controller, sensors, or motors, 
+except battery substitution with one approved by KIPR.
+
+No wire extensions may be used except those provided in the kit.
+
+Offensive entanglement strategies are not in line with the Spirit of Botball and may be 
+subject to disqualification.
+Safety
+
+No untethered robot-launched projectiles, other than game pieces, are allowed.
+
+No tethered projectiles containing metal pieces are allowed.
+
+No metal pieces or wires are to be used in effectors that move or rotate at high speed.
+
+No metal protrusions are to be used that are likely to cause electrical or safety risks for 
+other robots (including arms and projectiles).
+
+Judges will determine how safe a robot is.
+
+Electrical tape (black or white) may be used to cover metal pieces deemed a safety risk. 
+Tape may not be used for structural purposes.
+
+If the Head Judge decides a robot is not considered safe, it will not be allowed to run until 
+modified or will be removed from the table.
+External Communication
+
+No external communications (e.g., IR, Bluetooth, wireless, or semaphores) may be used 
+during tournament play, with the exception of robot to robot (for a team's own multiple 
+robots).
+
+Teams found programming a robot while at the table or in the on-deck area during rounds, 
+excluding during a timeout, will receive a DQ for the round.
+
+USB cables and chargers may not be used during game table tournament play.
+
+A team's robot controller may have WiFi turned on or off at the tournament.
+
+--- page 14 ---
+Overall Winner Calculations
+A team's overall score for this game is the sum of their Seeding and Double Elimination scores. 
+Documentation and Double Seeding do not apply to this game. Maximum possible Overall 
+Score: 2.000.
+Seeding Scoring Formula
+Seed Score=(
+3
+4)×(
+(n−Seed Rank +1)
+n
+)+(
+1
+4)×(
+Team Average Seed Score
+MaxTournament Seed Score)
+n = Number of teams at tournament or in bracket
+Double Elimination Bracket Scoring Formula
+Double Elimination Score= n−DE Rank +1
+n
+n = Number of teams at tournament or in bracket
