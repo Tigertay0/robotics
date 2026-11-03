@@ -3,16 +3,18 @@
 Two fingers printed already assembled with the base, meshed by gear sectors, so
 ONE micro servo opens and closes both:
   * left finger: turns on a captive printed pin + cap (0.4 mm clearances);
-  * right finger: sits over a small hole in the base. The micro servo bolts UNDER
-    the base, its shaft comes up through that hole, and its horn sits in a pocket
-    under the right finger's hub; screw the horn to the hub through the 4 pilot
-    holes. The servo turns the right finger, the gears mirror it to the left one.
+  * right finger: sits over a hole in the base. A standard kit Servo sits in a kit
+    Servo Bracket bolted UNDER the base (8-32 screws through the 4.4 mm grid); its
+    kit Round Servo Horn sits in the pocket under the right finger's hub and is bolted
+    to it with 3 kit "Silver Servo Horn Machine Screw (M3)" + "Silver Servo Horn Nut
+    (M3)" (nut traps on top). The servo turns the right finger, the gears mirror it.
+Every fastener is from the 2026 kit list (docs/2026 KIPR Metal Parts.pdf).
 After printing, rock the fingers to break any whiskers before fitting the servo.
 Pads are concave cups sized for a 1.6 in pom so it can't roll out.
 
 Frame: +Y = forward (finger tips), X = across, Z = up from the base bottom.
 The rear holes are LEGO pitch (8 mm) to bolt onto the paralleling arm.
-MEASURE: pom diameter, micro servo tab pitch / shaft offset, horn diameter.
+MEASURE: pom diameter, the Round Servo Horn diameter and its M3 hole radius.
 """
 import math
 import os
@@ -37,11 +39,11 @@ FINGER_W = 9.0
 OPEN_DEG = 18.0              # printed (rest) angle of each finger, outward from straight
 SWING_DEG = 25.0             # clearance is checked from -SWING to +SWING around the rest pose
 POM_D = 1.6 * 25.4
-SHAFT_HOLE_D = 8.0           # micro servo spline + clearance
-HORN_D, HORN_T = 22.0, 3.5   # pocket under the right hub for the micro servo horn
-HORN_SCREW_R = 8.0
-SERVO_TAB_PITCH = 27.5
-SERVO_SHAFT_OFFSET = 5.5     # shaft to body centre, along the body
+SHAFT_HOLE_D = 10.0          # standard servo spline + horn screw head
+HORN_D, HORN_T = 24.0, 3.5   # kit Round Servo Horn pocket under the right hub (MEASURE)
+HORN_SCREW_R = 7.0           # M3 holes in the Round Servo Horn (MEASURE)
+HORN_SCREW_ANGLES = (0, 90, 270)   # clear of the gear teeth (they face -X)
+BASE_RECESS = 1.5            # recess in the base top so the horn turns freely
 
 out = pl.out_dir_from_args()
 pl.reset()
@@ -58,10 +60,10 @@ pin_h = z_hub1 + CLR + CAP_T - BASE_T + 0.5
 pl.union(base, pl.cyl(PIN_D, pin_h, (xL, 0, BASE_T - 0.5 + pin_h / 2)))
 pl.union(base, pl.cyl(CAP_D, CAP_T, (xL, 0, z_hub1 + CLR + CAP_T / 2)))
 pl.difference(base, pl.cyl(SHAFT_HOLE_D, 20, (xR, 0, BASE_T / 2)))
-# servo body runs along +X (outward) under the plate; tabs at body centre +/- pitch/2
-body_cx = xR + SERVO_SHAFT_OFFSET
-for dx in (-SERVO_TAB_PITCH / 2, SERVO_TAB_PITCH / 2):
-    pl.difference(base, pl.cyl(2.0, 20, (body_cx + dx, 0, BASE_T / 2)))
+pl.difference(base, pl.cyl(HORN_D + 3, 2 * BASE_RECESS, (xR, 0, BASE_T)))       # horn swing recess
+# 4.4 mm grid (8 mm) for the kit Servo Bracket that holds the claw servo under the base
+bracket_pts = [(xR + dx, dy, BASE_T / 2) for dx in (-8, 0, 8, 16, 24) for dy in (-40, -32, -24)]
+pl.hole_grid(base, bracket_pts, pl.KIT_8_32_CLEAR, BASE_T + 2)
 # LEGO-pitch mounting holes at the rear, centred
 for y in (-58.0, -66.0):
     pl.hole_row(base, 5, pl.LEGO_PITCH, pl.LEGO_HOLE_D, start=(-16, y, BASE_T / 2),
@@ -88,13 +90,14 @@ def finger(x_pivot, side, name):
     pl.difference(hub, pl.cyl(POM_D, 40, (pad_x - side * (POM_D / 2 - 3), FINGER_L - 13, zc + 3)))
     if side < 0:   # re-cut the pin clearance last (the arm box overlaps the hub centre)
         pl.difference(hub, pl.cyl(PIN_D + 2 * CLR, HUB_T + 4, (x_pivot, 0, zc), segments=96))
-    else:          # horn pocket underneath + screw pilots + centre screw access
+    else:          # Round Servo Horn pocket underneath, M3 screw holes + nut traps, centre screw access
         pl.difference(hub, pl.cyl(HORN_D + 0.6, 2 * HORN_T, (x_pivot, 0, z_hub0)))
         pl.difference(hub, pl.cyl(6.5, HUB_T + 4, (x_pivot, 0, zc)))
-        for ang in range(45, 360, 90):
+        for ang in HORN_SCREW_ANGLES:
             r = math.radians(ang)
-            pl.difference(hub, pl.cyl(1.8, HUB_T + 4, (x_pivot + HORN_SCREW_R * math.cos(r),
-                                                       HORN_SCREW_R * math.sin(r), zc)))
+            hx, hy = x_pivot + HORN_SCREW_R * math.cos(r), HORN_SCREW_R * math.sin(r)
+            pl.difference(hub, pl.cyl(pl.M3_CLEAR, HUB_T + 4, (hx, hy, zc)))
+            pl.difference(hub, pl.hex_prism(pl.M3_NUT_AF, z_hub1 - 2.6, z_hub1 + 1, center=(hx, hy)))
     pl.rotate(hub, -side * OPEN_DEG, "Z", pivot=(x_pivot, 0, 0))   # tips swing outward
     return hub
 
@@ -140,4 +143,4 @@ claw = pl.join([base, left, right], "p2_geared_claw")
 pl.finish(claw, "p2_geared_claw", out, print_class="team",
           extra={"min_gap_mm": min(worst.values()), "swing_checked_deg": SWING_DEG},
           notes=f"print-in-place, 3 bodies (base+pin, finger_L, finger_R); min gap {min(worst.values()):.2f} mm "
-                f"over +/-{SWING_DEG:.0f} deg; servo under the base drives finger_R through its horn pocket")
+                f"over +/-{SWING_DEG:.0f} deg; kit Servo + Servo Bracket under the base, Round Servo Horn bolted to finger_R with kit M3 screws + nuts")

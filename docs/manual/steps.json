@@ -1,0 +1,9956 @@
+{
+ "version": 2,
+ "units": "mm; +X forward, +Y left, +Z up from the floor",
+ "mesh_naming": "'<SS>.<ss>|<part name>' = step . sub-step; '(...)' suffix = a sub-mesh of the same part",
+ "items_dir": "insertion direction of each mesh (robot frame): the fly-in comes from -dir and travels along dir",
+ "hints": {
+  "mecanum_x": "top-view pictogram: rollers form an X",
+  "gate_open_closed": "pictogram: flap DOWN = closed, flap UP (90 deg) = open",
+  "repeat_x3": "do the shown corner 3 more times",
+  "repeat_x4": "x4",
+  "repeat_x2": "x2",
+  "repeat_x1": "mirror on the other side",
+  "bend_35": "bend the strap 35 degrees outward",
+  "print_check": "check the print",
+  "wiring": "port map card"
+ },
+ "robot_a": {
+  "name": "Robot A - Duck Runner",
+  "glb": "robot_a.glb",
+  "steps": [
+   {
+    "n": 1,
+    "title": "Printed chassis",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "01.1",
+      "note": "3D PRINTED part. Print 1, deck side down. Clear every 4.4 mm hole with a drill.",
+      "parts": [
+       {
+        "name": "Printed chassis (print 1)",
+        "qty": 1,
+        "kind": "print",
+        "badge": "3D PRINTED"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "01.1|Printed chassis (print 1)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": null,
+      "hint": "print_check",
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "title": "Drive motors",
+    "hint": "repeat_x4",
+    "subs": [
+     {
+      "tag": "02.1",
+      "note": "Slide the motor into the window from outside, shaft facing out.",
+      "parts": [
+       {
+        "name": "Black Gear Motor",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.1|Black Gear Motor",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.1|Black Gear Motor (ear)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.1|Black Gear Motor (shaft)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       77.9,
+       90.0,
+       30
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.2",
+      "note": "4 screws through the motor ears into the wall.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.2|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         53.65,
+         92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         53.65,
+         92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         102.15,
+         92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         102.15,
+         92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       77.9,
+       90.0,
+       30
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.3",
+      "note": "4 Keps nuts on the inside, tighten.",
+      "parts": [
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         53.65,
+         84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         53.65,
+         84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         102.15,
+         84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         102.15,
+         84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       77.9,
+       82.0,
+       30
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.4",
+      "note": "Same for the other 3 corners.",
+      "parts": [
+       {
+        "name": "Black Gear Motor",
+        "qty": 3,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 12,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 12,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.4|Black Gear Motor",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (ear)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (shaft)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor.001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (ear).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (shaft).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).004",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).004",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).005",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).005",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).006",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).006",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).007",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).007",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).004",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).005",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).006",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).007",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor.002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (ear).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Black Gear Motor (shaft).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).008",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).008",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).009",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).009",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).010",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).010",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black).011",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Screw 8-32 x 1/2\" (black) (shank).011",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).008",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).009",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).010",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Nut 8-32 Keps (black).011",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         53.65,
+         -92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         53.65,
+         -92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         102.15,
+         -92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         102.15,
+         -92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         53.65,
+         -84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         53.65,
+         -84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         102.15,
+         -84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         102.15,
+         -84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -102.15,
+         92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -102.15,
+         92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -53.65,
+         92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -53.65,
+         92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -102.15,
+         84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -102.15,
+         84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -53.65,
+         84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -53.65,
+         84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -102.15,
+         -92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -102.15,
+         -92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -53.65,
+         -92.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -53.65,
+         -92.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -102.15,
+         -84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -102.15,
+         -84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -53.65,
+         -84.4,
+         25.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -53.65,
+         -84.4,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": null,
+      "hint": "repeat_x3",
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "title": "Mecanum wheels",
+    "hint": "mecanum_x",
+    "subs": [
+     {
+      "tag": "03.1",
+      "note": "Wheels on the shafts. Look from above: the rollers must make an X.",
+      "parts": [
+       {
+        "name": "Mecanum Wheel",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "03.1|Mecanum Wheel",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.004",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.005",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.006",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.007",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.008",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.009",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel.001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.010",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.011",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.012",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.013",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.014",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.015",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.016",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.017",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.018",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.019",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel.002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.020",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.021",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.022",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.023",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.024",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.025",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.026",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.027",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.028",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.029",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel.003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.030",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.031",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.032",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.033",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.034",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.035",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.036",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.037",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.038",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.1|Mecanum Wheel roller.039",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": null,
+      "hint": "mecanum_x",
+      "subassembly": null
+     },
+     {
+      "tag": "03.2",
+      "note": "One wheel screw in each hub.",
+      "parts": [
+       {
+        "name": "M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw.001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw.002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw (shank).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw.003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "03.2|M3 x 0.5\" x 6\" Mecanum Wheel Screw (shank).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "at": [
+         88.0,
+         -137.0,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "at": [
+         88.0,
+         137.0,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "at": [
+         -88.0,
+         -137.0,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "M3 x 0.5\" x 6\" Mecanum Wheel Screw",
+        "at": [
+         -88.0,
+         137.0,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       88,
+       136.0,
+       30
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "title": "Intake extension",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "04.1",
+      "note": "Plate on the outside of the left lane wall, front end.",
+      "parts": [
+       {
+        "name": "Plate 4 x 12",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.1|Plate 4 x 12",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       107.0,
+       26.4,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.2",
+      "note": "4 screws from INSIDE the lane, heads stay inside.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         99.0,
+         22.86,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         99.0,
+         22.86,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         87.0,
+         22.86,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         87.0,
+         22.86,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       93.0,
+       0,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.3",
+      "note": "4 Keps nuts outside, tighten.",
+      "parts": [
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.3|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.3|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.3|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.3|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         99.0,
+         29.96,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         99.0,
+         29.96,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         87.0,
+         29.96,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         87.0,
+         29.96,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       93.0,
+       26.4,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.4",
+      "note": "Plate on the outside of the right lane wall, front end.",
+      "parts": [
+       {
+        "name": "Plate 4 x 12",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.4|Plate 4 x 12",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       107.0,
+       -26.4,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.5",
+      "note": "4 screws from INSIDE the lane, heads stay inside.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         99.0,
+         -22.86,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         99.0,
+         -22.86,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         87.0,
+         -22.86,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         87.0,
+         -22.86,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       93.0,
+       0,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.6",
+      "note": "4 Keps nuts outside, tighten.",
+      "parts": [
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.6|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.6|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.6|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.6|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         99.0,
+         -29.96,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         99.0,
+         -29.96,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         87.0,
+         -29.96,
+         15.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         87.0,
+         -29.96,
+         35.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       93.0,
+       -26.4,
+       25
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.7",
+      "note": "Strap on the front end of the plate (2 screws + 2 nuts), then bend it 35 degrees out.",
+      "parts": [
+       {
+        "name": "Strap 1 x 10",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.7|Strap 1 x 10",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.7|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         169.0,
+         22.86,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         169.0,
+         31.56,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         181.0,
+         22.86,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         181.0,
+         31.56,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       185.0,
+       26.4,
+       14
+      ],
+      "hint": "bend_35",
+      "subassembly": null
+     },
+     {
+      "tag": "04.8",
+      "note": "Strap on the front end of the plate (2 screws + 2 nuts), then bend it 35 degrees out.",
+      "parts": [
+       {
+        "name": "Strap 1 x 10",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.8|Strap 1 x 10",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.8|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         169.0,
+         -22.86,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         169.0,
+         -31.56,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         181.0,
+         -22.86,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         181.0,
+         -31.56,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       185.0,
+       -26.4,
+       14
+      ],
+      "hint": "bend_35",
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "title": "Duck gates",
+    "hint": "gate_open_closed",
+    "subs": [
+     {
+      "tag": "05.1",
+      "note": "Exit gate A: servo into the servo bracket, 2 screws + 2 nuts through the servo ears.",
+      "parts": [
+       {
+        "name": "Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.1|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Servo Bracket.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Servo Bracket.002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Servo",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -76.0,
+         13.2,
+         61.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -76.0,
+         -13.8,
+         61.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -76.0,
+         13.2,
+         81.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -76.0,
+         -13.8,
+         81.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -97.0,
+       0,
+       65.0
+      ],
+      "hint": null,
+      "subassembly": "Exit gate A"
+     },
+     {
+      "tag": "05.2",
+      "note": "Exit gate A: 1x5 servo horn on the shaft, pointing DOWN; 1 horn screw in the middle.",
+      "parts": [
+       {
+        "name": "1 x 5 Servo Horn",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.2|1 x 5 Servo Horn",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Short Silver Servo Horn Screw (M3)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Short Silver Servo Horn Screw (M3) (shank)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "at": [
+         -96.9,
+         0.0,
+         65.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       -95.6,
+       0,
+       65.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": "Exit gate A"
+     },
+     {
+      "tag": "05.3",
+      "note": "Exit gate A: 1x7 liftarm on the lower 2 horn holes, 2 screws + 2 nuts. Its tip is 10 mm above the floor.",
+      "parts": [
+       {
+        "name": "1 x 7 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.3|1 x 7 Liftarm",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Nut 8-32 Keps (black)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.3|Nut 8-32 Keps (black).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -100.9,
+         0.0,
+         52.3
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -92.7,
+         0.0,
+         52.3
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -100.9,
+         0.0,
+         39.6
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -92.7,
+         0.0,
+         39.6
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -95.6,
+       0,
+       40.0
+      ],
+      "hint": null,
+      "subassembly": "Exit gate A"
+     },
+     {
+      "tag": "05.4",
+      "note": "Exit gate A: bracket on the deck over the REAR slot, flap through the slot. 2 screws down, 2 nuts under the deck.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.4|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -76.0,
+         -20.0,
+         53.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -76.0,
+         -20.0,
+         44.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -76.0,
+         20.0,
+         53.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -76.0,
+         20.0,
+         44.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -97.0,
+       0,
+       51.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": null
+     },
+     {
+      "tag": "05.5",
+      "note": "Pin gate B: micro servo into the micro servo mount, 2 small screws.",
+      "parts": [
+       {
+        "name": "Micro Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Micro Servo Mount",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "2-56 3/8\" Micro Servo Mount Screw",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.5|Micro Servo Mount",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.5|Micro Servo",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.5|2-56 3/8\" Micro Servo Mount Screw",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.5|2-56 3/8\" Micro Servo Mount Screw (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.5|2-56 3/8\" Micro Servo Mount Screw.001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.5|2-56 3/8\" Micro Servo Mount Screw (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "2-56 3/8\" Micro Servo Mount Screw",
+        "at": [
+         -23.5,
+         8.5,
+         59.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "2-56 3/8\" Micro Servo Mount Screw",
+        "at": [
+         -23.5,
+         8.5,
+         73.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       -41.0,
+       0,
+       61.0
+      ],
+      "hint": null,
+      "subassembly": "Pin gate B"
+     },
+     {
+      "tag": "05.6",
+      "note": "Pin gate B: 1x5 liftarm flap on the servo's own horn, tied with 1 zip tie. Flap points DOWN.",
+      "parts": [
+       {
+        "name": "1 x 5 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Zip tie 4\" (white), structural",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.6|1 x 5 Liftarm",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.6|Zip tie",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       -39.6,
+       0,
+       41.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": "Pin gate B"
+     },
+     {
+      "tag": "05.7",
+      "note": "Pin gate B: mount on the deck over the MIDDLE slot. 2 screws down, 2 nuts under the deck.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.7|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.7|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.7|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.7|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.7|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.7|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -23.5,
+         -20.0,
+         55.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -23.5,
+         -20.0,
+         44.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -23.5,
+         20.0,
+         55.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -23.5,
+         20.0,
+         44.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -41.0,
+       0,
+       51.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": null
+     },
+     {
+      "tag": "05.8",
+      "note": "Intake gate C: a 1x5 liftarm bridge across the two plates (2 screws + 2 nuts).",
+      "parts": [
+       {
+        "name": "1 x 5 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.8|1 x 5 Liftarm",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.8|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.8|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.8|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.8|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.8|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.8|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         157.0,
+         -27.36,
+         54.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         157.0,
+         -27.36,
+         41.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         157.0,
+         27.36,
+         54.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         157.0,
+         27.36,
+         41.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       157.0,
+       0,
+       46
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "05.9",
+      "note": "Intake gate C: servo into the servo bracket, 2 screws + 2 nuts through the servo ears.",
+      "parts": [
+       {
+        "name": "Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.9|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.9|Servo Bracket.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.9|Servo Bracket.002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.9|Servo",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.9|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.9|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.9|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.9|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.9|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.9|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         178.0,
+         13.2,
+         64.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         178.0,
+         -13.8,
+         64.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         178.0,
+         13.2,
+         84.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         178.0,
+         -13.8,
+         84.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       157.0,
+       0,
+       68.0
+      ],
+      "hint": null,
+      "subassembly": "Intake gate C"
+     },
+     {
+      "tag": "05.10",
+      "note": "Intake gate C: 1x5 servo horn on the shaft, pointing DOWN; 1 horn screw in the middle.",
+      "parts": [
+       {
+        "name": "1 x 5 Servo Horn",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.10|1 x 5 Servo Horn",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.10|Short Silver Servo Horn Screw (M3)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.10|Short Silver Servo Horn Screw (M3) (shank)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "at": [
+         157.1,
+         0.0,
+         68.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       158.4,
+       0,
+       68.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": "Intake gate C"
+     },
+     {
+      "tag": "05.11",
+      "note": "Intake gate C: 1x7 liftarm on the lower 2 horn holes, 2 screws + 2 nuts. Its tip is 10 mm above the floor.",
+      "parts": [
+       {
+        "name": "1 x 7 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.11|1 x 7 Liftarm",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Nut 8-32 Keps (black)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "05.11|Nut 8-32 Keps (black).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         153.1,
+         0.0,
+         55.3
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         161.3,
+         0.0,
+         55.3
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         153.1,
+         0.0,
+         42.6
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         161.3,
+         0.0,
+         42.6
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       158.4,
+       0,
+       43.0
+      ],
+      "hint": null,
+      "subassembly": "Intake gate C"
+     },
+     {
+      "tag": "05.12",
+      "note": "Intake gate C: bracket on the liftarm bridge, flap down into the lane. 2 screws, 2 nuts.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.12|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.12|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.12|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.12|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.12|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.12|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         178.0,
+         -20.0,
+         56.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         178.0,
+         -20.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         178.0,
+         20.0,
+         56.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         178.0,
+         20.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       157.0,
+       0,
+       54.0
+      ],
+      "hint": "gate_open_closed",
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "title": "Sensors",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "06.1",
+      "note": "Lane-full touch switch into the window in the right lane wall, 2 brass screws.",
+      "parts": [
+       {
+        "name": "Small Touch",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Brass Screws",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.1|Small Touch",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "06.1|Brass Screws",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "06.1|Brass Screws (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "06.1|Brass Screws.001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "06.1|Brass Screws (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Brass Screws",
+        "at": [
+         -85.5,
+         -33.36,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Brass Screws",
+        "at": [
+         -66.5,
+         -33.36,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       -76,
+       -26.4,
+       16
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.2",
+      "note": "Angle bracket on the front bumper, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Angle Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.2|Angle Bracket",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Angle Bracket.001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Angle Bracket.002",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         108.0,
+         -33.0,
+         28.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         101.4,
+         -33.0,
+         28.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         108.0,
+         33.0,
+         28.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         101.4,
+         33.0,
+         28.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       107.0,
+       0,
+       22
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.3",
+      "note": "Two tophats under the bracket, looking down, 1 screw each.",
+      "parts": [
+       {
+        "name": "Tophat (Reflectance)",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.3|Tophat (Reflectance)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.3|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.3|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.3|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.3|Tophat (Reflectance).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.3|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.3|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.3|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         115.0,
+         -30.0,
+         22.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         115.0,
+         -30.0,
+         12.05
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         115.0,
+         30.0,
+         22.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         115.0,
+         30.0,
+         12.05
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       115.0,
+       30,
+       14
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.4",
+      "note": "Rangefinder (ET) on the front bumper grid, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "ET (Rangefinder)",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.4|ET (Rangefinder)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Nut 8-32 Keps (black)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.4|Nut 8-32 Keps (black).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         117.0,
+         44.0,
+         30.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         101.4,
+         44.0,
+         30.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         117.0,
+         64.0,
+         30.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         101.4,
+         64.0,
+         30.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       107.0,
+       54,
+       30
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.5",
+      "note": "Start light sensor on the deck, front left, facing up, 1 screw + 1 nut.",
+      "parts": [
+       {
+        "name": "Light",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 1,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.5|Light",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.5|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.5|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.5|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         76.0,
+         58.0,
+         61.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         76.0,
+         58.0,
+         44.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       76,
+       58,
+       51.0
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "title": "Wombat and battery",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "07.1",
+      "note": "Front 2 posts: 2 in standoffs on the deck's Wombat holes, 1 short screw each from under the deck.",
+      "parts": [
+       {
+        "name": "Standoff 8-32 x 2\"",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.1|Standoff 8-32 x 2\"",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.1|Standoff 8-32 x 2\".001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         41.35,
+         -41.9,
+         46.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         41.35,
+         41.9,
+         46.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       }
+      ],
+      "zoom": [
+       41.4,
+       41.9,
+       76.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.2",
+      "note": "Rear 2 posts: two 1 in standoffs joined by a 1 in threaded rod, 1 short screw each from under the deck.",
+      "parts": [
+       {
+        "name": "Standoff 8-32 x 1\"",
+        "qty": 4,
+        "kind": "kit"
+       },
+       {
+        "name": "Threaded Rod 8-32 x 1\"",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.2|Standoff 8-32 x 1\"",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.2|Standoff 8-32 x 1\".001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.2|Standoff 8-32 x 1\".002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.2|Standoff 8-32 x 1\".003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -71.35,
+         -41.9,
+         46.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -71.35,
+         41.9,
+         46.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       }
+      ],
+      "zoom": [
+       -71.3,
+       41.9,
+       76.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.3",
+      "note": "Wombat on the 4 posts, screen up, 4 screws from above.",
+      "parts": [
+       {
+        "name": "Wombat",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 6.3
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.3|Wombat",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Wombat (screen)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black) (shank).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.3|Screw 8-32 x 1/4\" (black) (shank).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -71.35,
+         -41.9,
+         135.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -71.35,
+         41.9,
+         135.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         41.35,
+         -41.9,
+         135.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         41.35,
+         41.9,
+         135.8
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       }
+      ],
+      "zoom": [
+       -15,
+       0,
+       121.8
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.4",
+      "note": "Battery on the deck in front of the gates, 1 zip tie through the grid.",
+      "parts": [
+       {
+        "name": "Wombat Battery",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Zip tie 4\" (white), structural",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.4|Wombat Battery",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "07.4|Zip tie",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       80,
+       -52,
+       63.0
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "title": "Wiring",
+    "hint": "wiring",
+    "subs": [
+     {
+      "tag": "08.1",
+      "note": "Motors FR 0, FL 1, BR 2, BL 3. Servos: intake C 0, pin B 1, exit A 2. Analog: tophat L 0, R 1, ET 2, light 3. Digital 0: lane-full switch.",
+      "parts": [],
+      "items": [],
+      "targets": [],
+      "zoom": null,
+      "hint": "wiring",
+      "subassembly": null
+     }
+    ]
+   }
+  ],
+  "substeps": 37
+ },
+ "robot_b": {
+  "name": "Robot B - Point Scorer",
+  "glb": "robot_b.glb",
+  "steps": [
+   {
+    "n": 1,
+    "title": "Chassis",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "01.1",
+      "note": "KIPR chassis, flanges down.",
+      "parts": [
+       {
+        "name": "Chassis",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "01.1|Chassis",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "01.1|Chassis (flange)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "01.1|Chassis (flange).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": null,
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "title": "Drive",
+    "hint": "repeat_x2",
+    "subs": [
+     {
+      "tag": "02.1",
+      "note": "Servo bracket at the rear left, 2 screws down + 2 nuts under the plate.",
+      "parts": [
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.1|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Servo Bracket.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Servo Bracket.002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "02.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -90.0,
+         44.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -90.0,
+         44.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -50.0,
+         44.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -50.0,
+         44.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -70,
+       53.5,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.2",
+      "note": "Motor into the bracket, shaft out through the side.",
+      "parts": [
+       {
+        "name": "Black Gear Motor",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.2|Black Gear Motor",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       -70,
+       46,
+       35
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.3",
+      "note": "4 screws through the motor ears into the bracket, 4 nuts.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.3|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -94.0,
+         55.5,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -94.0,
+         51.9,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -94.0,
+         55.5,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -94.0,
+         51.9,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -46.0,
+         55.5,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -46.0,
+         51.9,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -46.0,
+         55.5,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -46.0,
+         51.9,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -70,
+       56,
+       35
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.4",
+      "note": "Wheel on the shaft.",
+      "parts": [
+       {
+        "name": "Solarbotics Wheel",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.4|Solarbotics Wheel",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.4|Solarbotics Wheel (hub)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       -70,
+       77,
+       35
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "02.5",
+      "note": "Same on the right side.",
+      "parts": [
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Black Gear Motor",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Solarbotics Wheel",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 6,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.5|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Servo Bracket.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Servo Bracket.002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "02.5|Black Gear Motor",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black).004",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Nut 8-32 Keps (black).005",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Solarbotics Wheel",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "02.5|Solarbotics Wheel (hub)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -90.0,
+         -44.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -90.0,
+         -44.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -50.0,
+         -44.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -50.0,
+         -44.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -94.0,
+         -55.5,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -94.0,
+         -51.9,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -94.0,
+         -55.5,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -94.0,
+         -51.9,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -46.0,
+         -55.5,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -46.0,
+         -51.9,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -46.0,
+         -55.5,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -46.0,
+         -51.9,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": null,
+      "hint": "repeat_x1",
+      "subassembly": null
+     },
+     {
+      "tag": "02.6",
+      "note": "Caster under the front, 2 caster screws from the top.",
+      "parts": [
+       {
+        "name": "Caster",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "2-56 1\" Caster Screw",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "02.6|Caster",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "02.6|Caster (ball)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "02.6|2-56 1\" Caster Screw",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.6|2-56 1\" Caster Screw (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.6|2-56 1\" Caster Screw.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "02.6|2-56 1\" Caster Screw (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "2-56 1\" Caster Screw",
+        "at": [
+         87.0,
+         0.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "2-56 1\" Caster Screw",
+        "at": [
+         105.0,
+         0.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       96,
+       0,
+       22.0
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "title": "Wombat and battery",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "03.1",
+      "note": "4 standoffs (1/2 in) on the plate, screws from below.",
+      "parts": [
+       {
+        "name": "Standoff 8-32 x 1/2\"",
+        "qty": 4,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 6.3
+       }
+      ],
+      "items": [
+       {
+        "mesh": "03.1|Standoff 8-32 x 1/2\"",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Standoff 8-32 x 1/2\".001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Standoff 8-32 x 1/2\".002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black) (shank).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Standoff 8-32 x 1/2\".003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black).003",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "03.1|Screw 8-32 x 1/4\" (black) (shank).003",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -86.35,
+         -41.9,
+         22.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         -86.35,
+         41.9,
+         22.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         26.35,
+         -41.9,
+         22.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         26.35,
+         41.9,
+         22.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       }
+      ],
+      "zoom": [
+       26.0,
+       42,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "03.2",
+      "note": "Wombat on the standoffs, screen up, 4 screws from above.",
+      "parts": [
+       {
+        "name": "Wombat",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       }
+      ],
+      "items": [
+       {
+        "mesh": "03.2|Wombat",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Wombat (screen)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.2|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -86.35,
+         -41.9,
+         70.7
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -86.35,
+         41.9,
+         70.7
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         26.35,
+         -41.9,
+         70.7
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         26.35,
+         41.9,
+         70.7
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       -30.0,
+       0,
+       66.7
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "03.3",
+      "note": "Battery on the rear of the Wombat, 1 zip tie around both.",
+      "parts": [
+       {
+        "name": "Wombat Battery",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Zip tie 4\" (white), structural",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "03.3|Wombat Battery",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "03.3|Zip tie",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       -82.0,
+       0,
+       81.7
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "title": "Arm",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "04.1",
+      "note": "Shoulder: servo bracket at the front left, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.1|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Servo Bracket.001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "04.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         58.0,
+         33.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         58.0,
+         33.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         86.0,
+         33.0,
+         26.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         86.0,
+         33.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       72,
+       32,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.2",
+      "note": "Servo into the bracket, shaft to the left (outside). 2 screws + 2 nuts through the ears.",
+      "parts": [
+       {
+        "name": "Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.2|Servo",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         54.0,
+         22.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         54.0,
+         18.4,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         90.6,
+         22.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         90.6,
+         18.4,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       72,
+       32,
+       45
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.3",
+      "note": "Round servo horn on the shaft, 1 horn screw.",
+      "parts": [
+       {
+        "name": "Round Servo Horn",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.3|Round Servo Horn",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.3|Short Silver Servo Horn Screw (M3)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.3|Short Silver Servo Horn Screw (M3) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "at": [
+         82.0,
+         45.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       82,
+       44,
+       50
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.4",
+      "note": "Upper 1x11 liftarm on the horn: 2 M3 screws + 2 M3 nuts.",
+      "parts": [
+       {
+        "name": "1 x 11 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Silver Servo Horn Nut (M3)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.4|1 x 11 Liftarm",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Machine Screw (M3)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Machine Screw (M3) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Nut (M3)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Machine Screw (M3).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Machine Screw (M3) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.4|Silver Servo Horn Nut (M3).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         82.0,
+         53.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         82.0,
+         42.2,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 2.4
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         89.25,
+         53.0,
+         53.38
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         89.25,
+         42.2,
+         53.38
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 2.4
+       }
+      ],
+      "zoom": [
+       90,
+       49,
+       54
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.5",
+      "note": "1x3 liftarm bolted upright on the bracket (2 screws + 2 nuts), lower 1x11 liftarm on its top hole with a friction pin.",
+      "parts": [
+       {
+        "name": "1 x 3 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "1 x 11 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Pin w/ Friction",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.5|1 x 3 Liftarm",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|1 x 11 Liftarm",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.5|Pin w/ Friction",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         82.0,
+         61.0,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         82.0,
+         18.4,
+         30.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         82.0,
+         61.0,
+         38.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         82.0,
+         18.4,
+         38.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       82,
+       57,
+       34
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "04.6",
+      "note": "1x5 liftarm joins both arm tips, 2 friction pins. The claw will stay level.",
+      "parts": [
+       {
+        "name": "1 x 5 Liftarm",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Pin w/ Friction",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "04.6|1 x 5 Liftarm",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.6|Pin w/ Friction",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "04.6|Pin w/ Friction.001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       154.5,
+       57,
+       75.8
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "title": "Geared claw",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "05.1",
+      "note": "3D PRINTED part. Claw (print 2): servo bracket under its base, 4 short screws + 4 nuts through the 4.4 mm grid.",
+      "parts": [
+       {
+        "name": "Geared claw (print 2)",
+        "qty": 1,
+        "kind": "print",
+        "badge": "3D PRINTED"
+       },
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.1|Geared claw (print 2)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Geared claw (print 2) (finger L)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Geared claw (print 2) (finger R)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Servo Bracket",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.1|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         205.24,
+         29.4,
+         63.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         205.24,
+         29.4,
+         56.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         205.24,
+         59.4,
+         63.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         205.24,
+         59.4,
+         56.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         237.24,
+         29.4,
+         63.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         237.24,
+         29.4,
+         56.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         237.24,
+         59.4,
+         63.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         237.24,
+         59.4,
+         56.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       220.5,
+       57,
+       59.8
+      ],
+      "hint": null,
+      "subassembly": "Claw"
+     },
+     {
+      "tag": "05.2",
+      "note": "Claw servo into the bracket, shaft UP under the right finger. 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.2|Servo",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "05.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         203.04,
+         54.55,
+         47.81
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         203.04,
+         32.65,
+         47.81
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         239.64,
+         54.55,
+         47.81
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         239.64,
+         32.65,
+         47.81
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       221.2,
+       44.4,
+       39.8
+      ],
+      "hint": null,
+      "subassembly": "Claw"
+     },
+     {
+      "tag": "05.3",
+      "note": "Round servo horn in the pocket under the right finger: 1 horn screw, then 3 M3 screws + 3 M3 nuts (nuts go in the hex holes on top).",
+      "parts": [
+       {
+        "name": "Round Servo Horn",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "qty": 3,
+        "kind": "kit"
+       },
+       {
+        "name": "Silver Servo Horn Nut (M3)",
+        "qty": 3,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.3|Round Servo Horn",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Short Silver Servo Horn Screw (M3)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.3|Short Silver Servo Horn Screw (M3) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3) (shank)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Nut (M3)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3) (shank).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Nut (M3).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Machine Screw (M3) (shank).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.3|Silver Servo Horn Nut (M3).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "at": [
+         230.24,
+         44.4,
+         67.71
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         230.24,
+         37.4,
+         64.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         230.24,
+         37.4,
+         71.01
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 2.4
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         237.24,
+         44.4,
+         64.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         237.24,
+         44.4,
+         71.01
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 2.4
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         223.24,
+         44.4,
+         64.21
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         223.24,
+         44.4,
+         71.01
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 2.4
+       }
+      ],
+      "zoom": [
+       230.2,
+       44.4,
+       67.8
+      ],
+      "hint": null,
+      "subassembly": "Claw"
+     },
+     {
+      "tag": "05.4",
+      "note": "Bolt the claw to the 1x5 liftarm at the arm tip: 2 screws + 2 nuts through the rear holes.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.4|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "05.4|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         166.5,
+         57.0,
+         65.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         166.5,
+         57.0,
+         54.61
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         174.5,
+         57.0,
+         65.81
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         174.5,
+         57.0,
+         54.61
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       160.5,
+       61,
+       61.8
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "title": "Pocket plow",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "06.1",
+      "note": "3D PRINTED part. Plow (print 3): slide its 2 tabs under the front of the chassis.",
+      "parts": [
+       {
+        "name": "Pocket plow (print 3)",
+        "qty": 1,
+        "kind": "print",
+        "badge": "3D PRINTED"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.1|Pocket plow (print 3)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       110.0,
+       0,
+       22.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.2",
+      "note": "4 screws down through plate and tabs, 4 Keps nuts under the tabs.",
+      "parts": [
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 4,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 4,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank).002",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black).002",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Screw 8-32 x 1/2\" (black) (shank).003",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "06.2|Nut 8-32 Keps (black).003",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         103.0,
+         -18.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         -18.0,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         103.0,
+         18.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         18.0,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         115.7,
+         -18.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         115.7,
+         -18.0,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         115.7,
+         18.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         115.7,
+         18.0,
+         14.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       109.0,
+       18,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "06.3",
+      "note": "Lever switch in the centre pocket, 2 brass screws.",
+      "parts": [
+       {
+        "name": "Lever",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Brass Screws",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "06.3|Lever",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.3|Brass Screws",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.3|Brass Screws (shank)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.3|Brass Screws.001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "06.3|Brass Screws (shank).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Brass Screws",
+        "at": [
+         129.0,
+         -7.0,
+         27.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "screw",
+        "name": "Brass Screws",
+        "at": [
+         129.0,
+         7.0,
+         27.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       121.0,
+       0,
+       27
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "title": "Cup hook",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "07.1",
+      "note": "Servo bracket on the right flange, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Servo Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.1|Servo Bracket",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         14.0,
+         -63.7,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         14.0,
+         -57.9,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         46.0,
+         -63.7,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         46.0,
+         -57.9,
+         16.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       30,
+       -62,
+       18
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.2",
+      "note": "Hook servo into the bracket, shaft to the RIGHT (outside). 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Servo",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.2|Servo",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         12.0,
+         -84.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         12.0,
+         -60.1,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         48.6,
+         -84.0,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         48.6,
+         -60.1,
+         50.0
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       30,
+       -74,
+       42
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.3",
+      "note": "1x5 servo horn on the shaft, pointing forward, 1 horn screw.",
+      "parts": [
+       {
+        "name": "1 x 5 Servo Horn",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.3|1 x 5 Servo Horn",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.3|Short Silver Servo Horn Screw (M3)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.3|Short Silver Servo Horn Screw (M3) (shank)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Short Silver Servo Horn Screw (M3)",
+        "at": [
+         40.0,
+         -86.6,
+         50.8
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       }
+      ],
+      "zoom": [
+       40,
+       -86,
+       50
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "07.4",
+      "note": "3D PRINTED part. Hook (print 4) on the horn, lip pointing IN: 2 M3 screws + 2 M3 nuts (nuts in the hex holes outside).",
+      "parts": [
+       {
+        "name": "Cup hook (print 4)",
+        "qty": 1,
+        "kind": "print",
+        "badge": "3D PRINTED"
+       },
+       {
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Silver Servo Horn Nut (M3)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "07.4|Cup hook (print 4)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Machine Screw (M3)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Machine Screw (M3) (shank)",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Nut (M3)",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Machine Screw (M3).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Machine Screw (M3) (shank).001",
+        "dir": [
+         0,
+         -1,
+         0
+        ]
+       },
+       {
+        "mesh": "07.4|Silver Servo Horn Nut (M3).001",
+        "dir": [
+         0,
+         1,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         27.3,
+         -86.6,
+         50.8
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         27.3,
+         -95.0,
+         50.8
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 2.4
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         52.7,
+         -86.6,
+         50.8
+        ],
+        "dir": [
+         0.0,
+         -1.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         52.7,
+         -95.0,
+         50.8
+        ],
+        "dir": [
+         0.0,
+         1.0,
+         0.0
+        ],
+        "len_mm": 2.4
+       }
+      ],
+      "zoom": [
+       40,
+       -92,
+       50
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "title": "Camera mast",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "08.1",
+      "note": "Channel 3x8 upright at the rear-left corner, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Channel 3 x 8",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 12.7
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "08.1|Channel 3 x 8",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "08.1|Screw 8-32 x 1/2\" (black)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "08.1|Screw 8-32 x 1/2\" (black) (shank)",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "08.1|Nut 8-32 Keps (black)",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "08.1|Screw 8-32 x 1/2\" (black).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "08.1|Screw 8-32 x 1/2\" (black) (shank).001",
+        "dir": [
+         -1,
+         0,
+         0
+        ]
+       },
+       {
+        "mesh": "08.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         1,
+         0,
+         0
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -104.0,
+         41.0,
+         34.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -118.6,
+         41.0,
+         34.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/2\" (black)",
+        "at": [
+         -104.0,
+         41.0,
+         46.0
+        ],
+        "dir": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         -118.6,
+         41.0,
+         46.0
+        ],
+        "dir": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       -110,
+       41,
+       39.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "08.2",
+      "note": "Camera clipped on top, tilted 35 degrees down toward the front, 1 zip tie.",
+      "parts": [
+       {
+        "name": "Black Camera",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Zip tie 4\" (white), structural",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "08.2|Black Camera",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "08.2|Zip tie",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [],
+      "zoom": [
+       -104,
+       41,
+       136.0
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 9,
+    "title": "Sensors",
+    "hint": null,
+    "subs": [
+     {
+      "tag": "09.1",
+      "note": "Angle bracket under the front of the plate, 2 screws + 2 nuts.",
+      "parts": [
+       {
+        "name": "Angle Bracket",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "09.1|Angle Bracket",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.1|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.1|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.1|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.1|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         103.0,
+         -28.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         -28.0,
+         18.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         103.0,
+         28.0,
+         24.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         28.0,
+         18.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       103,
+       0,
+       22.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "09.2",
+      "note": "Two tophats on the bracket, looking down, 1 screw + 1 nut each.",
+      "parts": [
+       {
+        "name": "Tophat (Reflectance)",
+        "qty": 2,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 2,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 2,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "09.2|Tophat (Reflectance)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.2|Tophat (Reflectance).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Screw 8-32 x 1/4\" (black).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Screw 8-32 x 1/4\" (black) (shank).001",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       },
+       {
+        "mesh": "09.2|Nut 8-32 Keps (black).001",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         103.0,
+         -18.0,
+         20.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         -18.0,
+         25.6
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 3.2
+       },
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         103.0,
+         18.0,
+         20.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         103.0,
+         18.0,
+         25.6
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       103,
+       18,
+       13
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "09.3",
+      "note": "Rangefinder (ET) on the plate, front right, 1 screw + 1 nut.",
+      "parts": [
+       {
+        "name": "ET (Rangefinder)",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 1,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "09.3|ET (Rangefinder)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.3|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.3|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.3|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         105.0,
+         -46.0,
+         40.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         105.0,
+         -46.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       105,
+       -46,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     },
+     {
+      "tag": "09.4",
+      "note": "Start light sensor on the plate, 1 screw + 1 nut.",
+      "parts": [
+       {
+        "name": "Light",
+        "qty": 1,
+        "kind": "kit"
+       },
+       {
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "qty": 1,
+        "kind": "kit",
+        "length_mm": 6.3
+       },
+       {
+        "name": "Nut 8-32 Keps (black)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "09.4|Light",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.4|Screw 8-32 x 1/4\" (black)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.4|Screw 8-32 x 1/4\" (black) (shank)",
+        "dir": [
+         0,
+         0,
+         -1
+        ]
+       },
+       {
+        "mesh": "09.4|Nut 8-32 Keps (black)",
+        "dir": [
+         0,
+         0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Screw 8-32 x 1/4\" (black)",
+        "at": [
+         46.0,
+         -54.0,
+         34.0
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 6.3
+       },
+       {
+        "kind": "nut",
+        "name": "Nut 8-32 Keps (black)",
+        "at": [
+         46.0,
+         -54.0,
+         20.4
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 3.2
+       }
+      ],
+      "zoom": [
+       46,
+       -54,
+       24.0
+      ],
+      "hint": null,
+      "subassembly": null
+     }
+    ]
+   },
+   {
+    "n": 10,
+    "title": "Wiring",
+    "hint": "wiring",
+    "subs": [
+     {
+      "tag": "10.1",
+      "note": "Motors: left 0, right 2. Servos: shoulder 1, claw 2, hook 3. Analog: tophat L 0, R 1, ET 2, light 3. Digital 0: plow lever. Camera on USB.",
+      "parts": [],
+      "items": [],
+      "targets": [],
+      "zoom": null,
+      "hint": "wiring",
+      "subassembly": null
+     }
+    ]
+   }
+  ],
+  "substeps": 34
+ },
+ "claw": {
+  "meshes": {
+   "base": "05.1|Geared claw (print 2)",
+   "finger_L": "05.1|Geared claw (print 2) (finger L)",
+   "finger_R": "05.1|Geared claw (print 2) (finger R)"
+  },
+  "pivots": {
+   "finger_L": [
+    230.24,
+    69.6,
+    68.21
+   ],
+   "finger_R": [
+    230.24,
+    44.4,
+    68.21
+   ]
+  },
+  "axis": [
+   0,
+   0,
+   1
+  ],
+  "open_deg": 25,
+  "driven": "finger_R (servo) turns finger_L through the gears, opposite way"
+ },
+ "cards": {
+  "Printed chassis (print 1)": "Our 3D print 1: Robot A's frame. The duck channel runs down the middle; 4 motor windows; 4.4 mm holes everywhere.",
+  "Geared claw (print 2)": "Our 3D print 2: the claw. Grey base + 2 fingers with gear teeth (shown orange). The servo turns the right finger; the gears turn the left one the other way, so the claw opens and closes.",
+  "Pocket plow (print 3)": "Our 3D print 3: a wide scoop on Robot B's nose. Pushes pom stacks and the pickleball.",
+  "Cup hook (print 4)": "Our 3D print 4: long arm with a hook lip at the tip. Catches the cup rim.",
+  "Black Gear Motor": "Black KIPR drive motor: rectangular gearbox + round motor can, shaft on the side, 2 wires.",
+  "Mecanum Wheel": "Wheel with angled rollers. Rollers must form an X when seen from above.",
+  "Solarbotics Wheel": "Round black rubber wheel, pushes onto the motor shaft.",
+  "Servo": "Standard servo: black box with 2 ears (screw holes) and a spline shaft on top. 3 wires.",
+  "Micro Servo": "Small servo, same shape as the standard servo but half size.",
+  "Round Servo Horn": "Disc with a ring of small holes. Pushes onto a servo shaft.",
+  "1 x 5 Servo Horn": "Flat bar with 5 holes. The middle hole goes on the servo shaft.",
+  "1 x 3 Liftarm": "LEGO beam with 3 round holes.",
+  "1 x 5 Liftarm": "LEGO beam with 5 round holes.",
+  "1 x 7 Liftarm": "LEGO beam with 7 round holes.",
+  "1 x 11 Liftarm": "LEGO beam with 11 round holes.",
+  "Pin w/ Friction": "Black LEGO pin with a ridge in the middle. Push it through 2 beams.",
+  "Servo Bracket": "Bent metal plate that holds a servo by its ears.",
+  "Micro Servo Mount": "Small metal plate that holds the micro servo.",
+  "Angle Bracket": "Metal L-shaped bracket (90 degree corner).",
+  "Plate 4 x 12": "Flat metal plate, 4 holes by 12 holes.",
+  "Strap 1 x 10": "Flat metal strip with 10 holes in a row.",
+  "Channel 3 x 8": "U-shaped metal channel, 3 holes wide, 8 holes long.",
+  "Chassis": "Big flat KIPR metal plate with folded edges: Robot B's base.",
+  "Caster": "Small ball caster: square plate with a free-rolling ball underneath.",
+  "Wombat": "KIPR Wombat controller: black box with a touch screen; ports on the sides.",
+  "Wombat Battery": "Battery pack with red + black wires and a plug.",
+  "Small Touch": "Small push-button switch (red button).",
+  "Lever": "Switch with a long metal lever and a roller at its tip.",
+  "Tophat (Reflectance)": "Small round blue sensor that looks down at the floor tape.",
+  "ET (Rangefinder)": "Blue distance sensor with 2 round eyes.",
+  "Light": "Small light sensor with a round yellow cell on top.",
+  "Black Camera": "USB camera: black box with a round lens.",
+  "Standoff 8-32 x 1/2\"": "Silver hex post, 1/2 inch long, threaded inside at both ends.",
+  "Standoff 8-32 x 1\"": "Silver hex post, 1 inch long.",
+  "Standoff 8-32 x 2\"": "Silver hex post, 2 inches long.",
+  "Threaded Rod 8-32 x 1\"": "Short threaded rod: joins two standoffs end to end.",
+  "Screw 8-32 x 1/4\" (black)": "Black screw, 1/4 inch (6 mm) long.",
+  "Screw 8-32 x 1/2\" (black)": "Black screw, 1/2 inch (13 mm) long.",
+  "Screw 8-32 x 3/4\" (black)": "Black screw, 3/4 inch (19 mm) long.",
+  "Nut 8-32 Keps (black)": "Black nut with a toothed washer on one side (teeth face the part).",
+  "Silver Servo Horn Machine Screw (M3)": "Small silver M3 screw (for servo horns).",
+  "Silver Servo Horn Nut (M3)": "Small silver M3 nut.",
+  "Short Silver Servo Horn Screw (M3)": "Short silver screw: holds a horn on the servo shaft.",
+  "Brass Screws": "Tiny brass screws for switches.",
+  "2-56 3/8\" Micro Servo Mount Screw": "Tiny silver screw for the micro servo mount.",
+  "2-56 1\" Caster Screw": "Long thin silver screw for the caster.",
+  "M3 x 0.5\" x 6\" Mecanum Wheel Screw": "Screw that holds a mecanum wheel on its shaft.",
+  "Zip tie 4\" (white), structural": "White zip tie. Pull tight, cut the tail."
+ },
+ "bom": {
+  "A": {
+   "Printed chassis (print 1)": 1,
+   "Black Gear Motor": 4,
+   "Screw 8-32 x 1/2\" (black)": 42,
+   "Nut 8-32 Keps (black)": 51,
+   "Mecanum Wheel": 4,
+   "M3 x 0.5\" x 6\" Mecanum Wheel Screw": 4,
+   "Plate 4 x 12": 2,
+   "Strap 1 x 10": 2,
+   "Servo": 2,
+   "Servo Bracket": 2,
+   "1 x 5 Servo Horn": 2,
+   "Short Silver Servo Horn Screw (M3)": 2,
+   "1 x 7 Liftarm": 2,
+   "Screw 8-32 x 1/4\" (black)": 17,
+   "Micro Servo": 1,
+   "Micro Servo Mount": 1,
+   "2-56 3/8\" Micro Servo Mount Screw": 2,
+   "1 x 5 Liftarm": 2,
+   "Zip tie 4\" (white), structural": 2,
+   "Small Touch": 1,
+   "Brass Screws": 2,
+   "Angle Bracket": 1,
+   "Tophat (Reflectance)": 2,
+   "ET (Rangefinder)": 1,
+   "Light": 1,
+   "Standoff 8-32 x 2\"": 2,
+   "Standoff 8-32 x 1\"": 4,
+   "Threaded Rod 8-32 x 1\"": 2,
+   "Wombat": 1,
+   "Wombat Battery": 1
+  },
+  "B": {
+   "Chassis": 1,
+   "Servo Bracket": 5,
+   "Screw 8-32 x 1/4\" (black)": 20,
+   "Nut 8-32 Keps (black)": 42,
+   "Black Gear Motor": 2,
+   "Screw 8-32 x 1/2\" (black)": 30,
+   "Solarbotics Wheel": 2,
+   "Caster": 1,
+   "2-56 1\" Caster Screw": 2,
+   "Standoff 8-32 x 1/2\"": 4,
+   "Wombat": 1,
+   "Wombat Battery": 1,
+   "Zip tie 4\" (white), structural": 2,
+   "Servo": 3,
+   "Round Servo Horn": 2,
+   "Short Silver Servo Horn Screw (M3)": 3,
+   "1 x 11 Liftarm": 2,
+   "Silver Servo Horn Machine Screw (M3)": 7,
+   "Silver Servo Horn Nut (M3)": 7,
+   "1 x 3 Liftarm": 1,
+   "Pin w/ Friction": 3,
+   "1 x 5 Liftarm": 1,
+   "Geared claw (print 2)": 1,
+   "Pocket plow (print 3)": 1,
+   "Lever": 1,
+   "Brass Screws": 2,
+   "1 x 5 Servo Horn": 1,
+   "Cup hook (print 4)": 1,
+   "Channel 3 x 8": 1,
+   "Black Camera": 1,
+   "Angle Bracket": 1,
+   "Tophat (Reflectance)": 2,
+   "ET (Rangefinder)": 1,
+   "Light": 1
+  }
+ }
+}

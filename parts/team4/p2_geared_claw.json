@@ -6,11 +6,11 @@
     18.4
   ],
   "islands": 3,
-  "volume_cm3": 44.44,
+  "volume_cm3": 42.46,
   "manifold": true,
   "non_manifold_edges": 0,
-  "triangles": 5632,
-  "notes": "print-in-place, 3 bodies (base+pin, finger_L, finger_R); min gap 0.40 mm over +/-25 deg; servo under the base drives finger_R through its horn pocket",
+  "triangles": 6594,
+  "notes": "print-in-place, 3 bodies (base+pin, finger_L, finger_R); min gap 0.40 mm over +/-25 deg; kit Servo + Servo Bracket under the base, Round Servo Horn bolted to finger_R with kit M3 screws + nuts",
   "min_gap_mm": 0.398,
   "swing_checked_deg": 25.0,
   "print_check": {

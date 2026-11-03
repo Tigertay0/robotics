@@ -179,6 +179,20 @@ def hole_grid(obj, centers, d, depth, axis="Z", segments=24):
     return difference(obj, _link(bm, "hole_grid"))
 
 
+M3_CLEAR = 3.4        # kit "Silver Servo Horn Machine Screw (M3)" clearance
+M3_NUT_AF = 5.7       # kit "Silver Servo Horn Nut (M3)" across flats + clearance
+KIT_8_32_CLEAR = 4.4  # kit "Screw 8-32" clearance (KIPR printed-chassis convention)
+KIT_BRASS_CLEAR = 2.4 # kit "Brass Screws" for sensors/switches (MEASURE)
+
+
+def hex_prism(af, z0, z1, center=(0, 0), name="hex"):
+    """Hexagonal prism (nut trap) with across-flats `af`, between z0 and z1."""
+    r = af / math.sqrt(3)
+    cx, cy = center
+    pts = [(cx + r * math.cos(math.radians(60 * k)), cy + r * math.sin(math.radians(60 * k))) for k in range(6)]
+    return prism(pts, z0, z1, name)
+
+
 def hole_row(obj, n, pitch, d, start, axis="Z", depth=30, direction=(1, 0, 0)):
     """Cut n holes of diameter d, `pitch` apart along `direction`, starting at `start`."""
     sx, sy, sz = start

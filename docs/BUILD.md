@@ -1,6 +1,6 @@
 # How we do everything: build, wire, code, test, compete
 
-This is the step-by-step manual. The plan is in [STRATEGY.md](../STRATEGY.md); what each part does is in [ROBOTS.md](ROBOTS.md); the interactive 3D build (every part appears in order) is [guide/index.html](../guide/index.html). Event: **Dec 5, 2026** (virtual).
+This is the step-by-step manual. The plan is in [STRATEGY.md](../STRATEGY.md); what each part does is in [ROBOTS.md](ROBOTS.md); the **picture manual** with every part named and every screw hole shown (also as a video) is [manual/build_manual.html](manual/build_manual.html). Event: **Dec 5, 2026** (virtual).
 
 Coordinates for part positions below: **robot frame, inches**. Origin = centre of the chassis plate, **+x = forward** (the direction the robot drives at the start: east), **+y = left**, **z = height above the floor**. They come straight from the Blender model (`blender/build_fall_game.py`), so measure and adjust on the real parts.
 
@@ -22,7 +22,7 @@ Jobs can run in parallel: one pair builds A, one pair builds B, one person does 
 
 ## 1. Before building
 
-1. **Count the kit** against [docs/2026 Electronics Kit.pdf](2026%20Electronics%20Kit.pdf): we need **6 gear motors** (4 A + 2 B), **4 servos + 2 micro servos**, **2 Wombats + 2 batteries**, 4 mecanum wheels, 2 Solarbotics wheels, 1 caster, **2 light sensors**, **4 tophats**, 2 ET rangefinders, 1 lever + 1 small touch switch, 1 camera, 2 chassis. Our inventory sheet lists no motors and no light sensors: find them first.
+1. **Count the kit** against [docs/2026 Electronics Kit.pdf](2026%20Electronics%20Kit.pdf): we need **6 gear motors** (4 A + 2 B), **5 servos + 1 micro servo**, **2 Wombats + 2 batteries**, 4 mecanum wheels, 2 Solarbotics wheels, 1 caster, **2 light sensors**, **4 tophats**, 2 ET rangefinders, 1 lever + 1 small touch switch, 1 camera, 2 chassis. Our inventory sheet lists no motors and no light sensors: find them first.
 2. **Chassis check**: the rules ban "the old KIPR aluminum chassis". Put a magnet on ours (steel sticks) and ask the Head Judge if unsure.
 3. **Buy the 2026 game pieces** (our "Parcour" bag is last year's game): 5 small rubber ducks (~2.25"), 1 big duck, 4 pickleballs, 2 cups (green + teal), 6 rings, 3 blue bottles, 25 pom-poms 1.5" (5 each: red, green, lavender, turquoise, gold), Botguy.
 4. **Measure the real pieces** (duck, cup rim, pom, ring) and write the numbers in `docs/team-hardware-confirmed.md`. Lane width, hook height and claw opening depend on them.
@@ -71,7 +71,7 @@ Start from the **KIPR base demobot + servo demobot** build guides, then add the 
 | B3 | Wombat + battery | Wombat at x = −1.2 on top; battery on top of it at the rear | |
 | B4 | Servo bracket + servo: **shoulder** | x = +3.2, y = +1.6, on the chassis | |
 | B5 | LEGO liftarm 1×11 (2) + 1×5 servo horn | **Paralleling arm**: two parallel liftarms from the shoulder, 25° up, at y = +0.95 and +2.25, so the claw stays level as it lifts | Claw does not tilt from down to up |
-| B6 | **Print 2 (geared claw)** + micro servo under its base | Bolted by its LEGO-pitch holes to the arm tip (≈ x = +7.8, z ≈ 4.8); micro servo screwed under the base, its horn in the pocket under the right finger, 4 small screws through the hub into the horn | Closes on the pom and holds it upside-down. (Until it's printed: micro servo + 2 bent 3×7 liftarms.) |
+| B6 | **Print 2 (geared claw)** + standard servo under its base | Bolted to the 1×5 liftarm at the arm tip; Servo Bracket under the base (4 screws + nuts), servo in the bracket shaft up under the right finger, Round Servo Horn in the pocket under that finger with 3 M3 screws + nuts (see the manual, B step 5) | Closes on the pom and holds it upside-down. (Until it's printed: the servo + 2 bent 3×7 liftarms.) |
 | B7 | **Print 3 (pocket plow)** (or, until printed, 2 Plate 4×12 bent 90° 2.5" from one end) | Rear tabs bolted to the front chassis flange, bottom 3 mm above the floor, centre face at x ≈ +7.6 | A pushed pom stack stays in the pocket as one group |
 | B8 | Lever switch | Centre of the plow, x = +7.6, 0.9" up | Clicks when the plow touches a wall or cup |
 | B9 | Servo bracket + servo: **cup hook** | Right side, x = +0.8, y = −3.4 | |
@@ -90,7 +90,7 @@ These are the `#define` lines at the top of `code/robot_a/main.c` and `code/robo
 | Motor front-right | motor 0 | | Motor left | motor 0 |
 | Motor front-left | motor 1 | | Motor right | motor 2 |
 | Motor back-right | motor 2 | | Shoulder servo | servo 1 |
-| Motor back-left | motor 3 | | Claw micro servo | servo 2 |
+| Motor back-left | motor 3 | | Claw servo | servo 2 |
 | Intake gate C (servo) | servo 0 | | Cup hook servo | servo 3 |
 | Pin gate B (micro servo) | servo 1 | | Tophat left / right | analog 0 / 1 |
 | Exit gate A (servo) | servo 2 | | ET rangefinder | analog 2 |
@@ -149,7 +149,7 @@ Run the whole 120 s match with both robots. Watch the code animation (`docs/anim
 ## 10. Tournament day
 
 1. Charge both batteries the night before. Bring spare servo horns and screws.
-2. Setup window is **90 s**: place both robots in their boxes (A small box, B in zone 5), check the light sensors face the lamp, calibrate `LIGHT_ON` if the room changed.
+2. Setup window is **90 s**: place both robots in their boxes (plan v3: **A in zone 5** at (28.5, 5.7) facing east, **B in the small box** at (63.8, 7.15) facing west), check the light sensors face the lamp, calibrate `LIGHT_ON` if the room changed.
 3. "Hands-off": no touching robots, lights or table. Robots start on the light.
 4. Robots must be stopped by 120 s (the code stops at 118 s).
 5. Check the score with the judge before leaving the table; disagree there or not at all.

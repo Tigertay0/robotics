@@ -20,7 +20,7 @@ side, y toward Botguy. The 3D model and animation in `blender/` use the same fra
 | Pickleballs | 4, on posts on the PVC; **7 each** under the platform. | +8 each with base. |
 | Rings | 6 (3 per post); on a bottle neck **15**, touching 3. | Richest stretch (6 × 16 = 96 base) and **tiebreaker #1**, but needs a lift. |
 | Botguy / big duck | 15 each (Botguy on platform; big duck at Botguy's start). | Low priority. |
-| Robots | A robot = Wombat + ≥2 motors, must leave the start box. Each robot must fit **11.25 × 21.125 × 12 in**; both start in the small box, or one in the small box and one in zone 5. Max 4 independent structures. Robot-to-robot IR allowed. | Robot A in the small box, Robot B in zone 5. |
+| Robots | A robot = Wombat + ≥2 motors, must leave the start box. Each robot must fit **11.25 × 21.125 × 12 in**; both start in the small box, or one in the small box and one in zone 5. Max 4 independent structures. Robot-to-robot IR allowed. | Robot A in zone 5, Robot B in the small box (plan v3, section 4). |
 | Match | 120 s, start on light, lights off at 5 s, **motors and servos must stop by 120 s** or DQ. Seeding = best 2 of 3 runs averaged; DE is scored on your own board (no opponent on the table). | No defence needed. Hard stop at 118 s in code. |
 | Kit | 8 gear motors, 5 servos, 2 micro servos, 2 Wombats, 4 mecanum + 4 Solarbotics wheels, 2 casters, 2 chassis, 1 camera, 2 ET, 4+2 tophat, 3 light, 2 lever, 4+6 touch. Metal can't be cut (straps/plates may bend). 3D prints allowed (PLA/PETG, grayscale, STL submitted in advance). | Everything below uses kit parts only. |
 
@@ -39,50 +39,60 @@ pom. Does cups, pom stacks, the red pom and the near pickleball.
 
 | Item | Base pts | Who | When |
 |---|---|---|---|
-| 5 ducks in 5 zones (base 1 each) | 5 | A | 46-112 s |
-| Upper cup upright, off tape | 21 | B | 11 s |
-| Lower cup upright, off tape | 21 | B | 52 s |
-| 5 pom stacks pushed into zone 1 as 5 same-colour groups | 40 | B | 58-82 s |
-| Red pom alone on the platform | 51 | B | 110 s |
-| Pickleball 1 (bottom wall) under the platform | 8 | B | 104 s |
-| **Core subtotal** | **146** | | |
+Plan v3 (section 4) times:
+
+| Item | Base pts | Who | When |
+|---|---|---|---|
+| 5 ducks in 5 zones (base 1 each) | 5 | A | 25-71 s |
+| Lower cup upright, off tape | 21 | B | 6 s |
+| 5 pom stacks pushed into zone 1 as 5 same-colour groups (A pushes the red one) | 40 | A + B | 17-50 s |
+| Red pom alone on the platform | 51 | B | 62 s |
+| Pickleball 1 (bottom wall) under the platform | 8 | B | 60 s |
+| **Core subtotal** | **125** | | |
 
 | Outcome | Subtotal | × | Score |
 |---|---|---|---|
-| Everything lands | 146 | 5 | **730** |
-| Red pom missed | 95 | 5 | 475 |
-| Red pom missed, 4 ducks | 95 | 4 | 380 |
-| 3 ducks, no red pom | 95 | 3 | 285 |
+| Everything lands | 125 | 5 | **625** |
+| Red pom missed | 74 | 5 | 370 |
+| Red pom missed, 4 ducks | 74 | 4 | 296 |
+| 3 ducks, no red pom | 74 | 3 | 222 |
 | Old strategy's best case for comparison | 78 | 5 | 390 |
 
-Stretch goals, in order of value per second (all ×5): rings on bottle necks (+16 base each),
-nesting the cups (+20), pickleball 2 on the right wall (+8), complete pom sets by adding the
-freed hidden pom of the same colour (+22 per colour), Botguy on platform (+15), big duck at
-Botguy's start (+15). The animation leaves B parked at 110 s; ball 2 is the first thing to add.
+The earlier timeline also flipped the **upper cup** (+21, so 730 total), but its route had B
+crossing the red duck and the two robots meeting at the lower cup. In plan v3, A pushes the
+upper cup out of the lane upside down; it ends on the centre tape and scores nothing.
 
-## 4. Timeline (both robots, collision-checked in `blender/animate_strategy.py`)
+Stretch goals, in order of value per second (all ×5): **flip the upper cup with B after 62 s**
+(+21 = +105, B and A are both done by 72 s), rings on bottle necks (+16 base each), nesting the
+cups (+20), pickleball 2 on the right wall (+8), complete pom sets by adding the freed hidden pom
+of the same colour (+22 per colour), Botguy on platform (+15), big duck at Botguy's start (+15).
 
-Robot A starts in the small start box at (53.3, 5.6) facing east. Robot B starts in zone 5 at
-(40, 6) facing north.
+## 4. Timeline: plan v3 (both robots, collision-checked by `tools/match_sim.py`)
+
+The routes live in `tools/match_plan.py` and the code in `code/robot_*/main.c` follows them
+move for move. Frame: inches from the inside corner of the bottom-left PVC. Robot A starts in
+**zone 5** (large box) at (28.5, 5.7) facing east; Robot B starts in the **small box** at
+(63.8, 7.15) facing west. The robots don't talk to each other: the 4 hand-offs are fixed times
+(`wait_until_s`), each padded past the moment the simulator says it is safe.
 
 | Time | Robot A, Duck Runner | Robot B, Point Scorer |
 |---|---|---|
-| 0-13 | Waits (B must clear the upper cup from A's line-up spot) | Drives north, then east to (48.5, 17.5) |
-| 8-13 | | Flips the upper cup and pushes it north-east to (60, 34) in zone 2 |
-| 13-21 | North out of the box, lines up on the centre lane at x = 44 facing east | Backs off to (66, 35) and waits for A to pass |
-| 21-38 | Line-follows east, intake open; red, green, purple, blue, yellow enter the lane | |
-| 38-48 | Zone 2 (TR): drop at (76, 34.5), then 4" forward | Drives south along x = 66 to the lower tape |
-| 48-56 | Zone 4 (MR): drop at (76.7, 23.5), 4" forward | Heads west on the lower tape, flips the lower cup, pushes it to (20, 7) in zone 5; the 3 hidden poms spill with it |
-| 56-71 | West along y = 17, holds at (56, 17) | Picks the red pom with the claw (camera) |
-| 71-81 | West along y = 19.5; zone 3 (ML): drop at (28, 19.5), 4" forward | Pushes the pom stacks north off the tape into zone 1, one at a time, east to west: x = 41, 33, 25, 17, 9 |
-| 81-97 | East to x = 48, north to y = 34.6, west; zone 1 (TL): drop at (28, 34.6), 4" forward | same |
-| 97-112 | East to x = 48, south to y = 5.6, west; zone 5 (BL): drop at (28.2, 5.6), 4" forward, stop | 83-96: south at x = 30, east along the bottom wall; knocks pickleball 1 off its post |
-| 112-120 | Stopped | 96-104: pushes the ball under the platform; 104-110: places the red pom on the platform, stops |
+| 0-3 | North out of zone 5, then west to (14.3, 17.9): out of B's way | Hook down; drags the upside-down lower cup west along the lower tape |
+| 3-12 | Waits (**hand-off 12 s**) | 6 s: pivots 20°, the cup rolls upright off the tape at (27, 8.9) in zone 5, its 3 poms spill; 7-10 s: grabs the red pom with the camera + claw |
+| 12-17 | East under the red stack, side-pushes the red stack + upper cup north into zone 1 | Waits holding the red pom (**hand-off 26 s**) |
+| 17-24 | Line-follows east, swallowing red, green, lavender, blue, yellow | same |
+| 24-36 | Drops: zone 2 (70.6, 33), zone 4 (72.1, 17.6), zone 1 (44, 28.2). The lane is first in, first out | 27-50: pushes the green, lavender, turquoise and gold stacks north into zone 1 |
+| 36-60 | Waits at (52.6, 21) (**hand-off 60 s**) | 51-57: east along zone 3, arcs down to the bottom wall east of the cup |
+| 57-62 | same | Hook knocks pickleball 1 off its post, the plow pushes it under the platform; red pom on the platform, stops at 62 s |
+| 60-72 | West through zone 3; waits (**hand-off 66 s**); drops in zone 5 (33.2, 6.8) and zone 3 (35.7, 21), stops at 72 s | Stopped |
 
-Rules the routes obey: a robot never crosses a zone's duck drop point after that duck is down;
-A always moves **forward** after a drop (the lane opens at the rear); every pom group ends more
-than 1" from tape; both robots keep ≥0.3" clearance from each other at every frame (the script
-checks footprints every 1/12 s and reports violations).
+Checks the simulator runs every 0.05 s (`python tools/match_sim.py` must print NO CONTACTS):
+- both robots' true footprints never come within 0.25" of each other;
+- no robot touches a wall, the platform, a post, or any piece outside a declared push/grab window;
+- B touches no duck at any time;
+- every duck lands alone in its own zone, off tape.
+
+`docs/animation/match_data.json` (`--export`) feeds the "How our robots think" video.
 
 ## 5. Failure plans
 
@@ -95,6 +105,11 @@ checks footprints every 1/12 s and reports violations).
   most valuable thing to test. Target: 50 drops in a row without a double.
 
 ## 6. Build notes (kit parts only)
+
+> Superseded for the actual build by [docs/BUILD.md](docs/BUILD.md) and the step-by-step manual
+> (`docs/manual/`): Robot A now uses printed chassis p1, Robot B the geared claw, pocket plow and
+> cup hook prints (4 prints total, see [3D_PRINTS.md](3D_PRINTS.md)). The notes below are the
+> original all-metal design.
 
 Robot A: chassis, 4 gear motors in 4 servo brackets dropped on 2" standoffs so the chassis
 floor sits 3" up, 4 mecanum wheels, 4 × Plate 4×12 on edge as lane walls (two per side,
@@ -125,11 +140,19 @@ Servos used: A 2 + B 2 = 4 of 5; micro servos A 1 + B 1 = 2 of 2; motors 4 + 2 =
 6. Pickleball 2 dropped from the core plan: B runs out of time. First stretch item.
 7. The old "53 pts/s" and "singles pom zone" ideas are gone (they were based on misread
    drawings).
+8. Plan v3 (Nov 3, 2026): the start boxes are swapped (A in zone 5, B in the small box). B's
+   first run is the lower cup + red pom, entirely south of the duck lane, so it can never hit a
+   duck; A pushes the red stack and the upper cup out of the lane itself. The upper cup stays
+   upside down in zone 1 (no flip bonus) — its flip is a stretch item. The old timeline had B
+   crossing the red duck and the robots meeting at the lower cup; the simulator now proves
+   0 contacts. Everything ends by 72 s, leaving ~45 s of margin for slower real robots.
 
 ## 8. Code
 
-`code/robot_a/main.c` and `code/robot_b/main.c` are first versions of both Wombat programs following
-this timeline, with the calibration numbers from last season. See `code/README.md`.
+`code/robot_a/main.c` and `code/robot_b/main.c` follow the plan v3 timeline move for move, with
+the calibration numbers from last season. If you change a route, change `tools/match_plan.py`
+first, run `python tools/match_sim.py`, then copy the distances and the `T_*` hand-off times into
+the code. See `code/README.md`.
 
 ## 9. Open items
 
