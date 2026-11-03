@@ -1,0 +1,1967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Robot Build Manual</title>
+<meta name="description" content="Picture-only, step-by-step 3D build instructions for Team Rochambotics' two KIPR Botball 2026 robots.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=block" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f2ed; --ink:#1d232b; --ink2:#47505b; --ink3:#7a838d; --rule:#e2ded5;
+  --callout:#d3e0ec; --callout-line:#93aac0;
+  --print:#c9772a; --hl:#ffa412; --arrow:#e2391f; --frame:#3f4d5b;
+  --ok:#2f9e5a; --no:#d23b2a; --s:1;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1}
+#stage{position:fixed;left:0;top:0;width:100vw;height:100vh;overflow:hidden;background:var(--bg);transform-origin:0 0}
+body.video #stage{width:1920px;height:1080px}
+#gl{position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+#ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#frame{position:absolute;border:calc(var(--s)*3px) solid var(--frame);border-radius:calc(var(--s)*6px);pointer-events:none;opacity:0;box-shadow:0 10px 30px -18px rgba(20,30,40,.35)}
+#rot{position:absolute;width:calc(var(--s)*112px);height:calc(var(--s)*112px);pointer-events:none;opacity:0}
+#rot svg{width:100%;height:100%;display:block}
+#flash{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none}
+#loading{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;color:var(--ink3);letter-spacing:.02em}
+#loading.err{color:#a3342a}
+
+/* top bar */
+#topbar{position:absolute;left:calc(var(--s)*56px);right:calc(var(--s)*56px);top:calc(var(--s)*30px);height:calc(var(--s)*48px);display:flex;align-items:center;justify-content:space-between;gap:12px;pointer-events:none}
+.brand{font-size:max(11px,calc(var(--s)*16px));font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.brand b{color:var(--ink);font-weight:800}
+.tr{display:flex;align-items:center;gap:10px}
+#robotlabel{font-size:calc(var(--s)*22px);font-weight:800;color:var(--ink2)}
+#robotlabel b{display:inline-grid;place-items:center;width:calc(var(--s)*40px);height:calc(var(--s)*40px);border-radius:50%;background:var(--ink);color:#fff;font-size:calc(var(--s)*21px);margin-right:calc(var(--s)*10px);vertical-align:middle}
+#switch{pointer-events:auto;display:flex;background:#e8e5de;border-radius:999px;padding:4px;gap:2px}
+#switch button{font:inherit;font-size:max(14px,calc(var(--s)*18px));font-weight:800;color:var(--ink2);background:transparent;border:0;border-radius:999px;padding:0 calc(var(--s)*18px);min-height:44px;cursor:pointer;transition:background-color .18s ease,color .18s ease}
+#switch button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(20,26,33,.12)}
+#switch button span{color:var(--ink3);font-weight:600;margin-left:6px}
+#aa{pointer-events:auto;font:inherit;font-weight:800;font-size:max(14px,calc(var(--s)*18px));min-width:48px;min-height:44px;border-radius:999px;border:2px solid #d9d5cc;background:#fff;color:var(--ink3);cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+#aa[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* panels */
+#panels{position:absolute;inset:0;pointer-events:none}
+.panel{position:absolute;left:calc(var(--s)*56px);top:calc(var(--s)*104px);width:max-content;max-width:calc(var(--s)*600px);min-width:calc(var(--s)*260px);visibility:hidden}
+.panel.on{visibility:visible}
+.stephead{display:flex;align-items:flex-end;gap:calc(var(--s)*16px)}
+.stepno{font-size:calc(var(--s)*150px);font-weight:900;line-height:.74;letter-spacing:-.05em;color:var(--ink)}
+.subno{display:grid;place-items:center;min-width:calc(var(--s)*62px);height:calc(var(--s)*62px);padding:0 calc(var(--s)*10px);border-radius:calc(var(--s)*14px);background:var(--ink);color:#fff;font-size:calc(var(--s)*40px);font-weight:800;line-height:1}
+.subdots{display:flex;flex-wrap:wrap;gap:calc(var(--s)*6px);max-width:calc(var(--s)*230px);padding-bottom:calc(var(--s)*6px)}
+.subdots i{width:calc(var(--s)*13px);height:calc(var(--s)*13px);border-radius:50%;border:calc(var(--s)*2.5px) solid #b9b4aa}
+.subdots i.d{background:#b9b4aa;border-color:#b9b4aa}
+.subdots i.c{background:var(--ink);border-color:var(--ink);transform:scale(1.25)}
+.note{display:none;margin-top:calc(var(--s)*18px);font-size:calc(var(--s)*19px);line-height:1.42;color:var(--ink2);max-width:calc(var(--s)*560px);text-wrap:pretty}
+#stage.notes .note{display:block}
+.callout{position:relative;margin-top:calc(var(--s)*24px);background:var(--callout);border:calc(var(--s)*3px) solid var(--callout-line);border-radius:calc(var(--s)*18px);padding:calc(var(--s)*14px);display:flex;flex-wrap:wrap;align-items:flex-end;gap:calc(var(--s)*12px) calc(var(--s)*14px);width:max-content;max-width:100%}
+.pc{position:relative;width:calc(var(--s)*112px);display:flex;flex-direction:column;align-items:center}
+.pc.sa .th{background:#fff;border:calc(var(--s)*2.5px) solid var(--frame);border-radius:calc(var(--s)*6px)}
+.th{width:calc(var(--s)*108px);height:calc(var(--s)*94px);display:grid;place-items:center}
+.th img,.th svg{max-width:100%;max-height:100%;display:block}
+.qty{font-size:calc(var(--s)*27px);font-weight:900;letter-spacing:-.01em;line-height:1.1}
+.pr{position:absolute;right:calc(var(--s)*-4px);top:calc(var(--s)*-6px);width:calc(var(--s)*34px);height:calc(var(--s)*34px);border-radius:50%;background:var(--print);display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.pr svg{width:72%;height:72%}
+.nm{display:block;margin-top:calc(var(--s)*3px);font-size:calc(var(--s)*12px);line-height:1.2;color:var(--ink2);text-align:center;max-width:100%;overflow-wrap:anywhere}
+#stage.notes .ctx{display:block}
+.ctx{display:none;font-size:calc(var(--s)*11px);color:var(--ink3);text-align:center;line-height:1.25;margin-top:2px}
+.spin{width:100%;height:100%;background-repeat:no-repeat;background-size:1200% 100%;background-position:0 0}
+.callout .pc,.callout .sb{pointer-events:auto}
+.snm{flex-basis:100%;font-size:calc(var(--s)*12px);font-weight:600;color:var(--ink2);white-space:normal;max-width:calc(var(--s)*190px);line-height:1.2}
+#tags{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ntag{position:absolute;left:0;top:0;white-space:nowrap;font-size:max(11px,calc(var(--s)*16px));font-weight:700;color:#1d232b;background:#fff;border:calc(var(--s)*2px) solid #1d232b;border-radius:calc(var(--s)*8px);padding:calc(var(--s)*3px) calc(var(--s)*9px);box-shadow:0 2px 8px rgba(20,30,40,.14);opacity:0}
+.ntag.old{border-color:#a9b1ba;color:#47505b;font-weight:600;font-size:max(10px,calc(var(--s)*13px));padding:calc(var(--s)*2px) calc(var(--s)*7px)}
+.badge{position:absolute;left:0;top:0;width:calc(var(--s)*28px);height:calc(var(--s)*28px);border-radius:50%;background:#ff6a00;color:#fff;font-weight:900;font-size:calc(var(--s)*16px);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);opacity:0}
+#final{position:absolute;border:2px solid #d9d5cc;border-radius:calc(var(--s)*12px);pointer-events:none;opacity:0;overflow:hidden}
+#final svg{position:absolute;left:calc(var(--s)*8px);top:calc(var(--s)*6px);width:calc(var(--s)*26px);height:calc(var(--s)*26px)}
+#names[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pbadge{display:inline-flex;align-items:center;gap:calc(var(--s)*5px);background:var(--print);color:#fff;font-weight:900;font-size:max(10px,calc(var(--s)*13px));letter-spacing:.04em;line-height:1;border-radius:calc(var(--s)*7px);padding:calc(var(--s)*4px) calc(var(--s)*7px);white-space:nowrap;box-shadow:0 1px 3px rgba(120,60,0,.35)}
+.pbadge svg{width:1.35em;height:1.35em;flex:none}
+.kbadge{display:inline-block;background:#e3e0d8;color:var(--ink2);font-weight:800;font-size:max(9px,calc(var(--s)*10.5px));letter-spacing:.08em;line-height:1;border-radius:calc(var(--s)*5px);padding:calc(var(--s)*3px) calc(var(--s)*6px)}
+.pc .pbadge,.pc .kbadge{margin-top:calc(var(--s)*3px)}
+.pc.isprint .th{outline:calc(var(--s)*3px) solid var(--print);outline-offset:calc(var(--s)*2px);border-radius:calc(var(--s)*10px);background:#fff4e8}
+.ntag .pbadge{margin-right:calc(var(--s)*7px);vertical-align:middle;font-size:max(9px,calc(var(--s)*12px))}
+#ribbon{position:absolute;left:0;top:0;opacity:0;pointer-events:none;font-size:max(14px,calc(var(--s)*26px));padding:calc(var(--s)*10px) calc(var(--s)*18px);border-radius:calc(var(--s)*14px);border:calc(var(--s)*3px) solid #fff;box-shadow:0 6px 18px -6px rgba(120,60,0,.55)}
+#stage.phone #ribbon{font-size:12px;padding:5px 9px}
+.sb{position:relative;background:#eef3f8;border-radius:calc(var(--s)*12px);padding:calc(var(--s)*10px) calc(var(--s)*12px) calc(var(--s)*6px);display:grid;grid-template-columns:auto auto;column-gap:calc(var(--s)*10px);row-gap:calc(var(--s)*4px);align-items:center}
+.sb svg{display:block}
+.sbl{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:calc(var(--s)*8px);white-space:nowrap}
+.sbq{font-size:calc(var(--s)*27px);font-weight:900}
+.sbm{font-size:calc(var(--s)*15px);font-weight:800;color:#fff;background:var(--ink2);border-radius:calc(var(--s)*6px);padding:calc(var(--s)*2px) calc(var(--s)*6px)}
+.sbm small{font-weight:600;opacity:.8;margin-left:2px}
+.one{position:absolute;right:calc(var(--s)*8px);bottom:calc(var(--s)*6px);font-size:calc(var(--s)*12px);font-weight:900;color:var(--ink2);border:calc(var(--s)*2px) solid var(--ink2);border-radius:calc(var(--s)*5px);padding:0 calc(var(--s)*4px);line-height:1.35}
+.hint{margin-top:calc(var(--s)*16px);background:#fff;border:calc(var(--s)*2px) solid var(--rule);border-radius:calc(var(--s)*18px);padding:calc(var(--s)*10px) calc(var(--s)*14px);width:max-content;max-width:100%;box-shadow:0 8px 24px -18px rgba(30,40,50,.3)}
+.hint svg{display:block;width:calc(var(--s)*var(--hw,400px));height:auto;max-width:100%}
+
+/* cover */
+.panel.cover{top:calc(var(--s)*180px);width:calc(var(--s)*700px);max-width:none}
+.letter{display:inline-grid;place-items:center;width:calc(var(--s)*92px);height:calc(var(--s)*92px);border-radius:calc(var(--s)*22px);background:var(--ink);color:#fff;font-size:calc(var(--s)*58px);font-weight:900}
+.cname{margin-top:calc(var(--s)*30px);font-size:calc(var(--s)*112px);font-weight:900;line-height:.92;letter-spacing:-.04em}
+.crole{font-size:calc(var(--s)*25px)}
+.cstats{margin-top:calc(var(--s)*44px);display:flex;flex-wrap:wrap;gap:calc(var(--s)*16px)}
+.cstats div{display:flex;align-items:center;gap:calc(var(--s)*10px);background:#fff;border:1px solid var(--rule);border-radius:calc(var(--s)*16px);padding:calc(var(--s)*10px) calc(var(--s)*16px)}
+.cstats svg{width:calc(var(--s)*46px);height:calc(var(--s)*46px)}
+.cstats b{font-size:calc(var(--s)*40px);color:var(--ink);font-weight:900;letter-spacing:-.02em;line-height:1}
+
+/* done */
+.panel.done{width:calc(var(--s)*640px);max-width:none;top:calc(var(--s)*96px)}
+.dhead{display:flex;align-items:center;gap:calc(var(--s)*18px)}
+.dhead svg{width:calc(var(--s)*104px);height:calc(var(--s)*104px)}
+.bom{margin-top:calc(var(--s)*16px);background:#fff;border:1px solid var(--rule);border-radius:calc(var(--s)*20px);padding:calc(var(--s)*12px)}
+.bomgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:calc(var(--s)*6px)}
+.bt{display:flex;flex-direction:column;align-items:center;padding:calc(var(--s)*4px) 0;border-radius:calc(var(--s)*10px);background:#f6f4ef;position:relative}
+.bt .th{width:calc(var(--s)*80px);height:calc(var(--s)*60px)}
+.bt .qty{font-size:calc(var(--s)*19px)}
+.bt .pr{width:calc(var(--s)*24px);height:calc(var(--s)*24px);right:calc(var(--s)*2px);top:calc(var(--s)*2px)}
+.bt .nm{font-size:calc(var(--s)*10px);padding:0 2px}
+
+/* wiring card */
+.wirecard{position:absolute;visibility:hidden;background:#fff;border:1px solid var(--rule);border-radius:calc(var(--s)*24px);box-shadow:0 1px 2px rgba(30,30,20,.05),0 12px 40px -18px rgba(30,40,50,.18);pointer-events:none;display:flex;flex-direction:column;padding:calc(var(--s)*22px) calc(var(--s)*26px)}
+.wirecard.on{visibility:visible}
+.wirecard svg{flex:1;min-height:0;width:100%}
+.wcap{font-size:calc(var(--s)*15px);color:var(--ink3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.legend{display:flex;gap:calc(var(--s)*18px);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--ink2)}
+.legend i{display:inline-block;width:calc(var(--s)*22px);height:4px;border-radius:2px}
+
+/* controls */
+#controls{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--s)*44px);display:flex;align-items:center;gap:10px;max-width:calc(100% - 24px)}
+.nav{font:inherit;font-size:max(14px,calc(var(--s)*17px));font-weight:700;height:max(48px,calc(var(--s)*60px));padding:0 calc(var(--s)*26px);min-width:max(64px,calc(var(--s)*96px));border-radius:999px;border:0;background:var(--ink);color:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease,background-color .18s ease}
+.nav.ghost{background:#e8e5de;color:var(--ink)}
+.nav:active{transform:scale(.97)}
+.nav:disabled{opacity:.35;cursor:default}
+.nav svg{width:max(22px,calc(var(--s)*28px));height:max(22px,calc(var(--s)*28px))}
+#strip{display:flex;gap:4px;background:#e8e5de;border-radius:999px;padding:5px;overflow-x:auto;scrollbar-width:none;max-width:60vw}
+#strip::-webkit-scrollbar{display:none}
+#strip button{font:inherit;flex:none;min-width:max(40px,calc(var(--s)*48px));height:max(40px,calc(var(--s)*50px));padding:0 8px;border-radius:999px;border:0;background:transparent;color:var(--ink2);font-weight:800;font-size:max(14px,calc(var(--s)*18px));cursor:pointer;transition:background-color .18s ease,color .18s ease;display:inline-grid;place-items:center}
+#strip button svg{width:max(18px,calc(var(--s)*22px));height:max(18px,calc(var(--s)*22px))}
+#strip button:hover{background:rgba(255,255,255,.55)}
+#strip button[aria-current="step"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(20,26,33,.14)}
+#tools{position:absolute;right:calc(var(--s)*56px);bottom:calc(var(--s)*44px);display:flex;gap:10px}
+#tools .nav{min-width:max(48px,calc(var(--s)*60px));padding:0}
+button:focus-visible{outline:3px solid #3b7bd0;outline-offset:2px}
+#foot{position:absolute;left:calc(var(--s)*56px);right:calc(var(--s)*56px);bottom:calc(var(--s)*12px);display:flex;justify-content:space-between;gap:16px;font-size:max(11px,calc(var(--s)*14px));color:var(--ink3);pointer-events:none}
+body.video #controls,body.video #tools,body.video #switch,body.video #aa{display:none}
+body:not(.video) #robotlabel{display:none}
+
+/* phone */
+#stage.phone .panel{left:12px;right:12px;width:auto;max-width:none;min-width:0;top:62px}
+#stage.phone .stephead{gap:10px}
+#stage.phone .stepno{font-size:58px}
+#stage.phone .subno{min-width:36px;height:36px;font-size:22px;border-radius:9px;padding:0 6px}
+#stage.phone .subdots{gap:4px;max-width:150px;padding-bottom:2px}
+#stage.phone .subdots i{width:9px;height:9px;border-width:2px}
+#stage.phone .note{font-size:13px;margin-top:8px}
+#stage.phone .callout{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:auto;padding:8px;gap:8px;margin-top:10px;border-radius:14px;border-width:2px;pointer-events:auto}
+#stage.phone .pc{width:66px;flex:none}
+#stage.phone .th{width:62px;height:50px}
+#stage.phone .qty,#stage.phone .sbq{font-size:18px}
+#stage.phone .pr{width:22px;height:22px}
+#stage.phone .sb{flex:none;padding:6px 8px 4px}
+#stage.phone .sbm{font-size:11px}
+#stage.phone .hint{margin-top:8px;padding:4px 8px;border-radius:12px}
+#stage.phone .hint svg{width:calc(var(--hw,400px) * .5)}
+#stage.phone .panel.cover{top:70px}
+#stage.phone .letter{width:52px;height:52px;font-size:32px;border-radius:14px}
+#stage.phone .cname{font-size:44px;margin-top:12px}
+#stage.phone .crole{font-size:15px}
+#stage.phone .cstats{margin-top:14px;gap:8px}
+#stage.phone .cstats div{padding:6px 10px;gap:6px}
+#stage.phone .cstats svg{width:28px;height:28px}
+#stage.phone .cstats b{font-size:22px}
+#stage.phone .dhead svg{width:56px;height:56px}
+#stage.phone .bom{max-height:44vh;overflow-y:auto;pointer-events:auto;padding:8px}
+#stage.phone .bomgrid{grid-template-columns:repeat(5,1fr)}
+#stage.phone .bt .th{width:48px;height:38px}
+#stage.phone .bt .qty{font-size:14px}
+#stage.phone #topbar{left:12px;right:12px;top:10px}
+#stage.phone .brand{display:none}
+#stage.phone #controls{left:10px;right:10px;transform:none;bottom:34px;max-width:none;justify-content:space-between;gap:6px}
+#stage.phone #strip{flex:1;max-width:none}
+#stage.phone .nav{padding:0 12px;min-width:56px}
+#stage.phone #tools{right:12px;bottom:96px}
+#stage.phone #foot{left:12px;right:12px;bottom:6px;font-size:9.5px}
+#stage.phone .wirecard{padding:12px}
+#stage.phone #rot{width:58px;height:58px}
+@media (prefers-reduced-motion: reduce){ .nav,#strip button,#switch button,#aa{transition:none} }
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" aria-label="3D view of the robot being built"></canvas>
+  <div id="frame"></div>
+  <div id="final" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21V4" stroke="#1d232b" stroke-width="2.4" stroke-linecap="round"/><path d="M5 4h13l-3 4 3 4H5z" fill="#2f9e5a"/></svg></div>
+  <svg id="ov" aria-hidden="true"><path id="tlo" fill="none" stroke="#7a838d" stroke-width="1.3"/><path id="tdo" fill="#7a838d"/><path id="tln" fill="none" stroke="#1d232b" stroke-width="1.8"/><path id="tdn" fill="#1d232b"/><path id="thv" fill="none" stroke="#ff6a00" stroke-width="2.5" stroke-dasharray="6 5"/></svg>
+  <div id="tags" aria-hidden="true"></div>
+  <div id="rot" aria-hidden="true"></div>
+  <div id="ribbon" class="pbadge" aria-label="3D printed part"></div>
+  <div id="panels" aria-live="polite"></div>
+  <div id="topbar">
+    <div class="brand"><b>Rochambotics</b>&nbsp; Build</div>
+    <div id="robotlabel"></div>
+    <div class="tr">
+      <button id="aa" aria-pressed="false" aria-label="Show or hide the English notes" title="Text">Aa</button>
+      <div id="switch" role="group" aria-label="Choose robot"></div>
+    </div>
+  </div>
+  <nav id="controls" aria-label="Manual navigation">
+    <button class="nav ghost" id="back" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div id="strip" role="group" aria-label="Jump to step"></div>
+    <button class="nav" id="next" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  </nav>
+  <div id="tools">
+    <button class="nav ghost" id="names" aria-pressed="false" aria-label="Show the names of all parts" title="Names (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.6" fill="currentColor"/></svg></button>
+    <button class="nav ghost" id="replay" aria-label="Play this step again" title="Play again"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/></svg></button>
+    <button class="nav ghost" id="reset" aria-label="Reset the 3D view" title="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
+  </div>
+  <footer id="foot"><span>Team Rochambotics · KIPR Botball 2026</span><span></span></footer>
+  <div id="flash"></div>
+  <div id="loading">Loading the robots…</div>
+</div>
+<script>window.__ready = false;</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/*__DATA__*/
+
+/* ---------- constants ---------- */
+const QS = new URLSearchParams(location.search);
+const VIDEO = QS.get('video') === '1' || window.__video === true;
+const VW = 1920, VH = 1080;
+const DUR = { cover: 6, step: 4.5, hint: 6.0, install: 6.5, intro: 8, wiring: 8.5, done: 10 };
+const FLY_MM = 60, FLY_FIRST_MM = 90, FLY_SUB_MM = 110;
+const FLY_T0 = 0.45, FLY_T = 0.85, FLY_SUB_T = 1.3, GROUP_GAP = 0.12, STAGGER = 0.07, STAGGER_MAX = 0.5;
+const CLICK_MM = 1.2, CAM_LERP = 0.9, PANEL_IN = 0.4, PANEL_OUT = 0.3, FLASH = 0.45, WIRE_HIDE = 0.45;
+const FOV = 24, INSET_FOV = 20;
+const VIEW_THETA = 0.87, PHI_UP = 1.0, PHI_DN = 2.12;
+const THETAS = [0.87, -0.87, Math.PI - 0.87, -(Math.PI - 0.87), 0.4, -0.4, Math.PI - 0.4, -(Math.PI - 0.4)];
+const MMPX = (96 / 25.4) * (VIDEO ? 1.35 : 1);
+const NEAR_MM = 45;
+const HL_COL = new THREE.Color('#ffa412');
+const OUT_COL = new THREE.Color('#ff5a00'), EDGE_COL = new THREE.Color(0x1e252d), FADE_TO = new THREE.Color('#ffffff');
+const CLAW_COL = '#e8833a', FADE_OLD = 0.45, SPIN_N = 12, SPIN_T = 4.8;
+const BG_HEX = '#f4f2ed';
+const ROLES = {
+  robot_a: 'Collects all five ducks in its built-in lane, then drops one duck in each zone for the x5 multiplier.',
+  robot_b: 'Flips the cups, pushes the pom stacks and places the red pom.'
+};
+const ROBOTS = [
+  { key: 'robot_a', letter: 'A', bom: 'A', glb: GLB_A },
+  { key: 'robot_b', letter: 'B', bom: 'B', glb: GLB_B }
+];
+const WIRE_COL = { motor: '#d4782a', servo: '#2f74c8', analog: '#2c9a6a', digital: '#8b5cc0', usb: '#59616b' };
+
+/* ---------- small helpers ---------- */
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const clamp = (x, a, b) => x < a ? a : x > b ? b : x;
+const lerp = (a, b, k) => a + (b - a) * k;
+const easeOut = x => 1 - Math.pow(1 - clamp01(x), 3);
+const easeInOut = x => { x = clamp01(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const fin = (x, d = 0) => Number.isFinite(x) ? x : d;
+const angWrap = a => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
+const B2T = a => new THREE.Vector3(a[0], a[2], -a[1]);
+const camDir = (theta, phi) => new THREE.Vector3(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
+const fmt1 = mm => (Math.round(mm * 10 + 1e-6) / 10).toFixed(1);
+function b64ToBuf(b64) { const bin = atob(b64); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer; }
+function parseGLB(buf) { return new Promise((res, rej) => new GLTFLoader().parse(buf, '', res, rej)); }
+function shortName(full) { const p = String(full).split(/\s+[-–—]\s+/); return p.length > 1 ? p.slice(1).join(' - ') : full; }
+function boxDist(a, b) { const dx = Math.max(0, a.min.x - b.max.x, b.min.x - a.max.x), dy = Math.max(0, a.min.y - b.max.y, b.min.y - a.max.y), dz = Math.max(0, a.min.z - b.max.z, b.min.z - a.max.z); return Math.hypot(dx, dy, dz); }
+function boxCorners(b) { const out = []; for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, b.max.y]) for (const z of [b.min.z, b.max.z]) out.push(new THREE.Vector3(x, y, z)); return out; }
+const along = (d, v) => Math.abs(d.x) * v.x + Math.abs(d.y) * v.y + Math.abs(d.z) * v.z;
+function ftype(name) { return /screw|bolt/i.test(name) ? 'screw' : /\bnut\b/i.test(name) ? 'nut' : 'part'; }
+
+/* ---------- renderer / scene ---------- */
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.autoUpdate = false;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.localClippingEnabled = true;
+/* section cut for the magnifier: removes everything in front of the new fasteners along their insertion axis */
+const CLIP = new THREE.Plane(new THREE.Vector3(0, 1, 0), 1e7);
+const scene = new THREE.Scene();
+const BG = new THREE.Color(BG_HEX), WHITE = new THREE.Color('#ffffff');
+scene.background = BG;
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(FOV, 16 / 9, 2, 8000);
+const fitCam = new THREE.PerspectiveCamera(FOV, 16 / 9, 2, 8000);
+const panelCam = new THREE.PerspectiveCamera(FOV, 1, 2, 8000);
+const insetCam = new THREE.PerspectiveCamera(INSET_FOV, 1, 0.5, 3000);
+
+function addLights(sc, withShadow) {
+  sc.add(new THREE.HemisphereLight(0xffffff, 0xcfd6dd, 0.55));
+  const key = new THREE.DirectionalLight(0xffffff, 1.55);
+  key.position.set(-260, 620, 300);
+  if (withShadow) {
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.bias = -0.0004;
+    key.shadow.normalBias = 0.6;
+    key.shadow.radius = 4;
+  }
+  sc.add(key); sc.add(key.target);
+  const fill = new THREE.DirectionalLight(0xfff6ea, 0.45);
+  fill.position.set(520, 260, 420);
+  sc.add(fill);
+  const under = new THREE.DirectionalLight(0xf2f5ff, 0.5);
+  under.position.set(120, -500, -160);
+  sc.add(under);
+  return key;
+}
+const keyLight = addLights(scene, true);
+
+function discTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(256, 256, 0, 256, 256, 256);
+  gr.addColorStop(0, 'rgba(218,226,233,1)');
+  gr.addColorStop(0.7, 'rgba(221,228,234,1)');
+  gr.addColorStop(0.9, 'rgba(226,231,234,.55)');
+  gr.addColorStop(1, 'rgba(244,242,237,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const disc = new THREE.Mesh(new THREE.CircleGeometry(1, 96), new THREE.MeshBasicMaterial({ map: discTexture(), transparent: true, depthWrite: false, toneMapped: false }));
+disc.rotation.x = -Math.PI / 2; disc.position.y = -0.6; disc.renderOrder = -2;
+scene.add(disc);
+const shadowCatcher = new THREE.Mesh(new THREE.CircleGeometry(1, 96), new THREE.ShadowMaterial({ opacity: 0.17, depthWrite: false }));
+shadowCatcher.rotation.x = -Math.PI / 2; shadowCatcher.position.y = -0.3; shadowCatcher.receiveShadow = true; shadowCatcher.renderOrder = -1;
+scene.add(shadowCatcher);
+
+const edgeMatBase = new THREE.LineBasicMaterial({ color: 0x1e252d, transparent: true, opacity: 0.4, depthWrite: false });
+/* x-ray: new parts that are hidden behind other parts show through as an amber silhouette */
+const ghostMat = new THREE.MeshBasicMaterial({ clippingPlanes: [CLIP], color: HL_COL, transparent: true, opacity: 0.42, depthFunc: THREE.GreaterDepth, depthWrite: false, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+const arrowMatBase = new THREE.MeshBasicMaterial({ color: new THREE.Color('#e2391f'), transparent: true, depthTest: false, depthWrite: false, toneMapped: false });
+const haloMatBase = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, depthTest: false, depthWrite: false, toneMapped: false });
+const CYL = new THREE.CylinderGeometry(1, 1, 1, 14).translate(0, 0.5, 0);
+const CONE = new THREE.ConeGeometry(1, 1, 22).translate(0, 0.5, 0);
+const UPV = new THREE.Vector3(0, 1, 0), ZV = new THREE.Vector3(0, 0, 1);
+const RING_GEO = new THREE.RingGeometry(0.6, 1, 44);
+const ringMatBase = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff6a00'), transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+const tagName = n => String(n).replace(/\.\d{3}$/, '').replace(/(\s*\([^()]*\))+\s*$/, '').trim();
+
+/* magnifier compositing: inset renders go to render targets, then onto circles in screen space */
+const oScene = new THREE.Scene();
+const oCam = new THREE.OrthographicCamera(0, 1, 1, 0, -10, 10);
+const RTS = [0, 1].map(() => new THREE.WebGLRenderTarget(16, 16, { type: THREE.HalfFloatType, samples: 4 }));
+const insetDiscs = RTS.map(rt => {
+  const bg = new THREE.Mesh(new THREE.CircleGeometry(1, 72), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, depthTest: false, depthWrite: false, toneMapped: false }));
+  const fg = new THREE.Mesh(new THREE.CircleGeometry(1, 72), new THREE.MeshBasicMaterial({ map: rt.texture, transparent: true, depthTest: false, depthWrite: false, blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor, blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneMinusSrcAlphaFactor }));
+  bg.renderOrder = 0; fg.renderOrder = 1;
+  oScene.add(bg, fg);
+  return { bg, fg, rt };
+});
+
+/* ---------- robot loading ---------- */
+function prepMesh(m) {
+  const o = m.obj;
+  const src = Array.isArray(o.material) ? o.material[0] : o.material;
+  m.baseMat = src.clone();
+  const c = src.clone();
+  /* later parts win where two meshes overlap (no z-fighting speckle in close-ups) */
+  c.polygonOffset = true; c.polygonOffsetFactor = 1; c.polygonOffsetUnits = 1 + Math.max(0, 80 - m.sub.si) * 2 + (m.idx % 8);
+  if ('envMapIntensity' in c) c.envMapIntensity = 0.75;
+  if (c.emissive) { c.emissive.copy(HL_COL); c.emissiveIntensity = 0; }
+  if (/\(finger\s*[LR]\)/i.test(m.label)) { c.color.set(CLAW_COL); m.baseMat.color.set(CLAW_COL); }
+  m.baseColor = c.color.clone();
+  c.userData.base = c.opacity; c.clippingPlanes = [CLIP];
+  o.material = c; m.mat = c;
+  o.castShadow = true; o.receiveShadow = true;
+  const vc = o.geometry.attributes.position ? o.geometry.attributes.position.count : 0;
+  const eg = new THREE.EdgesGeometry(o.geometry, vc > 6000 ? 40 : 28);
+  const lm = edgeMatBase.clone(); lm.userData.base = lm.opacity; lm.clippingPlanes = [CLIP];
+  const ls = new THREE.LineSegments(eg, lm); ls.raycast = () => {}; ls.userData.isEdge = true;
+  o.add(ls); m.edgeMat = lm;
+  const gh = new THREE.Mesh(o.geometry, ghostMat); gh.raycast = () => {}; gh.renderOrder = 10; gh.visible = false;
+  o.add(gh); m.ghost = gh;
+  m.st = { alpha: -1, hl: -1, trans: null, fade: -1, out: null, rot: false };
+}
+
+/* split a sub-step's meshes into part instances: "Screw ... (shank).001" belongs to the nearest "Screw ..." */
+function groupInstances(s) {
+  const qty = new Map();
+  (s.parts || []).forEach(p => qty.set(p.name, (qty.get(p.name) || 0) + (Number(p.qty) || 1)));
+  const names = [...qty.keys()];
+  const mains = new Map(), extras = [], loose = [];
+  const add = (k, m) => { if (!mains.has(k)) mains.set(k, []); mains.get(k).push(m); };
+  for (const m of s.meshes) {
+    const core = m.label.replace(/\.\d{3}$/, '');
+    if (qty.has(core)) { m.part = core; add(core, m); continue; }
+    let b = core;
+    while (!qty.has(b) && /\([^()]*\)$/.test(b)) b = b.replace(/\s*\([^()]*\)$/, '');
+    if (qty.has(b)) { m.part = b; extras.push(m); continue; }
+    let best = null;
+    for (const n of names) if ((n.startsWith(core) || core.startsWith(n)) && (!best || n.length > best.length)) best = n;
+    m.part = best; loose.push(m);
+  }
+  const promote = new Set(loose.filter(m => m.part && !mains.has(m.part)).map(m => m.part));
+  for (const m of loose) { if (m.part && promote.has(m.part)) add(m.part, m); else extras.push(m); }
+  const insts = [];
+  for (const [part, list] of mains) {
+    let groups = list.map(m => ({ ms: [m], box: m.box.clone() }));
+    const q = Math.max(1, qty.get(part) || 1);
+    while (groups.length > q) {
+      let bi = 0, bj = 1, bd = Infinity;
+      for (let i = 0; i < groups.length; i++) for (let j = i + 1; j < groups.length; j++) {
+        const d = boxDist(groups[i].box, groups[j].box) * 1000 + groups[i].box.getCenter(new THREE.Vector3()).distanceTo(groups[j].box.getCenter(new THREE.Vector3()));
+        if (d < bd) { bd = d; bi = i; bj = j; }
+      }
+      groups[bi].ms.push(...groups[bj].ms); groups[bi].box.union(groups[bj].box); groups.splice(bj, 1);
+    }
+    groups.forEach(g => insts.push({ sub: s, part, meshes: g.ms }));
+  }
+  for (const m of extras) {
+    let best = null, bs = Infinity;
+    for (const pass of [true, false]) {
+      for (const it of insts) {
+        if (pass && m.part && it.part !== m.part) continue;
+        const b = new THREE.Box3(); it.meshes.forEach(x => b.union(x.box));
+        const sc = boxDist(m.box, b) * 1000 + m.center.distanceTo(b.getCenter(new THREE.Vector3()));
+        if (sc < bs) { bs = sc; best = it; }
+      }
+      if (best) break;
+    }
+    if (best) best.meshes.push(m); else insts.push({ sub: s, part: m.part || m.label, meshes: [m] });
+  }
+  for (const it of insts) {
+    it.box = new THREE.Box3(); it.meshes.forEach(m => it.box.union(m.box));
+    it.center = it.box.getCenter(new THREE.Vector3()); it.size = it.box.getSize(new THREE.Vector3());
+    it.dir = it.meshes[0].dir.clone();
+    it.ext = along(it.dir, it.size) / 2;
+    it.kind = ftype(it.part);
+    it.vol = it.size.x * it.size.y * it.size.z;
+  }
+  return insts;
+}
+
+function makeArrow(R, from, to, big, thick) {
+  const g = new THREE.Group();
+  const dir = to.clone().sub(from); const len = dir.length(); dir.normalize();
+  const mat = arrowMatBase.clone(), halo = haloMatBase.clone();
+  const shaft = new THREE.Mesh(CYL, mat), head = new THREE.Mesh(CONE, mat);
+  const hs = new THREE.Mesh(CYL, halo), hh = new THREE.Mesh(CONE, halo);
+  [shaft, head].forEach(x => { x.renderOrder = 21; x.raycast = () => {}; });
+  [hs, hh].forEach(x => { x.renderOrder = 20; x.raycast = () => {}; });
+  g.add(hs, hh, shaft, head);
+  g.position.copy(from); g.quaternion.setFromUnitVectors(UPV, dir);
+  g.userData = { len, mat, halo, shaft, head, hs, hh, big, thick, alpha: 0, where: null, sc: -1 };
+  g.visible = false;
+  R.root.add(g); R.arrows.push(g);
+  return g;
+}
+function scaleArrow(a, mmpp) {
+  const u = a.userData;
+  if (u.fixed || Math.abs(u.sc - mmpp) < 1e-6) return;
+  u.sc = mmpp;
+  const k = u.big ? 1.7 : u.thick ? 1.4 : 1;
+  const r = 1.8 * mmpp * k, rh = 5.8 * mmpp * k, hl = Math.min(14 * mmpp * k, u.len * 0.6), h = 1.7 * mmpp;
+  const sl = Math.max(0.01, u.len - hl);
+  u.shaft.scale.set(r, sl, r); u.shaft.position.y = 0;
+  u.head.scale.set(rh, hl, rh); u.head.position.y = sl;
+  u.hs.scale.set(r + h, sl + h, r + h); u.hs.position.y = -h;
+  u.hh.scale.set(rh + h * 1.9, hl + h * 2.8, rh + h * 1.9); u.hh.position.y = sl - h * 1.4;
+}
+
+async function buildRobot(def) {
+  const data = STEPS[def.key];
+  const gltf = await parseGLB(b64ToBuf(def.glb));
+  const root = gltf.scene;
+  root.updateMatrixWorld(true);
+  const subs = [];
+  [...data.steps].sort((a, b) => a.n - b.n).forEach(st => (st.subs || []).forEach((sb, k) => subs.push({ ...sb, step: st.n, k: k + 1, K: st.subs.length, title: st.title, si: subs.length, meshes: [], insts: [] })));
+  const byTag = new Map(subs.map(s => [s.tag, s]));
+  const dirOf = new Map(); subs.forEach(s => (s.items || []).forEach(it => dirOf.set(it.mesh, it.dir)));
+  const found = []; root.traverse(o => { if (o.isMesh) found.push(o); });
+  const meshes = [];
+  for (const o of found) {
+    let raw = '', q = o;
+    while (q && q !== root) { const nm = (q.userData && q.userData.name) || q.name || ''; if (/^\d+\.\d+\|/.test(nm)) { raw = nm; break; } q = q.parent; }
+    const mm = /^(\d+)\.(\d+)\|(.*)$/.exec(raw);
+    const sub = mm ? byTag.get(mm[1] + '.' + mm[2]) : null;
+    if (!sub) { o.visible = false; continue; }
+    const d = dirOf.get(raw) || [0, 0, -1];
+    const m = { obj: o, raw, label: mm[3].trim(), sub, dir: B2T(d).normalize(), idx: meshes.length };
+    o.geometry.computeBoundingBox();
+    m.box = o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld);
+    m.center = m.box.getCenter(new THREE.Vector3()); m.size = m.box.getSize(new THREE.Vector3());
+    prepMesh(m);
+    sub.meshes.push(m); meshes.push(m);
+  }
+  subs.forEach(s => { s.insts = groupInstances(s); });
+
+  const box = new THREE.Box3(); meshes.forEach(m => box.union(m.box));
+  const C = box.getCenter(new THREE.Vector3()), S3 = box.getSize(new THREE.Vector3());
+  const Hh = S3.clone().multiplyScalar(0.5), maxDim = Math.max(S3.x, S3.y, S3.z);
+  const pivot = new THREE.Group();
+  pivot.position.set(C.x, 0, C.z); root.position.set(-C.x, 0, -C.z);
+  pivot.add(root); scene.add(pivot); pivot.visible = false;
+  const R = { def, data, name: shortName(data.name), role: ROLES[def.key] || '', root, pivot, subs, meshes, box, C, S: S3, Hh, maxDim, arrows: [], rings: [], labels: new Map() };
+
+  /* exact screw / nut spots (steps.json targets when present, else the fastener meshes) */
+  for (const s of subs) buildSpots(R, s);
+  /* arrows: one per part instance, ending where the part goes in */
+  for (const s of subs) for (const it of s.insts) {
+    if (it.spot) { it.arrow = it.spot.arrow; continue; }
+    const fly = flyDist(it, s);
+    const L = Math.min(fly * 0.85, it.kind === 'part' ? clamp(Math.max(it.size.x, it.size.y, it.size.z) * 0.45, 26, 60) : 28);
+    const tip = it.center.clone().addScaledVector(it.dir, -(it.ext + 2.5));
+    const tail = tip.clone().addScaledVector(it.dir, -L);
+    it.arrow = makeArrow(R, tail, tip, false);
+  }
+  /* sub-assemblies: built on the side, then installed on the sub-step after their last one */
+  for (const s of subs) {
+    const L = s.subassembly; if (!L) continue;
+    if (!R.labels.has(L)) R.labels.set(L, { label: L, subs: [], meshes: [], box: new THREE.Box3() });
+    const inf = R.labels.get(L);
+    inf.subs.push(s); s.meshes.forEach(m => { inf.meshes.push(m); inf.box.union(m.box); });
+  }
+  for (const inf of R.labels.values()) {
+    inf.install = Math.min(subs.length - 1, Math.max(...inf.subs.map(s => s.si)) + 1);
+    const is = subs[inf.install];
+    const pick = is.insts.find(it => it.kind === 'screw') || is.insts[0];
+    inf.dir = pick ? pick.dir.clone() : new THREE.Vector3(0, -1, 0);
+    inf.center = inf.box.getCenter(new THREE.Vector3()); inf.size = inf.box.getSize(new THREE.Vector3());
+    inf.ext = along(inf.dir, inf.size) / 2;
+    const tip = inf.center.clone().addScaledVector(inf.dir, -(inf.ext + 4));
+    inf.arrow = makeArrow(R, tip.clone().addScaledVector(inf.dir, -FLY_SUB_MM * 0.8), tip, true);
+  }
+  R.partInfo = buildPartInfo(R);
+  R.intro = buildIntro(R, data);
+  return R;
+}
+function buildSpots(R, s) {
+  const fas = s.insts.filter(it => it.kind !== 'part');
+  let spots;
+  if (Array.isArray(s.targets) && s.targets.length) {
+    spots = s.targets.filter(t => t && t.at && t.dir).map(t => ({ kind: t.kind === 'nut' ? 'nut' : 'screw', name: t.name || '', P: B2T(t.at), d: B2T(t.dir).normalize(), len: t.len_mm || null, inst: null }));
+    const free = new Set(fas);
+    for (const sp of spots) {
+      let best = null, bd = 25;
+      for (const it of free) { if (it.kind !== sp.kind) continue; const dd = it.center.clone().addScaledVector(it.dir, -it.ext).distanceTo(sp.P); if (dd < bd) { bd = dd; best = it; } }
+      if (best) { sp.inst = best; best.spot = sp; free.delete(best); }
+    }
+  } else spots = fas.map(it => { const sp = { kind: it.kind, name: it.part, P: it.center.clone().addScaledVector(it.dir, -it.ext), d: it.dir.clone(), inst: it }; it.spot = sp; return sp; });
+  spots.sort((a, b) => (a.kind === 'screw' ? 0 : 1) - (b.kind === 'screw' ? 0 : 1) || b.P.y - a.P.y || a.P.x - b.P.x || a.P.z - b.P.z);
+  spots.forEach((sp, i) => {
+    sp.n = i + 1;
+    const fly = sp.inst ? flyDist(sp.inst, s) : FLY_MM;
+    const L = Math.min(fly * 0.85, 30);
+    const tip = sp.P.clone().addScaledVector(sp.d, -2.5);
+    sp.arrow = makeArrow(R, tip.clone().addScaledVector(sp.d, -L), tip, false, true);
+    sp.tail = tip.clone().addScaledVector(sp.d, -L - 9);
+    const ring = new THREE.Mesh(RING_GEO, ringMatBase.clone()); ring.renderOrder = 22; ring.raycast = () => {};
+    ring.position.copy(sp.P).addScaledVector(sp.d, -0.8); ring.quaternion.setFromUnitVectors(ZV, sp.d.clone().negate());
+    ring.userData = { rmm: sp.kind === 'nut' ? 5.8 : 4.6, alpha: 0, where: null, pk: 1, pulse: 0 };
+    ring.visible = false; R.root.add(ring); R.rings.push(ring); sp.ring = ring;
+  });
+  s.spots = spots;
+}
+function makeCurve(R, p, axis, c) {
+  const u = c.clone().sub(p); u.addScaledVector(axis, -u.dot(axis));
+  const rad = clamp(u.length() * 0.75, 12, 40); u.normalize();
+  const w = new THREE.Vector3().crossVectors(axis, u);
+  const arc = 1.0, g = new THREE.Group();
+  const mat = arrowMatBase.clone(), halo = haloMatBase.clone();
+  const tor = new THREE.Mesh(new THREE.TorusGeometry(rad, 1.3, 8, 36, arc), mat); tor.rotation.z = -arc / 2; tor.renderOrder = 21;
+  const torH = new THREE.Mesh(new THREE.TorusGeometry(rad, 2.5, 8, 36, arc), halo); torH.rotation.z = -arc / 2; torH.renderOrder = 20;
+  g.add(torH, tor);
+  for (const sg of [1, -1]) {
+    const t = sg * arc / 2, cone = new THREE.Mesh(CONE, mat);
+    cone.position.set(rad * Math.cos(t), rad * Math.sin(t), 0);
+    cone.quaternion.setFromUnitVectors(UPV, new THREE.Vector3(-Math.sin(t) * sg, Math.cos(t) * sg, 0));
+    cone.scale.set(3.6, 8, 3.6); cone.renderOrder = 21; g.add(cone);
+  }
+  g.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(u, w, axis));
+  g.position.copy(p).addScaledVector(axis, 5);
+  g.traverse(o => { o.raycast = () => {}; });
+  g.userData = { mat, halo, alpha: 0, where: null, fixed: true };
+  g.visible = false; R.root.add(g); R.arrows.push(g);
+  return g;
+}
+/* "meet the claw": a sub-assembly whose meshes are called "...claw..." gets an exploded intro page */
+function buildIntro(R, data) {
+  const clawD = (data && data.claw) || STEPS.claw || null;
+  for (const inf of R.labels.values()) {
+    if (!inf.meshes.some(m => /claw/i.test(m.label))) continue;
+    const insts = inf.subs.flatMap(s => s.insts);
+    const base = insts.filter(it => it.kind === 'part').sort((a, b) => b.vol - a.vol)[0];
+    const it = { label: inf.label, inf, insts, base, fingers: [], curves: [], open: 0, axis: new THREE.Vector3(0, 1, 0), P: base ? base.center.clone() : inf.center.clone() };
+    const fm = inf.meshes.filter(m => /\(finger\s*[LR]\)/i.test(m.label));
+    const pv = clawD && clawD.pivots;
+    const pivOf = sd => { if (!pv) return null; if (Array.isArray(pv)) return null; const v = pv['finger_' + sd] || pv[sd]; return Array.isArray(v) ? B2T(v) : null; };
+    const pivList = Array.isArray(pv) ? pv.map(B2T) : pv ? Object.values(pv).filter(Array.isArray).map(B2T) : [];
+    if (clawD && fm.length && pivList.length) {
+      it.axis = B2T(clawD.axis || [0, 0, 1]).normalize();
+      it.open = THREE.MathUtils.degToRad(Number(clawD.open_deg) || 25);
+      it.P = pivList.reduce((a, b) => a.add(b), new THREE.Vector3()).multiplyScalar(1 / pivList.length);
+      const sides = ['L', 'R'].map(sd => ({ sd, ms: fm.filter(m => (sd === 'L' ? /\(finger\s*L\)/i : /\(finger\s*R\)/i).test(m.label)) })).filter(x => x.ms.length);
+      const centers = sides.map(({ ms }) => { const b = new THREE.Box3(); ms.forEach(m => b.union(m.box)); return b.getCenter(new THREE.Vector3()); });
+      sides.forEach(({ sd, ms }, i) => {
+        const c = centers[i], p = pivOf(sd) || pivList.slice().sort((a, b) => a.distanceTo(c) - b.distanceTo(c))[0];
+        const other = centers[1 - i] || (base ? base.center : it.P);
+        const q = new THREE.Quaternion().setFromAxisAngle(it.axis, 0.2);
+        const c2 = c.clone().sub(p).applyQuaternion(q).add(p);
+        const sign = c2.distanceTo(other) > c.distanceTo(other) ? 1 : -1;
+        it.fingers.push({ meshes: ms, pivot: p, sign, q: new THREE.Quaternion() });
+        it.curves.push(makeCurve(R, p, it.axis, c));
+      });
+    }
+    return it;
+  }
+  return null;
+}
+function flyDist(it, s) {
+  let d = s.si === 0 ? FLY_FIRST_MM : FLY_MM;
+  if (it.dir.y > 0.5) { const room = (it.box.min.y - 1) / it.dir.y; if (room >= 20) d = Math.min(d, room); }
+  return d;
+}
+
+/* ---------- part facts: screw length, colours ---------- */
+function inchMM(name) {
+  const m = /(\d+\/\d+|\d*\.\d+|\d+)\s*"/.exec(name);
+  if (!m) return null;
+  const v = m[1].includes('/') ? m[1].split('/').reduce((a, b) => +a / +b) : +m[1];
+  return v > 0 && v < 4 ? v * 25.4 : null;
+}
+function screwSpec(pi) {
+  const n = pi.name;
+  const def = /M3/i.test(n) ? { dia: 3, headD: 5.5, headH: 2.2, color: '#c9ccd1' } : /2-56/.test(n) ? { dia: 2.2, headD: 4.4, headH: 1.8, color: '#c9ccd1' } : { dia: 4.1, headD: 7.2, headH: 2.8, color: '#2b2f35' };
+  if (/brass/i.test(n)) def.color = '#c7a04a';
+  if (/black/i.test(n)) def.color = '#2b2f35';
+  let measured = null;
+  const it = pi.inst;
+  if (it) {
+    const d = it.dir;
+    const sh = it.meshes.filter(m => /\(shank\)/.test(m.label)), hd = it.meshes.filter(m => !/\(shank\)/.test(m.label));
+    const perp = v => { const a = [v.x, v.y, v.z].filter((x, i) => Math.abs([d.x, d.y, d.z][i]) < 0.5); return a.length ? Math.max(...a) : 0; };
+    if (sh.length) { const b = new THREE.Box3(); sh.forEach(m => b.union(m.box)); const z = b.getSize(new THREE.Vector3()); measured = along(d, z); def.dia = perp(z) || def.dia; }
+    if (hd.length) { const b = new THREE.Box3(); hd.forEach(m => b.union(m.box)); const z = b.getSize(new THREE.Vector3()); def.headD = perp(z) || def.headD; def.headH = along(d, z) || def.headH; def.color = '#' + hd[0].baseMat.color.getHexString(); }
+  }
+  const len = inchMM(n) || pi.given || measured || 12.7;
+  return { ...def, len };
+}
+function buildPartInfo(R) {
+  const info = new Map();
+  R.subs.forEach(s => (s.parts || []).forEach(p => {
+    if (!info.has(p.name)) info.set(p.name, { name: p.name, kind: p.kind, type: ftype(p.name), given: p.length_mm || null, inst: null });
+    else if (p.length_mm && !info.get(p.name).given) info.get(p.name).given = p.length_mm;
+  }));
+  R.subs.forEach(s => s.insts.forEach(it => { const pi = info.get(it.part); if (pi && !pi.inst) pi.inst = it; }));
+  for (const pi of info.values()) {
+    if (pi.type === 'screw') pi.screw = screwSpec(pi);
+    if (pi.type === 'nut') pi.color = pi.inst ? '#' + pi.inst.meshes[0].baseMat.color.getHexString() : (/black/i.test(pi.name) ? '#2b2f35' : '#c9ccd1');
+  }
+  return info;
+}
+
+/* ---------- posing ---------- */
+const _o = new THREE.Vector3();
+function applyMesh(m) {
+  const o = m.obj, st = m.st;
+  if (m.rotQ) { o.quaternion.copy(m.rotQ); o.position.copy(m.pivot).sub(_o.copy(m.pivot).applyQuaternion(m.rotQ)); st.rot = true; }
+  else { if (st.rot) { o.quaternion.identity(); st.rot = false; } o.position.set(0, 0, 0); }
+  if (m.kd) o.position.addScaledVector(m.kd, -m.k);
+  const out = !!m.isNew;
+  if (st.out !== out) { st.out = out; m.edgeMat.color.copy(out ? OUT_COL : EDGE_COL); m.edgeMat.userData.base = out ? 0.95 : 0.4; st.alpha = -1; }
+  const a = m.alpha;
+  if (st.alpha !== a) {
+    st.alpha = a;
+    const base = m.mat.userData.base;
+    m.mat.opacity = base * a;
+    const want = a < 0.999 || base < 1;
+    if (st.trans !== want) { st.trans = want; m.mat.transparent = want; m.mat.depthWrite = !want || base >= 1; m.mat.needsUpdate = true; }
+    m.edgeMat.opacity = m.edgeMat.userData.base * a;
+  }
+  if (st.hl !== m.hl) { st.hl = m.hl; if (m.mat.emissive) m.mat.emissiveIntensity = m.hl; }
+  if (st.fade !== m.fade) { st.fade = m.fade; m.mat.color.copy(m.baseColor).lerp(FADE_TO, m.fade); }
+  m.ghost.visible = m.ghostOn && m.alpha > 0.5;
+}
+function poseRobot(R, pg, tau, settled) {
+  const s = pg.s;
+  for (const m of R.meshes) { m.where = null; m.k = 0; m.kd = null; m.alpha = 1; m.hl = 0; m.isNew = false; m.ghostOn = false; m.fade = 0; m.rotQ = null; }
+  for (const a of R.arrows) a.userData.alpha = 0;
+  for (const r of R.rings) r.userData.alpha = 0;
+  if (pg.type === 'intro') { poseIntro(R, pg, tau); for (const m of R.meshes) applyMesh(m); return; }
+  if (pg.type === 'cover' || pg.type === 'done') R.meshes.forEach(m => { m.where = 'main'; });
+  else if (pg.type === 'wiring') R.meshes.forEach(m => { m.where = m.sub.si < s.si ? 'main' : null; });
+  else for (const m of R.meshes) {
+    const L = m.sub.subassembly;
+    if (L) {
+      const inf = R.labels.get(L);
+      if (s.subassembly === L) m.where = m.sub.si <= s.si ? 'panel' : null;
+      else m.where = s.si >= inf.install ? 'main' : null;
+    } else m.where = m.sub.si <= s.si ? 'main' : null;
+  }
+  if (pg.actors) for (const a of pg.actors) {
+    const u = settled ? 1 : (tau - a.t0) / a.T;
+    const au = settled ? 1 : clamp01((tau - a.t0 + 0.35) / 0.3);
+    a.arrow.userData.alpha = au; a.arrow.userData.where = a.where;
+    const land = settled ? 99 : tau - (a.t0 + a.T);
+    for (const m of a.meshes) {
+      m.isNew = true; m.ghostOn = !!(a.inst && (a.inst.kind !== 'part' || a.inst.vol < 30000));
+      if (u <= 0) { m.where = null; continue; }
+      const uu = clamp01(u);
+      let off = a.dist * (1 - easeOut(uu / 0.86));
+      if (!settled && uu > 0.86 && uu < 1) off -= CLICK_MM * Math.sin(Math.PI * (uu - 0.86) / 0.14);
+      m.k = off; m.kd = a.d; m.alpha = clamp01(uu / 0.15);
+      m.hl = a.hlMax * (land < 0 ? 1 : 0.55 + 0.45 * Math.exp(-land * 3));
+    }
+  }
+  if (s && pg.type === 'step' && s.spots) {
+    const where = s.subassembly ? 'panel' : 'main', ra = settled ? 1 : clamp01((tau - 0.15) / 0.3);
+    for (const sp of s.spots) {
+      const u = sp.ring.userData; u.alpha = ra; u.where = where; u.pulse = tau;
+      if (!sp.inst) { sp.arrow.userData.alpha = ra; sp.arrow.userData.where = where; }
+    }
+    if (s.spots.length) { const f = FADE_OLD * (settled ? 1 : clamp01((tau - 0.1) / 0.5)); for (const m of R.meshes) if (!m.isNew) m.fade = f; }
+  }
+  for (const m of R.meshes) applyMesh(m);
+}
+function introOffset(it) { return it.kind === 'part' ? 24 : 32; }
+function poseIntro(R, pg, tau) {
+  const I = pg.intro, e = easeInOut((tau - 0.3) / 1.2);
+  for (const it of I.insts) {
+    const k = it === I.base ? 0 : e * introOffset(it);
+    for (const m of it.meshes) { m.where = 'main'; if (k) { m.kd = it.dir; m.k = k; } }
+  }
+  if (I.fingers.length) {
+    const ph = Math.max(0, tau - 1.7), ang = I.open * (0.5 - 0.5 * Math.cos(2 * Math.PI * ph / 2.4));
+    for (const f of I.fingers) { f.q.setFromAxisAngle(I.axis, f.sign * ang); for (const m of f.meshes) { m.rotQ = f.q; m.pivot = f.pivot; } }
+    for (const c of I.curves) { c.userData.alpha = clamp01((tau - 1.5) / 0.4); c.userData.where = 'main'; }
+  }
+}
+function applyPass(R, pass) {
+  for (const m of R.meshes) m.obj.visible = m.where === pass;
+  for (const a of R.arrows) { const u = a.userData; const on = u.where === pass && u.alpha > 0.01; a.visible = on; if (on) { u.mat.opacity = u.alpha; u.halo.opacity = 0.95 * u.alpha; } }
+  for (const r of R.rings) { const u = r.userData; const on = u.where === pass && u.alpha > 0.01; r.visible = on; if (on) { const pz = 0.5 + 0.5 * Math.sin(u.pulse * 2 * Math.PI / 1.1); r.material.opacity = u.alpha * (0.55 + 0.45 * pz); u.pk = 1 + 0.25 * pz; } }
+}
+
+/* ---------- camera ---------- */
+const _v = new THREE.Vector3();
+function placeCam(cam, p, Wv, Hv) {
+  cam.aspect = Wv / Hv;
+  cam.position.set(p.tx + p.d * Math.sin(p.phi) * Math.sin(p.theta), p.ty + p.d * Math.cos(p.phi), p.tz + p.d * Math.sin(p.phi) * Math.cos(p.theta));
+  cam.up.set(0, 1, 0);
+  cam.lookAt(p.tx, p.ty, p.tz);
+  cam.setViewOffset(Wv, Hv, p.ox, p.oy, Wv, Hv);
+  cam.near = Math.max(1, p.d * 0.05); cam.far = p.d * 6 + 2000;
+  cam.updateProjectionMatrix();
+  cam.updateMatrixWorld(true);
+}
+function fitParams(box, rect, Wv, Hv, theta, phi, fill) {
+  const corners = boxCorners(box);
+  const c = box.getCenter(new THREE.Vector3()), sz = box.getSize(new THREE.Vector3());
+  const p = { tx: c.x, ty: c.y, tz: c.z, theta, phi, d: Math.max(sz.x, sz.y, sz.z, 20) * 3.2, ox: 0, oy: 0 };
+  const rcx = rect.x + rect.w / 2, rcy = rect.y + rect.h / 2;
+  for (let i = 0; i < 7; i++) {
+    placeCam(fitCam, p, Wv, Hv);
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (const q of corners) {
+      _v.copy(q).project(fitCam);
+      const px = (_v.x + 1) / 2 * Wv, py = (1 - _v.y) / 2 * Hv;
+      x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+    const sc = Math.max((x1 - x0) / (rect.w * fill), (y1 - y0) / (rect.h * fill));
+    p.ox += (x0 + x1) / 2 - rcx; p.oy += (y0 + y1) / 2 - rcy;
+    if (i < 6) p.d *= clamp(fin(sc, 1), 0.3, 3);
+  }
+  for (const k in p) p[k] = fin(p[k]);
+  return p;
+}
+function lerpParams(a, b, k) {
+  const o = {};
+  for (const key in b) o[key] = key === 'theta' ? a.theta + angWrap(b.theta - a.theta) * k : lerp(a[key], b[key], k);
+  return o;
+}
+const mmPerPx = (p, Hv) => 2 * p.d * Math.tan(THREE.MathUtils.degToRad(FOV / 2)) / Hv;
+
+/* pick the view (8 azimuths x above/below) that best shows where the new parts go */
+function chooseView(items, prev, R, keep = 0.25) {
+  let best = { theta: VIEW_THETA, phi: PHI_UP }, bs = -1e9;
+  for (const phi of [PHI_UP, PHI_DN]) for (const th of THETAS) {
+    const c = camDir(th, phi);
+    let sc = 0, ws = 0;
+    for (const it of items) { sc += it.w * (0.65 * Math.min(1, Math.max(0, -c.dot(it.d)) / 0.62) + 0.35 * Math.max(0, c.dot(it.n))); ws += it.w; }
+    sc = ws ? sc / ws : 0;
+    if (phi < Math.PI / 2) sc += 0.3;
+    if (prev && Math.abs(angWrap(prev.theta - th)) < 1e-3 && prev.phi === phi) sc += keep;
+    else if (prev && prev.phi === phi && Math.abs(angWrap(prev.theta - th)) < 1.2) sc += keep * 0.4;
+    if (th === VIEW_THETA && phi === PHI_UP) sc += 0.04;
+    if (sc > bs + 1e-9) { bs = sc; best = { theta: th, phi }; }
+  }
+  return best;
+}
+function viewItems(R, insts, extra) {
+  const out = insts.map(it => {
+    const n = new THREE.Vector3((it.center.x - R.C.x) / R.Hh.x, 0, (it.center.z - R.C.z) / R.Hh.z);
+    if (n.length() > 0.15) n.normalize(); else n.set(0, 0, 0);
+    return { d: it.dir, n, w: it.kind === 'part' ? 1 : 0.5 };
+  });
+  if (extra) out.push(extra);
+  return out;
+}
+function insetViewDir(d, c) {
+  const base = d.clone().negate();
+  const perp = c.clone().addScaledVector(base, -c.dot(base));
+  if (perp.length() < 0.15) perp.set(c.x, 0, c.z);
+  if (perp.length() < 0.05) perp.set(0, 1, 0);
+  perp.normalize();
+  return base.addScaledVector(perp, 0.95).normalize();
+}
+
+/* ---------- layout ---------- */
+let W = 0, H = 0, S = 1, PHONE = false;
+const camCache = new Map();
+function layout() {
+  if (VIDEO) {
+    W = VW; H = VH; S = 1; PHONE = false;
+    const k = Math.min(innerWidth / VW, innerHeight / VH);
+    stage.style.transform = `translate(${(innerWidth - VW * k) / 2}px,${(innerHeight - VH * k) / 2}px) scale(${k})`;
+    renderer.setPixelRatio(1);
+  } else {
+    W = innerWidth; H = innerHeight;
+    PHONE = W < 760;
+    S = PHONE ? 0.62 : Math.max(0.5, Math.min(1.35, Math.min(W / 1920, H / 1080)));
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  }
+  stage.classList.toggle('phone', PHONE);
+  stage.style.setProperty('--s', S);
+  renderer.setSize(W, H, false);
+  oCam.left = 0; oCam.right = W; oCam.top = H; oCam.bottom = 0; oCam.updateProjectionMatrix();
+  ov.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  camCache.clear();
+}
+function bottomPad() { return VIDEO ? 70 * S : PHONE ? 104 : 124 * S; }
+function freeRect(pg) {
+  const p = pg.panel;
+  if (PHONE) {
+    const top = p.offsetTop + p.offsetHeight + 8, bottom = H - bottomPad();
+    return { x: 8, y: top, w: W - 16, h: Math.max(150, bottom - top) };
+  }
+  const left = p.offsetLeft + p.offsetWidth + 34 * S;
+  const right = W - 44 * S, top = 100 * S, bottom = H - bottomPad();
+  return { x: left, y: top, w: Math.max(220, right - left), h: Math.max(200, bottom - top) };
+}
+function turntableBox(R) {
+  const b = R.box.clone(), r = Math.hypot(R.Hh.x, R.Hh.z);
+  b.min.x = R.C.x - r; b.max.x = R.C.x + r; b.min.z = R.C.z - r; b.max.z = R.C.z + r; b.min.y = Math.min(b.min.y, 0);
+  return b;
+}
+function placeInsets(out, pg, cam, view, D, colX, colW) {
+  /* cam: params for the view the insets magnify; view: {x,y,w,h} rect of that view on screen */
+  const n = pg.insetDefs.length, free = out.free, r = D / 2;
+  placeCam(fitCam, cam, view.w, view.h);
+  const P = pg.insetDefs[0].P;
+  _v.copy(P).project(fitCam);
+  const mx = view.x + (_v.x + 1) / 2 * view.w, my = view.y + (1 - _v.y) / 2 * view.h;
+  const pxmm = view.h / (2 * fitCam.position.distanceTo(P) * Math.tan(THREE.MathUtils.degToRad(FOV / 2)));
+  pg.insetDefs.forEach((ins, i) => {
+    let cx, cy;
+    if (colW) {
+      cx = colX + colW / 2;
+      if (n === 1) cy = clamp(my, free.y + r + 4 * S, free.y + free.h - r - 4 * S);
+      else { const tot = n * D + (n - 1) * 22 * S; cy = clamp(my - tot / 2, free.y, free.y + free.h - tot) + r + i * (D + 22 * S); }
+    } else {
+      const host = view.w === W && view.h === H ? out.free : view;
+      const left = mx > host.x + host.w / 2;
+      cx = left ? host.x + r + 6 : host.x + host.w - r - 6;
+      cy = host.y + r + 6 + i * (D + 8);
+    }
+    /* magnification 2x..5x so the new fasteners near the point fill the circle */
+    let need = 8;
+    for (const b of ins.boxes) for (const q of boxCorners(b)) {
+      const w = q.clone().sub(ins.P); const al = w.dot(ins.v);
+      need = Math.max(need, (w.addScaledVector(ins.v, -al).length() + 3) * 1.18);
+    }
+    const mag = clamp(r / (need * pxmm), 1.5, 5);
+    out.insets.push({ ...ins, cx, cy, r, Rmm: r / (mag * pxmm) });
+  });
+}
+function pageLayout(g) {
+  if (camCache.has(g)) return camCache.get(g);
+  const pg = PAGES[g], R = pg.R;
+  const free = freeRect(pg);
+  const out = { free, mainRect: free, frame: null, insets: [], main: null, panel: null };
+  const n = pg.insetDefs ? pg.insetDefs.length : 0;
+  if (pg.type === 'cover' || pg.type === 'done') out.main = fitParams(turntableBox(R), free, W, H, VIEW_THETA, PHI_UP, 1.04);
+  else if (pg.type === 'wiring') out.main = fitParams(R.box, free, W, H, VIEW_THETA, PHI_UP, 0.92);
+  else if (pg.type === 'step' && pg.s.subassembly) {
+    let robotRect = free, colW = 0, colX = 0, D = 0;
+    if (PHONE) {
+      out.frame = { x: free.x + 2, y: free.y + 2, w: free.w - 4, h: free.h - 4 };
+      if (n) D = Math.min(118, out.frame.w * 0.34, (out.frame.h - 12) / n - 8);
+    } else {
+      const gap = 24 * S;
+      if (n) { colW = clamp(free.w * 0.28, 170 * S, 340 * S); colX = free.x + free.w - colW; D = Math.min(colW - 16 * S, (free.h - 22 * S * (n - 1)) / n - 6 * S); }
+      const avail = free.w - colW - (colW ? gap : 0);
+      const rw = avail * (n ? 0.3 : 0.34);
+      robotRect = { x: free.x, y: free.y + free.h * 0.2, w: rw, h: free.h * 0.6 };
+      out.frame = { x: free.x + rw + gap, y: free.y, w: avail - rw - gap, h: free.h };
+    }
+    out.mainRect = robotRect;
+    out.main = fitParams(R.box, robotRect, W, H, VIEW_THETA, PHI_UP, 0.9);
+    const pad = 26 * S, f = out.frame;
+    out.panel = fitParams(pg.panelBox, { x: pad, y: pad, w: f.w - 2 * pad, h: f.h - 2 * pad }, f.w, f.h, pg.view.theta, pg.view.phi, 0.9);
+    if (n) placeInsets(out, pg, out.panel, f, D, colX, colW);
+  } else {
+    let mainRect = free, D = 0, colW = 0, colX = 0;
+    if (n && !PHONE) {
+      colW = clamp(free.w * 0.36, 180 * S, 380 * S); colX = free.x + free.w - colW;
+      D = Math.min(colW - 18 * S, (free.h - 22 * S * (n - 1)) / n - 6 * S);
+      mainRect = { x: free.x, y: free.y, w: free.w - colW, h: free.h };
+    } else if (n) D = Math.min(126, free.w * 0.36, (free.h - 10) / n - 8);
+    out.mainRect = mainRect;
+    out.main = fitParams(pg.focus, mainRect, W, H, pg.view.theta, pg.view.phi, 0.9);
+    if (n) placeInsets(out, pg, out.main, { x: 0, y: 0, w: W, h: H }, D, colX, colW);
+  }
+  if (!PHONE && (pg.type === 'step' || pg.type === 'intro')) {
+    const fw = 236 * S, fh = 158 * S, fx = 56 * S, fy = H - bottomPad() - fh - 8 * S;
+    if (pg.panel.offsetTop + pg.panel.offsetHeight < fy - 10 * S && fw > 120) {
+      out.finalRect = { x: fx, y: fy, w: fw, h: fh };
+      out.finalCam = fitParams(R.box, { x: 10, y: 14, w: fw - 20, h: fh - 22 }, fw, fh, VIEW_THETA, PHI_UP, 0.96);
+    }
+  }
+  camCache.set(g, out);
+  return out;
+}
+
+/* ---------- pictograms (SVG, no words) ---------- */
+const CHECK = (x, y, r) => `<g transform="translate(${x} ${y})"><circle r="${r}" fill="#2f9e5a"/><path d="M${-r * .45} ${r * .02} L${-r * .1} ${r * .36} L${r * .5} ${-r * .34}" fill="none" stroke="#fff" stroke-width="${r * .27}" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+const CROSS = (x, y, r) => `<g transform="translate(${x} ${y})"><circle r="${r}" fill="#d23b2a"/><path d="M${-r * .36} ${-r * .36} L${r * .36} ${r * .36} M${r * .36} ${-r * .36} L${-r * .36} ${r * .36}" stroke="#fff" stroke-width="${r * .27}" stroke-linecap="round"/></g>`;
+const PRINTER = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h16v8H4z"/><path d="M7 9V4h10v5"/><path d="M8 17v3h8v-3"/><path d="M12 9v3"/><path d="M10.5 12h3l-1.5 2z" fill="#fff"/></svg>`;
+function duck(x, y, s = 1, flip = false) {
+  return `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s})"><ellipse cx="0" cy="0" rx="22" ry="15" fill="#f6c428" stroke="#8a6a00" stroke-width="2.5"/><path d="M-20 -4 Q-30 -12 -24 -18 Q-16 -10 -14 -8z" fill="#f6c428" stroke="#8a6a00" stroke-width="2"/><circle cx="14" cy="-17" r="10" fill="#f6c428" stroke="#8a6a00" stroke-width="2.5"/><path d="M23 -19 L33 -15 L23 -12z" fill="#ee8a1c" stroke="#8a5200" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16" cy="-19" r="2" fill="#1d232b"/></g>`;
+}
+function wheelsFig(cx, cy, k, xcfg) {
+  const bw = 96, bh = 140, ww = 30, wh = 58;
+  const L = -bw / 2, T = -bh / 2;
+  const wheels = [[L - ww - 4, T + 6, 'FL'], [-L + 4, T + 6, 'FR'], [L - ww - 4, -T - wh - 6, 'RL'], [-L + 4, -T - wh - 6, 'RR']];
+  let s = `<g transform="translate(${cx} ${cy}) scale(${k})">`;
+  s += `<rect x="${L}" y="${T}" width="${bw}" height="${bh}" rx="14" fill="#d6dce2" stroke="#6b7785" stroke-width="3"/>`;
+  s += `<path d="M0 ${T + 16} l-14 20 h28z" fill="#6b7785"/>`;
+  wheels.forEach(([x, y, n], i) => {
+    const back = (n === 'FL' || n === 'RR') === xcfg; /* '\' lines */
+    const id = `wc${xcfg ? 1 : 0}${i}${Math.round(cx)}`;
+    s += `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${ww}" height="${wh}" rx="7"/></clipPath><rect x="${x}" y="${y}" width="${ww}" height="${wh}" rx="7" fill="#2c3138"/><g clip-path="url(#${id})" stroke="#c4ccd5" stroke-width="5" stroke-linecap="round">`;
+    for (let j = -4; j < 6; j++) { const x0 = x + j * 12; s += back ? `<line x1="${x0}" y1="${y}" x2="${x0 + wh}" y2="${y + wh}"/>` : `<line x1="${x0}" y1="${y + wh}" x2="${x0 + wh}" y2="${y}"/>`; }
+    s += `</g>`;
+  });
+  const c = wheels.map(([x, y]) => [x + ww / 2, y + wh / 2]);
+  if (xcfg) s += `<path d="M${c[0][0]} ${c[0][1]} L${c[3][0]} ${c[3][1]} M${c[1][0]} ${c[1][1]} L${c[2][0]} ${c[2][1]}" stroke="#ffa412" stroke-width="5" stroke-dasharray="10 8" stroke-linecap="round" fill="none"/>`;
+  else s += `<path d="M${c[0][0] + 10} ${c[0][1]} L${c[1][0] - 10} ${c[1][1]} M${c[2][0] + 10} ${c[2][1]} L${c[3][0] - 10} ${c[3][1]}" stroke="none"/>`;
+  return s + '</g>';
+}
+function hintSVG(h) {
+  if (!h) return '';
+  if (h === 'mecanum_x') return { w: 420, svg: `<svg viewBox="0 0 420 240">${wheelsFig(130, 122, 1, true)}${CHECK(232, 34, 22)}<line x1="268" y1="20" x2="268" y2="224" stroke="#e2ded5" stroke-width="3"/>${wheelsFig(346, 132, 0.62, false)}${CROSS(398, 46, 16)}</svg>` };
+  if (h === 'gate_open_closed') {
+    const panel = (x0, open) => {
+      const px = x0 + 112, py = 62;
+      let s = `<line x1="${x0 + 8}" y1="196" x2="${x0 + 204}" y2="196" stroke="#6b7785" stroke-width="5" stroke-linecap="round"/>`;
+      s += `<rect x="${px - 30}" y="${py - 44}" width="60" height="40" rx="7" fill="#23282f"/><rect x="${px - 38}" y="${py - 30}" width="76" height="8" rx="3" fill="#23282f"/>`;
+      if (open) s += `<rect x="${px - 8}" y="${py - 8}" width="${88}" height="16" rx="8" fill="#8f9aa6" stroke="#4d5763" stroke-width="2.5"/>`;
+      else s += `<rect x="${px - 8}" y="${py - 8}" width="16" height="${122}" rx="8" fill="#8f9aa6" stroke="#4d5763" stroke-width="2.5"/>`;
+      s += `<circle cx="${px}" cy="${py}" r="7" fill="#fff" stroke="#4d5763" stroke-width="2.5"/>`;
+      if (open) {
+        s += `<path d="M${px + 2} ${py + 54} A 52 52 0 0 0 ${px + 52} ${py + 6}" fill="none" stroke="#e2391f" stroke-width="5" stroke-linecap="round"/><path d="M${px + 52} ${py - 6} l-11 14 l20 2z" fill="#e2391f"/>`;
+        s += `<text x="${px + 46}" y="${py + 62}" font-size="20" font-weight="900" fill="#e2391f" font-family="Inter,system-ui,sans-serif">90°</text>`;
+        s += duck(x0 + 150, 172, 1) + `<path d="M${x0 + 40} 164 h44 M${x0 + 30} 178 h40" stroke="#9aa4ae" stroke-width="4" stroke-linecap="round"/>`;
+        s += CHECK(x0 + 186, 30, 20);
+      } else {
+        s += duck(x0 + 68, 172, 1) + `<path d="M${x0 + 18} 170 h14" stroke="#9aa4ae" stroke-width="4" stroke-linecap="round"/>`;
+        s += CROSS(x0 + 186, 30, 20);
+      }
+      return s;
+    };
+    return { w: 470, svg: `<svg viewBox="0 0 470 214">${panel(4, false)}<line x1="235" y1="14" x2="235" y2="200" stroke="#e2ded5" stroke-width="3"/>${panel(258, true)}</svg>` };
+  }
+  let m;
+  if ((m = /^repeat_x(\d+)$/.exec(h))) {
+    const n = +m[1], w = n === 1 ? 400 : (n > 9 ? 300 : 250);
+    let s = `<svg viewBox="0 0 ${w} 140"><g transform="translate(66 70)"><path d="M 44 -24 A 50 50 0 1 0 50 8" fill="none" stroke="#1d232b" stroke-width="10" stroke-linecap="round"/><path d="M 30 -36 L 62 -30 L 46 -2 z" fill="#1d232b"/></g><text x="138" y="96" text-anchor="start" font-family="Inter,system-ui,sans-serif" font-size="72" font-weight="900" fill="#1d232b">×${n}</text>`;
+    if (n === 1) {
+      s += `<g transform="translate(336 70)"><line x1="0" y1="-56" x2="0" y2="56" stroke="#6b7785" stroke-width="4" stroke-dasharray="8 7"/><path d="M-10 -30 h-34 v52 h18 v-34 h16z" fill="#8f9aa6" stroke="#4d5763" stroke-width="3" stroke-linejoin="round"/><path d="M10 -30 h34 v52 h-18 v-34 h-16z" fill="#ffd27a" stroke="#b87a00" stroke-width="3" stroke-linejoin="round"/><path d="M-24 42 h48" stroke="#e2391f" stroke-width="4"/><path d="M-30 42 l11 -7 v14z M30 42 l-11 -7 v14z" fill="#e2391f"/></g>`;
+    }
+    return { w: n === 1 ? 310 : 200, svg: s + '</svg>' };
+  }
+  if (h === 'bend_35') {
+    const a = 35 * Math.PI / 180, bx = 196, by = 128, Ln = 150;
+    const ex = bx + Ln * Math.cos(a), ey = by - Ln * Math.sin(a);
+    let holes = '';
+    for (let i = 0; i < 8; i++) holes += `<circle cx="${30 + i * 22}" cy="${by}" r="5.5" fill="#f4f2ed"/>`;
+    for (let i = 1; i < 7; i++) holes += `<circle cx="${bx + i * 22 * Math.cos(a)}" cy="${by - i * 22 * Math.sin(a)}" r="5.5" fill="#f4f2ed"/>`;
+    return { w: 380, svg: `<svg viewBox="0 0 380 170"><line x1="${bx}" y1="${by}" x2="${bx + 170}" y2="${by}" stroke="#9aa4ae" stroke-width="3" stroke-dasharray="8 7"/><path d="M18 ${by} L${bx} ${by} L${ex} ${ey}" fill="none" stroke="#4d5763" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 ${by} L${bx} ${by} L${ex} ${ey}" fill="none" stroke="#9aa6b2" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>${holes}<path d="M${bx + 92} ${by} A 92 92 0 0 0 ${bx + 92 * Math.cos(a)} ${by - 92 * Math.sin(a)}" fill="none" stroke="#e2391f" stroke-width="5"/><path d="M${bx + 92 * Math.cos(a) - 4} ${by - 92 * Math.sin(a) - 9} l13 3 l-8 11z" fill="#e2391f"/><text x="${bx + 104}" y="${by - 20}" font-family="Inter,system-ui,sans-serif" font-size="30" font-weight="900" fill="#e2391f">35°</text></svg>` };
+  }
+  if (h === 'print_check') {
+    let holes = '';
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 7; c++) holes += `<circle cx="${42 + c * 26}" cy="${62 + r * 26}" r="6" fill="#f4f2ed" stroke="#7d8792" stroke-width="1.5"/>`;
+    return { w: 400, svg: `<svg viewBox="0 0 400 204"><rect x="18" y="38" width="208" height="128" rx="12" fill="#a9b0b9" stroke="#59616b" stroke-width="3"/>${holes}<circle cx="146" cy="88" r="13" fill="none" stroke="#ffa412" stroke-width="4"/><line x1="158" y1="80" x2="226" y2="62" stroke="#59616b" stroke-width="2.5" stroke-dasharray="5 5"/><line x1="158" y1="98" x2="244" y2="146" stroke="#59616b" stroke-width="2.5" stroke-dasharray="5 5"/><circle cx="282" cy="100" r="62" fill="#fff" stroke="#1d232b" stroke-width="9"/><line x1="326" y1="146" x2="366" y2="186" stroke="#1d232b" stroke-width="16" stroke-linecap="round"/><circle cx="282" cy="112" r="22" fill="#f4f2ed" stroke="#7d8792" stroke-width="3"/><rect x="274" y="44" width="16" height="66" rx="3" fill="#b9c0c8" stroke="#4d5763" stroke-width="2.5"/><path d="M274 56 l16 8 M274 70 l16 8 M274 84 l16 8 M274 98 l16 8" stroke="#4d5763" stroke-width="2"/><path d="M274 110 l8 12 l8 -12z" fill="#b9c0c8" stroke="#4d5763" stroke-width="2.5" stroke-linejoin="round"/><path d="M296 128 a 26 26 0 0 0 0 -32" fill="none" stroke="#e2391f" stroke-width="4"/><path d="M291 90 l12 2 l-6 10z" fill="#e2391f"/><text x="244" y="194" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="22" font-weight="900" fill="#1d232b">Ø4.4</text>${CHECK(372, 32, 20)}</svg>` };
+  }
+  return '';
+}
+function rotateSVG(kind, sign) {
+  const model = `<g transform="translate(60 64)"><path d="M-26 -6 L0 -20 L26 -6 L0 8z" fill="#d6dce2" stroke="#4d5763" stroke-width="2.5" stroke-linejoin="round"/><path d="M-26 -6 V8 L0 22 V8z" fill="#aab4bf" stroke="#4d5763" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 -6 V8 L0 22 V8z" fill="#8f9aa6" stroke="#4d5763" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-14" cy="14" r="5" fill="#2c3138"/><circle cx="14" cy="14" r="5" fill="#2c3138"/></g>`;
+  let arrow;
+  if (kind === 'flip') arrow = `<path d="M60 14 A 20 46 0 1 1 52 112" fill="none" stroke="#e2391f" stroke-width="6" stroke-linecap="round"/><path d="M40 104 l14 14 l4 -18z" fill="#e2391f"/>`;
+  else arrow = `<g transform="translate(60 0) scale(${sign < 0 ? -1 : 1} 1) translate(-60 0)"><path d="M14 70 A 46 20 0 1 0 98 54" fill="none" stroke="#e2391f" stroke-width="6" stroke-linecap="round"/><path d="M92 44 l14 10 l-17 8z" fill="#e2391f"/></g>`;
+  return `<svg viewBox="0 0 120 120"><rect x="3" y="3" width="114" height="114" rx="18" fill="#fff" stroke="#1d232b" stroke-width="4"/>${model}${arrow}</svg>`;
+}
+function genericIcon() { return `<svg viewBox="0 0 120 100" aria-hidden="true"><rect x="30" y="26" width="60" height="48" rx="8" fill="#c9d3dc" stroke="#8a97a3" stroke-width="3"/></svg>`; }
+function rodIcon(name) {
+  const mm = inchMM(name) || 25.4, w = Math.min(104, mm * 2.6);
+  let t = ''; for (let x = 60 - w / 2 + 3; x < 60 + w / 2 - 2; x += 4) t += `<line x1="${x}" y1="43" x2="${x + 3}" y2="57" stroke="#6b7280" stroke-width="1.3"/>`;
+  if (/standoff/i.test(name)) return `<svg viewBox="0 0 120 100"><rect x="${60 - w / 2}" y="38" width="${w}" height="24" rx="2" fill="#c6cad0" stroke="#59616b" stroke-width="2.5"/><line x1="${60 - w / 2}" y1="50" x2="${60 + w / 2}" y2="50" stroke="#8a929c" stroke-width="2"/></svg>`;
+  return `<svg viewBox="0 0 120 100"><rect x="${60 - w / 2}" y="43" width="${w}" height="14" rx="2" fill="#c6cad0" stroke="#59616b" stroke-width="2"/>${t}</svg>`;
+}
+function nutIcon(color, keps) {
+  const pts = [...Array(6)].map((_, i) => { const a = Math.PI / 6 + i * Math.PI / 3; return `${60 + 34 * Math.cos(a)},${50 + 34 * Math.sin(a)}`; }).join(' ');
+  const dark = /^#[0-3]/.test(color);
+  let teeth = '';
+  if (keps) for (let i = 0; i < 16; i++) { const a = i * Math.PI / 8; teeth += `<line x1="${60 + 20 * Math.cos(a)}" y1="${50 + 20 * Math.sin(a)}" x2="${60 + 27 * Math.cos(a)}" y2="${50 + 27 * Math.sin(a)}" stroke="${dark ? '#8a929c' : '#7d8792'}" stroke-width="2.5"/>`; }
+  return `<svg viewBox="0 0 120 100"><polygon points="${pts}" fill="${color}" stroke="${dark ? '#000' : '#59616b'}" stroke-width="3" stroke-linejoin="round"/>${keps ? `<circle cx="60" cy="50" r="28" fill="none" stroke="${dark ? '#5d646d' : '#9aa3ad'}" stroke-width="3"/>` : ''}${teeth}<circle cx="60" cy="50" r="12" fill="#f4f2ed" stroke="${dark ? '#000' : '#59616b'}" stroke-width="3"/></svg>`;
+}
+function screwPath(sp, k, x0, cy, headMax) {
+  const ux = x0 + headMax * k; /* under-head point = ruler 0 */
+  const hh = sp.headH * k, hd = sp.headD * k, d = sp.dia * k, L = sp.len * k;
+  const dark = /^#[0-3]/.test(sp.color);
+  const stroke = dark ? '#0b0d10' : '#59616b', thr = dark ? '#6b7280' : '#8a929c';
+  let s = `<path d="M${ux} ${cy - hd / 2} h${-hh * 0.45} q${-hh * 0.55} 0 ${-hh * 0.55} ${hd * 0.3} v${hd * 0.4} q0 ${hd * 0.3} ${hh * 0.55} ${hd * 0.3} h${hh * 0.45}z" fill="${sp.color}" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round"/>`;
+  s += `<path d="M${ux} ${cy - d / 2} h${L - d * 0.3} l${d * 0.3} ${d * 0.3} v${d * 0.4} l${-d * 0.3} ${d * 0.3} h${-(L - d * 0.3)}z" fill="${sp.color}" stroke="${stroke}" stroke-width="1.2" stroke-linejoin="round"/>`;
+  const pitch = Math.max(0.55, /M3/i.test(sp.name || '') ? 0.5 : 0.8) * k;
+  for (let x = ux + pitch; x < ux + L - d * 0.3; x += pitch) s += `<line x1="${x}" y1="${cy - d / 2 + 0.8}" x2="${x - pitch * 0.6}" y2="${cy + d / 2 - 0.8}" stroke="${thr}" stroke-width="1"/>`;
+  return s;
+}
+function screwBlockHTML(list) {
+  const k = MMPX;
+  const headMax = Math.max(...list.map(x => x.sp.headH));
+  const maxL = Math.max(...list.map(x => x.sp.len));
+  const rmax = Math.max(10, Math.ceil((maxL + 0.4) / 5) * 5);
+  const wpx = Math.ceil((headMax + rmax) * k + 8);
+  let html = '';
+  for (const { sp, qty, name } of list) {
+    const rh = Math.ceil(Math.max(sp.headD * k + 8, 30));
+    html += `<svg width="${wpx}" height="${rh}" viewBox="0 0 ${wpx} ${rh}">${screwPath({ ...sp, name }, k, 2, rh / 2, headMax)}</svg><div class="sbl" data-tag="${esc(tagName(name))}"><span class="sbq">×${qty}</span><span class="sbm">${fmt1(sp.len)}<small>mm</small></span><span class="snm">${esc(tagName(name))}</span></div>`;
+  }
+  let r = `<line x1="${2 + headMax * k}" y1="3" x2="${2 + (headMax + rmax) * k}" y2="3" stroke="#1d232b" stroke-width="2"/>`;
+  for (let i = 0; i <= rmax; i++) {
+    const x = 2 + (headMax + i) * k, len = i % 5 === 0 ? 11 : 6;
+    r += `<line x1="${x}" y1="3" x2="${x}" y2="${3 + len}" stroke="#1d232b" stroke-width="${i % 5 === 0 ? 1.6 : 1}"/>`;
+    if (i % 5 === 0) r += `<text x="${x}" y="27" text-anchor="middle" font-size="11" font-weight="800" fill="#1d232b" font-family="Inter,system-ui,sans-serif">${i}</text>`;
+  }
+  html += `<svg width="${wpx}" height="30" viewBox="0 0 ${wpx} 30">${r}</svg><div></div>`;
+  return `<div class="sb" aria-label="Screws at true size">${html}<span class="one">1:1</span></div>`;
+}
+
+/* ---------- thumbnails ---------- */
+const thumbs = new Map();
+async function buildThumbs() {
+  const TS = 150, N = SPIN_N;
+  const tr = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  tr.setPixelRatio(1); tr.setSize(TS, TS, false);
+  tr.toneMapping = THREE.ACESFilmicToneMapping; tr.toneMappingExposure = 1.05;
+  tr.setClearColor(0x000000, 0);
+  const tpm = new THREE.PMREMGenerator(tr);
+  const envT = tpm.fromScene(new RoomEnvironment(tr), 0.04).texture;
+  const tcam = new THREE.PerspectiveCamera(22, 1, 1, 5000);
+  const strip = document.createElement('canvas'); strip.width = TS * N; strip.height = TS;
+  const sg = strip.getContext('2d');
+  const shot = (key, meshes) => {
+    const ts = new THREE.Scene(); ts.environment = envT; addLights(ts, false);
+    const grp = new THREE.Group();
+    for (const m of meshes) {
+      const mat = m.baseMat.clone(); if ('envMapIntensity' in mat) mat.envMapIntensity = 0.75;
+      const c = new THREE.Mesh(m.obj.geometry, mat);
+      c.add(new THREE.LineSegments(m.obj.children.find(x => x.userData.isEdge).geometry, edgeMatBase));
+      grp.add(c);
+    }
+    ts.add(grp);
+    const bb = new THREE.Box3(); meshes.forEach(m => bb.union(m.box));
+    const sph = bb.getBoundingSphere(new THREE.Sphere());
+    const d = sph.radius / Math.sin(THREE.MathUtils.degToRad(11)) * 1.02;
+    sg.clearRect(0, 0, strip.width, strip.height);
+    for (let f = 0; f < N; f++) {
+      tcam.position.copy(sph.center).addScaledVector(camDir(VIEW_THETA + 2 * Math.PI * f / N, 0.95), d);
+      tcam.lookAt(sph.center);
+      tcam.near = Math.max(0.1, d - sph.radius * 2); tcam.far = d + sph.radius * 2; tcam.updateProjectionMatrix();
+      tr.render(ts, tcam);
+      sg.drawImage(tr.domElement, f * TS, 0);
+    }
+    thumbs.set(key, strip.toDataURL('image/png'));
+    grp.traverse(o => { if (o.isMesh) o.material.dispose(); });
+  };
+  for (const R of RB) {
+    for (const pi of R.partInfo.values()) if (pi.type === 'part' && pi.inst) shot(R.def.key + '|' + pi.name, pi.inst.meshes);
+    for (const inf of R.labels.values()) shot(R.def.key + '|SA|' + inf.label, inf.meshes);
+    await new Promise(r => setTimeout(r, 0));
+  }
+  tpm.dispose(); envT.dispose(); tr.dispose(); tr.forceContextLoss();
+}
+const spinHTML = (u, still) => `<div class="spin${still ? ' still' : ''}" style="background-image:url(${u})"></div>`;
+function partThumb(R, name, still) {
+  const pi = R.partInfo.get(name) || { name, type: ftype(name) };
+  if (pi.type === 'nut') return nutIcon(pi.color || '#2b2f35', /keps/i.test(name));
+  const u = thumbs.get(R.def.key + '|' + name);
+  if (u) return spinHTML(u, still);
+  if (/standoff|rod/i.test(name)) return rodIcon(name);
+  return genericIcon();
+}
+
+/* ---------- panels ---------- */
+let RB = [];
+const PAGES = [];
+const panelsEl = document.getElementById('panels');
+const ov = document.getElementById('ov');
+const frameEl = document.getElementById('frame');
+const rotEl = document.getElementById('rot');
+
+function stepHead(R, s) {
+  const st = R.subs.filter(x => x.step === s.step);
+  const dots = st.map(x => `<i class="${x.si < s.si ? 'd' : x.si === s.si ? 'c' : ''}"></i>`).join('');
+  return `<div class="stephead"><div class="stepno">${s.step}</div>${s.K > 1 ? `<div class="subno">${s.k}</div><div class="subdots" aria-label="Part ${s.k} of ${s.K}">${dots}</div>` : ''}</div>`;
+}
+const cardText = name => (STEPS.cards && STEPS.cards[name]) ? `<div class="ctx">${esc(STEPS.cards[name])}</div>` : '';
+function calloutHTML(R, parts, saLabel) {
+  const tiles = [], screws = [], nuts = [];
+  if (saLabel) {
+    const u = thumbs.get(R.def.key + '|SA|' + saLabel);
+    const inf = R.labels.get(saLabel), pr = inf && inf.subs.some(x => (x.parts || []).some(q => q.kind === 'print'));
+    tiles.push(`<div class="pc sa" data-tag="${esc(saLabel)}"><div class="th">${u ? spinHTML(u) : genericIcon()}</div><div class="qty">×1</div>${pr ? `<span class="pbadge">${PRINTER}3D PRINTED</span>` : ''}<div class="nm">${esc(saLabel)}</div></div>`);
+  }
+  for (const pt of parts) {
+    const pi = R.partInfo.get(pt.name) || { type: ftype(pt.name), name: pt.name };
+    if (pi.type === 'screw') { screws.push({ sp: pi.screw || screwSpec(pi), qty: pt.qty, name: pt.name }); continue; }
+    const t = `<div class="pc${pt.kind === 'print' ? ' isprint' : ''}" data-tag="${esc(tagName(pt.name))}"><div class="th">${partThumb(R, pt.name)}</div><div class="qty">×${esc(pt.qty)}</div>${pt.kind === 'print' ? `<span class="pbadge">${PRINTER}${esc(pt.badge || '3D PRINTED')}</span>` : pi.type === 'part' ? '<span class="kbadge">KIT</span>' : ''}<div class="nm">${esc(tagName(pt.name))}</div>${cardText(pt.name)}</div>`;
+    (pi.type === 'nut' ? nuts : tiles).push(t);
+  }
+  const html = tiles.join('') + (screws.length ? screwBlockHTML(screws) : '') + nuts.join('');
+  return html ? `<div class="callout" aria-label="Parts for this step">${html}</div>` : '';
+}
+function stepPanel(R, pg) {
+  const s = pg.s;
+  const p = el('div', 'panel step');
+  const hint = s.hint && s.hint !== 'wiring' ? hintSVG(s.hint) : '';
+  p.innerHTML = stepHead(R, s) + calloutHTML(R, s.parts || [], pg.install ? pg.install.label : null) + (hint ? `<div class="hint" style="--hw:${hint.w}px">${hint.svg}</div>` : '') + `<div class="note">${esc(s.note || '')}</div>`;
+  return p;
+}
+const EYE = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`;
+function introPanel(R, pg) {
+  const I = pg.intro, agg = new Map();
+  for (const s of I.inf.subs) for (const pt of (s.parts || [])) { if (!agg.has(pt.name)) agg.set(pt.name, { ...pt, qty: 0 }); agg.get(pt.name).qty += Number(pt.qty) || 0; }
+  const p = el('div', 'panel step');
+  p.innerHTML = `<div class="stephead"><div class="stepno">${pg.s.step}</div><div class="subno" style="padding:0 calc(var(--s)*12px)"><span style="display:block;width:calc(var(--s)*36px);height:calc(var(--s)*36px)">${EYE}</span></div></div>` + calloutHTML(R, [...agg.values()], null) + `<div class="note">${esc(I.label)}: all its parts, opened up. Watch the fingers open and close; the gears in the circle turn together.</div>`;
+  return p;
+}
+const ICONS = {
+  pages: `<svg viewBox="0 0 48 48"><rect x="12" y="6" width="28" height="36" rx="4" fill="#e8e5de" stroke="#7a838d" stroke-width="3"/><rect x="7" y="10" width="28" height="34" rx="4" fill="#fff" stroke="#1d232b" stroke-width="3"/><path d="M13 20h16M13 27h16M13 34h10" stroke="#7a838d" stroke-width="3" stroke-linecap="round"/></svg>`,
+  print: `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#c9772a"/><g transform="translate(9 9) scale(1.25)">${PRINTER.replace(/<\/?svg[^>]*>/g, '')}</g></svg>`,
+  kit: `<svg viewBox="0 0 48 48"><path d="M6 16 L24 7 L42 16 L42 34 L24 43 L6 34z" fill="#d6dce2" stroke="#1d232b" stroke-width="3" stroke-linejoin="round"/><path d="M6 16 L24 25 L42 16 M24 25 V43" fill="none" stroke="#1d232b" stroke-width="3" stroke-linejoin="round"/></svg>`,
+  screw: `<svg viewBox="0 0 48 48"><path d="M6 16 h8 v16 h-8 q-3 0 -3 -3 v-10 q0 -3 3 -3z" fill="#2b2f35"/><rect x="14" y="20" width="28" height="8" rx="1.5" fill="#2b2f35"/><path d="M18 20 l-2 8 M22 20 l-2 8 M26 20 l-2 8 M30 20 l-2 8 M34 20 l-2 8 M38 20 l-2 8" stroke="#8a929c" stroke-width="1.4"/></svg>`,
+  nut: `<svg viewBox="0 0 48 48"><polygon points="24,5 40,14.5 40,33.5 24,43 8,33.5 8,14.5" fill="#2b2f35"/><circle cx="24" cy="24" r="7" fill="#f4f2ed"/></svg>`
+};
+function bomList(R) {
+  const src = (STEPS.bom && STEPS.bom[R.def.bom]) || {};
+  const rank = n => { const pi = R.partInfo.get(n); if (pi && pi.kind === 'print') return 0; const t = ftype(n); return t === 'part' ? 1 : t === 'screw' ? 2 : 3; };
+  return Object.entries(src).map(([name, qty], i) => ({ name, qty: Number(qty) || 0, i })).sort((a, b) => rank(a.name) - rank(b.name) || a.i - b.i);
+}
+function coverPanel(R) {
+  const p = el('div', 'panel cover');
+  const bom = bomList(R);
+  let printed = 0, kit = 0, screws = 0, nuts = 0;
+  for (const b of bom) { const pi = R.partInfo.get(b.name); const t = ftype(b.name); if (pi && pi.kind === 'print') printed += b.qty; else if (t === 'screw') screws += b.qty; else if (t === 'nut') nuts += b.qty; else kit += b.qty; }
+  p.innerHTML = `<div class="letter">${R.def.letter}</div><div class="cname">${esc(R.name)}</div><div class="note crole">${esc(R.role)}</div><div class="cstats"><div>${ICONS.pages}<b>${R.subs.length}</b></div><div>${ICONS.print}<b>${printed}</b></div><div>${ICONS.kit}<b>${kit}</b></div><div>${ICONS.screw}<b>${screws}</b></div><div>${ICONS.nut}<b>${nuts}</b></div></div>`;
+  return p;
+}
+function bomThumb(R, name) {
+  const pi = R.partInfo.get(name);
+  if (pi && pi.type === 'screw') {
+    const sp = pi.screw, k = 2.4, w = (sp.headH + sp.len) * k + 4, h = Math.max(sp.headD * k + 4, 20);
+    return `<svg viewBox="0 0 ${w} ${h + 22}" width="${w}"><g>${screwPath({ ...sp, name }, k, 2, h / 2, sp.headH)}</g><text x="${w / 2}" y="${h + 18}" text-anchor="middle" font-size="15" font-weight="900" fill="#1d232b" font-family="Inter,system-ui,sans-serif">${fmt1(sp.len)}</text></svg>`;
+  }
+  return partThumb(R, name, true);
+}
+function donePanel(R) {
+  const p = el('div', 'panel done');
+  const tiles = bomList(R).map(b => {
+    const pi = R.partInfo.get(b.name);
+    return `<div class="bt"><div class="th">${bomThumb(R, b.name)}</div><div class="qty">×${b.qty}</div>${pi && pi.kind === 'print' ? `<span class="pr">${PRINTER}</span>` : ''}<div class="nm">${esc(tagName(b.name))}</div></div>`;
+  }).join('');
+  p.innerHTML = `<div class="dhead"><svg viewBox="0 0 100 100">${CHECK(50, 50, 48)}</svg><div class="letter">${R.def.letter}</div></div><div class="bom" aria-label="All parts for this robot"><div class="bomgrid">${tiles}</div></div>`;
+  return p;
+}
+
+/* ---------- wiring diagram (port map card) ---------- */
+function parseWiring(note) {
+  const conns = [], extra = [];
+  const sentences = String(note).split(/\.\s+|\.$/).map(s => s.trim()).filter(Boolean);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  for (const s of sentences) {
+    let m;
+    if ((m = /^(motors?|servos?|analog|digital)\b\s*:?\s*(.*)$/i.exec(s))) {
+      const g = m[1].toLowerCase().replace(/s$/, '');
+      const rest = m[2];
+      const dm = /^(\d+)\s*:\s*(.+)$/.exec(rest);
+      if (dm) { conns.push({ g, port: +dm[1], label: cap(dm[2]) }); continue; }
+      let prev = null;
+      for (const raw of rest.split(/,\s*/)) {
+        const im = /^(.*?)\s*(\d+)$/.exec(raw.trim());
+        if (!im) continue;
+        let label = im[1].trim();
+        if (prev && /^[a-z]$/i.test(label) && /\s[a-z]$/i.test(prev)) label = prev.replace(/\S+$/, label);
+        prev = label;
+        let shown = cap(label || g);
+        if (g === 'motor' && !/motor/i.test(shown)) shown += ' motor';
+        if (g === 'servo' && !/servo/i.test(shown)) shown += ' servo';
+        conns.push({ g, port: +im[2], label: shown });
+      }
+    } else if ((m = /^(.+?)\s+(?:on|to|via)\s+usb$/i.exec(s))) {
+      conns.push({ g: 'usb', port: 0, label: cap(m[1]) });
+    } else extra.push(s + '.');
+  }
+  return { conns, extra };
+}
+function wiringSVG(note) {
+  const { conns, extra } = parseWiring(note);
+  const VBW = 1000, VBH = 600;
+  const bx = 395, by = 60, bw = 210, bh = 500;
+  const port = (g, i) => {
+    if (g === 'motor') return { x: bx, y: by + 70 + i * 34, side: -1 };
+    if (g === 'servo') return { x: bx, y: by + 260 + i * 34, side: -1 };
+    if (g === 'analog') return { x: bx + bw, y: by + 52 + i * 24, side: 1 };
+    if (g === 'digital') return { x: bx + bw, y: by + 222 + i * 24, side: 1 };
+    return { x: bx + bw / 2, y: by, side: 0 };
+  };
+  let s = `<svg viewBox="0 0 ${VBW} ${VBH}" preserveAspectRatio="xMidYMid meet" aria-label="Wombat port map" font-family="Inter,system-ui,sans-serif">`;
+  s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="22" fill="#23282f"/>`;
+  s += `<rect x="${bx + 30}" y="${by + 395}" width="${bw - 60}" height="80" rx="8" fill="#2d6a95"/><text x="${bx + bw / 2}" y="${by + 442}" text-anchor="middle" font-size="17" font-weight="800" fill="#e8f1f8">WOMBAT</text>`;
+  const used = new Set(conns.map(c => c.g + c.port));
+  const groups = [['motor', 4, 'MOTOR'], ['servo', 4, 'SERVO'], ['analog', 6, 'ANALOG'], ['digital', 10, 'DIGITAL']];
+  for (const [g, n, label] of groups) {
+    const p0 = port(g, 0);
+    const lx = p0.side < 0 ? bx + 44 : bx + bw - 44;
+    s += `<text x="${lx}" y="${p0.y - 20}" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="1.5" fill="#9aa4ae">${label}</text>`;
+    for (let i = 0; i < n; i++) {
+      const p = port(g, i), on = used.has(g + i);
+      const w = g === 'motor' || g === 'servo' ? 26 : 20, h = g === 'motor' || g === 'servo' ? 20 : 15;
+      const x = p.side < 0 ? p.x - w + 8 : p.x - 8;
+      s += `<rect x="${x}" y="${p.y - h / 2}" width="${w}" height="${h}" rx="3" fill="${on ? WIRE_COL[g] : '#3a414b'}" stroke="${on ? 'none' : '#59616b'}"/>`;
+      const tx = p.side < 0 ? p.x + 16 : p.x - 16;
+      s += `<text x="${tx}" y="${p.y + 4.5}" text-anchor="${p.side < 0 ? 'start' : 'end'}" font-size="13" font-weight="700" fill="${on ? '#ffffff' : '#7d8792'}">${i}</text>`;
+    }
+  }
+  const usbOn = conns.some(c => c.g === 'usb');
+  s += `<rect x="${bx + bw / 2 - 18}" y="${by - 8}" width="36" height="16" rx="3" fill="${usbOn ? WIRE_COL.usb : '#3a414b'}"/><text x="${bx + bw / 2 - 30}" y="${by - 4}" text-anchor="end" font-size="12" font-weight="800" letter-spacing="1.5" fill="#9aa4ae">USB</text>`;
+  const left = conns.filter(c => c.g === 'motor' || c.g === 'servo').sort((a, b) => port(a.g, a.port).y - port(b.g, b.port).y);
+  const right = conns.filter(c => c.g === 'usb').concat(conns.filter(c => c.g === 'analog' || c.g === 'digital').sort((a, b) => port(a.g, a.port).y - port(b.g, b.port).y));
+  const place = (list, side) => list.map((c, i) => {
+    const y0 = 70, y1 = VBH - 40, y = list.length === 1 ? (y0 + y1) / 2 : y0 + (y1 - y0) * i / (list.length - 1);
+    return { c, y, x: side < 0 ? 300 : 700, side };
+  });
+  const labels = place(left, -1).concat(place(right, 1));
+  let k = 0;
+  for (const L of labels) {
+    const p = port(L.c.g, L.c.port);
+    const col = WIRE_COL[L.c.g];
+    const px = L.c.g === 'usb' ? p.x : p.side < 0 ? p.x - 18 : p.x + 12;
+    const py = L.c.g === 'usb' ? p.y - 8 : p.y;
+    const d = L.c.g === 'usb'
+      ? `M${px} ${py} C ${px} ${py - 50}, ${L.x - 120} ${L.y}, ${L.x} ${L.y}`
+      : `M${px} ${py} C ${px + L.side * 60} ${py}, ${L.x - L.side * 60} ${L.y}, ${L.x} ${L.y}`;
+    s += `<path class="wl" data-k="${k}" d="${d}" fill="none" stroke="${col}" stroke-width="4.5" stroke-linecap="round"/>`;
+    const tag = L.c.g === 'usb' ? 'USB' : (L.c.g[0].toUpperCase() + L.c.port);
+    const tw = 300 - 40;
+    const rx = L.side < 0 ? L.x - tw : L.x;
+    s += `<g class="wt" data-k="${k}"><rect x="${rx}" y="${L.y - 21}" width="${tw}" height="42" rx="21" fill="#f3f1ec"/><circle cx="${L.side < 0 ? L.x - 21 : L.x + 21}" cy="${L.y}" r="12" fill="${col}"/><text x="${L.side < 0 ? L.x - 21 : L.x + 21}" y="${L.y + 4.5}" text-anchor="middle" font-size="${tag.length > 2 ? 8 : 11}" font-weight="800" fill="#fff">${tag}</text><text x="${L.side < 0 ? L.x - 42 : L.x + 42}" y="${L.y + 6}" text-anchor="${L.side < 0 ? 'end' : 'start'}" font-size="17" font-weight="700" fill="#1d232b">${esc(L.c.label)}</text></g>`;
+    k++;
+  }
+  s += '</svg>';
+  return { svg: s, extra, count: k };
+}
+function wiringCard(s) {
+  const w = el('div', 'wirecard');
+  const { svg } = wiringSVG(s.note);
+  w.innerHTML = svg + `<div class="wcap"><div class="legend"><span><i style="background:${WIRE_COL.motor}"></i>Motor</span><span><i style="background:${WIRE_COL.servo}"></i>Servo</span><span><i style="background:${WIRE_COL.analog}"></i>Analog</span><span><i style="background:${WIRE_COL.digital}"></i>Digital</span><span><i style="background:${WIRE_COL.usb}"></i>USB</span></div></div>`;
+  return w;
+}
+
+/* ---------- page model (layout independent, deterministic) ---------- */
+function buildActors(R, pg) {
+  const s = pg.s, acts = [];
+  let t = FLY_T0;
+  if (pg.install) {
+    const inf = pg.install;
+    acts.push({ meshes: inf.meshes, d: inf.dir, dist: FLY_SUB_MM, t0: t, T: FLY_SUB_T, where: 'main', arrow: inf.arrow, hlMax: 0.3 });
+    t += FLY_SUB_T + GROUP_GAP;
+  }
+  const where = s.subassembly ? 'panel' : 'main';
+  const groups = [[], [], []];
+  for (const it of s.insts) groups[it.kind === 'screw' ? 1 : it.kind === 'nut' ? 2 : 0].push(it);
+  groups[0].sort((a, b) => b.vol - a.vol);
+  for (const g of [groups[1], groups[2]]) g.sort((a, b) => a.center.x - b.center.x || a.center.z - b.center.z || a.center.y - b.center.y);
+  for (const g of groups) {
+    if (!g.length) continue;
+    const st = g.length > 1 ? Math.min(STAGGER, STAGGER_MAX / (g.length - 1)) : 0;
+    g.forEach((it, i) => acts.push({ meshes: it.meshes, d: it.dir, dist: flyDist(it, s), t0: t + i * st, T: FLY_T, where, arrow: it.arrow, inst: it, hlMax: it.kind === 'part' ? (it.vol > 2e5 ? 0.12 : 0.24) : 0.6 }));
+    t += (g.length - 1) * st + FLY_T + GROUP_GAP;
+  }
+  pg.animEnd = t;
+  return acts;
+}
+function mainWhereFinal(R, s, m) {
+  const L = m.sub.subassembly;
+  if (L) return s.subassembly !== L && s.si >= R.labels.get(L).install;
+  return m.sub.si <= s.si;
+}
+function focusBox(R, pg) {
+  const b = new THREE.Box3();
+  for (const m of R.meshes) if (mainWhereFinal(R, pg.s, m)) b.union(m.box);
+  for (const a of pg.actors) if (a.where === 'main') for (const m of a.meshes) b.union(m.box.clone().translate(a.d.clone().multiplyScalar(-a.dist * 0.4)));
+  if (pg.s.zoom) { const P = B2T(pg.s.zoom); b.union(new THREE.Box3(P.clone().subScalar(12), P.clone().addScalar(12))); }
+  if (b.isEmpty()) return R.box.clone();
+  b.min.y = Math.max(b.min.y, R.box.min.y - 60);
+  return b;
+}
+
+function buildPages() {
+  for (const R of RB) {
+    PAGES.push({ R, type: 'cover', panel: coverPanel(R) });
+    let prevMain = null, prevPanel = null, prevLabel = null;
+    for (const s of R.subs) {
+      if (s.hint === 'wiring' || !s.meshes.length) {
+        const pg = { R, s, type: 'wiring', dur: DUR.wiring };
+        pg.panel = el('div', 'panel step'); pg.panel.innerHTML = stepHead(R, s) + `<div class="note">${esc(s.note || '')}</div>`;
+        pg.card = wiringCard(s);
+        PAGES.push(pg); continue;
+      }
+      if (R.intro && s.subassembly === R.intro.label && !R.intro.page) {
+        const ip = { R, s, type: 'intro', intro: R.intro, actors: [], dur: DUR.intro, view: { theta: VIEW_THETA, phi: 0.95 } };
+        const fb = new THREE.Box3();
+        for (const it of R.intro.insts) fb.union(it.box.clone().translate(it.dir.clone().multiplyScalar(it === R.intro.base ? 0 : -introOffset(it))));
+        ip.focus = fb; ip.insetDefs = introInset(R, R.intro, ip.view);
+        ip.tagGroups = tagGroupsOf(R.intro.insts.map(it => ({ it, where: 'main' })), R);
+        ip.printed = true; ip.panel = introPanel(R, ip); R.intro.page = ip; PAGES.push(ip);
+      }
+      const pg = { R, s, type: 'step' };
+      for (const inf of R.labels.values()) if (inf.install === s.si && s.subassembly !== inf.label) pg.install = inf;
+      pg.actors = buildActors(R, pg);
+      let base = DUR.step;
+      if (s.hint && s.hint !== 'wiring') base = DUR.hint;
+      if (pg.install) base = Math.max(DUR.install, base + 0.5);
+      pg.dur = Math.max(base, pg.animEnd + 1.1);
+      if (s.subassembly) {
+        const inf = R.labels.get(s.subassembly);
+        const items = viewItems(R, s.insts);
+        pg.view = chooseView(items, prevLabel === s.subassembly ? prevPanel : null, R);
+        if (prevLabel === s.subassembly && prevPanel) pg.rot = rotKind(prevPanel, pg.view);
+        prevPanel = pg.view; prevLabel = s.subassembly;
+        const pb = new THREE.Box3(); inf.subs.filter(x => x.si <= s.si).forEach(x => x.meshes.forEach(m => pb.union(m.box)));
+        for (const a of pg.actors) for (const m of a.meshes) pb.union(m.box.clone().translate(a.d.clone().multiplyScalar(-a.dist * 0.3)));
+        pg.panelBox = pb.expandByScalar(6);
+        pg.insetDefs = insetDefs(R, pg);
+      } else {
+        const extra = pg.install ? { d: pg.install.dir, n: new THREE.Vector3(), w: 1.5 } : null;
+        pg.view = chooseView(viewItems(R, s.insts, extra), prevMain, R, s.zoom ? 0.45 : 0.25);
+        if (prevMain) pg.rot = rotKind(prevMain, pg.view);
+        prevMain = pg.view; prevLabel = null;
+        pg.focus = focusBox(R, pg);
+        pg.insetDefs = insetDefs(R, pg);
+      }
+      const tg = s.insts.map(it => ({ it, where: s.subassembly ? 'panel' : 'main' }));
+      if (pg.install) tg.unshift({ it: { part: pg.install.label, center: pg.install.center, meshes: pg.install.meshes, sa: true, print: pg.install.subs.some(x => (x.parts || []).some(q => q.kind === 'print')) }, where: 'main' });
+      pg.tagGroups = tagGroupsOf(tg, R);
+      pg.printed = (s.parts || []).some(q => q.kind === 'print' || q.badge) || tg.some(x => x.it.sa && x.it.print) || /^3D PRINTED/i.test(s.note || '');
+      pg.panel = stepPanel(R, pg);
+      PAGES.push(pg);
+    }
+    PAGES.push({ R, type: 'done', panel: donePanel(R) });
+  }
+}
+function tagGroupsOf(list, R) {
+  const map = new Map();
+  for (const { it, where } of list) {
+    const key = it.sa ? it.part : tagName(it.part);
+    const k = key + '|' + where;
+    const pi = R && !it.sa ? R.partInfo.get(it.part) : null;
+    const print = it.sa ? !!it.print : !!(pi && pi.kind === 'print');
+    if (!map.has(k)) map.set(k, { key, where, insts: [], print });
+    map.get(k).insts.push(it);
+  }
+  return [...map.values()].map(g => ({ ...g, text: g.key + (g.insts.length > 1 ? ' ×' + g.insts.length : '') }));
+}
+function allGroupsOf(pg) {
+  if (pg._all) return pg._all;
+  const R = pg.R, s = pg.s, list = [];
+  if (s && pg.type === 'step') for (const x of R.subs) {
+    if (x.si >= s.si) break;
+    const L = x.subassembly;
+    const where = L ? (s.subassembly === L ? 'panel' : s.si >= R.labels.get(L).install ? 'main' : null) : 'main';
+    if (where) for (const it of x.insts) list.push({ it, where });
+  }
+  pg._all = tagGroupsOf(list, R);
+  return pg._all;
+}
+function rotKind(a, b) {
+  if ((a.phi > Math.PI / 2) !== (b.phi > Math.PI / 2)) return { kind: 'flip', sign: 1 };
+  const d = angWrap(b.theta - a.theta);
+  if (Math.abs(d) > 1.6) return { kind: 'turn', sign: Math.sign(d) };
+  return null;
+}
+function insetDefs(R, pg) {
+  const s = pg.s, spots = s.spots || [];
+  const pass = s.subassembly ? 'panel' : 'main';
+  const c = camDir(pg.view.theta, pg.view.phi);
+  const Z = s.zoom ? B2T(s.zoom) : null;
+  if (spots.length) {
+    /* groups: same insertion side and close together; magnify the group nearest the zoom point, then its nuts/screws partner */
+    const groups = [];
+    for (const sp of spots) {
+      let g = groups.find(g => g.d.dot(sp.d) > 0.9 && g.spots[0].P.distanceTo(sp.P) < 62);
+      if (!g) groups.push(g = { d: sp.d.clone(), spots: [] });
+      g.spots.push(sp);
+    }
+    groups.forEach(g => { g.P = g.spots.reduce((a, sp) => a.add(sp.P), new THREE.Vector3()).multiplyScalar(1 / g.spots.length); g.screw = g.spots.some(sp => sp.kind === 'screw'); });
+    groups.sort((a, b) => (Z ? a.P.distanceTo(Z) - b.P.distanceTo(Z) : 0) || (b.screw - a.screw) || b.spots.length - a.spots.length);
+    const g1 = groups[0], pick = [g1];
+    const g2 = groups.filter(g => g !== g1 && g.d.dot(g1.d) < -0.5 && g.P.distanceTo(g1.P) < 60).sort((a, b) => a.P.distanceTo(g1.P) - b.P.distanceTo(g1.P))[0];
+    if (g2) pick.push(g2);
+    return pick.map(g => {
+      const insts = g.spots.map(sp => sp.inst).filter(Boolean);
+      const boxes = insts.map(it => it.box);
+      g.spots.forEach(sp => boxes.push(new THREE.Box3(sp.P.clone().subScalar(3), sp.P.clone().addScalar(3))));
+      let qd = Infinity;
+      for (const b of boxes) for (const q of boxCorners(b)) qd = Math.min(qd, q.dot(g.d));
+      return { P: g.P, d: g.d, v: insetViewDir(g.d, c), boxes, qd: qd - 2.37, pass, spots: g.spots, arrows: new Set(g.spots.map(sp => sp.arrow)), rings: new Set(g.spots.map(sp => sp.ring)), meshSet: new Set(insts.flatMap(it => it.meshes)) };
+    });
+  }
+  if (!Z) return [];
+  const near = s.insts.filter(it => boxDist(it.box, new THREE.Box3(Z, Z)) < NEAR_MM);
+  const src = near.length ? near : s.insts;
+  const dirs = [];
+  for (const it of src) if (!dirs.some(d => d.dot(it.dir) > 0.9)) dirs.push(it.dir.clone());
+  return dirs.slice(0, 1).map(d => {
+    const insts = src.filter(it => it.dir.dot(d) > 0.9);
+    let qd = Infinity;
+    for (const it of insts) for (const q of boxCorners(it.box)) qd = Math.min(qd, q.dot(d));
+    return { P: Z, d, v: insetViewDir(d, c), boxes: insts.map(it => it.box), qd: qd - 2.37, pass, arrows: new Set(insts.map(it => it.arrow)), rings: new Set(), meshSet: new Set(insts.flatMap(it => it.meshes)) };
+  });
+}
+function introInset(R, I, view) {
+  const c = camDir(view.theta, view.phi);
+  const d = I.axis.clone().negate();
+  const r = I.fingers.length ? 20 : 26;
+  return [{ P: I.P.clone(), d, v: insetViewDir(d, c), boxes: [new THREE.Box3(I.P.clone().subScalar(r), I.P.clone().addScalar(r))], qd: -1e9, pass: 'main', arrows: new Set(I.curves), rings: new Set(), meshSet: new Set() }];
+}
+
+/* ---------- drawing ---------- */
+const flashEl = document.getElementById('flash');
+let curApplied = null, visibleRobot = null, curPageDom = -1;
+const OV = { rings: [], leads: [], marks: [] };
+function initOverlay() {
+  const ns = 'http://www.w3.org/2000/svg';
+  for (let i = 0; i < 2; i++) {
+    const lead = document.createElementNS(ns, 'line'); lead.setAttribute('stroke', '#1d232b'); lead.setAttribute('stroke-linecap', 'round');
+    const mark = document.createElementNS(ns, 'circle'); mark.setAttribute('fill', 'rgba(255,255,255,.18)'); mark.setAttribute('stroke', '#1d232b');
+    const ring = document.createElementNS(ns, 'circle'); ring.setAttribute('fill', 'none'); ring.setAttribute('stroke', '#1d232b');
+    const ring2 = document.createElementNS(ns, 'circle'); ring2.setAttribute('fill', 'none'); ring2.setAttribute('stroke', '#ffffff');
+    ov.append(lead, mark, ring, ring2);
+    OV.leads.push(lead); OV.marks.push(mark); OV.rings.push([ring, ring2]);
+  }
+}
+function hideOverlay(from) {
+  for (let i = from; i < 2; i++) { OV.leads[i].style.display = OV.marks[i].style.display = 'none'; OV.rings[i].forEach(r => { r.style.display = 'none'; }); insetDiscs[i].bg.visible = insetDiscs[i].fg.visible = false; }
+}
+function pageAngle(pg, tau) {
+  if (pg.type === 'cover') return VIDEO ? 0.55 * Math.sin(2 * Math.PI * tau / DUR.cover) : 0.55 * Math.sin(tau * 0.55);
+  if (pg.type === 'done') return tau * 0.32;
+  return 0;
+}
+function pageDur(pg) { return pg.dur || DUR[pg.type]; }
+function updateGround(R) {
+  const r = Math.hypot(R.S.x, R.S.z) * 0.5;
+  disc.scale.setScalar(r); disc.position.x = R.C.x; disc.position.z = R.C.z;
+  shadowCatcher.scale.setScalar(r * 1.1); shadowCatcher.position.x = R.C.x; shadowCatcher.position.z = R.C.z;
+  const sc = keyLight.shadow.camera, e = R.maxDim * 0.85;
+  sc.left = -e; sc.right = e; sc.top = e; sc.bottom = -e; sc.near = 10; sc.far = 3000; sc.updateProjectionMatrix();
+  keyLight.target.position.set(R.C.x, 0, R.C.z);
+  keyLight.position.set(R.C.x - 260, 620, R.C.z + 300);
+  keyLight.target.updateMatrixWorld();
+}
+function setArrowScale(R, mmpp) { for (const a of R.arrows) if (a.visible) scaleArrow(a, mmpp); for (const r of R.rings) if (r.visible) r.scale.setScalar(Math.max(r.userData.rmm, 9 * mmpp) * r.userData.pk); }
+
+const tagsEl = document.getElementById('tags'), finalEl = document.getElementById('final');
+const tagPool = [], badgePool = [];
+let showAll = false, hoverKey = null, hoverEl = null;
+function poolEl(pool, cls, i) { while (pool.length <= i) { const e = el('div', cls); tagsEl.appendChild(e); pool.push(e); } return pool[i]; }
+function projPt(p, where, L) {
+  const cam = where === 'panel' ? panelCam : camera, vr = where === 'panel' ? L.frame : { x: 0, y: 0, w: W, h: H };
+  if (!vr) return null;
+  _v.copy(p).project(cam);
+  if (_v.z > 1 || _v.z < -1) return null;
+  return { x: vr.x + (_v.x + 1) / 2 * vr.w, y: vr.y + (1 - _v.y) / 2 * vr.h };
+}
+const dot = (x, y, r) => `M${(x - r).toFixed(1)} ${y.toFixed(1)}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
+/* floating English name tags with leader lines, stacked so they never overlap */
+function drawTags(pg, L, tau, settled, aOut, showModel) {
+  const entries = [];
+  const pageA = (settled ? 1 : clamp01((tau - 0.75) / 0.35)) * aOut;
+  const add = (groups, old) => {
+    for (const g of groups) {
+      const vr = g.where === 'panel' ? L.frame : L.mainRect;
+      if (!vr) continue;
+      const pts = [];
+      for (const it of g.insts) {
+        const m = it.meshes[0];
+        if (!m || m.where !== g.where) continue;
+        const p = projPt(_o.copy(it.center).add(m.obj.position), g.where, L);
+        if (p && p.x > vr.x - 20 && p.x < vr.x + vr.w + 20 && p.y > vr.y - 20 && p.y < vr.y + vr.h + 20) pts.push(p);
+      }
+      if (pts.length) entries.push({ text: g.text, key: g.key, pts, vr, old, print: g.print });
+    }
+  };
+  if (showModel && pg.tagGroups && pageA > 0.01) add(pg.tagGroups, false);
+  if (showModel && showAll && (pg.type === 'step')) add(allGroupsOf(pg), true);
+  let nt = 0;
+  for (const e of entries) {
+    const t = poolEl(tagPool, 'ntag', nt++);
+    const sig = e.text + '|' + e.old + '|' + e.print;
+    if (t._sig !== sig) { t._sig = sig; t.innerHTML = (e.print ? `<span class="pbadge">${PRINTER}3D PRINTED</span>` : '') + esc(e.text); t.classList.toggle('old', e.old); t._w = 0; }
+    if (!t._w || t._s !== S) { t._w = t.offsetWidth; t._h = t.offsetHeight; t._s = S; }
+    e.el = t; e.w = t._w; e.h = t._h;
+    const cx = e.pts.reduce((a, p) => a + p.x, 0) / e.pts.length, cy = e.pts.reduce((a, p) => a + p.y, 0) / e.pts.length;
+    const minX = Math.min(...e.pts.map(p => p.x)), maxX = Math.max(...e.pts.map(p => p.x));
+    const need = e.w + 52 * S, roomR = e.vr.x + e.vr.w - maxX, roomL = minX - e.vr.x;
+    e.side = cx >= e.vr.x + e.vr.w / 2 ? 1 : -1;
+    if (e.side > 0 && roomR < need && roomL > roomR) e.side = -1; else if (e.side < 0 && roomL < need && roomR > roomL) e.side = 1;
+    const ex = e.side > 0 ? Math.max(...e.pts.map(p => p.x)) + 44 * S : Math.min(...e.pts.map(p => p.x)) - 44 * S - e.w;
+    e.x = clamp(ex, e.vr.x + 4, e.vr.x + e.vr.w - e.w - 4);
+    e.y = cy - e.h / 2 - (e.old ? 0 : 30 * S);
+  }
+  const gap = 6 * S, buckets = new Map();
+  for (const e of entries) { const k = (e.vr === L.frame ? 'f' : 'm') + e.side; if (!buckets.has(k)) buckets.set(k, []); buckets.get(k).push(e); }
+  for (const list of buckets.values()) {
+    list.sort((a, b) => a.y - b.y);
+    const vr = list[0].vr, sweep = () => { for (let i = 1; i < list.length; i++) { const p = list[i - 1]; if (list[i].y < p.y + p.h + gap) list[i].y = p.y + p.h + gap; } };
+    sweep();
+    const last = list[list.length - 1], over = last.y + last.h - (vr.y + vr.h - 4);
+    if (over > 0) list.forEach(e => { e.y -= over; });
+    if (list[0].y < vr.y + 4) { list[0].y = vr.y + 4; sweep(); }
+  }
+  let ln = '', dn = '', lo = '', dO = '', hv = '';
+  for (const e of entries) {
+    e.el.style.transform = `translate(${e.x.toFixed(1)}px,${e.y.toFixed(1)}px)`;
+    e.el.style.opacity = String(e.old ? 0.92 * aOut : pageA);
+    const ax = e.side > 0 ? e.x : e.x + e.w, ay = e.y + e.h / 2;
+    let segs = '', dots = '';
+    const lp = e.old && e.pts.length > 4 ? e.pts.slice().sort((a, b) => Math.hypot(a.x - ax, a.y - ay) - Math.hypot(b.x - ax, b.y - ay)).slice(0, 4) : e.pts;
+    for (const p of lp) { segs += `M${ax.toFixed(1)} ${ay.toFixed(1)}L${p.x.toFixed(1)} ${p.y.toFixed(1)}`; dots += dot(p.x, p.y, (e.old ? 2.2 : 3.2) * S + 0.5); }
+    if (e.old) { lo += segs; dO += dots; } else { ln += segs; dn += dots; }
+    if (hoverKey && hoverEl && e.key === hoverKey) {
+      const sr = stage.getBoundingClientRect(), k = sr.width / W || 1, r = hoverEl.getBoundingClientRect();
+      hv += `M${((r.right - sr.left) / k).toFixed(1)} ${((r.top + r.height / 2 - sr.top) / k).toFixed(1)}L${(e.x + e.w / 2).toFixed(1)} ${(e.y + e.h / 2).toFixed(1)}`;
+    }
+  }
+  for (let i = nt; i < tagPool.length; i++) tagPool[i].style.opacity = '0';
+  TL.ln.setAttribute('d', ln); TL.dn.setAttribute('d', dn); TL.lo.setAttribute('d', lo); TL.dO.setAttribute('d', dO); TL.hv.setAttribute('d', hv);
+  TL.ln.style.opacity = TL.dn.style.opacity = String(pageA);
+  TL.ln.setAttribute('stroke-width', 1.8 * S + 0.4); TL.lo.setAttribute('stroke-width', 1.2 * S + 0.3);
+  /* number badges at the start of each screw / nut arrow */
+  let nb = 0;
+  const sp = pg.type === 'step' && showModel ? pg.s.spots : null;
+  const placed = [];
+  if (sp && sp.length > 1 && sp.length <= 16) for (const x of sp) {
+    const u = x.ring.userData;
+    if (u.alpha < 0.01 || !u.where) continue;
+    const inIns = L.insets.length && x._ib && L.insets.some(ins => ins.spots && ins.spots.includes(x));
+    let p = inIns ? { ...x._ib } : projPt(x.tail, u.where, L);
+    if (!p) continue;
+    for (let it = 0; it < 6; it++) { const hit = placed.find(q => Math.hypot(q.x - p.x, q.y - p.y) < 27 * S); if (!hit) break; const dx = p.x - hit.x, dy = p.y - hit.y, dl = Math.hypot(dx, dy) || 1; p.x = hit.x + dx / dl * 28 * S + (dl < 1 ? 28 * S : 0); p.y = hit.y + dy / dl * 28 * S; }
+    placed.push(p);
+    const b = poolEl(badgePool, 'badge', nb++);
+    if (b.textContent !== String(x.n)) b.textContent = String(x.n);
+    b.style.transform = `translate(${(p.x - 14 * S).toFixed(1)}px,${(p.y - 14 * S).toFixed(1)}px)`;
+    b.style.opacity = String(u.alpha * aOut);
+  }
+  for (let i = nb; i < badgePool.length; i++) badgePool[i].style.opacity = '0';
+}
+const TL = {};
+/* small "final look" view: the finished robot, today's parts glowing */
+function drawFinal(R, pg, L, aOut) {
+  const f = L.finalRect;
+  if (!f) { finalEl.style.opacity = '0'; return; }
+  Object.assign(finalEl.style, { left: f.x + 'px', top: f.y + 'px', width: f.w + 'px', height: f.h + 'px', opacity: String(aOut) });
+  const intro = pg.type === 'intro';
+  for (const m of R.meshes) {
+    const glow = intro ? !!m.where : m.isNew;
+    m.obj.visible = true; m.obj.position.set(0, 0, 0); if (m.st.rot) m.obj.quaternion.identity();
+    m.mat.opacity = m.mat.userData.base; if (m.mat.emissive) m.mat.emissiveIntensity = glow ? 0.95 : 0;
+    m.mat.color.copy(m.baseColor); if (!glow) m.mat.color.lerp(FADE_TO, 0.3);
+    m.edgeMat.color.copy(glow ? OUT_COL : EDGE_COL); m.edgeMat.opacity = glow ? 0.95 : 0.3;
+    m.ghost.visible = glow;
+    m.st.alpha = -1; m.st.hl = -1; m.st.fade = -1; m.st.out = null; m.st.rot = true;
+  }
+  for (const a of R.arrows) a.visible = false;
+  for (const r of R.rings) r.visible = false;
+  R.pivot.visible = true; disc.visible = shadowCatcher.visible = false;
+  placeCam(panelCam, L.finalCam, f.w, f.h);
+  const bw = 2;
+  renderer.setViewport(f.x, H - (f.y + f.h), f.w, f.h);
+  renderer.setScissor(f.x + bw, H - (f.y + f.h) + bw, f.w - 2 * bw, f.h - 2 * bw); renderer.setScissorTest(true);
+  renderer.setClearColor(WHITE, 1); scene.background = WHITE;
+  renderer.render(scene, panelCam);
+  renderer.setScissorTest(false); renderer.setViewport(0, 0, W, H);
+  scene.background = BG; renderer.setClearColor(BG, 1);
+}
+
+/* draw a page at local time tau. opts: {from, settled, pageDur, flash, userCam} */
+function drawPage(g, tau, opts) {
+  const pg = PAGES[g], R = pg.R;
+  if (visibleRobot !== R) { RB.forEach(r => { r.pivot.visible = false; }); visibleRobot = R; updateGround(R); }
+  if (curPageDom !== g) {
+    curPageDom = g;
+    for (const p of PAGES) {
+      const on = p === pg;
+      p.panel.classList.toggle('on', on); if (!on) p.panel.style.opacity = '0';
+      if (p.card) { p.card.classList.toggle('on', on); if (!on) p.card.style.opacity = '0'; }
+    }
+    rotEl.innerHTML = pg.rot ? rotateSVG(pg.rot.kind, pg.rot.sign) : '';
+  }
+  const L = pageLayout(g);
+  const dur = opts.pageDur;
+  const aIn = clamp01(tau / PANEL_IN);
+  const aOut = Number.isFinite(dur) ? clamp01((dur - tau) / PANEL_OUT) : 1;
+  pg.panel.style.opacity = String(aIn * aOut);
+  pg.panel.style.transform = `translateY(${((1 - easeOut(aIn)) * 12 * S).toFixed(2)}px)`;
+  let showModel = true;
+  if (pg.type === 'wiring') {
+    const r = L.free, card = pg.card, pad = PHONE ? 0 : 6 * S;
+    Object.assign(card.style, { left: (r.x + pad) + 'px', top: (r.y + pad) + 'px', width: (r.w - 2 * pad) + 'px', height: (r.h - 2 * pad) + 'px' });
+    card.style.opacity = String(clamp01(tau / 0.4) * aOut);
+    pg.wl.forEach((path, i) => {
+      const Ln = pg.wlLen[i], k = clamp01((tau - 0.5 - i * 0.22) / 0.55);
+      path.style.strokeDasharray = `${Ln} ${Ln}`; path.style.strokeDashoffset = String(Ln * (1 - easeOut(k)));
+    });
+    pg.wt.forEach((t, i) => { t.style.opacity = String(clamp01((tau - 0.85 - i * 0.22) / 0.3)); });
+    showModel = tau < WIRE_HIDE;
+  }
+  /* rotate-the-model icon */
+  if (pg.rot) {
+    const host = L.frame || L.mainRect;
+    rotEl.style.left = (host.x + 10 * S) + 'px'; rotEl.style.top = (host.y + 10 * S) + 'px';
+    rotEl.style.opacity = String(clamp01((tau - 0.05) / 0.3) * aOut);
+  } else rotEl.style.opacity = '0';
+  /* 3D PRINTED ribbon */
+  const ribbon = document.getElementById('ribbon');
+  if (pg.printed && pg.type !== 'wiring') {
+    if (!ribbon.innerHTML) ribbon.innerHTML = `${PRINTER}3D PRINTED`;
+    const host = L.frame || L.mainRect, rw = ribbon.offsetWidth;
+    ribbon.style.transform = `translate(${(host.x + host.w - rw - 10 * S).toFixed(1)}px,${(host.y + 8 * S).toFixed(1)}px)`;
+    ribbon.style.opacity = String(clamp01((tau - 0.05) / 0.3) * aOut);
+  } else ribbon.style.opacity = '0';
+  /* sub-assembly frame */
+  if (L.frame) { Object.assign(frameEl.style, { left: L.frame.x + 'px', top: L.frame.y + 'px', width: L.frame.w + 'px', height: L.frame.h + 'px' }); frameEl.style.opacity = String(clamp01(tau / 0.3) * aOut); }
+  else frameEl.style.opacity = '0';
+
+  poseRobot(R, pg, tau, !!opts.settled);
+  /* main camera */
+  let cam = L.main, angle = pageAngle(pg, tau);
+  if (opts.from) { const k = easeInOut(tau / CAM_LERP); cam = lerpParams(opts.from.cam, L.main, k); angle = lerp(opts.from.angle, angle, k); }
+  R.pivot.rotation.y = fin(angle);
+  if (opts.userCam) { camera.setViewOffset(W, H, cam.ox, cam.oy, W, H); camera.aspect = W / H; camera.updateProjectionMatrix(); }
+  else { placeCam(camera, cam, W, H); controls.target.set(cam.tx, cam.ty, cam.tz); }
+  curApplied = { cam, angle, panel: null };
+  const camAbove = camera.position.y > (opts.userCam ? controls.target.y : cam.ty) - 1e-3 || camera.position.y > 0;
+
+  /* pass 1: robot */
+  renderer.setRenderTarget(null);
+  renderer.setScissorTest(false);
+  renderer.setViewport(0, 0, W, H);
+  renderer.setClearColor(BG, 1);
+  scene.background = BG;
+  R.pivot.visible = showModel && !(PHONE && L.frame);
+  disc.visible = shadowCatcher.visible = R.pivot.visible && camAbove;
+  applyPass(R, 'main');
+  setArrowScale(R, camera.position.distanceTo(controls.target) * 2 * Math.tan(THREE.MathUtils.degToRad(FOV / 2)) / H);
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+
+  /* pass 2: sub-assembly frame */
+  if (L.frame && L.panel) {
+    const f = L.frame, prevPg = opts.from && opts.from.panel ? opts.from.panel : null;
+    let pc = L.panel;
+    if (prevPg) pc = lerpParams(prevPg, L.panel, easeInOut(tau / CAM_LERP));
+    curApplied.panel = pc;
+    const bw = 3 * S;
+    const vx = f.x + bw, vy = H - (f.y + f.h) + bw, vw = f.w - 2 * bw, vh = f.h - 2 * bw;
+    placeCam(panelCam, pc, f.w, f.h);
+    R.pivot.visible = true; disc.visible = shadowCatcher.visible = false;
+    applyPass(R, 'panel');
+    setArrowScale(R, mmPerPx(pc, f.h));
+    renderer.setViewport(f.x, H - (f.y + f.h), f.w, f.h);
+    renderer.setScissor(vx, vy, vw, vh); renderer.setScissorTest(true);
+    renderer.setClearColor(WHITE, 1); scene.background = WHITE;
+    renderer.shadowMap.needsUpdate = true;
+    renderer.render(scene, panelCam);
+    renderer.setScissorTest(false); renderer.setViewport(0, 0, W, H);
+    scene.background = BG; renderer.setClearColor(BG, 1);
+  }
+
+  /* pass 3: magnifier insets */
+  const insA = clamp01((tau - 0.25) / 0.35) * aOut;
+  const insets = showModel ? L.insets : [];
+  if (insets.length && insA > 0.001) {
+    R.pivot.visible = true; disc.visible = shadowCatcher.visible = false;
+    applyPass(R, insets[0].pass);
+    scene.background = null;
+    insets.forEach((ins, i) => {
+      const D = Math.max(16, Math.round(ins.r * 2 * renderer.getPixelRatio()));
+      const rt = RTS[i]; if (rt.width !== D) rt.setSize(D, D);
+      const dist = ins.Rmm / Math.tan(THREE.MathUtils.degToRad(INSET_FOV / 2));
+      insetCam.position.copy(ins.P).addScaledVector(ins.v, dist);
+      insetCam.up.set(0, 1, 0); insetCam.lookAt(ins.P);
+      insetCam.near = Math.max(0.3, dist * 0.08); insetCam.far = dist + 900; insetCam.aspect = 1;
+      CLIP.normal.copy(ins.d); CLIP.constant = -ins.qd;
+      for (const a of R.arrows) { const u = a.userData; a.visible = u.where === ins.pass && u.alpha > 0.01 && ins.arrows.has(a); }
+      for (const m of R.meshes) m.ghost.visible = m.ghostOn && m.alpha > 0.5 && ins.meshSet.has(m);
+      for (const r of R.rings) r.visible = r.userData.where === ins.pass && r.userData.alpha > 0.01 && ins.rings.has(r);
+      insetCam.updateProjectionMatrix();
+      setArrowScale(R, 2 * ins.Rmm / (ins.r * 2) * 1.0);
+      renderer.setRenderTarget(rt); renderer.setClearColor(0x000000, 0); renderer.clear();
+      renderer.render(scene, insetCam);
+      if (ins.spots) for (const sp of ins.spots) {
+        _v.copy(sp.tail).project(insetCam);
+        const bx = ins.cx + _v.x * ins.r, by = ins.cy - _v.y * ins.r;
+        sp._ib = Math.hypot(bx - ins.cx, by - ins.cy) < ins.r * 0.86 && _v.z < 1 ? { x: bx, y: by } : null;
+      }
+    });
+    renderer.setRenderTarget(null); renderer.setClearColor(BG, 1); scene.background = BG;
+    CLIP.normal.set(0, 1, 0); CLIP.constant = 1e7;
+    /* composite circles + rings + leader lines */
+    const pxScale = insA;
+    insets.forEach((ins, i) => {
+      const dsc = insetDiscs[i], rr = ins.r * (0.85 + 0.15 * easeOut(pxScale));
+      dsc.bg.visible = dsc.fg.visible = true;
+      dsc.bg.position.set(ins.cx, H - ins.cy, 0); dsc.fg.position.copy(dsc.bg.position);
+      dsc.bg.scale.setScalar(rr); dsc.fg.scale.setScalar(rr);
+      dsc.bg.material.opacity = pxScale; dsc.fg.material.opacity = pxScale;
+      dsc.fg.material.color.setScalar(pxScale);
+      /* leader */
+      const pc = ins.pass === 'panel' ? panelCam : camera, vr = ins.pass === 'panel' ? L.frame : { x: 0, y: 0, w: W, h: H };
+      _v.copy(ins.P).project(pc);
+      const mx = vr.x + (_v.x + 1) / 2 * vr.w, my = vr.y + (1 - _v.y) / 2 * vr.h;
+      const dP = pc.position.distanceTo(ins.P);
+      const pxmm = vr.h / (2 * dP * Math.tan(THREE.MathUtils.degToRad(FOV / 2)));
+      const mr = Math.max(9 * S, ins.Rmm * pxmm);
+      const dx = mx - ins.cx, dy = my - ins.cy, dl = Math.hypot(dx, dy) || 1;
+      const [ring, ring2] = OV.rings[i];
+      ring.style.display = ring2.style.display = OV.leads[i].style.display = OV.marks[i].style.display = '';
+      ring.setAttribute('cx', ins.cx); ring.setAttribute('cy', ins.cy); ring.setAttribute('r', rr); ring.setAttribute('stroke-width', 6 * S + 1);
+      ring2.setAttribute('cx', ins.cx); ring2.setAttribute('cy', ins.cy); ring2.setAttribute('r', rr - 3.5 * S); ring2.setAttribute('stroke-width', 2 * S);
+      OV.marks[i].setAttribute('cx', mx); OV.marks[i].setAttribute('cy', my); OV.marks[i].setAttribute('r', mr); OV.marks[i].setAttribute('stroke-width', 3 * S + 0.5);
+      const show = dl > rr + mr + 4;
+      OV.leads[i].style.display = show ? '' : 'none';
+      OV.leads[i].setAttribute('x1', ins.cx + dx / dl * rr); OV.leads[i].setAttribute('y1', ins.cy + dy / dl * rr);
+      OV.leads[i].setAttribute('x2', mx - dx / dl * mr); OV.leads[i].setAttribute('y2', my - dy / dl * mr);
+      OV.leads[i].setAttribute('stroke-width', 3 * S + 0.5);
+      [ring, ring2, OV.leads[i], OV.marks[i]].forEach(e => { e.style.opacity = String(pxScale); });
+    });
+    hideOverlay(insets.length);
+    renderer.autoClear = false; renderer.clearDepth();
+    renderer.render(oScene, oCam);
+    renderer.autoClear = true;
+  } else hideOverlay(0);
+  drawTags(pg, L, tau, !!opts.settled, aOut, showModel);
+  if (showModel && L.finalRect) drawFinal(R, pg, L, aOut); else finalEl.style.opacity = '0';
+  R.pivot.visible = showModel;
+  flashEl.style.opacity = String(opts.flash || 0);
+  /* rotating identity-card thumbnails */
+  if (pg.spins && pg.spins.length) {
+    const fr = Math.floor(tau / SPIN_T * SPIN_N) % SPIN_N;
+    if (pg.spinF !== fr) { pg.spinF = fr; const pos = `${(fr / (SPIN_N - 1) * 100).toFixed(3)}% 0`; pg.spins.forEach(e => { e.style.backgroundPosition = pos; }); }
+  }
+}
+
+/* ---------- video timeline ---------- */
+let STARTS = [], DURATION = 0;
+function buildTimeline() { STARTS = []; let t = 0; PAGES.forEach(p => { STARTS.push(t); t += pageDur(p); }); DURATION = t; }
+function renderTimeline(t) {
+  t = Math.max(0, Math.min(fin(t), DURATION - 1e-4));
+  let g = 0;
+  while (g < PAGES.length - 1 && t >= STARTS[g + 1]) g++;
+  const tau = t - STARTS[g], pg = PAGES[g], dur = pageDur(pg);
+  let from = null;
+  if (g > 0 && PAGES[g - 1].R === pg.R) { const p = PAGES[g - 1], Lp = pageLayout(g - 1); from = { cam: Lp.main, angle: pageAngle(p, pageDur(p)), panel: pg.s && p.s && pg.s.subassembly && pg.s.subassembly === p.s.subassembly ? Lp.panel : null }; }
+  let flash = 0;
+  const first = g === 0 || PAGES[g - 1].R !== pg.R, last = g === PAGES.length - 1 || PAGES[g + 1].R !== pg.R;
+  if (first) flash = Math.max(flash, 1 - clamp01(tau / FLASH));
+  if (last && g !== PAGES.length - 1) flash = Math.max(flash, clamp01((tau - (dur - FLASH)) / FLASH));
+  drawPage(g, tau, { from, pageDur: dur, flash });
+}
+
+/* ---------- interactive ---------- */
+let controls;
+let cur = 0, pageStart = 0, from = null, arrivedBack = false, userCam = false, seekDriven = false;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const now = () => performance.now() / 1000;
+function hashFor(g) { const pg = PAGES[g]; return '#' + pg.R.def.letter + (pg.type === 'cover' ? '0' : pg.type === 'done' ? 'done' : pg.s.step + '.' + (pg.type === 'intro' ? 0 : pg.s.k)); }
+function pageFromHash(h) {
+  const m = /^#?([AB])(?:(\d+)(?:\.(\d+))?|(done|cover))?$/i.exec(decodeURIComponent(h || ''));
+  if (!m) return 0;
+  const R = RB.find(r => r.def.letter === m[1].toUpperCase());
+  if (m[4] && m[4].toLowerCase() === 'done') return PAGES.findIndex(p => p.R === R && p.type === 'done');
+  const st = m[2] ? parseInt(m[2], 10) : 0, k = m[3] ? parseInt(m[3], 10) : 1;
+  if (!st) return PAGES.findIndex(p => p.R === R && p.type === 'cover');
+  if (m[3] === '0') { const ii = PAGES.findIndex(p => p.R === R && p.type === 'intro' && p.s.step === st); if (ii >= 0) return ii; }
+  let idx = PAGES.findIndex(p => p.R === R && p.s && p.type !== 'intro' && p.s.step === st && p.s.k === k);
+  if (idx < 0) idx = PAGES.findIndex(p => p.R === R && p.s && p.s.step === st);
+  return idx < 0 ? 0 : idx;
+}
+function go(g, opts = {}) {
+  g = Math.max(0, Math.min(PAGES.length - 1, g));
+  seekDriven = false;
+  const old = cur, oldPg = PAGES[old], pg = PAGES[g];
+  const sameRobot = oldPg.R === pg.R;
+  from = sameRobot && curApplied && g !== old ? { cam: curApplied.cam, angle: curApplied.angle, panel: curApplied.panel && pg.s && oldPg.s && pg.s.subassembly && pg.s.subassembly === oldPg.s.subassembly ? curApplied.panel : null } : null;
+  arrivedBack = sameRobot && g < old;
+  if (!sameRobot || g !== old) userCam = false;
+  cur = g;
+  pageStart = reduceMotion ? now() - 60 : now();
+  if (!opts.noHash) history.replaceState(null, '', hashFor(g));
+  updateChrome();
+}
+const STRIP_ICON = { cover: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6" stroke-linecap="round"/></svg>`, done: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>` };
+function updateChrome() {
+  const pg = PAGES[cur];
+  document.getElementById('back').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === PAGES.length - 1;
+  document.querySelectorAll('#switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.r === pg.R.def.key)));
+  const strip = document.getElementById('strip');
+  if (strip.dataset.r !== pg.R.def.key) {
+    strip.dataset.r = pg.R.def.key; strip.innerHTML = '';
+    const add = (label, html, gi, key) => { const b = el('button', '', html); b.dataset.g = gi; b.dataset.k = key; b.setAttribute('aria-label', label); b.addEventListener('click', () => go(gi)); strip.appendChild(b); };
+    const R = pg.R;
+    add('Cover', STRIP_ICON.cover, PAGES.findIndex(p => p.R === R && p.type === 'cover'), 'c');
+    const seen = new Set();
+    PAGES.forEach((p, i) => { if (p.R === R && p.s && !seen.has(p.s.step)) { seen.add(p.s.step); add(`Step ${p.s.step}`, String(p.s.step), i, 's' + p.s.step); } });
+    add('Finished robot and parts list', STRIP_ICON.done, PAGES.findIndex(p => p.R === R && p.type === 'done'), 'd');
+  }
+  const key = pg.type === 'cover' ? 'c' : pg.type === 'done' ? 'd' : 's' + pg.s.step;
+  strip.querySelectorAll('button').forEach(b => {
+    if (b.dataset.k === key) { b.setAttribute('aria-current', 'step'); b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } else b.removeAttribute('aria-current');
+  });
+  document.getElementById('robotlabel').innerHTML = `<b>${pg.R.def.letter}</b>${esc(pg.R.name)}`;
+}
+function renderInteractive() {
+  const tau = now() - pageStart;
+  if (userCam) controls.update();
+  drawPage(cur, tau, { from, settled: arrivedBack, pageDur: Infinity, userCam });
+  if (from && tau > CAM_LERP) from = null;
+}
+function setNotes(on) {
+  stage.classList.toggle('notes', on);
+  document.getElementById('aa').setAttribute('aria-pressed', String(on));
+  try { localStorage.setItem('manual-notes', on ? '1' : '0'); } catch (e) { /* storage optional */ }
+  camCache.clear();
+}
+
+/* ---------- boot ---------- */
+async function boot() {
+  if (VIDEO) document.body.classList.add('video');
+  controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = false; controls.enablePan = false;
+  controls.minDistance = 40; controls.maxDistance = 4000;
+  controls.addEventListener('start', () => { userCam = true; });
+  controls.enabled = !VIDEO;
+  initOverlay();
+
+  RB = [];
+  for (const def of ROBOTS) RB.push(await buildRobot(def));
+  scene.updateMatrixWorld(true);
+  await buildThumbs();
+  buildPages();
+  for (const pg of PAGES) {
+    panelsEl.appendChild(pg.panel); if (pg.card) panelsEl.appendChild(pg.card);
+    pg.spins = [...pg.panel.querySelectorAll('.spin:not(.still)')];
+    pg.panel.querySelectorAll('[data-tag]').forEach(t => {
+      t.addEventListener('pointerenter', () => { hoverKey = t.dataset.tag; hoverEl = t; });
+      t.addEventListener('pointerleave', () => { if (hoverEl === t) { hoverKey = null; hoverEl = null; } });
+    });
+  }
+  ['ln', 'dn', 'lo', 'dO', 'hv'].forEach(k => { TL[k] = document.getElementById({ ln: 'tln', dn: 'tdn', lo: 'tlo', dO: 'tdo', hv: 'thv' }[k]); });
+  for (const pg of PAGES) if (pg.card) {
+    pg.wl = [...pg.card.querySelectorAll('.wl')];
+    pg.wlLen = pg.wl.map(p => { try { return Math.ceil(p.getTotalLength()) + 2; } catch (e) { return 1000; } });
+    pg.wt = [...pg.card.querySelectorAll('.wt')];
+  }
+  buildTimeline();
+
+  const sw = document.getElementById('switch');
+  RB.forEach(R => {
+    const b = el('button', '', `${R.def.letter}<span>${esc(R.name)}</span>`);
+    b.dataset.r = R.def.key;
+    b.addEventListener('click', () => go(PAGES.findIndex(p => p.R === R)));
+    sw.appendChild(b);
+  });
+  document.getElementById('back').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+  document.getElementById('reset').addEventListener('click', () => { userCam = false; from = null; seekDriven = false; });
+  document.getElementById('replay').addEventListener('click', () => { pageStart = now(); arrivedBack = false; userCam = false; seekDriven = false; });
+  let notes = QS.get('notes') === '1';
+  if (!VIDEO && !QS.has('notes')) { try { notes = localStorage.getItem('manual-notes') === '1'; } catch (e) { notes = false; } }
+  setNotes(notes && !VIDEO);
+  document.getElementById('aa').addEventListener('click', () => setNotes(!stage.classList.contains('notes')));
+  const setAll = on => { showAll = on; document.getElementById('names').setAttribute('aria-pressed', String(on)); };
+  document.getElementById('names').addEventListener('click', () => setAll(!showAll));
+  addEventListener('keydown', e => {
+    if (VIDEO || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); setAll(!showAll); }
+  });
+  addEventListener('hashchange', () => { if (!VIDEO) { const g = pageFromHash(location.hash); if (g !== cur) go(g, { noHash: true }); } });
+  addEventListener('resize', () => { layout(); });
+
+  layout();
+  try { await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 3000))]); } catch (e) { /* fonts optional */ }
+  await Promise.all([...new Set([...document.querySelectorAll('#panels .spin')].map(e => e.style.backgroundImage.slice(5, -2)))].map(u => { const im = new Image(); im.src = u; return im.decode().catch(() => {}); }));
+  camCache.clear();
+
+  window.__duration = DURATION;
+  window.__seek = t => { seekDriven = true; renderTimeline(Number(t)); return true; };
+  window.__go = g => go(g);
+  if (QS.get('debug') === '1') window.__dbg = { THREE, renderer, scene, keyLight, CLIP, RB, PAGES, ghostMat, setAll: v => { showAll = v; } };
+  window.__pages = () => PAGES.map((p, i) => ({ i, hash: hashFor(i), type: p.type, start: STARTS[i], dur: pageDur(p) }));
+
+  document.getElementById('loading').remove();
+  if (!VIDEO) { cur = pageFromHash(location.hash); go(cur, { noHash: !location.hash }); }
+  const playStart = now();
+  const loop = () => {
+    requestAnimationFrame(loop);
+    if (seekDriven) return;
+    if (VIDEO) renderTimeline((now() - playStart) % DURATION);
+    else renderInteractive();
+  };
+  if (VIDEO) renderTimeline(0); else renderInteractive();
+  window.__ready = true;
+  requestAnimationFrame(loop);
+}
+boot().catch(err => {
+  const l = document.getElementById('loading');
+  if (l) { l.textContent = 'Could not load the build manual: ' + (err && err.message ? err.message : err); l.classList.add('err'); }
+  console.error(err);
+});
+</script>
+</body>
+</html>
