@@ -1,0 +1,1274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How our robots think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=block" rel="stylesheet">
+<style>
+:root{--bg:#04070d;--hud:rgba(11,17,29,.92);--fg:#e9eef5;--mute:#97a3b6;--acc:#3fd5e6}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+#cv{position:absolute;display:block}
+#hud{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;
+  padding:8px 14px;background:var(--hud);border:1px solid #27344b;border-radius:10px;color:var(--fg);
+  font:13px/1 "JetBrains Mono",Consolas,monospace;opacity:0;transition:opacity .35s ease;width:min(720px,calc(100vw - 32px));box-sizing:border-box}
+#hud.on{opacity:1}
+#hud button{background:none;border:1px solid #33425c;color:var(--fg);border-radius:6px;width:34px;height:28px;cursor:pointer;font:inherit}
+#hud input{flex:1;accent-color:var(--acc);min-width:0}
+#hud span{color:var(--mute);white-space:nowrap}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"><button id="pp" aria-label="Play or pause">&#9654;</button><input id="scrub" type="range" min="0" max="150" step="0.01" value="0" aria-label="Timeline"><span id="tc">0:00 / 2:30</span></div>
+<script>
+'use strict';
+const SRC_A = "/******************************************************************************\n * Robot A - \"Duck Runner\"                                   2026 Fall Game\n * KIPR Wombat, 4 gear motors on mecanum wheels, 3 servo flaps, tophats.\n *\n * Implements the Robot A column of STRATEGY.md section 4.\n * Every number marked CALIBRATE was budgeted, not measured: tune it on the\n * real robot before trusting the timeline.\n *\n * Motor ports follow last season's wiring (Botball robotics 2025_26.pdf):\n *   FR 0, FL 1, BR 2, BL 3.  Encoder: 1870 ticks per wheel revolution.\n *****************************************************************************/\n#include <kipr/wombat.h>\n#include <stdio.h>\n#include <stdlib.h>    /* abs, labs */\n#include <math.h>\n\n/* ---------------------------------------------------------------- ports */\n#define FR 0\n#define FL 1\n#define BR 2\n#define BL 3\n#define SERVO_GATE_C   0      /* intake flap, front            (regular servo) */\n#define SERVO_GATE_B   1      /* pin flap, one duck from rear  (micro servo)   */\n#define SERVO_GATE_A   2      /* exit flap, rear               (regular servo) */\n#define TOPHAT_L       0      /* analog: left tape sensor at the lane mouth    */\n#define TOPHAT_R       1      /* analog: right tape sensor                     */\n#define ET_FRONT       2      /* analog: ET rangefinder looking forward        */\n#define LIGHT_START    3      /* analog: starting-light sensor                 */\n#define TOUCH_LANE     0      /* digital: pressed when the 5th duck is in      */\n\n/* ---------------------------------------------------------------- calibration */\n#define TICKS_PER_REV   1870.0\n#define WHEEL_DIAM_IN   2.36                 /* CALIBRATE: 60 mm mecanum; last year's wheels were 3.0 */\n#define TICKS_PER_INCH  (TICKS_PER_REV / (M_PI * WHEEL_DIAM_IN))\n#define STRAFE_FACTOR   1.15                 /* CALIBRATE: mecanum wheels slip sideways */\n#define TAPE_THRESHOLD  2700                 /* CALIBRATE: analog (12-bit) < this = black (last year 2700) */\n#define LIGHT_ON        770                  /* CALIBRATE: analog < this = light on (last year 770) */\n#define SPEED_FAST      80\n#define SPEED_LINE      45                   /* line-following speed while swallowing ducks */\n#define SPEED_SLOW      30\n#define MATCH_END_S     118                  /* hard stop; rules DQ a robot still moving at 120 */\n\n/* servo positions, CALIBRATE on the built flaps */\n#define GATE_OPEN    1900\n#define GATE_CLOSED  1000\n\n/* ---------------------------------------------------------------- mecanum base */\n/* vx: + forward (east at start), vy: + left (north at start), w: + counter-clockwise */\nstatic void mecanum(int vx, int vy, int w) {\n    /* Each wheel is a sum of up to three terms, so a mix can exceed motor()'s -100..100\n       range. Scale all four together rather than letting motor() clip them one by one:\n       clipping per wheel would silently bend the commanded direction. */\n    int m[4] = { vx - vy - w, vx + vy + w, vx + vy - w, vx - vy + w };   /* FL, FR, BL, BR */\n    int peak = 0;\n    for (int i = 0; i < 4; i++)\n        if (abs(m[i]) > peak) peak = abs(m[i]);\n    if (peak > 100)\n        for (int i = 0; i < 4; i++) m[i] = m[i] * 100 / peak;\n    motor(FL, m[0]);\n    motor(FR, m[1]);\n    motor(BL, m[2]);\n    motor(BR, m[3]);\n}\nstatic void stop_all(void) { ao(); }\n\n/* Drive a straight distance in inches; dx forward, dy left. Pass exactly one non-zero:\n   direction is quantised to the sign of dx/dy and the tick target is |dx|+|dy|, so a\n   diagonal call drives 45 deg for a Manhattan distance and misses the waypoint. Split\n   diagonals into two calls at the call site. */\nstatic void move_in(double dx, double dy, int speed) {\n    double dist = fabs(dx) + fabs(dy);\n    double factor = (dy != 0) ? STRAFE_FACTOR : 1.0;\n    long target = (long)(dist * TICKS_PER_INCH * factor);\n    int vx = (dx > 0) - (dx < 0), vy = (dy > 0) - (dy < 0);\n    cmpc(FL);\n    mecanum(vx * speed, vy * speed, 0);\n    while (labs(gmpc(FL)) < target && seconds() < MATCH_END_S) msleep(5);\n    stop_all();\n    if (labs(gmpc(FL)) < target)   /* ran out of match clock: say so, or the rest of the run\n                                      silently no-ops and the log shows nothing wrong */\n        printf(\"move_in(%.1f, %.1f) stopped at %ld/%ld ticks, t=%.1f s\\n\",\n               dx, dy, labs(gmpc(FL)), target, seconds());\n    msleep(150);\n}\n\n/* keep the lane mouth on the centre tape while creeping east, until the lane is full */\nstatic void follow_tape_east(double inches, int speed) {\n    long target = (long)(inches * TICKS_PER_INCH);\n    cmpc(FL);\n    /* the touch switch at the rear of the lane is the real stop condition; the distance\n       is only the backstop for a switch that never trips */\n    while (labs(gmpc(FL)) < target && !digital(TOUCH_LANE) && seconds() < MATCH_END_S) {\n        int l = analog(TOPHAT_L) < TAPE_THRESHOLD;\n        int r = analog(TOPHAT_R) < TAPE_THRESHOLD;\n        if (l && !r)      mecanum(speed, +20, 0);   /* drifted right: nudge left  */\n        else if (r && !l) mecanum(speed, -20, 0);   /* drifted left: nudge right  */\n        else              mecanum(speed, 0, 0);\n        msleep(10);\n    }\n    stop_all();\n    printf(\"follow_tape_east: %ld/%ld ticks, lane full=%d, t=%.1f s\\n\",\n           labs(gmpc(FL)), target, digital(TOUCH_LANE), seconds());\n}\n\n/* ---------------------------------------------------------------- escapement */\nstatic void gates_init(void) {\n    set_servo_position(SERVO_GATE_C, GATE_OPEN);     /* intake open while collecting */\n    set_servo_position(SERVO_GATE_B, GATE_OPEN);\n    set_servo_position(SERVO_GATE_A, GATE_CLOSED);   /* exit shut */\n}\n\n/* release exactly one duck: pin holds duck #2, exit opens, robot creeps forward, exit shuts */\nstatic void drop_one_duck(void) {\n    set_servo_position(SERVO_GATE_B, GATE_CLOSED);   /* pin the second duck from the rear */\n    msleep(300);\n    set_servo_position(SERVO_GATE_A, GATE_OPEN);\n    msleep(300);\n    move_in(2.5, 0, SPEED_SLOW);                     /* lane slides over the rear duck, it stays */\n    set_servo_position(SERVO_GATE_A, GATE_CLOSED);\n    msleep(250);\n    set_servo_position(SERVO_GATE_B, GATE_OPEN);     /* remaining ducks settle to the rear */\n    msleep(400);\n}\n\n/* ---------------------------------------------------------------- main */\nint main(void) {\n    enable_servos();\n    gates_init();\n    printf(\"Robot A ready. Waiting for the light.\\n\");\n    while (analog(LIGHT_START) > LIGHT_ON) msleep(10);   /* wait_for_light(LIGHT_START) also works */\n    shut_down_in(119.0);                                  /* safety: everything off before 120 s */\n\n    /* 0-16 s: wait for Robot B to clear the upper cup (IR handshake could replace this) */\n    msleep(16000);\n\n    /* 16-24 s: north out of the small box, then onto the centre tape at x = 44 */\n    move_in(0, 13.9, SPEED_FAST);            /* (54.3, 5.6) -> (54.3, 19.5) */\n    /* two axis-aligned legs, not one diagonal: move_in() quantises direction to the sign of\n       dx/dy, so a diagonal drives at a fixed 45 deg for a Manhattan tick target and lands\n       somewhere else entirely. West first keeps us south of the tape, clear of the ducks. */\n    move_in(-10.3, 0, SPEED_FAST);           /* -> (44, 19.5) */\n    move_in(0, 6.1, SPEED_FAST);             /* -> (44, 25.6), at the lane mouth */\n\n    /* 24-41 s: swallow the five ducks, line-following east */\n    follow_tape_east(36.0, SPEED_LINE);      /* until the touch switch, or 36 in */\n    set_servo_position(SERVO_GATE_C, GATE_CLOSED);\n\n    /* zone 2 (TR): strafe north-east, drop, creep forward */\n    move_in(0, 8.9, SPEED_FAST);  move_in(-0.5, 0, SPEED_SLOW);   /* -> (79.5, 34.5) */\n    drop_one_duck();                                               /* duck at ~(72, 34.5) */\n\n    /* zone 4 (MR) */\n    move_in(0, -11.0, SPEED_FAST);                                 /* -> (81, 23.5) */\n    drop_one_duck();                                               /* duck at ~(73.6, 23.5) */\n\n    /* west along y = 17, hold until B has finished the cups (timed; IR message is better) */\n    move_in(0, -6.5, SPEED_FAST);\n    move_in(-25.6, 0, SPEED_FAST);                                 /* -> (56, 17) */\n    while (seconds() < 74) msleep(50);\n\n    /* zone 3 (ML) */\n    move_in(0, 2.5, SPEED_FAST);                                   /* -> (56, 19.5) */\n    move_in(-22.2, 0, SPEED_FAST);                                 /* -> (33.8, 19.5) */\n    drop_one_duck();                                               /* duck at ~(26.5, 19.5) */\n\n    /* up the centre column to y = 34.6, west, zone 1 (TL) */\n    move_in(10.2, 0, SPEED_FAST);                                  /* -> (48, 19.5) */\n    move_in(0, 15.1, SPEED_FAST);                                  /* -> (48, 34.6) */\n    move_in(-14.2, 0, SPEED_FAST);                                 /* -> (33.8, 34.6) */\n    drop_one_duck();                                               /* duck at ~(26.5, 34.6) */\n\n    /* back down the centre column, west along the bottom, zone 5 (BL) */\n    move_in(12.0, 0, SPEED_FAST);                                  /* -> (48, 34.6) */\n    move_in(0, -29.0, SPEED_FAST);                                 /* -> (48, 5.6) */\n    move_in(-14.0, 0, SPEED_FAST);                                 /* -> (34, 5.6) */\n    drop_one_duck();                                               /* duck at ~(26.7, 5.6) */\n\n    stop_all();\n    disable_servos();\n    printf(\"Robot A done at %.1f s\\n\", seconds());\n    return 0;\n}\n";
+const SRC_B = "/******************************************************************************\n * Robot B - \"Point Scorer\"                                  2026 Fall Game\n * KIPR Wombat, 2 gear motors (differential), servo arm + micro-servo claw,\n * cup-hook servo, camera, 2 tophats, ET, lever switch on the plow.\n *\n * Implements the Robot B column of STRATEGY.md section 4:\n *   upper cup -> wait -> lower cup + red pom -> 5 pom stacks -> pickleball 1\n *   -> red pom on the platform.\n * Numbers marked CALIBRATE were budgeted, not measured.\n *\n * Servo values are last season's measured ones (Botball robotics 2025_26.pdf)\n * for the same arm/claw servos; re-check after rebuilding.\n *****************************************************************************/\n#include <kipr/wombat.h>\n#include <stdio.h>\n#include <stdlib.h>    /* labs */\n#include <math.h>\n\n/* ---------------------------------------------------------------- ports */\n#define LEFT   0\n#define RIGHT  2\n#define SERVO_ARM    1            /* shoulder (regular servo)      */\n#define SERVO_CLAW   2            /* claw (micro servo)            */\n#define SERVO_HOOK   3            /* cup hook on the right side    */\n#define TOPHAT_L     0\n#define TOPHAT_R     1\n#define ET_FRONT     2\n#define LIGHT_START  3\n#define LEVER_PLOW   0            /* digital: plow touched something */\n#define CAM_RED      0            /* camera channel 0 = find_red.conf, as last year */\n\n/* ---------------------------------------------------------------- calibration */\n#define TICKS_PER_REV   1870.0\n#define WHEEL_DIAM_IN   2.75               /* CALIBRATE: Solarbotics wheel; last year's were 3.0 */\n#define TICKS_PER_INCH  (TICKS_PER_REV / (M_PI * WHEEL_DIAM_IN))\n#define TICKS_PER_DEG   13.0               /* CALIBRATE: last year's pivot constant (angle * 13) */\n#define TAPE_THRESHOLD  2700               /* CALIBRATE: analog (12-bit) < this = black */\n#define LIGHT_ON        770\n#define SPEED_FAST      80\n#define SPEED_PUSH      45\n#define MATCH_END_S     118\n\n#define ARM_UP        860                  /* measured last season */\n#define ARM_DOWN     1750\n#define ARM_PLATFORM  600                  /* CALIBRATE: claw above the 5.7 in platform edge */\n#define CLAW_OPEN    2000\n#define CLAW_CLOSED  1200\n#define HOOK_UP      1000                  /* CALIBRATE */\n#define HOOK_DOWN    1900\n\n/* ---------------------------------------------------------------- base */\nstatic void drive(int l, int r) { motor(LEFT, l); motor(RIGHT, r); }\nstatic void stop_all(void) { ao(); }\n\nstatic void forward_in(double inches, int speed) {\n    long target = (long)(fabs(inches) * TICKS_PER_INCH);\n    int s = inches < 0 ? -speed : speed;\n    cmpc(LEFT);\n    drive(s, s);\n    while (labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);\n    stop_all();\n    if (labs(gmpc(LEFT)) < target)   /* ran out of match clock: say so, or every later move\n                                        silently no-ops and the log shows nothing wrong */\n        printf(\"forward_in(%.1f) stopped at %ld/%ld ticks, t=%.1f s\\n\",\n               inches, labs(gmpc(LEFT)), target, seconds());\n    msleep(150);\n}\n/* positive = counter-clockwise (turn left), in place */\nstatic void turn_deg(double deg, int speed) {\n    long target = (long)(fabs(deg) * TICKS_PER_DEG);\n    cmpc(LEFT);\n    if (deg > 0) drive(-speed, speed); else drive(speed, -speed);\n    while (labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);\n    stop_all();\n    if (labs(gmpc(LEFT)) < target)\n        printf(\"turn_deg(%.1f) stopped at %ld/%ld ticks, t=%.1f s\\n\",\n               deg, labs(gmpc(LEFT)), target, seconds());\n    msleep(200);\n}\n/* gentle arc: inner wheel at half speed. sign of deg = direction as in turn_deg */\nstatic void arc_in(double inches, double deg, int speed) {\n    long target = (long)(fabs(inches) * TICKS_PER_INCH);\n    cmpc(LEFT); cmpc(RIGHT);\n    if (deg > 0) drive(speed / 2, speed); else drive(speed, speed / 2);\n    while ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target && seconds() < MATCH_END_S) msleep(5);\n    stop_all();\n    if ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target)\n        printf(\"arc_in(%.1f, %.1f) stopped short, t=%.1f s\\n\", inches, deg, seconds());\n    msleep(150);                 /* settle, as forward_in and turn_deg do */\n}\n/* drive forward until a tophat sees tape, then stop. max_in bounds the blind drive so a\n   missed line does not push the robot into a wall for the rest of the match. */\nstatic void forward_to_tape(int speed, double max_in) {\n    long target = (long)(fabs(max_in) * TICKS_PER_INCH);\n    cmpc(LEFT);\n    drive(speed, speed);\n    while (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD\n           && labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);\n    stop_all();\n    if (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD)\n        printf(\"forward_to_tape: no tape within %.1f in, t=%.1f s\\n\", max_in, seconds());\n    msleep(150);\n}\n\n/* ---------------------------------------------------------------- tools */\nstatic void flip_cup_with_right_wing(double push_in) {\n    /* the cup is upside-down; the hook catches the rim, the wing rolls it upright\n       while the robot keeps pushing. CALIBRATE the hook height on the real cup. */\n    set_servo_position(SERVO_HOOK, HOOK_DOWN);\n    msleep(300);\n    forward_in(push_in, SPEED_PUSH);\n    set_servo_position(SERVO_HOOK, HOOK_UP);\n}\n\n/* Find the red pom with the camera, centre on it, grab it. Returns 1 on success.\n   Everything after this call is dead reckoning from the pre-scan pose, so the scan\n   rotation and the approach are both undone before returning, on success and failure\n   alike. Without that, a pom that is a few degrees off frame leaves the robot facing\n   an arbitrary direction for the whole rest of the match. */\nstatic int grab_red_pom(void) {\n    set_servo_position(SERVO_CLAW, CLAW_OPEN);\n    set_servo_position(SERVO_ARM, ARM_DOWN);\n    msleep(400);\n    camera_open();\n    const int CAM_TRIES = 40;                                /* x 100 ms = ~4 s budget */\n    int found = 0;\n    cmpc(LEFT);                                              /* net scan rotation, in ticks */\n    for (int tries = 0; tries < CAM_TRIES && !found; tries++) {\n        camera_update();\n        if (get_object_count(CAM_RED) > 0) {\n            int x = get_object_center_x(CAM_RED, 0);        /* 0..159 */\n            if (x < 70)       drive(-25, 25);\n            else if (x > 90)  drive(25, -25);\n            else { found = 1; stop_all(); }\n        } else {\n            drive(-25, 25);                                  /* scan */\n        }\n        msleep(100);\n    }\n    camera_close();\n    stop_all();\n    long spun = gmpc(LEFT);                                  /* signed: which way we turned */\n    if (found) {\n        forward_in(2.0, 30);\n        set_servo_position(SERVO_CLAW, CLAW_CLOSED);\n        msleep(400);\n        set_servo_position(SERVO_ARM, ARM_UP);\n        msleep(400);\n        forward_in(-2.0, 30);                                /* undo the approach */\n    } else {\n        printf(\"red pom not seen in %d camera frames\\n\", CAM_TRIES);\n        set_servo_position(SERVO_ARM, ARM_UP);\n    }\n    /* unwind the scan rotation back to the heading the caller assumes */\n    if (labs(spun) > 20) {\n        cmpc(LEFT);\n        if (spun > 0) drive(-25, 25); else drive(25, -25);   /* spun>0 = turned right: turn back left */\n        while (labs(gmpc(LEFT)) < labs(spun) && seconds() < MATCH_END_S) msleep(5);\n        stop_all();\n        msleep(200);\n    }\n    return found;\n}\n\n/* push one pom stack north off the tape: start 3.5 in south of the stack line */\nstatic void push_stack_north(void) {\n    forward_in(3.5, SPEED_PUSH);       /* stack ends ~2 in north of the tape edge */\n    forward_in(-3.5, SPEED_FAST);\n}\n\n/* ---------------------------------------------------------------- main */\nint main(void) {\n    enable_servos();\n    set_servo_position(SERVO_ARM, ARM_UP);\n    set_servo_position(SERVO_CLAW, CLAW_OPEN);\n    set_servo_position(SERVO_HOOK, HOOK_UP);\n    printf(\"Robot B ready. Waiting for the light.\\n\");\n    while (analog(LIGHT_START) > LIGHT_ON) msleep(10);\n    shut_down_in(119.0);\n\n    /* 0-16 s: out of zone 5 heading NE, left plow wing takes the upper cup north-east into zone 2 */\n    arc_in(5.0, +45, SPEED_FAST);               /* (33, 5.6) -> facing NE */\n    forward_in(17.5, SPEED_FAST);               /* -> ~(48.5, 21): wing meets the cup */\n    forward_in(12.0, SPEED_PUSH);               /* cup rolls upright and slides to ~(59.5, 34) */\n    arc_in(9.0, -45, SPEED_FAST);               /* -> ~(64, 32) facing east */\n\n    /* 17-32 s: loop down the east side; face west by the lower cup at (68, 16) */\n    arc_in(12.0, -60, SPEED_FAST);\n    forward_in(10.0, SPEED_FAST);\n    arc_in(8.0, -75, SPEED_FAST);               /* now heading west at ~(68, 16) */\n\n    /* 32-50 s: wait for A to finish the duck run and the first two drops */\n    while (seconds() < 50) msleep(50);\n\n    /* 50-58 s: flip the lower cup with the right wing + hook, push it west into zone 5 */\n    forward_in(11.4, SPEED_FAST);               /* -> (56.6, 16): wing meets the cup rim */\n    flip_cup_with_right_wing(28.0);             /* cup ends ~(18.5, 7.3); hidden poms spill */\n\n    /* 58-63 s: the red pom */\n    forward_in(-1.0, SPEED_FAST);\n    int have_red = grab_red_pom();\n    if (!have_red) printf(\"red pom not found, skipping the platform\\n\");\n\n    /* 63-86 s: five pom stacks, east to west, each pushed north into zone 1 */\n    forward_in(-10.0, SPEED_FAST);              /* back east to x ~ 39.8 */\n    turn_deg(-90, SPEED_FAST);                  /* facing west -> clockwise 90 = face north */\n    forward_to_tape(SPEED_FAST, 10.0);          /* lower tape: y ~ 12; give up after 10 in */\n    forward_in(3.5, SPEED_FAST);                /* -> y ~ 15.5 */\n    for (int k = 0; k < 5; k++) {\n        push_stack_north();\n        if (k < 4) {                            /* side-step 8 in west: back-arc then forward-arc */\n            arc_in(-6.0, -40, SPEED_FAST);\n            arc_in(6.0, +40, SPEED_FAST);\n        }\n    }\n\n    /* 86-97 s: down to the bottom wall and east to pickleball 1 */\n    forward_in(-5.0, SPEED_FAST);\n    turn_deg(-90, SPEED_FAST);                  /* face east at ~(6.5, 14) */\n    forward_in(27.5, SPEED_FAST);               /* -> (34, 14) */\n    arc_in(10.0, -35, SPEED_FAST);              /* -> ~(42, 8) */\n    arc_in(4.5, +35, SPEED_FAST);               /* -> (45, 5.3) facing east */\n    set_servo_position(SERVO_HOOK, HOOK_DOWN);  /* hook sweeps the ball off its post */\n    forward_in(2.5, SPEED_PUSH);\n    set_servo_position(SERVO_HOOK, HOOK_UP);\n\n    /* 97-104 s: push the ball under the platform, stop at x = 66 */\n    forward_in(18.5, SPEED_PUSH);\n\n    /* 104-112 s: red pom alone on the platform (big duck is allowed next to it) */\n    if (have_red) {\n        set_servo_position(SERVO_ARM, ARM_PLATFORM);\n        msleep(1200);\n        set_servo_position(SERVO_CLAW, CLAW_OPEN);\n        msleep(400);\n        set_servo_position(SERVO_ARM, ARM_UP);\n    }\n\n    stop_all();\n    disable_servos();\n    printf(\"Robot B done at %.1f s\\n\", seconds());\n    return 0;\n}\n";
+const MD = {"frame":"inches; origin = inside corner of bottom-left PVC; x along the 93.08 in long side (left->right), y toward Botguy (0..40.2)","field":{"interior":[0,0,93.08,40.2],"tape":{"centre_vertical":[45.66,0,47.54,40.2],"upper_lane":[0,24.5,93.08,26.38],"lower":[3.6,11.25,93.08,13.13],"platform_edge":[68.66,0,70.54,11.25]},"zones":{"Z1":[0,26.38,45.66,40.2],"Z2":[47.54,26.38,93.08,40.2],"Z3":[0,13.13,45.66,24.5],"Z4":[47.54,13.13,93.08,24.5],"Z5 (large start box)":[4.04,0,45.66,11.25]},"small_start_box":[47.54,0,68.66,11.25],"raised_platform":[70.54,-1.46,94.54,11.04],"bottle_enclosure":[0,1.9,4.04,12.9],"pieces":{"ducks_on_lane_x":{"red":53.2,"green":61.2,"lavender":69.2,"blue":77.2,"yellow":85.2},"pom_stacks_on_lane_x":{"gold":8.0,"turquoise":16.0,"lavender":24.0,"green":32.0,"red":40.0},"cup_upper":[46.6,25.4],"cup_lower_with_red_pom":[46.6,12.2],"pickleball_1_bottom_wall":[46.6,-0.6],"botguy_beyond_top_wall":[46.5,42.8],"big_duck_on_platform":[73.3,4.3]}},"robot_A":{"name":"Duck Runner","drive":"mecanum, heading fixed east, strafes","size_in":[17.9,9.1],"waypoints_t_x_y":[[0,54.3,5.6],[16,54.3,5.6],[20,54.3,19.5],[24,44.0,25.62],[41,80.0,25.62],[49,79.5,34.5],[51,81.0,34.5],[57,80.9,23.5],[59,81.6,23.5],[62,81.6,17.0],[69,56.0,17.0],[74,56.0,17.0],[76,54.0,19.5],[82,33.8,19.5],[84,37.8,19.5],[87,48.0,19.5],[92,48.0,34.6],[98,33.8,34.6],[100,36.0,34.6],[103,48.0,34.6],[111,48.0,5.6],[115,34.0,5.6],[117,36.0,5.6],[120,36.0,5.6]],"duck_drops_t":{"zone2":49,"zone4":57,"zone3":82,"zone1":98,"zone5":115}},"robot_B":{"name":"Point Scorer","drive":"differential; heading = direction of travel; 'rev' = backing up","size_in":[14.4,9.2],"waypoints_t_x_y":[[0,33.0,5.6],[2,36.0,8.5],[11,48.5,21.0],[16,57.0,29.5],[17.5,64.0,32.0],[22,74.0,27.0],[27,68.0,16.0],[28,68.0,16.0],[50,68.0,16.0],[52,56.6,16.0],[58,28.7,16.0],[59,29.7,16.0,"rev"],[63,29.7,16.0],[64.5,39.8,13.0,"rev"],[65.5,39.8,13.0],[66.5,39.8,15.5],[68,39.8,19.0],[70,31.9,15.5,"rev"],[72.5,31.9,19.0],[74.5,23.9,15.5,"rev"],[77,23.9,19.0],[79,15.9,15.5,"rev"],[81.5,15.9,19.0],[83.5,7.9,15.5,"rev"],[86,7.9,19.0],[87,6.5,14.0,"rev"],[88,6.5,14.0],[91,34.0,14.0],[93.5,42.0,8.0],[95.5,45.0,5.3],[97.5,47.5,5.3],[103.5,66.0,5.3],[120,66.0,5.3]],"stack_pushes_start_t":[66.5,70,74.5,79,83.5]},"score_events_t_points_duckzone_label":[[16,21,0,"upper cup upright + off tape"],[49,1,1,"duck in zone 2"],[57,1,1,"duck in zone 4"],[58,21,0,"lower cup upright + off tape"],[68,8,0,"red stack -> zone 1"],[72.5,8,0,"green stack -> zone 1"],[77,8,0,"lavender stack -> zone 1"],[81.5,8,0,"turquoise stack -> zone 1"],[86,8,0,"gold stack -> zone 1"],[82,1,1,"duck in zone 3"],[98,1,1,"duck in zone 1"],[103.5,8,0,"pickleball under the platform"],[111.5,51,0,"red pom alone on the platform"],[115,1,1,"duck in zone 5"]],"score_formula":"total = subtotal x min(5, max(1, number of zones with exactly one duck))"};
+
+/* =========================================================== basics */
+const W = 1920, H = 1080, PI = Math.PI;
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const COL = {bg:'#070b13', panel:'#0b111d', panel2:'#0f1727', line:'#1a2436', line2:'#2a3750', text:'#e9eef5',
+  mute:'#97a3b6', dim:'#66728a', faint:'#38445a', A:'#3fd5e6', B:'#f5ab3d', red:'#ef5a62', field:'#d9dde3',
+  wall:'#9aa2ad', tape:'#17191d', code:'#cdbcff', Atrail:'#0b98ab', Btrail:'#c97f0c'};
+const SANS = 'Inter, "Segoe UI", system-ui, sans-serif', MONO = '"JetBrains Mono", Consolas, monospace';
+const clamp = (v, a = 0, b = 1) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, u) => a + (b - a) * u;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const eio = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+const eo = u => 1 - Math.pow(1 - u, 3);
+const sstep = (a, b, x) => { const u = clamp((x - a) / (b - a)); return u * u * (3 - 2 * u); };
+const win = (t, a, b, fi = .45, fo = .45) => Math.min(sstep(a, a + fi, t), 1 - sstep(b - fo, b, t));
+const angD = (a, b) => { let d = ((b - a) % 360 + 540) % 360 - 180; return d; };
+const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+const font = (sz, w = 400, mono = false) => `${w} ${sz}px ${mono ? MONO : SANS}`;
+
+function T(str, x, y, o = {}) {
+  ctx.save();
+  ctx.font = font(o.size || 16, o.weight || 400, o.mono);
+  ctx.fillStyle = o.color || COL.text;
+  ctx.textAlign = o.align || 'left';
+  ctx.textBaseline = o.base || 'alphabetic';
+  ctx.letterSpacing = (o.ls || 0) + 'px';
+  if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+  ctx.fillText(str, x, y);
+  const w = ctx.measureText(str).width;
+  ctx.restore();
+  return w;
+}
+function TW(str, o = {}) {
+  ctx.save(); ctx.font = font(o.size || 16, o.weight || 400, o.mono); ctx.letterSpacing = (o.ls || 0) + 'px';
+  const w = ctx.measureText(str).width; ctx.restore(); return w;
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function panel(x, y, w, h, o = {}) {
+  rr(x, y, w, h, o.r == null ? 8 : o.r);
+  ctx.fillStyle = o.fill || COL.panel; ctx.fill();
+  if (o.stroke !== false) { ctx.strokeStyle = o.stroke || COL.line2; ctx.lineWidth = o.lw || 1; ctx.stroke(); }
+}
+function withA(a, fn) { if (a <= 0.001) return; ctx.save(); ctx.globalAlpha *= a; fn(); ctx.restore(); }
+function arrow(x0, y0, x1, y1, color, lw = 2, head = 10, dash) {
+  const a = Math.atan2(y1 - y0, x1 - x0), L = Math.hypot(x1 - x0, y1 - y0);
+  if (L < 1) return;
+  ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round';
+  if (dash) ctx.setLineDash(dash);
+  const hx = x1 - Math.cos(a) * Math.min(head * .8, L * .5), hy = y1 - Math.sin(a) * Math.min(head * .8, L * .5);
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.stroke(); ctx.setLineDash([]);
+  const hs = Math.min(head, L * .6);
+  ctx.beginPath(); ctx.moveTo(x1, y1);
+  ctx.lineTo(x1 - hs * Math.cos(a - .42), y1 - hs * Math.sin(a - .42));
+  ctx.lineTo(x1 - hs * Math.cos(a + .42), y1 - hs * Math.sin(a + .42)); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+/* =========================================================== C source + highlighter */
+const LA = SRC_A.split('\n'), LB = SRC_B.split('\n');
+const KW = new Set(['int', 'double', 'long', 'static', 'void', 'const', 'for', 'if', 'else', 'while', 'return', 'char']);
+function tokenize(lines) {
+  let inCom = false; const out = [];
+  for (const L of lines) {
+    const toks = []; let i = 0;
+    const push = (s, c) => { if (s) toks.push({s, c}); };
+    while (i < L.length) {
+      if (inCom) {
+        const e = L.indexOf('*/', i);
+        if (e < 0) { push(L.slice(i), 'com'); i = L.length; } else { push(L.slice(i, e + 2), 'com'); i = e + 2; inCom = false; }
+        continue;
+      }
+      const ch = L[i];
+      if (L.startsWith('/*', i)) {
+        const e = L.indexOf('*/', i + 2);
+        if (e < 0) { push(L.slice(i), 'com'); inCom = true; i = L.length; } else { push(L.slice(i, e + 2), 'com'); i = e + 2; }
+        continue;
+      }
+      if (L.startsWith('//', i)) { push(L.slice(i), 'com'); break; }
+      if (ch === '"') { let j = i + 1; while (j < L.length && L[j] !== '"') { if (L[j] === '\\') j++; j++; } push(L.slice(i, j + 1), 'str'); i = j + 1; continue; }
+      if (ch === '#' && /^\s*$/.test(L.slice(0, i))) { const m = /^#\w+/.exec(L.slice(i)); push(m[0], 'kw'); i += m[0].length; continue; }
+      if (/[0-9]/.test(ch) || (ch === '.' && /[0-9]/.test(L[i + 1] || ''))) { const m = /^[0-9.]+/.exec(L.slice(i)); push(m[0], 'num'); i += m[0].length; continue; }
+      if (/[A-Za-z_]/.test(ch)) {
+        const w = /^[A-Za-z_]\w*/.exec(L.slice(i))[0]; let c = 'id'; const j = i + w.length;
+        if (KW.has(w)) c = 'kw'; else if (/^[A-Z][A-Z0-9_]+$/.test(w)) c = 'mac';
+        else { let k = j; while (L[k] === ' ') k++; if (L[k] === '(') c = 'fn'; }
+        push(w, c); i = j; continue;
+      }
+      let j = i + 1; while (j < L.length && !/[A-Za-z_0-9"#\/.]/.test(L[j])) j++;
+      push(L.slice(i, j), 'p'); i = j;
+    }
+    out.push(toks);
+  }
+  return out;
+}
+const SRC = {A: {L: LA, T: tokenize(LA)}, B: {L: LB, T: tokenize(LB)}};
+const TOKC = {kw: '#b9a3ff', fn: '#f6f8fc', num: '#c8e38e', str: '#9fd8a8', mac: '#9fb6ff', com: '#5d6b82', id: '#c3cddb', p: '#8e9aae'};
+let CH = 9.3; const CODE_SZ = 15.5;
+function codeOnly(src, n) { return SRC[src].L[n - 1].replace(/\/\*.*?\*\//g, '').replace(/\/\*.*$/, '').replace(/\s+$/, '').trim(); }
+function fitTokens(toks, maxChars) {
+  const len = a => a.reduce((s, t) => s + t.s.length, 0);
+  if (len(toks) <= maxChars) return toks;
+  let seen = false; const out = [];
+  for (const t of toks) { let s = t.s; if (seen) s = s.replace(/ {2,}/g, ' '); if (/\S/.test(s)) seen = true; out.push({s, c: t.c}); }
+  if (len(out) <= maxChars) return out;
+  const res = []; let n = 0; const lim = maxChars - 3;
+  for (const t of out) {
+    if (n + t.s.length <= lim) { res.push(t); n += t.s.length; }
+    else { if (t.c === 'com' || t.c === 'str' || t.c === 'p') res.push({s: t.s.slice(0, lim - n).replace(/\s+$/, ''), c: t.c}); break; }
+  }
+  res.push({s: '...', c: 'com'});
+  return res;
+}
+function drawTokens(toks, x, y, maxChars, size = CODE_SZ) {
+  const tk = fitTokens(toks, maxChars); let cx = x; const cw = CH * size / CODE_SZ;
+  ctx.save(); ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
+  for (const t of tk) {
+    ctx.font = font(size, t.c === 'fn' ? 500 : 400, true);
+    ctx.fillStyle = TOKC[t.c]; ctx.fillText(t.s, cx, y); cx += t.s.length * cw;
+  }
+  ctx.restore();
+  return cx - x;
+}
+function codeStr(str, x, y, maxChars = 200, size = CODE_SZ) { return drawTokens(tokenize([str])[0], x, y, maxChars, size); }
+
+/* rows: array of line numbers or '...'. hl(n) -> 0..1 */
+function codeView(o) {
+  const lh = o.lh || 22, gut = 50, pad = 12, size = o.size || CODE_SZ;
+  const maxChars = Math.floor((o.w - gut - pad * 2) / (CH * size / CODE_SZ));
+  ctx.save(); rr(o.x, o.y, o.w, o.h, 4); ctx.clip();
+  const sc = o.scroll || 0;
+  const first = Math.max(0, Math.floor(sc) - 1), last = Math.min(o.rows.length - 1, Math.ceil(sc + o.h / lh) + 1);
+  for (let r = first; r <= last; r++) {
+    const ry = o.y + (r - sc) * lh, row = o.rows[r], base = ry + lh * 0.7;
+    if (row === '...') { T('⋮', o.x + gut + pad - 4, base, {mono: 1, size: 15, color: COL.dim}); continue; }
+    const h = o.hl ? o.hl(row) : 0;
+    if (h > 0.001) {
+      ctx.fillStyle = rgba(o.accent, 0.15 * h); ctx.fillRect(o.x, ry, o.w, lh);
+      ctx.fillStyle = rgba(o.accent, h); ctx.fillRect(o.x, ry, 3, lh);
+    }
+    T(String(row), o.x + gut - 12, base, {mono: 1, size: 14, align: 'right', color: h > .5 ? o.accent : COL.faint});
+    withA(o.dimOthers ? lerp(0.5, 1, h) : 1, () => drawTokens(SRC[o.src].T[row - 1], o.x + gut + pad - 4, base, maxChars, size));
+  }
+  ctx.restore();
+}
+function codeCard(o) {
+  const lh = o.lh || 22, h = o.rows.length * lh + 20 + 34;
+  panel(o.x, o.y, o.w, h, {fill: COL.panel, stroke: COL.line2});
+  ctx.fillStyle = COL.panel2; ctx.fillRect(o.x + 1, o.y + 1, o.w - 2, 33);
+  ctx.fillStyle = COL.line2; ctx.fillRect(o.x + 1, o.y + 34, o.w - 2, 1);
+  [0, 1, 2].forEach(i => { ctx.beginPath(); ctx.arc(o.x + 18 + i * 14, o.y + 17, 4, 0, 7); ctx.fillStyle = COL.faint; ctx.fill(); });
+  T(o.title, o.x + 66, o.y + 22, {mono: 1, size: 14, color: COL.mute});
+  if (o.tag) T(o.tag, o.x + o.w - 14, o.y + 22, {mono: 1, size: 14, color: o.accent, align: 'right'});
+  codeView({x: o.x + 1, y: o.y + 44, w: o.w - 2, h: o.rows.length * lh, src: o.src, rows: o.rows, hl: o.hl, accent: o.accent, lh, dimOthers: o.dimOthers});
+  return h;
+}
+
+/* rich captions: `code` segments in mono */
+function richWrap(str, size, maxW) {
+  const parts = [];
+  str.split('`').forEach((p, i) => { if (!p) return; if (i % 2) parts.push({s: p, code: 1}); else p.split(/(\s+)/).forEach(w => { if (w) parts.push({s: w, code: 0}); }); });
+  const lines = [[]]; let lw = 0;
+  for (const p of parts) {
+    const w = TW(p.s, {size: p.code ? size * .9 : size, mono: p.code, weight: p.code ? 500 : 400});
+    const sp = /^\s+$/.test(p.s);
+    if (sp) { if (lw > 0) { lines[lines.length - 1].push({...p, w}); lw += w; } continue; }
+    if (lw + w > maxW && lw > 0) {
+      const Lc = lines[lines.length - 1];
+      while (Lc.length && /^\s+$/.test(Lc[Lc.length - 1].s)) { lw -= Lc[Lc.length - 1].w; Lc.pop(); }
+      lines.push([]); lw = 0;
+    }
+    lines[lines.length - 1].push({...p, w}); lw += w;
+  }
+  return lines.map(Lr => { while (Lr.length && /^\s+$/.test(Lr[Lr.length - 1].s)) Lr.pop(); return {runs: Lr, w: Lr.reduce((a, r) => a + r.w, 0)}; });
+}
+function drawRich(str, x, y, o = {}) {
+  const size = o.size || 26, lh = o.lh || size * 1.38, lines = richWrap(str, size, o.maxW || 1600);
+  lines.forEach((Lr, i) => {
+    let cx = o.align === 'center' ? x - Lr.w / 2 : x;
+    for (const r of Lr.runs) {
+      if (r.code) T(r.s, cx, y + i * lh, {mono: 1, size: size * .9, weight: 500, color: o.codeColor || COL.code, alpha: o.alpha});
+      else T(r.s, cx, y + i * lh, {size, color: o.color || COL.text, alpha: o.alpha, weight: o.weight || 400});
+      cx += r.w;
+    }
+  });
+  return lines.length;
+}
+function captions(list, t, x, y, o = {}) {
+  for (const [a, b, s] of list) { const al = win(t, a, b, .4, .35); if (al > 0) drawRich(s, x, y + (1 - eo(sstep(a, a + .4, t))) * 10, {...o, alpha: al}); }
+}
+
+/* =========================================================== match model */
+const F = MD.field, RA = MD.robot_A, RB = MD.robot_B;
+const AW = RA.waypoints_t_x_y.map(w => w.slice());
+AW.splice(3, 0, [22.5, 44.0, 19.5]);   // code: move_in(-10.3, 0) then move_in(0, 6.1) -> two legs via (44, 19.5)
+const BW = RB.waypoints_t_x_y;
+function posAt(wps, m) {
+  if (m <= wps[0][0]) return [wps[0][1], wps[0][2]];
+  for (let i = 0; i < wps.length - 1; i++) {
+    const a = wps[i], b = wps[i + 1];
+    if (m <= b[0]) { const u = (m - a[0]) / (b[0] - a[0]); return [lerp(a[1], b[1], u), lerp(a[2], b[2], u)]; }
+  }
+  const l = wps[wps.length - 1]; return [l[1], l[2]];
+}
+const BKF = (() => {
+  const kf = [[-1e9, 0], [0, 0]]; const n = BW.length; let i = 0;
+  const hd = (a, b) => Math.atan2(b[2] - a[2], b[1] - a[1]) * 180 / PI + (b[3] === 'rev' ? 180 : 0);
+  const still = (a, b) => Math.hypot(b[1] - a[1], b[2] - a[2]) < 1e-6;
+  while (i < n - 1) {
+    const a = BW[i], b = BW[i + 1];
+    if (still(a, b)) {
+      let j = i; while (j < n - 1 && still(BW[j], BW[j + 1])) j++;
+      const t0 = BW[i][0], t1 = BW[j][0], ph = kf[kf.length - 1][1];
+      const nh = j < n - 1 ? hd(BW[j], BW[j + 1]) : null;
+      if (nh !== null && t0 !== 59) kf.push([t0, ph], [t0 + Math.min(1.2, t1 - t0), nh]); else kf.push([t0, ph], [t1, ph]);
+      i = j; continue;
+    }
+    const h = hd(a, b), dur = b[0] - a[0], d = i === 0 ? dur * .8 : Math.min(.35, dur * .3);
+    kf.push([a[0] + (i === 0 ? 0 : d), i === 0 ? kf[kf.length - 1][1] : h], [b[0] - (i === 0 ? dur - d : d), h]);
+    i++;
+  }
+  return kf;
+})();
+function headingB(m) {
+  for (let i = 0; i < BKF.length - 1; i++) {
+    const a = BKF[i], b = BKF[i + 1];
+    if (m <= b[0]) { const u = sstep(a[0], b[0], m); return a[1] + angD(a[1], b[1]) * u; }
+  }
+  return BKF[BKF.length - 1][1];
+}
+const POM_FLOOR = [19.8, 14.2], SCAN_A = Math.atan2(POM_FLOOR[1] - 16, POM_FLOOR[0] - 29.7) * 180 / PI + 360 - 180;
+function poseA(m) { const [x, y] = posAt(AW, m); return {x, y, h: 0}; }
+function poseB(m) {
+  let [x, y] = posAt(BW, m); let h = headingB(m);
+  if (m > 59 && m < 63) {
+    const sa = SCAN_A * (eio(seg(m, 59.2, 60.2)) - eio(seg(m, 62.1, 62.8)));
+    const ap = 2.0 * (eio(seg(m, 60.2, 60.7)) - eio(seg(m, 61.5, 62.0)));
+    h = 180 + sa; x += ap * Math.cos(h * PI / 180); y += ap * Math.sin(h * PI / 180);
+  }
+  return {x, y, h};
+}
+const loc = (p, lx, ly) => { const h = p.h * PI / 180; return [p.x + lx * Math.cos(h) - ly * Math.sin(h), p.y + lx * Math.sin(h) + ly * Math.cos(h)]; };
+
+/* ducks */
+const DUCKC = {red: '#e5484d', green: '#3fb36b', lavender: '#b49cf0', blue: '#4b8fe8', yellow: '#f2cf3a'};
+const POMC = {gold: '#d9a521', turquoise: '#22bfb2', lavender: '#b49cf0', green: '#3fb36b', red: '#e5484d'};
+const DUCKS = Object.entries(F.pieces.ducks_on_lane_x);
+const LANE_Y = (F.tape.upper_lane[1] + F.tape.upper_lane[3]) / 2;
+const DROP_T = [RA.duck_drops_t.zone2, RA.duck_drops_t.zone4, RA.duck_drops_t.zone3, RA.duck_drops_t.zone1, RA.duck_drops_t.zone5];
+const DROP_Z = ['2', '4', '3', '1', '5'];
+const REAR = -7.3, SP = 3.15, A_HALF = RA.size_in[0] / 2, B_HALF = RB.size_in[0] / 2;
+const SWALLOW = DUCKS.map(([c, xd]) => { for (let m = 20; m < 41; m += 0.01) { const p = poseA(m); if (p.x + A_HALF >= xd - 0.25 && Math.abs(p.y - LANE_Y) < 1.2) return m; } return 41; });
+const DROPPOS = DROP_T.map(t => { const p = poseA(t); return [p.x + REAR, p.y]; });
+function duckState(k, m) {
+  const [col, xd] = DUCKS[k], ts = SWALLOW[k], td = DROP_T[k];
+  if (m < ts) return {x: xd, y: LANE_Y, col, ph: 'lane'};
+  if (m >= td) return {x: DROPPOS[k][0], y: DROPPOS[k][1], col, ph: 'floor'};
+  const a = poseA(m); let slot = k;
+  for (let j = 0; j < k; j++) slot -= eio(seg(m, DROP_T[j] + 1.65, DROP_T[j] + 2.0));
+  const lx = lerp(A_HALF - .6, REAR + slot * SP, eo(seg(m, ts, ts + .9)));
+  return {x: a.x + lx, y: a.y, col, ph: 'in'};
+}
+function flapsA(m) {
+  let A = 0, B = 1, C = 1 - seg(m, 41, 41.3);
+  for (const td of DROP_T) {
+    if (m >= td && m < td + 2.2) {
+      B = Math.min(B, 1 - seg(m, td, td + .25) + seg(m, td + 1.65, td + 1.9));
+      A = Math.max(A, seg(m, td + .3, td + .55) - seg(m, td + 1.4, td + 1.6));
+    }
+  }
+  return {A, B, C};
+}
+/* pieces moved by B */
+const CUP_U0 = F.pieces.cup_upper, CUP_U1 = [57.8, 38.0];
+const CUP_L0 = F.pieces.cup_lower_with_red_pom, CUP_L1 = [18.5, 7.3];
+const BALL0 = F.pieces.pickleball_1_bottom_wall;
+const STACKS = Object.entries(F.pieces.pom_stacks_on_lane_x).map(([c, x]) => ({c, x})).sort((a, b) => b.x - a.x);
+const PUSH_T = RB.stack_pushes_start_t, STACK_Y1 = F.tape.upper_lane[3] + 2.0;
+function cupUpper(m) { const u = eio(seg(m, 11, 16)); return {x: lerp(CUP_U0[0], CUP_U1[0], u), y: lerp(CUP_U0[1], CUP_U1[1], u), flip: seg(m, 12.5, 15.2)}; }
+function cupLower(m) { const u = seg(m, 52.2, 58); const v = u * u * (3 - 2 * u) * .5 + u * .5; return {x: lerp(CUP_L0[0], CUP_L1[0], v), y: lerp(CUP_L0[1], CUP_L1[1], v), flip: seg(m, 56.4, 57.6)}; }
+function redPom(m) {
+  if (m < 56.9) return null;
+  if (m < 60.85) { const c = cupLower(56.9), u = eo(seg(m, 56.9, 57.8)); return {x: lerp(c.x, POM_FLOOR[0], u), y: lerp(c.y, POM_FLOOR[1], u), held: false}; }
+  if (m < 111.0) { const p = poseB(m), ext = 8.0 + 2.6 * eio(seg(m, 104.5, 110.8)); const q = loc(p, ext, 0); return {x: q[0], y: q[1], held: true}; }
+  const p = poseB(111.0), q = loc(p, 10.6, 0); return {x: q[0], y: q[1], held: false, placed: true};
+}
+function stackY(k, m) { return lerp(LANE_Y, STACK_Y1, eio(seg(m, PUSH_T[k] + .45, PUSH_T[k] + 1.5))); }
+function ball(m) {
+  const u = eio(seg(m, 95.8, 97.4)); if (u <= 0) return {x: BALL0[0], y: BALL0[1]};
+  const q = loc(poseB(m), 8.65, -3.3); return {x: lerp(BALL0[0], q[0], u), y: lerp(BALL0[1], q[1], u)};
+}
+const EVENTS = MD.score_events_t_points_duckzone_label.map(e => ({t: e[0], pts: e[1], duck: e[2], label: e[3]})).sort((a, b) => a.t - b.t);
+function scoreAt(m) { let sub = 0, d = 0; for (const e of EVENTS) if (e.t <= m) { sub += e.pts; d += e.duck; } const mult = Math.min(5, Math.max(1, d)); return {sub, d, mult, total: sub * mult}; }
+(() => {
+  let d = 0;
+  for (const e of EVENTS) {
+    const before = Math.min(5, Math.max(1, d)); d += e.duck; const after = Math.min(5, Math.max(1, d));
+    if (e.duck) {
+      const z = /zone (\d)/.exec(e.label)[1]; const k = DROP_Z.indexOf(z);
+      e.pos = DROPPOS[k]; e.who = 'A'; e.text = `${e.label}: multiplier ×${before} → ×${after}`; e.zone = 'Z' + z;
+    } else {
+      e.who = 'B'; e.text = `+${e.pts}  ${e.label}`;
+      if (/upper cup/.test(e.label)) e.pos = CUP_U1; else if (/lower cup/.test(e.label)) e.pos = CUP_L1;
+      else if (/stack/.test(e.label)) { const c = e.label.split(' ')[0]; e.pos = [STACKS.find(s => s.c === c).x, STACK_Y1]; }
+      else if (/pickleball/.test(e.label)) e.pos = [74.6, 2.0]; else e.pos = [76.6, 5.3];
+    }
+  }
+})();
+function zoneHasDuck(z, m) { return EVENTS.some(e => e.duck && e.zone === z && e.t <= m); }
+
+/* =========================================================== robots */
+function xf(cx, cy, s, hdeg) { const h = hdeg * PI / 180, c = Math.cos(h), sn = Math.sin(h); return (lx, ly) => [cx + s * (lx * c - ly * sn), cy - s * (lx * sn + ly * c)]; }
+function polyL(f, pts) { ctx.beginPath(); pts.forEach((p, i) => { const q = f(p[0], p[1]); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.closePath(); }
+function rectL(f, x0, y0, x1, y1) { polyL(f, [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]); }
+function lineL(f, pts) { ctx.beginPath(); pts.forEach((p, i) => { const q = f(p[0], p[1]); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); }
+function circL(f, x, y, r, s) { const p = f(x, y); ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(.5, r * s), 0, 2 * PI); }
+
+const HW_A = {LIGHT: [-3.5, 3.1], GC: [8.2, 0], GB: [-5.7, 0], GA: [-8.7, 0], FL: [6.6, 3.85], FR: [6.6, -3.85], BL: [-6.6, 3.85], BR: [-6.6, -3.85], TL: [8.6, 2.2], TR: [8.6, -2.2], TOUCH: [-7.9, -2.05], ET: [9.25, 3.45]};
+const HW_B = {LIGHT: [-6.2, 2.8], ML: [-1.2, 4.0], MR: [-1.2, -4.0], TL: [6.3, 2.6], TR: [6.3, -2.6], HOOK: [3.2, -4.9], ARM: [1.0, 0], CLAW: [8.3, 0], CAM: [4.9, 0], LEVER: [7.8, -3.6], ET: [6.8, 3.85]};
+
+function drawRobotA(cx, cy, s, h, o = {}) {
+  const f = xf(cx, cy, s, h), lw = Math.max(1, s * .08), dark = !!o.dark;
+  const fl = o.flaps || {A: 0, B: 1, C: 1};
+  ctx.save(); if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+  ctx.lineJoin = 'round';
+  if (o.shadow) { ctx.fillStyle = 'rgba(10,20,35,.22)'; rectL(xf(cx + s * .3, cy + s * .4, s, h), -8.95, -4.55, 8.95, 4.55); ctx.fill(); }
+  ctx.fillStyle = dark ? '#0c1b26' : COL.A; rectL(f, -8.95, -4.55, 8.95, 4.55); ctx.fill();
+  ctx.strokeStyle = dark ? COL.A : '#0a3d47'; ctx.lineWidth = lw * (dark ? 1.2 : 1); ctx.stroke();
+  [[6.6, 3.85, 1], [6.6, -3.85, -1], [-6.6, 3.85, -1], [-6.6, -3.85, 1]].forEach(([wx, wy, d]) => {
+    ctx.fillStyle = dark ? '#16324a' : '#1a2029'; rectL(f, wx - 1.25, wy - .62, wx + 1.25, wy + .62); ctx.fill();
+    if (dark) { ctx.strokeStyle = rgba(COL.A, .7); ctx.lineWidth = 1; ctx.stroke(); }
+    ctx.strokeStyle = dark ? rgba(COL.A, .55) : '#9aa6b5'; ctx.lineWidth = Math.max(1, s * .06);
+    for (let k = -1; k <= 1; k++) lineL(f, [[wx + k * .75 - .3 * d, wy - .5], [wx + k * .75 + .3 * d, wy + .5]]), ctx.stroke();
+  });
+  ctx.fillStyle = dark ? 'rgba(63,213,230,.08)' : '#c2eef5'; rectL(f, -8.95, -1.6, 8.95, 1.6); ctx.fill();
+  ctx.strokeStyle = dark ? rgba(COL.A, .6) : '#0a3d47'; ctx.lineWidth = lw * .8;
+  lineL(f, [[-8.95, 1.6], [8.95, 1.6]]); ctx.stroke(); lineL(f, [[-8.95, -1.6], [8.95, -1.6]]); ctx.stroke();
+  ctx.fillStyle = dark ? '#1b2a3c' : '#20262f'; rectL(f, -4.8, -4.15, 2.6, -2.05); ctx.fill();
+  if (dark) { ctx.strokeStyle = rgba(COL.A, .5); ctx.lineWidth = 1; ctx.stroke(); }
+  ctx.fillStyle = dark ? rgba(COL.A, .35) : '#5d7d90'; rectL(f, -1.6, -3.8, 1.8, -2.4); ctx.fill();
+  if (o.detail !== false) {
+    circL(f, ...HW_A.LIGHT, .55, s); ctx.fillStyle = dark ? '#2a3b4f' : '#f3efd2'; ctx.fill(); ctx.strokeStyle = dark ? COL.A : '#333'; ctx.lineWidth = 1; ctx.stroke();
+    [HW_A.TL, HW_A.TR].forEach(p => { circL(f, p[0], p[1], .45, s); ctx.fillStyle = '#0d0f12'; ctx.fill(); ctx.strokeStyle = dark ? COL.A : '#e6f9fc'; ctx.lineWidth = 1; ctx.stroke(); });
+    ctx.fillStyle = dark ? '#2a3b4f' : '#262b33'; rectL(f, 8.95, 3.0, 9.6, 3.9); ctx.fill();
+    ctx.fillStyle = dark ? '#2a3b4f' : '#30353d'; rectL(f, -8.25, -2.4, -7.55, -1.7); ctx.fill();
+    if (dark) { ctx.strokeStyle = rgba(COL.A, .6); ctx.lineWidth = 1; ctx.stroke(); }
+  }
+  const flap = (x, phi, col) => { const a = phi * PI / 2; lineL(f, [[x, 1.6], [x - 3.2 * Math.sin(a), 1.6 - 3.2 * Math.cos(a)]]); ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, s * .32); ctx.lineCap = 'round'; ctx.stroke(); };
+  const fc = dark ? '#e9eef5' : '#0b2a33';
+  flap(8.2, fl.C, fc); flap(-5.7, fl.B, fc); flap(-8.7, fl.A, fc);
+  if (o.label !== false) { const p = f(4.3, 3.05); T('A', p[0], p[1], {mono: 1, size: Math.max(14, s * 1.45), weight: 700, color: dark ? COL.A : '#063139', align: 'center', base: 'middle'}); }
+  ctx.restore();
+}
+function drawRobotB(cx, cy, s, h, o = {}) {
+  const f = xf(cx, cy, s, h), lw = Math.max(1, s * .08), dark = !!o.dark;
+  ctx.save(); if (o.alpha != null) ctx.globalAlpha *= o.alpha; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  if (o.fov) {
+    const c = f(5.6, 0); ctx.beginPath(); ctx.moveTo(c[0], c[1]);
+    for (let a = -30; a <= 30; a += 5) { const r = 13; const q = f(5.6 + r * Math.cos(a * PI / 180), r * Math.sin(a * PI / 180)); ctx.lineTo(q[0], q[1]); }
+    ctx.closePath(); ctx.fillStyle = `rgba(20,30,50,${.10 * o.fov})`; ctx.fill();
+  }
+  if (o.shadow) { ctx.fillStyle = 'rgba(10,20,35,.22)'; rectL(xf(cx + s * .3, cy + s * .4, s, h), -7.2, -4.6, 7.2, 4.6); ctx.fill(); }
+  ctx.fillStyle = dark ? '#21180b' : COL.B; rectL(f, -7.2, -4.6, 7.2, 4.6); ctx.fill();
+  ctx.strokeStyle = dark ? COL.B : '#6b4508'; ctx.lineWidth = lw * (dark ? 1.2 : 1); ctx.stroke();
+  [[-1.2, 4.0], [-1.2, -4.0]].forEach(([wx, wy]) => { ctx.fillStyle = dark ? '#3a2a12' : '#1a2029'; rectL(f, wx - 1.6, wy - .55, wx + 1.6, wy + .55); ctx.fill(); if (dark) { ctx.strokeStyle = rgba(COL.B, .7); ctx.lineWidth = 1; ctx.stroke(); } });
+  circL(f, -5.9, 0, .55, s); ctx.fillStyle = dark ? '#3a2a12' : '#2b3038'; ctx.fill();
+  ctx.fillStyle = dark ? '#2e2414' : '#262b33'; rectL(f, -5.0, -2.9, 0.4, 2.9); ctx.fill();
+  if (dark) { ctx.strokeStyle = rgba(COL.B, .5); ctx.lineWidth = 1; ctx.stroke(); }
+  ctx.fillStyle = dark ? rgba(COL.B, .3) : '#7b6a4f'; rectL(f, -3.6, -1.4, -.6, 1.4); ctx.fill();
+  lineL(f, [[8.6, 6.0], [7.6, 5.2], [7.6, -5.2], [8.6, -6.0]]); ctx.strokeStyle = dark ? '#d8dee8' : '#3a3f47'; ctx.lineWidth = Math.max(2, s * .5); ctx.stroke();
+  const hook = o.hook || 0;
+  lineL(f, [[3.2, -4.6], [3.2, -4.6 - 1.5 * hook], [3.2 + .9 * hook, -4.6 - 1.5 * hook]]); ctx.strokeStyle = dark ? '#d8dee8' : '#3a3f47'; ctx.lineWidth = Math.max(2, s * .3); ctx.stroke();
+  if (o.detail !== false) {
+    circL(f, ...HW_B.LIGHT, .5, s); ctx.fillStyle = dark ? '#3a2a12' : '#f3efd2'; ctx.fill(); ctx.strokeStyle = dark ? COL.B : '#333'; ctx.lineWidth = 1; ctx.stroke();
+    [HW_B.TL, HW_B.TR].forEach(p => { circL(f, p[0], p[1], .42, s); ctx.fillStyle = '#0d0f12'; ctx.fill(); ctx.strokeStyle = dark ? COL.B : '#fff3dc'; ctx.lineWidth = 1; ctx.stroke(); });
+    ctx.fillStyle = dark ? '#3a2a12' : '#262b33'; rectL(f, 6.4, 3.4, 7.2, 4.3); ctx.fill(); rectL(f, 7.55, -4.0, 8.15, -3.2); ctx.fill();
+  }
+  const ext = o.ext || 0, tip = 8.0 + 2.6 * ext, claw = o.claw || 0;
+  lineL(f, [[0.8, 0], [tip, 0]]); ctx.strokeStyle = dark ? '#c9d2df' : '#2b3038'; ctx.lineWidth = Math.max(2, s * .6); ctx.stroke();
+  const jaw = lerp(1.0, .55, claw);
+  lineL(f, [[tip, jaw], [tip + 1.1, jaw * (1 - claw * .5)]]); ctx.lineWidth = Math.max(1.5, s * .28); ctx.stroke();
+  lineL(f, [[tip, -jaw], [tip + 1.1, -jaw * (1 - claw * .5)]]); ctx.stroke();
+  ctx.fillStyle = dark ? '#3a2a12' : '#1d2128'; rectL(f, 4.2, -.85, 5.6, .85); ctx.fill();
+  circL(f, 5.6, 0, .35, s); ctx.fillStyle = dark ? COL.B : '#9fc2ff'; ctx.fill();
+  if (o.pom) { circL(f, tip + .3, 0, .8, s); ctx.fillStyle = COL.red; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.45)'; ctx.lineWidth = 1; ctx.stroke(); }
+  if (o.label !== false) { const p = f(-2.2, 0); T('B', p[0], p[1], {mono: 1, size: Math.max(14, s * 1.45), weight: 700, color: dark ? COL.B : '#3a2604', align: 'center', base: 'middle'}); }
+  ctx.restore();
+}
+function drawDuck(x, y, r, col, hdeg = 150) {
+  const h = hdeg * PI / 180, hx = x + Math.cos(h) * r * .55, hy = y - Math.sin(h) * r * .55;
+  ctx.save(); ctx.lineWidth = Math.max(1, r * .1); ctx.strokeStyle = 'rgba(0,0,0,.5)';
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * PI); ctx.fillStyle = DUCKC[col] || col; ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(hx + Math.cos(h) * r * .5, hy - Math.sin(h) * r * .5);
+  ctx.lineTo(hx + Math.cos(h) * r * .78, hy - Math.sin(h) * r * .78); ctx.strokeStyle = '#f08a1c'; ctx.lineWidth = Math.max(1.5, r * .22); ctx.stroke();
+  ctx.beginPath(); ctx.arc(hx, hy, r * .45, 0, 2 * PI); ctx.fillStyle = DUCKC[col] || col; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.5)'; ctx.lineWidth = Math.max(1, r * .1); ctx.stroke();
+  ctx.restore();
+}
+function drawCup(x, y, r, flip) {
+  const sx = Math.max(.08, Math.abs(Math.cos(flip * PI))), up = flip > .5;
+  ctx.save(); ctx.translate(x, y); ctx.scale(sx, 1);
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, 2 * PI); ctx.fillStyle = '#f5f6f8'; ctx.fill(); ctx.strokeStyle = '#4a515c'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.arc(0, 0, r * (up ? .78 : .45), 0, 2 * PI); ctx.fillStyle = up ? '#c3c9d2' : '#e2e5ea'; ctx.fill(); ctx.strokeStyle = '#7a828e'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.restore();
+}
+function drawPom(x, y, r, col) { ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * PI); ctx.fillStyle = col; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.45)'; ctx.lineWidth = 1; ctx.stroke(); ctx.beginPath(); ctx.arc(x - r * .25, y - r * .25, r * .35, 0, 2 * PI); ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.fill(); }
+function drawStack(x, y, r, col) { drawPom(x + r * .18, y + r * .18, r, col); drawPom(x, y, r, col); }
+function drawBall(x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * PI); ctx.fillStyle = '#d6e84b'; ctx.fill(); ctx.strokeStyle = '#6d7a14'; ctx.lineWidth = 1.2; ctx.stroke(); for (let k = 0; k < 5; k++) { const a = k * 1.26 + .3; ctx.beginPath(); ctx.arc(x + Math.cos(a) * r * .5, y + Math.sin(a) * r * .5, Math.max(1, r * .12), 0, 2 * PI); ctx.fillStyle = '#8e9c22'; ctx.fill(); } }
+
+/* =========================================================== field */
+const ZONES = Object.entries(F.zones).map(([k, r]) => ({k: k.slice(0, 2), name: k, r}));
+const ZT = {Z1: 'rgba(70,110,210,.10)', Z2: 'rgba(40,160,120,.10)', Z3: 'rgba(150,100,210,.10)', Z4: 'rgba(210,140,50,.10)', Z5: 'rgba(210,80,80,.08)'};
+function fieldMap(b) { return {X: v => b.x + v * b.s, Y: v => b.y + (40.2 - v) * b.s, S: v => v * b.s}; }
+function fRect(M, r) { return [M.X(r[0]), M.Y(r[3]), M.S(r[2] - r[0]), M.S(r[3] - r[1])]; }
+function drawField(b, m, o = {}) {
+  const M = fieldMap(b), {X, Y, S} = M, s = b.s;
+  const wt = 1.0;
+  ctx.fillStyle = COL.wall; ctx.fillRect(X(-wt), Y(40.2 + wt), S(93.08 + 2 * wt), S(40.2 + 2 * wt));
+  ctx.fillStyle = COL.field; ctx.fillRect(...fRect(M, F.interior));
+  for (const z of ZONES) {
+    ctx.fillStyle = ZT[z.k]; ctx.fillRect(...fRect(M, z.r));
+    const on = o.zoneGlow ? zoneHasDuck(z.k, m) : false;
+    if (on) { const r = fRect(M, z.r); ctx.strokeStyle = rgba('#0aa9bd', .85); ctx.lineWidth = 2.5; ctx.strokeRect(r[0] + 3, r[1] + 3, r[2] - 6, r[3] - 6); }
+  }
+  ctx.fillStyle = COL.tape;
+  for (const k of ['centre_vertical', 'upper_lane', 'lower', 'platform_edge']) ctx.fillRect(...fRect(M, F.tape[k]));
+  { const r = fRect(M, F.small_start_box); ctx.fillStyle = 'rgba(10,152,171,.10)'; ctx.fillRect(...r); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(10,80,95,.55)'; ctx.lineWidth = 1.2; ctx.strokeRect(r[0] + .5, r[1] + .5, r[2] - 1, r[3] - 1); ctx.setLineDash([]); }
+  { const r = fRect(M, F.bottle_enclosure); ctx.fillStyle = '#bfc5cd'; ctx.fillRect(...r); ctx.strokeStyle = '#5b636e'; ctx.lineWidth = 1; ctx.strokeRect(...r); }
+  const lab = (str, x, y, al = 'left', c = 'rgba(25,35,50,.62)') => T(str, x, y, {mono: 1, size: 14, weight: 700, color: c, align: al});
+  if (o.labels !== false) {
+    lab('Z1', X(1.2), Y(40.2) + 18); lab('Z2', X(92), Y(40.2) + 18, 'right'); lab('Z3', X(1.2), Y(24.5) + 18); lab('Z4', X(92), Y(24.5) + 18, 'right');
+    lab('Z5 · B start', X(5.0), Y(0) - 7); lab('A start', X(48.3), Y(0) - 7);
+  }
+  // trails
+  if (o.trails) {
+    const tr = (wps, m, col, pose) => {
+      ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.setLineDash([2, 6]); ctx.strokeStyle = rgba(col, .45); ctx.lineWidth = 1.6; ctx.beginPath();
+      wps.forEach((w, i) => i ? ctx.lineTo(X(w[1]), Y(w[2])) : ctx.moveTo(X(w[1]), Y(w[2]))); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = rgba(col, .9); ctx.lineWidth = 2.4; ctx.beginPath(); let started = false;
+      for (const w of wps) { if (w[0] > m) break; started ? ctx.lineTo(X(w[1]), Y(w[2])) : ctx.moveTo(X(w[1]), Y(w[2])); started = true; }
+      if (started) { ctx.lineTo(X(pose.x), Y(pose.y)); ctx.stroke(); }
+      ctx.restore();
+    };
+    tr(AW, m, COL.Atrail, poseA(m)); tr(BW, m, COL.Btrail, {x: posAt(BW, m)[0], y: posAt(BW, m)[1]});
+  }
+  // stacks
+  STACKS.forEach((st, k) => drawStack(X(st.x), Y(stackY(k, m)), S(1.0), POMC[st.c]));
+  // ducks outside the robot
+  const ds = DUCKS.map((d, k) => duckState(k, m));
+  ds.forEach(d => { if (d.ph === 'lane') drawDuck(X(d.x), Y(d.y), S(1.15), d.col); });
+  // cups
+  const cu = cupUpper(m); drawCup(X(cu.x), Y(cu.y), S(1.75), cu.flip);
+  const cl = cupLower(m); drawCup(X(cl.x), Y(cl.y), S(1.75), cl.flip);
+  const rp = redPom(m); if (rp && !rp.held && !rp.placed) drawPom(X(rp.x), Y(rp.y), S(.8), COL.red);
+  const bl = ball(m); drawBall(X(bl.x), Y(bl.y), S(1.45));
+  // botguy
+  { const p = F.pieces.botguy_beyond_top_wall, x = X(p[0]), y = Y(p[1]); const r = Math.max(7, S(1.3));
+    rr(x - r, y - r, 2 * r, 2 * r, 3); ctx.fillStyle = '#e94b3c'; ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillRect(x - r * .5, y - r * .25, r * .3, r * .3); ctx.fillRect(x + r * .2, y - r * .25, r * .3, r * .3);
+    if (o.labels !== false) T('Botguy', x + r + 6, y + 5, {mono: 1, size: 14, color: COL.mute}); }
+  // robots
+  if (o.robots !== false) {
+    const pa = poseA(m), pb = poseB(m);
+    drawRobotA(X(pa.x), Y(pa.y), s, 0, {shadow: true, flaps: flapsA(m)});
+    ds.forEach(d => { if (d.ph === 'in') drawDuck(X(d.x), Y(d.y), S(1.05), d.col, 0); });
+    const hook = Math.max(seg(m, 52, 52.3) - seg(m, 58, 58.3), seg(m, 95.5, 95.8) - seg(m, 97.3, 97.6));
+    const ext = eio(seg(m, 104.5, 110.8)) - eio(seg(m, 111.7, 112.2));
+    const claw = seg(m, 60.7, 61.0) - seg(m, 110.8, 111.1);
+    drawRobotB(X(pb.x), Y(pb.y), s, pb.h, {shadow: true, hook, ext, claw, pom: false});
+    ds.forEach(d => { if (d.ph === 'floor') drawDuck(X(d.x), Y(d.y), S(1.05), d.col, 0); });
+  }
+  // platform
+  { const r = fRect(M, F.raised_platform); ctx.save(); ctx.globalAlpha *= .62; ctx.fillStyle = '#a7aeb8'; ctx.fillRect(...r);
+    ctx.beginPath(); ctx.rect(...r); ctx.clip(); ctx.strokeStyle = 'rgba(60,66,76,.35)'; ctx.lineWidth = 1;
+    for (let k = -20; k < 60; k++) { ctx.beginPath(); ctx.moveTo(r[0] + k * 9, r[1]); ctx.lineTo(r[0] + k * 9 + r[3], r[1] + r[3]); ctx.stroke(); }
+    ctx.restore(); ctx.strokeStyle = '#59616c'; ctx.lineWidth = 1.2; ctx.strokeRect(...r);
+    if (o.labels !== false) lab('platform', r[0] + r[2] - 6, r[1] + 17, 'right', 'rgba(25,35,50,.7)'); }
+  const bd = F.pieces.big_duck_on_platform; drawDuck(X(bd[0]), Y(bd[1]), S(2.2), '#f2cf3a', 140);
+  if (rp && (rp.placed || rp.held)) drawPom(X(rp.x), Y(rp.y), S(.8), COL.red);
+
+  return M;
+}
+const ovl = (p, q) => p[0] < q[2] && p[2] > q[0] && p[1] < q[3] && p[3] > q[1];
+function robotBoxes(M, m) {
+  const bb = (p, hl, hw) => { const pts = [[hl, hw], [hl, -hw], [-hl, hw], [-hl, -hw]].map(([x, y]) => loc(p, x, y)); const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+    return [M.X(Math.min(...xs)) - 6, M.Y(Math.max(...ys)) - 6, M.X(Math.max(...xs)) + 6, M.Y(Math.min(...ys)) + 6]; };
+  return [bb(poseA(m), 8.95, 4.55), bb(poseB(m), 8.8, 6.1)];
+}
+/* avoid: list of [x0,y0,x1,y1] boxes; placed chips are appended to it */
+function chip(text, ax, ay, color, a, bounds, avoid = []) {
+  if (a <= 0) return;
+  ctx.save(); ctx.font = font(15, 500, true); ctx.letterSpacing = '0px';
+  const w = ctx.measureText(text).width + 24, h = 30, x = clamp(ax - w / 2, bounds[0], bounds[1] - w);
+  const ys = [ay - 26 - h, ay + 22]; for (const bx of avoid) if (bx[0] < x + w && bx[2] > x) ys.push(bx[1] - 10 - h, bx[3] + 10);
+  let y = null;
+  for (const c of ys) { if (c < bounds[2] || c + h > bounds[3]) continue; if (!avoid.some(bx => ovl([x, c, x + w, c + h], bx))) { y = c; break; } }
+  if (y === null) y = ys.find(c => c >= bounds[2] && c + h <= bounds[3]) ?? bounds[2];
+  avoid.push([x - 4, y - 4, x + w + 4, y + h + 4]);
+  ctx.globalAlpha *= a;
+  const sc = .9 + .1 * eo(clamp(a * 1.4));
+  ctx.translate(ax, ay); ctx.scale(sc, sc); ctx.translate(-ax, -ay);
+  const ex = clamp(ax, x + 10, x + w - 10), ey = y > ay ? y : y + h;
+  ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ex, ey); ctx.stroke();
+  ctx.beginPath(); ctx.arc(ax, ay, 4, 0, 2 * PI); ctx.fillStyle = color; ctx.fill(); ctx.strokeStyle = '#0b111d'; ctx.lineWidth = 1.5; ctx.stroke();
+  rr(x, y, w, h, 6); ctx.fillStyle = 'rgba(9,14,24,.94)'; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.fillStyle = COL.text; ctx.textBaseline = 'middle'; ctx.fillText(text, x + 12, y + h / 2 + 1);
+  ctx.restore();
+}
+
+/* =========================================================== timing */
+const S1 = [0, 10], S2 = [10, 30], S3 = [30, 56], S3SUB = [[30, 35], [35, 40.5], [40.5, 45.5], [45.5, 51], [51, 56]];
+const SLOW = [[23, 27], [47.5, 50.5], [58.5, 62.5], [113.5, 116.5]], BASE = 1.8, EDGE = .8;
+function rateAt(m) { let w = 0; for (const [a, b] of SLOW) w = Math.max(w, sstep(a - EDGE, a, m) * (1 - sstep(b, b + EDGE, m))); return BASE - (BASE - 1) * w; }
+const DM = 0.005, STAB = [0];
+for (let i = 0; i < 120 / DM; i++) STAB.push(STAB[i] + DM / rateAt((i + .5) * DM));
+const S4D = STAB[STAB.length - 1], S4PRE = 2.4, S4POST = 1.6;
+const S4 = [56, 56 + S4PRE + S4D + S4POST], S5 = [S4[1], S4[1] + 16];
+const DUR = Math.round(S5[1] * 100) / 100;
+function matchFromScene(x) {
+  let lo = 0, hi = STAB.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (STAB[mid] <= x) lo = mid; else hi = mid; }
+  return (lo + (x - STAB[lo]) / (STAB[hi] - STAB[lo] || 1)) * DM;
+}
+function s4m(t) { const r = t - S4[0]; if (r < S4PRE) return -S4PRE + r; const x = r - S4PRE; if (x >= S4D) return 120 + (x - S4D); return matchFromScene(x); }
+function sceneOfMatch(m) { return S4[0] + S4PRE + STAB[Math.round(clamp(m, 0, 120) / DM)]; }
+
+/* =========================================================== chrome */
+const CHAPTERS = [['01', 'Title', S1], ['02', 'Code map', S2], ['03', 'Core abstractions', S3], ['04', 'The match, traced', S4], ['05', 'Final board', S5]];
+function bg() {
+  ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(140,170,220,.04)'; ctx.lineWidth = 1; ctx.beginPath();
+  for (let x = 0; x <= W; x += 48) { ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); }
+  for (let y = 0; y <= H; y += 48) { ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); }
+  ctx.stroke();
+  const g = ctx.createRadialGradient(W / 2, H * .42, 250, W / 2, H / 2, 1200);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function chrome(t) {
+  T('ROCHAMBOTICS · KIPR BOTBALL 2026', 1856, 62, {mono: 1, size: 14, color: COL.dim, ls: 2, align: 'right'});
+  const x0 = 64, x1 = 1856, y = 1052;
+  for (const [n, name, [a, b]] of CHAPTERS) {
+    const xa = x0 + (a / DUR) * (x1 - x0) + 2, xb = x0 + (b / DUR) * (x1 - x0) - 2, act = t >= a && t < b;
+    ctx.fillStyle = COL.line2; ctx.fillRect(xa, y, xb - xa, 2);
+    const p = clamp((t - a) / (b - a)); ctx.fillStyle = act ? COL.text : rgba(COL.text, .45); ctx.fillRect(xa, y, (xb - xa) * p, 2);
+    T(n + '  ' + name, xa, y - 12, {mono: 1, size: 14, color: act ? COL.text : COL.dim});
+  }
+}
+function header(eye, title, a = 1) { T(eye, 64, 62, {mono: 1, size: 15, color: COL.mute, ls: 2, alpha: a}); T(title, 64, 106, {size: 32, weight: 600, alpha: a}); }
+
+/* =========================================================== scene 1: title */
+function schematic(b, prog) {
+  const M = fieldMap(b), {X, Y, S} = M;
+  ctx.save(); ctx.strokeStyle = 'rgba(160,180,210,.35)'; ctx.lineWidth = 1;
+  ctx.strokeRect(...fRect(M, F.interior));
+  ctx.fillStyle = 'rgba(200,215,235,.22)'; for (const k of ['centre_vertical', 'upper_lane', 'lower', 'platform_edge']) ctx.fillRect(...fRect(M, F.tape[k]));
+  ctx.strokeStyle = 'rgba(160,180,210,.22)'; ctx.strokeRect(...fRect(M, F.raised_platform)); ctx.strokeRect(...fRect(M, F.small_start_box));
+  const route = (wps, col, p) => {
+    const tEnd = 120 * p; ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath(); let st = false;
+    for (const w of wps) { if (w[0] > tEnd) break; st ? ctx.lineTo(X(w[1]), Y(w[2])) : ctx.moveTo(X(w[1]), Y(w[2])); st = true; }
+    const q = posAt(wps, tEnd); ctx.lineTo(X(q[0]), Y(q[1])); ctx.stroke();
+    ctx.beginPath(); ctx.arc(X(q[0]), Y(q[1]), 4, 0, 2 * PI); ctx.fillStyle = col; ctx.fill();
+  };
+  route(AW, COL.A, prog); route(BW, COL.B, prog);
+  ctx.restore();
+}
+function scene1(t) {
+  const a = (x, d = .6) => eo(seg(t, x, x + d));
+  T('KIPR BOTBALL · 2026 FALL GAME · TEAM ROCHAMBOTICS', 120, 196, {mono: 1, size: 16, color: COL.mute, ls: 3, alpha: a(.2)});
+  withA(a(.5, .8), () => T('How our robots think', 116, 318 + 24 * (1 - a(.5, .8)), {size: 96, weight: 700, ls: -2}));
+  T('Two KIPR Wombats · two C programs · 120 seconds · no remote control.', 120, 382, {size: 30, color: COL.mute, alpha: a(1.3)});
+  withA(a(.9), () => { const b = {x: 1290, y: 166, s: 5.6}; schematic(b, eio(seg(t, 1.0, 5.2)));
+    T('the field, 93.08 × 40.2 in, with both routes', 1290, 422, {mono: 1, size: 14, color: COL.dim}); });
+  const card = (x, R, at) => withA(a(at), () => {
+    const y = 456 + 16 * (1 - a(at)); panel(x, y, 820, 156, {fill: 'rgba(11,17,29,.86)', stroke: COL.line2, r: 10});
+    ctx.fillStyle = R === 'A' ? COL.A : COL.B; ctx.fillRect(x, y + 14, 3, 128);
+    if (R === 'A') drawRobotA(x + 110, y + 78, 9.5, 0, {dark: true, label: false}); else drawRobotB(x + 104, y + 78, 10.5, 0, {dark: true, label: false});
+    const tx = x + 230;
+    T(R === 'A' ? 'Robot A · Duck Runner' : 'Robot B · Point Scorer', tx, y + 46, {size: 28, weight: 600, color: R === 'A' ? COL.A : COL.B});
+    T(R === 'A' ? 'Mecanum drive: strafes, heading always east.' : 'Differential drive with arm, claw, cup hook and camera.', tx, y + 82, {size: 20, color: COL.text});
+    T(R === 'A' ? 'Swallows five ducks, drops one in each zone.' : 'Flips cups, pushes stacks and the ball, places the red pom.', tx, y + 110, {size: 20, color: COL.mute});
+    T(R === 'A' ? 'robot_a_main.c · 182 lines' : 'robot_b_main.c · 243 lines', tx, y + 140, {mono: 1, size: 15, color: COL.dim});
+  });
+  card(120, 'A', 2.2); card(980, 'B', 2.6);
+  withA(a(4.8), () => {
+    T('THE RULE THAT SHAPES BOTH PROGRAMS', 120, 690, {mono: 1, size: 15, color: COL.mute, ls: 2});
+    T('total = subtotal × min(5, max(1, zones holding exactly one small duck))', 120, 744, {mono: 1, size: 28, weight: 500, color: COL.text});
+    drawRich('So Robot A’s whole job, one duck per zone, multiplies everything Robot B scores.', 120, 800, {size: 26, color: COL.mute, alpha: a(5.6)});
+  });
+  withA(a(5.4), () => {
+    const b = {x: 1424, y: 650, s: 4.04}, M = fieldMap(b);
+    ctx.fillStyle = 'rgba(200,210,225,.10)'; ctx.fillRect(...fRect(M, F.interior)); ctx.strokeStyle = COL.line2; ctx.strokeRect(...fRect(M, F.interior));
+    const order = ['Z2', 'Z4', 'Z3', 'Z1', 'Z5']; let n = 0;
+    order.forEach((z, i) => {
+      const zr = ZONES.find(q => q.k === z), r = fRect(M, zr.r), on = eo(seg(t, 6.0 + i * .55, 6.35 + i * .55));
+      ctx.fillStyle = rgba(COL.A, .07 + .16 * on); ctx.fillRect(r[0] + 2, r[1] + 2, r[2] - 4, r[3] - 4);
+      ctx.strokeStyle = rgba(COL.A, .25 + .6 * on); ctx.lineWidth = 1; ctx.strokeRect(r[0] + 2.5, r[1] + 2.5, r[2] - 5, r[3] - 5);
+      T(z, r[0] + 8, r[1] + 19, {mono: 1, size: 14, color: COL.mute});
+      if (on > 0) drawDuck(r[0] + r[2] / 2 + 8, r[1] + r[3] / 2 + 4, 9 * on, DUCKS[i][0]);
+      if (on > .5) n = i + 1;
+    });
+    T('multiplier', 1424, 860, {mono: 1, size: 15, color: COL.mute});
+    T('×' + Math.max(1, n), 1800, 862, {mono: 1, size: 40, weight: 700, color: COL.A, align: 'right'});
+  });
+}
+
+/* =========================================================== scene 2: code map */
+const S2DEF = {
+  A: {X0: 64, file: 'robot_a_main.c · 182 lines', name: 'Robot A · Duck Runner',
+    main: [[130], [131], [134], [145], [150, '× 5 zones']],
+    tools: ['gates_init()', 'drop_one_duck()'], motion: ['mecanum()', 'move_in()', 'follow_tape_east()', 'stop_all()'],
+    ports: [35, 36, 37, 41, 44], kipr: ['motor() gmpc() cmpc() analog() digital()', 'set_servo_position() seconds() msleep()'],
+    tags: [['LIGHT', 'LIGHT_START 3'], ['GC', 'SERVO_GATE_C 0'], ['GB', 'SERVO_GATE_B 1'], ['GA', 'SERVO_GATE_A 2'], ['MF', 'FL 1 · FR 0', ['FL', 'FR']], ['MB', 'BL 3 · BR 2', ['BL', 'BR']], ['TL', 'TOPHAT_L 0'], ['TR', 'TOPHAT_R 1'], ['TOUCH', 'TOUCH_LANE 0'], ['ET', 'ET_FRONT 2', null, 1]],
+    links: [['main', 'LIGHT'], ['gates_init()', 'GC'], ['gates_init()', 'GB'], ['gates_init()', 'GA'], ['drop_one_duck()', 'GB'], ['drop_one_duck()', 'GA'], ['mecanum()', 'MF'], ['mecanum()', 'MB'], ['move_in()', 'MF'], ['follow_tape_east()', 'TL'], ['follow_tape_east()', 'TR'], ['follow_tape_east()', 'TOUCH']],
+    path: {main: 3, chips: ['follow_tape_east()', 'mecanum()'], tags: ['TL', 'TR', 'TOUCH', 'MF', 'MB']}},
+  B: {X0: 992, file: 'robot_b_main.c · 243 lines', name: 'Robot B · Point Scorer',
+    main: [[182], [193], [197], [201], [210, '× 5 stacks']],
+    tools: ['flip_cup_with_right_wing()', 'grab_red_pom()', 'push_stack_north()'], motion: ['drive()', 'forward_in()', 'turn_deg()', 'arc_in()', 'forward_to_tape()', 'stop_all()'],
+    ports: [34, 36, 37, 45, 48], kipr: ['motor() gmpc() analog() set_servo_position()', 'camera_update() get_object_center_x()'],
+    tags: [['LIGHT', 'LIGHT_START 3'], ['HOOK', 'SERVO_HOOK 3'], ['CAM', 'CAM_RED 0'], ['ARM', 'SERVO_ARM 1'], ['CLAW', 'SERVO_CLAW 2'], ['ML', 'LEFT 0'], ['MR', 'RIGHT 2'], ['TL', 'TOPHAT_L 0'], ['TR', 'TOPHAT_R 1'], ['LEVER', 'LEVER_PLOW 0', null, 1], ['ET', 'ET_FRONT 2', null, 1]],
+    links: [['main', 'LIGHT'], ['flip_cup_with_right_wing()', 'HOOK'], ['grab_red_pom()', 'CAM'], ['grab_red_pom()', 'ARM'], ['grab_red_pom()', 'CLAW'], ['drive()', 'ML'], ['drive()', 'MR'], ['forward_in()', 'ML'], ['arc_in()', 'MR'], ['forward_to_tape()', 'TL'], ['forward_to_tape()', 'TR']],
+    path: {main: 3, chips: ['grab_red_pom()', 'drive()'], tags: ['CAM', 'ARM', 'CLAW', 'ML', 'MR']}},
+};
+let S2L = null;
+function layoutS2() {
+  const L = {};
+  for (const R of ['A', 'B']) {
+    const d = S2DEF[R], X0 = d.X0, o = {X0, d};
+    o.box = {main: {x: X0, y: 178, w: 420, h: 172}, tools: {x: X0, y: 366, w: 420, h: 118}, motion: {x: X0, y: 500, w: 420, h: 130}, ports: {x: X0, y: 646, w: 420, h: 158}, kipr: {x: X0, y: 820, w: 420, h: 92}};
+    o.chips = {};
+    for (const layer of ['tools', 'motion']) {
+      const b = o.box[layer]; let cx = b.x + 14, cy = b.y + 40;
+      for (const name of d[layer]) { const w = TW(name, {size: 15, mono: true}) + 18; if (cx + w > b.x + b.w - 10) { cx = b.x + 14; cy += 40; } o.chips[name] = {x: cx, y: cy, w, h: 32, layer}; cx += w + 8; }
+    }
+    o.chips.main = {x: X0, y: o.box.main.y + 34 + 2 * 24 - 16, w: 420, h: 32, layer: 'main', ry: o.box.main.y + 46 + 0 * 24 - 6};
+    const n = d.tags.length, ty0 = 188, ty1 = 872;
+    o.tags = d.tags.map((tg, i) => ({id: tg[0], text: tg[1], pts: tg[2] || [tg[0]], unused: !!tg[3], x: X0 + 470, y: ty0 + i * (ty1 - ty0 - 30) / (n - 1), w: 140, h: 30}));
+    o.robot = {cx: X0 + (R === 'A' ? 752 : 740), cy: 530, s: R === 'A' ? 16.2 : 18.2};
+    L[R] = o;
+  }
+  return L;
+}
+function bez(p0, p1, p2, p3, u) { const v = 1 - u; return [v * v * v * p0[0] + 3 * v * v * u * p1[0] + 3 * v * u * u * p2[0] + u * u * u * p3[0], v * v * v * p0[1] + 3 * v * v * u * p1[1] + 3 * v * u * u * p2[1] + u * u * u * p3[1]]; }
+function partialBez(p0, p1, p2, p3, prog) { const N = 28, k = Math.ceil(N * prog); if (k <= 0) return; ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); for (let i = 1; i <= k; i++) { const q = bez(p0, p1, p2, p3, Math.min(prog, i / N)); ctx.lineTo(q[0], q[1]); } ctx.stroke(); }
+function scene2(t) {
+  if (!S2L) S2L = layoutS2();
+  const r = t - S2[0];
+  header('02 · THE CODE MAP', 'Two programs, one shape: mission → tools → motion → hardware', eo(seg(r, 0, .7)));
+  const pathA = win(t, 22.0, 25.6, .4, .4), pathB = win(t, 25.6, 30.4, .4, .4);
+  for (const R of ['A', 'B']) {
+    const o = S2L[R], d = o.d, acc = R === 'A' ? COL.A : COL.B, t0 = R === 'A' ? .6 : 3.2;
+    const pathOn = R === 'A' ? pathA : pathB, otherOn = R === 'A' ? pathB : pathA;
+    const fade = 1 - .55 * Math.max(pathOn * 0, otherOn);
+    const inPath = (kind, id) => { const p = d.path; if (kind === 'chip') return p.chips.includes(id); if (kind === 'tag') return p.tags.includes(id); return false; };
+    const dimF = (kind, id) => pathOn > 0 ? lerp(1, inPath(kind, id) ? 1 : .38, pathOn) : 1;
+    ctx.save(); ctx.globalAlpha *= fade;
+    withA(eo(seg(r, t0 - .3, t0 + .3)), () => { T(d.name, o.X0, 156, {size: 24, weight: 600, color: acc}); T(d.file, o.X0 + 610, 156, {mono: 1, size: 14, color: COL.dim, align: 'right'}); });
+    // links (behind boxes)
+    const lp = eio(seg(r, (R === 'A' ? 6.0 : 8.0), (R === 'A' ? 8.2 : 10.2)));
+    for (const [from, to] of d.links) {
+      const c = o.chips[from], tg = o.tags.find(q => q.id === to); if (!c || !tg) continue;
+      const sy = from === 'main' ? o.box.main.y + 54 : c.y + c.h / 2, p0 = [o.X0 + 420, sy], p3 = [tg.x, tg.y + tg.h / 2];
+      const hot = pathOn * (inPath('chip', from) && inPath('tag', to) ? 1 : 0) + (from === 'main' ? 0 : 0);
+      ctx.strokeStyle = rgba(acc, (.32 + .6 * hot) * dimF('chip', from)); ctx.lineWidth = 1.2 + 1.3 * hot;
+      partialBez(p0, [p0[0] + 34, p0[1]], [p3[0] - 34, p3[1]], p3, lp);
+    }
+    // boxes
+    const layers = [['main', 'main()', 'mission sequence'], ['tools', 'tools', 'what the robot does to game pieces'], ['motion', 'motion', 'how it moves'], ['ports', 'ports + calibration', '#define'], ['kipr', 'libkipr', '']];
+    layers.forEach(([k, title, sub], i) => {
+      const at = t0 + i * .35, al = eo(seg(r, at, at + .5)); if (al <= 0) return;
+      const b = o.box[k];
+      withA(al, () => {
+        const y = b.y + 10 * (1 - al);
+        panel(b.x, y, b.w, b.h, {fill: 'rgba(11,17,29,.94)', stroke: k === 'main' ? rgba(acc, .7) : COL.line2, r: 8});
+        T(title, b.x + 14, y + 25, {mono: k === 'main', size: k === 'main' ? 18 : 15, weight: 600, color: k === 'main' ? acc : COL.text, ls: k === 'main' ? 0 : 1});
+        if (sub) T(sub, b.x + b.w - 14, y + 25, {size: 14, color: COL.dim, align: 'right'});
+        if (k === 'main') d.main.forEach(([n, note], j) => {
+          const yy = y + 56 + j * 24, hot = pathOn * (j === d.path.main ? 1 : 0);
+          if (hot > 0) { ctx.fillStyle = rgba(acc, .16 * hot); ctx.fillRect(b.x + 1, yy - 17, b.w - 2, 23); ctx.fillStyle = rgba(acc, hot); ctx.fillRect(b.x + 1, yy - 17, 3, 23); }
+          withA(pathOn > 0 ? lerp(1, j === d.path.main ? 1 : .45, pathOn) : 1, () => { const w = codeStr(codeOnly(R, n), b.x + 14, yy, 44, 15); if (note) T(note, b.x + 22 + w, yy, {size: 15, color: COL.mute}); });
+        });
+        if (k === 'tools' || k === 'motion') d[k].forEach((name, j) => {
+          const c = o.chips[name], ca = eo(seg(r, at + .15 + j * .08, at + .5 + j * .08)), hot = pathOn * (inPath('chip', name) ? 1 : 0);
+          withA(ca * dimF('chip', name), () => {
+            rr(c.x, c.y + 10 * (1 - al), c.w, c.h, 6); ctx.fillStyle = hot > 0 ? rgba(acc, .18 * hot) : COL.panel2; ctx.fill();
+            ctx.strokeStyle = hot > 0 ? acc : COL.line2; ctx.lineWidth = 1 + hot; ctx.stroke();
+            T(name, c.x + 9, c.y + 21 + 10 * (1 - al), {mono: 1, size: 15, weight: 500, color: name === 'stop_all()' ? COL.mute : COL.text});
+          });
+        });
+        if (k === 'ports') d.ports.forEach((n, j) => {
+          const yy = y + 52 + j * 21; codeStr(codeOnly(R, n), b.x + 14, yy, 36, 15);
+          if (/CALIBRATE/.test(SRC[R].L[n - 1])) T('CALIBRATE', b.x + b.w - 14, yy, {mono: 1, size: 14, color: rgba(acc, .85), align: 'right'});
+        });
+        if (k === 'kipr') { codeStr('#include <kipr/wombat.h>', b.x + 150, y + 25, 30, 15); d.kipr.forEach((s, j) => T(s, b.x + 14, y + 52 + j * 22, {mono: 1, size: 15, color: COL.mute})); }
+      });
+    });
+    // layer arrows (calls flow down)
+    withA(eo(seg(r, t0 + 1.6, t0 + 2.2)), () => { for (let i = 0; i < 4; i++) { const a = o.box[layers[i][0]], b = o.box[layers[i + 1][0]]; arrow(o.X0 + 210, a.y + a.h + 2, o.X0 + 210, b.y - 2, COL.faint, 1.5, 7); } });
+    // robot
+    const ra = eo(seg(r, R === 'A' ? 5.2 : 7.2, R === 'A' ? 6.2 : 8.2));
+    withA(ra, () => {
+      const rb = o.robot; const f = xf(rb.cx, rb.cy, rb.s, 90), HW = R === 'A' ? HW_A : HW_B;
+      const tagA = (tg, i) => eo(seg(r, (R === 'A' ? 5.4 : 7.4) + i * .08, (R === 'A' ? 5.9 : 7.9) + i * .08));
+      const tagHot = tg => pathOn * (inPath('tag', tg.id) ? 1 : 0);
+      o.tags.forEach((tg, i) => withA(tagA(tg, i) * dimF('tag', tg.id), () => {
+        const hot = tagHot(tg);
+        tg.pts.forEach(pid => { const q = f(...HW[pid]); ctx.strokeStyle = rgba(acc, tg.unused ? .25 : .42 + .5 * hot); ctx.lineWidth = 1 + hot; ctx.setLineDash(tg.unused ? [3, 4] : []);
+          ctx.beginPath(); ctx.moveTo(tg.x + tg.w, tg.y + tg.h / 2); ctx.lineTo(tg.x + tg.w + 12, tg.y + tg.h / 2); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.setLineDash([]); });
+      }));
+      if (R === 'A') drawRobotA(rb.cx, rb.cy, rb.s, 90, {dark: true, flaps: {A: 0, B: 1, C: 1}});
+      else drawRobotB(rb.cx, rb.cy, rb.s, 90, {dark: true, hook: 1});
+      T('front', rb.cx, rb.cy - (R === 'A' ? 9.6 : 9.4) * rb.s - 14, {mono: 1, size: 14, color: COL.dim, align: 'center'});
+      o.tags.forEach((tg, i) => withA(tagA(tg, i) * dimF('tag', tg.id), () => {
+        const hot = tagHot(tg);
+        tg.pts.forEach(pid => { const q = f(...HW[pid]); ctx.beginPath(); ctx.arc(q[0], q[1], 3.5 + 3 * hot * (.6 + .4 * Math.sin(t * 8)), 0, 2 * PI); ctx.fillStyle = tg.unused ? COL.faint : acc; ctx.fill(); });
+        rr(tg.x, tg.y, tg.w, tg.h, 5); ctx.fillStyle = hot > 0 ? rgba(acc, .2 * hot) : 'rgba(11,17,29,.95)'; ctx.fill();
+        ctx.setLineDash(tg.unused ? [3, 3] : []); ctx.strokeStyle = tg.unused ? COL.faint : rgba(acc, .6 + .4 * hot); ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+        T(tg.text, tg.x + 9, tg.y + 20, {mono: 1, size: 14, color: tg.unused ? COL.dim : COL.text});
+        if (tg.unused) T('defined, unused', tg.x + 9, tg.y + tg.h + 17, {size: 14, color: COL.dim});
+      }));
+    });
+    ctx.restore();
+  }
+  captions([
+    [S2[0] + .4, 16.2, 'Robot A: `main()` runs the mission on top of a motion layer and a duck escapement.'],
+    [16.2, 22.0, 'Robot B has the same shape: `main()` calls motion helpers and three tool routines.'],
+    [22.0, 25.6, 'Trace one call: `follow_tape_east()` reads both tophats and the lane switch, and drives through `mecanum()`.'],
+    [25.6, 30.4, '`grab_red_pom()` is the only code that uses the camera; `drive()` turns the robot until the red blob is centred.'],
+  ], t, W / 2, 978, {align: 'center', size: 26, maxW: 1760});
+}
+
+/* =========================================================== scene 3: abstractions */
+const S3NAMES = ['start', 'mecanum()', 'follow_tape_east()', 'drop_one_duck()', 'grab_red_pom()'];
+const S3TITLES = ['Start: wait for the light, arm the shutdown', 'mecanum(): four wheels, one motion', 'follow_tape_east(): stay on the tape, stop when full', 'drop_one_duck(): an escapement with three flaps', 'grab_red_pom(): see it, centre it, grab it, unwind'];
+function scene3(t) {
+  const r = t - S3[0];
+  T('03 · CORE ABSTRACTIONS', 64, 62, {mono: 1, size: 15, color: COL.mute, ls: 2, alpha: eo(seg(r, 0, .6))});
+  S3SUB.forEach(([a, b], i) => withA(win(t, a, b + (i === 4 ? 1 : 0), .45, .35), () => T(S3TITLES[i], 64, 106, {size: 32, weight: 600})));
+  // pills
+  let px = 1856; const pills = S3NAMES.map((n, i) => ({n, w: TW(n, {mono: 1, size: 14}) + 22, i})).reverse();
+  for (const p of pills) {
+    px -= p.w; const [a, b] = S3SUB[p.i], act = sstep(a, a + .3, t) * (1 - sstep(b, b + .3, t));
+    rr(px, 88, p.w, 28, 14); ctx.fillStyle = act > .5 ? rgba(p.i === 4 ? COL.B : COL.A, .18) : 'rgba(0,0,0,0)'; ctx.fill(); ctx.strokeStyle = act > .5 ? (p.i === 4 ? COL.B : COL.A) : COL.line2; ctx.lineWidth = 1; ctx.stroke();
+    T(p.n, px + 11, 107, {mono: 1, size: 14, color: act > .5 ? COL.text : COL.dim}); px -= 8;
+  }
+  const subs = [s3a, s3b, s3c, s3d, s3e];
+  S3SUB.forEach(([a, b], i) => { const al = sstep(a, a + .45, t) * (1 - (i < 4 ? sstep(b, b + .4, t) : 0)); if (al > 0 && t < b + .4) withA(al, () => subs[i](t - a, t)); });
+  captions([
+    [S3[0] + .2, 35, 'Both programs start the same way: spin on the light sensor, then arm a 119-second shutdown.'],
+    [35, 37.9, '`mecanum()` mixes forward, sideways and turn into four wheel speeds. Strafing north, the 45° rollers cancel forward.'],
+    [37.9, 40.5, 'A mix can exceed ±100. Scaling all four by the peak keeps the direction; clipping each wheel would bend it.'],
+    [40.5, 45.5, 'Two tophats straddle the 1.875 in tape and nudge the robot sideways. The lane-full switch ends the loop.'],
+    [45.5, 51, 'Pin gate B holds duck #2, exit gate A opens, the robot creeps 2.5 in. Exactly one duck stays on the floor.'],
+    [51, 56.4, 'Turn until the red blob’s x is 70..90, approach, close the claw, then unwind the scan rotation.'],
+  ], t, W / 2, 978, {align: 'center', size: 26, maxW: 1760});
+}
+const CODEX = 64, CODEY = 150, CODEW = 820;
+function floorPanel(x, y, w, h) { rr(x, y, w, h, 10); ctx.fillStyle = COL.field; ctx.fill(); ctx.strokeStyle = COL.wall; ctx.lineWidth = 2; ctx.stroke(); }
+function readout(label, val, x, y, o = {}) { T(label, x, y, {mono: 1, size: 14, color: COL.mute, ls: 1}); T(val, x, y + 30, {mono: 1, size: o.size || 22, weight: 500, color: o.color || COL.text}); }
+
+function s3a(τ, t) {
+  const lit = sstep(2.15, 2.35, τ);
+  const hA = codeCard({x: CODEX, y: CODEY, w: CODEW, src: 'A', title: 'robot_a_main.c', tag: 'Robot A', accent: COL.A,
+    rows: [37, '...', 126, 127, 128, 129, 130, 131], hl: n => n === 130 ? 1 - lit : n === 131 ? lit : n === 37 ? .45 * win(τ, .3, 2.4) : 0, dimOthers: true});
+  withA(eo(seg(τ, .5, 1.0)), () => codeCard({x: CODEX, y: CODEY + hA + 24, w: CODEW, src: 'B', title: 'robot_b_main.c', tag: 'Robot B: the same two lines', accent: COL.B,
+    rows: [38, '...', 178, 179], hl: n => n === 178 ? 1 - lit : n === 179 ? lit : n === 38 ? .45 * win(τ, .3, 2.4) : 0, dimOthers: true}));
+  // lamp
+  const on = sstep(1.95, 2.05, τ), lx = 1010, ly = 300;
+  ctx.save(); if (on > 0) { const g = ctx.createRadialGradient(lx, ly, 4, lx, ly, 70); g.addColorStop(0, `rgba(255,236,170,${.55 * on})`); g.addColorStop(1, 'rgba(255,236,170,0)'); ctx.fillStyle = g; ctx.fillRect(lx - 80, ly - 80, 160, 160); }
+  ctx.beginPath(); ctx.arc(lx, ly, 24, 0, 2 * PI); ctx.fillStyle = on > .5 ? '#fff1c4' : '#1a2232'; ctx.fill(); ctx.strokeStyle = on > .5 ? '#ffe6a0' : COL.line2; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+  T('start light', lx, ly + 52, {mono: 1, size: 14, color: COL.mute, align: 'center'});
+  T(on > .5 ? 'ON' : 'off', lx, ly + 74, {mono: 1, size: 15, weight: 700, color: on > .5 ? '#ffe6a0' : COL.dim, align: 'center'});
+  // chart
+  const cx0 = 1100, cx1 = 1820, cy0 = 190, cy1 = 520, vy = v => cy1 - v / 4095 * (cy1 - cy0), tx = s => cx0 + s / 5 * (cx1 - cx0);
+  ctx.strokeStyle = COL.line2; ctx.lineWidth = 1; ctx.strokeRect(cx0, cy0, cx1 - cx0, cy1 - cy0);
+  T('analog(LIGHT_START)', cx0, cy0 - 12, {mono: 1, size: 15, color: COL.text});
+  T('12-bit reading over time', cx1, cy0 - 12, {mono: 1, size: 14, color: COL.dim, align: 'right'});
+  [[4095, '4095'], [770, ''], [0, '0']].forEach(([v, s]) => s && T(s, cx0 - 10, vy(v) + 5, {mono: 1, size: 14, color: COL.dim, align: 'right'}));
+  ctx.setLineDash([6, 5]); ctx.strokeStyle = COL.A; ctx.beginPath(); ctx.moveTo(cx0, vy(770)); ctx.lineTo(cx1, vy(770)); ctx.stroke(); ctx.setLineDash([]);
+  T('LIGHT_ON 770', cx1 - 8, vy(770) - 10, {mono: 1, size: 15, color: COL.A, align: 'right'});
+  T('dark: keep waiting', cx1 - 8, vy(3300) - 18, {mono: 1, size: 14, color: COL.dim, align: 'right'});
+  const val = s => s < 2.0 ? 3250 + 90 * Math.sin(s * 7.3) + 45 * Math.sin(s * 13.1 + 1) : 380 + (3250 - 380) * Math.exp(-(s - 2.0) * 14) + 25 * Math.sin(s * 11);
+  ctx.strokeStyle = COL.text; ctx.lineWidth = 2; ctx.beginPath();
+  const te = clamp(τ, 0, 5); for (let s = 0; s <= te; s += .02) { const x = tx(s), y = vy(val(s)); s ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  const tc = 2.0 + Math.log(2870 / 390) / 14;
+  if (τ > tc) { ctx.beginPath(); ctx.arc(tx(tc), vy(770), 6, 0, 2 * PI); ctx.fillStyle = COL.A; ctx.fill(); withA(sstep(tc, tc + .3, τ), () => T('< 770: loop exits', tx(tc) + 150, vy(770) + 34, {mono: 1, size: 15, color: COL.A})); }
+  // clock + bar
+  const run = Math.max(0, τ - tc), by = 700, bx0 = 1100, bx1 = 1760, bxx = s => bx0 + s / 120 * (bx1 - bx0);
+  withA(sstep(tc - .2, tc + .3, τ), () => {
+    T('seconds()', 1100, 600, {mono: 1, size: 15, color: COL.mute});
+    T(run.toFixed(2) + ' s', 1100, 646, {mono: 1, size: 40, weight: 500, color: COL.text});
+    T('the match clock both robots share', 1340, 640, {size: 18, color: COL.mute});
+  });
+  withA(sstep(tc + .2, tc + .7, τ), () => {
+    ctx.fillStyle = COL.line; ctx.fillRect(bx0, by, bx1 - bx0, 10); ctx.fillStyle = COL.A; ctx.fillRect(bx0, by, Math.max(2, bxx(run) - bx0), 10);
+    for (let s = 0; s <= 100; s += 20) { ctx.fillStyle = COL.line2; ctx.fillRect(bxx(s), by + 12, 1, 6); T(String(s), bxx(s), by + 36, {mono: 1, size: 14, color: COL.dim, align: 'center'}); }
+    T('120 s', bx1 + 12, by + 10, {mono: 1, size: 15, color: COL.text});
+    ctx.fillStyle = COL.A; ctx.fillRect(bxx(119) - 1, by - 14, 2, 14);
+    T('shut_down_in(119.0): everything off', bxx(119) + 1, by - 22, {mono: 1, size: 15, color: COL.A, align: 'right'});
+    ctx.fillStyle = COL.mute; ctx.fillRect(bxx(118) - 1, by + 10, 2, 52);
+    T('MATCH_END_S 118: every loop gives up', bxx(118) + 1, by + 80, {mono: 1, size: 15, color: COL.mute, align: 'right'});
+  });
+}
+const MIXF = {FL: [1, -1], FR: [1, 1], BL: [1, 1], BR: [1, -1]};
+const WPOS = {FL: [6.6, 3.85], FR: [6.6, -3.85], BL: [-6.6, 3.85], BR: [-6.6, -3.85]};
+function mix(vx, vy, w) { return {FL: vx - vy - w, FR: vx + vy + w, BL: vx + vy - w, BR: vx - vy + w}; }
+function resultant(m) { let x = 0, y = 0; for (const k in m) { x += m[k] * MIXF[k][0]; y += m[k] * MIXF[k][1]; } return [x, y]; }
+function s3b(τ, t) {
+  const p2 = sstep(2.7, 3.2, τ);
+  const hlSet = p2 < .5 ? [53, 59, 60, 61, 62] : [54, 55, 56, 57, 58];
+  codeCard({x: CODEX, y: CODEY, w: CODEW, src: 'A', title: 'robot_a_main.c', tag: 'lines 48-63', accent: COL.A, rows: Array.from({length: 16}, (_, i) => 48 + i),
+    hl: n => hlSet.includes(n) ? (p2 < .5 ? 1 - 2 * p2 : 2 * p2 - 1) * (n === 53 || p2 > .5 ? 1 : seg(τ, .8, 1.2)) + (n === 53 && p2 < .5 ? 0 : 0) : 0, dimOthers: true});
+  const cx = lerp(1395, 1165, eio(p2)), cy = lerp(500, 480, eio(p2)), s = lerp(23, 18, eio(p2));
+  const raw = mix(80, 40, 20), peak = 140, scaled = {}; for (const k in raw) scaled[k] = Math.trunc(raw[k] * 100 / peak);
+  const m1 = mix(0, 80, 0), mcur = p2 < .5 ? m1 : scaled;
+  const grow = p2 < .5 ? eo(seg(τ, .3, 1.1)) : eo(seg(τ, 3.2, 3.8));
+  // floor
+  floorPanel(950, 180, lerp(890, 430, eio(p2)), 640);
+  drawRobotA(cx, cy, s, 0, {flaps: {A: 0, B: 1, C: 1}, label: false, detail: false});
+  const f = xf(cx, cy, s, 0);
+  for (const k in WPOS) {
+    const [wx, wy] = WPOS[k], c = f(wx, wy), v = mcur[k] * grow, d = MIXF[k], L = v / 100 * 3.8 / Math.SQRT2;
+    arrow(c[0], c[1], c[0] + d[0] * L * s, c[1] - d[1] * L * s, '#0b2a33', 3.2, 12);
+    const lp = f(wx + (wx > 0 ? 1.0 : -1.0), wy > 0 ? 6.4 : -6.4);
+    T(`${k} ${mcur[k] > 0 ? '+' : ''}${mcur[k]}`, lp[0], lp[1] + 5, {mono: 1, size: 16, weight: 700, color: '#1d2733', align: 'center'});
+  }
+  const R = resultant(mcur), rl = Math.hypot(...R);
+  const ra = p2 < .5 ? eo(seg(τ, 1.1, 1.7)) : eo(seg(τ, 3.8, 4.3));
+  if (rl > 0) { const L = 6.5 * ra; arrow(cx, cy, cx + R[0] / rl * L * s, cy - R[1] / rl * L * s, '#0a8fa1', 6, 20); }
+  if (p2 > .5) { const Rc = resultant({FL: 20, FR: 100, BL: 100, BR: 60}), L = 6.5 * ra, rc = Math.hypot(...Rc); arrow(cx, cy, cx + Rc[0] / rc * L * s, cy - Rc[1] / rc * L * s, '#d9434c', 3, 14, [6, 5]); }
+  withA(1 - p2, () => {
+    T('mecanum(0, 80, 0)', 1400, 230, {mono: 1, size: 24, weight: 500, color: '#14202c', align: 'center'});
+    T('vx 0 · vy +80 · w 0', 1400, 262, {mono: 1, size: 15, color: '#3c4a5c', align: 'center'});
+    withA(eo(seg(τ, 1.2, 1.7)), () => { T('sum of four 45° wheel forces: pure strafe north', 1400, 790, {size: 19, color: '#1d2733', align: 'center'}); });
+  });
+  withA(p2, () => {
+    T('e.g. mecanum(80, 40, 20)', 1170, 230, {mono: 1, size: 20, weight: 500, color: '#14202c', align: 'center'});
+    T('commanded', 990, 780, {mono: 1, size: 15, color: '#0a7f90'}); T('per-wheel clip', 1110, 780, {mono: 1, size: 15, color: '#c4333c'});
+    const rows = [['raw mix: m[]', raw, '26.6°', 'turn 20', 3.3], ['motor() clips each', {FL: 20, FR: 100, BL: 100, BR: 60}, '23.2°', 'turn 10 (bent)', 3.9], ['scaled ×100/peak', scaled, '26.6°', 'turn 14 (kept)', 4.5]];
+    rows.forEach(([lab, vals, ang, tn, at], i) => withA(eo(seg(τ, at, at + .45)), () => {
+      const y0 = 190 + i * 210; panel(1410, y0, 446, 190, {fill: COL.panel, stroke: i === 1 ? rgba(COL.red, .6) : i === 2 ? rgba(COL.A, .6) : COL.line2});
+      T(lab, 1428, y0 + 28, {mono: 1, size: 16, weight: 500, color: COL.text});
+      T(ang, 1838, y0 + 28, {mono: 1, size: 18, weight: 700, color: i === 1 ? COL.red : COL.A, align: 'right'});
+      T(tn, 1838, y0 + 50, {mono: 1, size: 14, color: COL.mute, align: 'right'});
+      const base = y0 + 160, k100 = 72;
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = COL.faint; ctx.beginPath(); ctx.moveTo(1428, base - k100); ctx.lineTo(1736, base - k100); ctx.stroke(); ctx.setLineDash([]);
+      T('100', 1742, base - k100 + 5, {mono: 1, size: 14, color: COL.dim});
+      Object.keys(vals).forEach((k, j) => {
+        const v = vals[k], x = 1440 + j * 74, hgt = v / 100 * k100;
+        ctx.fillStyle = rgba(i === 1 ? COL.red : COL.A, .75); ctx.fillRect(x, base - Math.min(hgt, k100), 46, Math.min(hgt, k100));
+        if (hgt > k100) { ctx.fillStyle = COL.red; ctx.fillRect(x, base - hgt, 46, hgt - k100); }
+        T(String(v), x + 23, base - hgt - 7, {mono: 1, size: 15, color: COL.text, align: 'center'});
+        T(k, x + 23, base + 20, {mono: 1, size: 14, color: COL.mute, align: 'center'});
+      });
+    }));
+  });
+}
+function s3c(τ, t) {
+  const stopT = 4.0, xr = 10 * Math.min(τ, stopT), d = 1.75 * Math.sin(2 * PI * Math.min(τ, stopT) / 1.7 + .9);
+  const yA = d, l = Math.abs(yA + 2.2) < .94, rr_ = Math.abs(yA - 2.2) < .94;
+  const ducksIn = [0, 1, 2, 3, 4].filter(k => τ >= .4 + .8 * k).length, full = τ >= 3.85;
+  const act = τ >= stopT ? 100 : (l && !rr_) ? 95 : (rr_ && !l) ? 96 : 97;
+  codeCard({x: CODEX, y: CODEY, w: CODEW, src: 'A', title: 'robot_a_main.c', tag: 'lines 86-103', accent: COL.A, rows: Array.from({length: 18}, (_, i) => 86 + i),
+    hl: n => n === act ? 1 : (n === 93 || n === 94) && τ < stopT ? .45 : n === 92 && τ < stopT ? .3 : (n === 90 || n === 91) && τ >= 3.85 ? .5 : 0, dimOthers: true});
+  const PX = 950, PY = 180, PW = 906, PH = 520, s = 24, cx = 1420, ty = PY + PH / 2;
+  floorPanel(PX, PY, PW, PH);
+  ctx.save(); rr(PX + 1, PY + 1, PW - 2, PH - 2, 10); ctx.clip();
+  ctx.fillStyle = COL.tape; ctx.fillRect(PX, ty - 1.875 / 2 * s, PW, 1.875 * s);
+  T('upper lane tape, 1.875 in', PX + 16, ty - 1.875 / 2 * s - 10, {mono: 1, size: 14, color: '#3c4a5c'});
+  const cy = ty - yA * s;
+  drawRobotA(cx, cy, s, 0, {shadow: true, flaps: {A: 0, B: 1, C: 1}});
+  for (let k = 0; k < 5; k++) {
+    const tk = .4 + .8 * k, xd = 12.95 + 8 * k;
+    if (τ < tk) drawDuck(cx + (xd - xr) * s, ty, 1.05 * s, DUCKS[k][0], 0);
+    else { const lx = lerp(8.4, REAR + k * SP, eo(seg(τ, tk, tk + .5))); drawDuck(cx + lx * s, cy, 1.05 * s, DUCKS[k][0], 0); }
+  }
+  const f = xf(cx, cy, s, 0);
+  [[HW_A.TL, l], [HW_A.TR, rr_]].forEach(([p, on]) => { const q = f(...p); ctx.beginPath(); ctx.arc(q[0], q[1], 12, 0, 2 * PI); ctx.strokeStyle = on ? '#ffffff' : 'rgba(255,255,255,.0)'; ctx.lineWidth = 3; ctx.stroke(); if (on) { ctx.beginPath(); ctx.arc(q[0], q[1], 18, 0, 2 * PI); ctx.strokeStyle = 'rgba(10,143,161,.8)'; ctx.lineWidth = 2; ctx.stroke(); } });
+  const tq = f(...HW_A.TOUCH); if (full) { ctx.beginPath(); ctx.arc(tq[0], tq[1], 14, 0, 2 * PI); ctx.strokeStyle = '#d9434c'; ctx.lineWidth = 3; ctx.stroke(); }
+  if (τ < stopT && act !== 97) { const fr = f(10.6, 0); arrow(fr[0], fr[1], fr[0], fr[1] + (act === 95 ? -46 : 46), '#0a8fa1', 4, 14); }
+  const lq = f(...HW_A.TL), rq = f(...HW_A.TR);
+  T('TOPHAT_L', f(8.6, 4.55)[0], f(8.6, 4.55)[1] - 14, {mono: 1, size: 14, weight: 700, color: '#14202c', align: 'center'}); T('TOPHAT_R', f(8.6, -4.55)[0], f(8.6, -4.55)[1] + 26, {mono: 1, size: 14, weight: 700, color: '#14202c', align: 'center'});
+  T('TOUCH_LANE', tq[0] + 20, f(-7.9, -4.55)[1] + 26, {mono: 1, size: 14, weight: 700, color: full ? '#c4333c' : '#14202c', align: 'center'});
+  ctx.restore();
+  const ry = PY + PH + 36;
+  readout('l = analog(TOPHAT_L) < 2700', l ? '1' : '0', 960, ry, {color: l ? COL.A : COL.text});
+  readout('r = analog(TOPHAT_R) < 2700', rr_ ? '1' : '0', 1250, ry, {color: rr_ ? COL.A : COL.text});
+  readout('digital(TOUCH_LANE)', full ? '1  lane full' : '0', 1540, ry, {color: full ? COL.red : COL.text});
+  readout('command', τ >= stopT ? 'stop_all()' : act === 95 ? 'mecanum(speed, +20, 0)  nudge left' : act === 96 ? 'mecanum(speed, -20, 0)  nudge right' : 'mecanum(speed, 0, 0)  straight', 960, ry + 76, {size: 20});
+  readout('ducks in lane', `${ducksIn} / 5`, 1540, ry + 76, {size: 20});
+}
+function s3d(τ, t) {
+  const step = τ < .5 ? 0 : τ < 1.1 ? 1 : τ < 1.7 ? 2 : τ < 3.1 ? 3 : τ < 3.6 ? 4 : τ < 4.4 ? 5 : 6;
+  const lineFor = [113, 114, 116, 118, 119, 121, 123][step], sleepL = (τ > .8 && τ < 1.1) ? 115 : (τ > 1.4 && τ < 1.7) ? 117 : (τ > 3.4 && τ < 3.6) ? 120 : (τ > 3.9 && τ < 4.4) ? 122 : 0;
+  const hc = codeCard({x: CODEX, y: CODEY, w: CODEW, src: 'A', title: 'robot_a_main.c', tag: 'lines 112-123', accent: COL.A, rows: Array.from({length: 12}, (_, i) => 112 + i),
+    hl: n => n === lineFor && !sleepL ? 1 : n === sleepL ? 1 : n === 112 ? .3 : 0, dimOthers: true});
+  codeCard({x: CODEX, y: CODEY + hc + 24, w: CODEW, src: 'A', title: 'robot_a_main.c', tag: 'servo positions', accent: COL.A, rows: [22, 23, 24, '...', 43, 44, 45],
+    hl: n => (n === 44 && (step === 2 || step === 5)) || (n === 45 && (step === 1 || step === 4)) ? 1 : 0, dimOthers: true});
+  const PX = 950, PY = 180, PW = 906, PH = 500, s = 26;
+  floorPanel(PX, PY, PW, PH);
+  ctx.save(); rr(PX + 1, PY + 1, PW - 2, PH - 2, 10); ctx.clip();
+  ctx.strokeStyle = 'rgba(40,55,75,.13)'; ctx.lineWidth = 1;
+  for (let x = PX; x < PX + PW; x += s) { ctx.beginPath(); ctx.moveTo(x + .5, PY); ctx.lineTo(x + .5, PY + PH); ctx.stroke(); }
+  const creep = 2.5 * eio(seg(τ, 1.7, 3.1)), cx = 1380 + creep * s, cy = PY + 260;
+  const fl = {C: 0, B: 1 - eio(seg(τ, .5, .8)) + eio(seg(τ, 3.6, 3.9)), A: eio(seg(τ, 1.1, 1.4)) - eio(seg(τ, 3.1, 3.4))};
+  drawRobotA(cx, cy, s, 0, {shadow: true, flaps: fl});
+  const x0w = 1380 + REAR * s;
+  for (let k = 0; k < 5; k++) {
+    let x;
+    if (k === 0) x = τ < 1.7 ? cx + REAR * s : x0w;
+    else { const slot = k - eio(seg(τ, 3.9, 4.4)); x = cx + (REAR + slot * SP) * s; }
+    drawDuck(x, cy, 1.05 * s, DUCKS[k][0], 0);
+  }
+  const f = xf(cx, cy, s, 0);
+  const flapLab = (lx, name, sv, open, side) => {
+    const q = f(lx, side > 0 ? 4.55 : -4.55), y = side > 0 ? q[1] - 22 : q[1] + 34;
+    T(name, q[0], y - 22, {mono: 1, size: 15, weight: 700, color: '#0b2a33', align: 'center'});
+    T(`${sv} → ${open > .5 ? 'GATE_OPEN' : 'GATE_CLOSED'}`, q[0], y, {mono: 1, size: 14, color: open > .5 ? '#0a7f90' : '#3c4a5c', align: 'center'});
+  };
+  flapLab(8.2, 'gate C (intake)', 'SERVO_GATE_C', fl.C, 1); flapLab(-5.7, 'gate B (pin)', 'SERVO_GATE_B', fl.B, 1);
+  { const q = f(-8.7, -4.55); T('gate A (exit)', q[0] - 10, q[1] + 34, {mono: 1, size: 15, weight: 700, color: '#0b2a33', align: 'center'}); T(`SERVO_GATE_A → ${fl.A > .5 ? 'GATE_OPEN' : 'GATE_CLOSED'}`, q[0] - 10, q[1] + 56, {mono: 1, size: 14, color: fl.A > .5 ? '#0a7f90' : '#3c4a5c', align: 'center'}); }
+  if (τ > 1.7) { ctx.strokeStyle = '#0a7f90'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(1380, PY + 440); ctx.lineTo(cx, PY + 440); ctx.stroke(); ctx.setLineDash([]); T(`move_in(2.5, 0, SPEED_SLOW): +${creep.toFixed(1)} in`, 1380, PY + 466, {mono: 1, size: 15, color: '#0b2a33'}); }
+  if (τ > 3.2) withA(sstep(3.2, 3.6, τ), () => T('stays on the floor', x0w, cy - 48, {mono: 1, size: 15, weight: 700, color: '#0b2a33', align: 'center'}));
+  ctx.restore();
+  const steps = ['pin B', 'open A', 'creep 2.5 in', 'close A', 'release B'];
+  let x = 960; const y = PY + PH + 30;
+  steps.forEach((s_, i) => { const w = TW(s_, {mono: 1, size: 15}) + 26, on = step === i + 1, done = step > i + 1;
+    rr(x, y, w, 34, 17); ctx.fillStyle = on ? rgba(COL.A, .22) : 'rgba(0,0,0,0)'; ctx.fill(); ctx.strokeStyle = on ? COL.A : done ? rgba(COL.A, .45) : COL.line2; ctx.lineWidth = 1; ctx.stroke();
+    T(s_, x + 13, y + 22, {mono: 1, size: 15, color: on ? COL.text : done ? COL.mute : COL.dim}); x += w + 10; });
+  T('duck #1 out, #2..#5 held: one per call', 1856, y + 22, {size: 17, color: COL.mute, align: 'right'});
+}
+function s3e(τ, t) {
+  const spin = 31.4, scanU = eio(seg(τ, .4, 2.0)), unw = eio(seg(τ, 3.9, 4.9));
+  const rot = spin * scanU * (1 - unw), app = 2 * (eio(seg(τ, 2.1, 2.6)) - eio(seg(τ, 3.4, 3.8))), held = τ > 2.8;
+  const beta = 35 - spin * scanU, xImg = 79.5 - beta * 2.65, seen = beta < 30 && !held, found = τ >= 2.0;
+  const line = τ < .4 ? 121 : !seen && !found ? 136 : !found ? (xImg < 70 ? 132 : 133) : τ < 2.1 ? 134 : τ < 2.6 ? 144 : τ < 3.0 ? 145 : τ < 3.4 ? 147 : τ < 3.85 ? 149 : 157;
+  const rows = [128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, '...', 142, 143, 144, 145, 146, 147, 148, 149, '...', 155, 156, 157, 158];
+  codeCard({x: CODEX, y: CODEY, w: CODEW, src: 'B', title: 'robot_b_main.c', tag: 'lines 128-158', accent: COL.B, rows, lh: 22,
+    hl: n => n === line ? 1 : (n === 130 || n === 131) && seen && !found ? .45 : (n === 155 || n === 156 || n === 158) && line === 157 ? .45 : n === 121 && τ < .4 ? 1 : 0, dimOthers: true});
+  // camera frame
+  const fx = 970, fy = 230, fw = 420, fh = 315, k = fw / 160;
+  T('camera frame · 160 px wide', fx, fy - 14, {mono: 1, size: 15, color: COL.text});
+  rr(fx, fy, fw, fh, 6); ctx.fillStyle = '#0a0f18'; ctx.fill(); ctx.strokeStyle = COL.line2; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = rgba(COL.B, .12); ctx.fillRect(fx + 70 * k, fy + 1, 20 * k, fh - 2);
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = rgba(COL.B, .7); [70, 90].forEach(v => { ctx.beginPath(); ctx.moveTo(fx + v * k, fy); ctx.lineTo(fx + v * k, fy + fh); ctx.stroke(); }); ctx.setLineDash([]);
+  [[0, 'left'], [70, 'center'], [90, 'center'], [159, 'right']].forEach(([v, al]) => T(String(v), fx + v * k + (v === 0 ? 2 : 0), fy + fh + 22, {mono: 1, size: 14, color: v === 70 || v === 90 ? COL.B : COL.dim, align: al}));
+  if (seen || (found && !held)) {
+    const rad = (14 + 18 * eio(seg(τ, 2.1, 2.6))), bx = fx + clamp(xImg, -10, 170) * k;
+    ctx.save(); rr(fx, fy, fw, fh, 6); ctx.clip();
+    const g = ctx.createRadialGradient(bx, fy + 160, 2, bx, fy + 160, rad * 1.8); g.addColorStop(0, 'rgba(239,90,98,.95)'); g.addColorStop(.6, 'rgba(239,90,98,.55)'); g.addColorStop(1, 'rgba(239,90,98,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, fy + 160, rad * 1.8, 0, 2 * PI); ctx.fill();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.strokeRect(bx - rad, fy + 160 - rad, 2 * rad, 2 * rad);
+    ctx.restore();
+    T('x = ' + Math.round(xImg), bx, fy + 160 - rad - 10, {mono: 1, size: 15, weight: 700, color: COL.text, align: 'center'});
+  }
+  const ry = fy + fh + 66;
+  readout('get_object_count(CAM_RED)', seen || (found && !held) ? '1' : '0', fx, ry);
+  readout('found', found ? '1' : '0', fx + 300, ry, {color: found ? COL.B : COL.text});
+  readout('drive(l, r)', τ < .4 ? 'arm down, claw open' : !found ? 'drive(-25, 25)  turn left' : line === 157 ? 'unwind the scan' : line === 144 || line === 149 ? 'forward_in(±2.0, 30)' : 'stop_all()', fx, ry + 76, {size: 20});
+  // top-down
+  const PX = 1440, PY = 180, PW = 416, PH = 600; floorPanel(PX, PY, PW, PH);
+  ctx.save(); rr(PX + 1, PY + 1, PW - 2, PH - 2, 10); ctx.clip();
+  const s = 15, c0 = [1640, 600], h = 90 + rot, hr = h * PI / 180;
+  const c = [c0[0] + app * s * Math.cos(hr), c0[1] - app * s * Math.sin(hr)];
+  const pomW = [c0[0] + 10 * s * Math.cos(125 * PI / 180), c0[1] - 10 * s * Math.sin(125 * PI / 180)];
+  ctx.strokeStyle = 'rgba(20,32,44,.35)'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(c0[0], c0[1]); ctx.lineTo(c0[0], c0[1] - 12 * s); ctx.stroke(); ctx.setLineDash([]);
+  if (rot > .5) { ctx.strokeStyle = '#a86a07'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(c0[0], c0[1], 5.5 * s, -PI / 2 - rot * PI / 180, -PI / 2, false); ctx.stroke(); }
+  if (!held) drawPom(pomW[0], pomW[1], .8 * s, COL.red);
+  drawRobotB(c[0], c[1], s, h, {fov: (τ > .3 && τ < 2.1) ? 1 : 0, claw: eio(seg(τ, 2.6, 3.0)), pom: held, shadow: true});
+  ctx.restore();
+  T('heading at the start of the scan', PX + 16, PY + PH - 16, {mono: 1, size: 14, color: '#3c4a5c'});
+  readout('|spun| from gmpc(LEFT)', Math.round(rot * 13) + ' ticks', PX, PY + PH + 36, {color: COL.B});
+}
+
+/* =========================================================== scene 4: the match */
+const SCHED_A = [[-2.4, 127], [-2.1, 128], [-1.8, 129], [-1.5, 130], [0, 131], [.25, 134], [16, 137], [20, 141], [22.5, 142], [24, 145], [41, 146], [41.3, 149], [49, 150], [51, 153], [57, 154], [59, 157], [62, 158], [69, 159], [74, 162], [76, 163], [82, 164], [84, 167], [87, 168], [92, 169], [98, 170], [100, 173], [103, 174], [111, 175], [115, 176], [117, 178], [117.3, 179], [117.6, 180], [118, 181]];
+const SCHED_B = (() => {
+  const s = [[-2.4, 173], [-2.25, 174], [-2.1, 175], [-1.95, 176], [-1.8, 177], [-1.5, 178], [0, 179], [.25, 182], [2, 183], [11, 184], [16, 185], [17.5, 188], [21, 189], [24.5, 190], [28, 193], [50, 196], [52, 197], [58, 200], [59, 201], [63, 202], [63.1, 205], [64.5, 206], [65.5, 207], [66.0, 208]];
+  const P = PUSH_T.concat([86]);
+  for (let k = 0; k < 5; k++) { const p = P[k], q = P[k + 1]; s.push([p, 209], [p + .1, 210]); if (k < 4) s.push([p + 2.1, 211], [p + 2.2, 212], [p + 2.85, 213]); else s.push([q - .1, 211]); }
+  s.push([86, 218], [87, 219], [88, 220], [91, 221], [93.5, 222], [95.5, 223], [95.8, 224], [97.3, 225], [97.5, 228], [103.5, 231], [103.8, 232], [104.5, 233], [110.8, 234], [111.3, 235], [111.7, 236], [112.2, 239], [112.4, 240], [112.6, 241], [113.2, 242]);
+  return s;
+})();
+function schedAt(S, m) { let i = 0; while (i < S.length - 1 && S[i + 1][0] <= m) i++; return i; }
+const FNCAT = {move_in: 'move', forward_in: 'move', arc_in: 'move', turn_deg: 'move', forward_to_tape: 'move', follow_tape_east: 'sense', drop_one_duck: 'tool', flip_cup_with_right_wing: 'tool', grab_red_pom: 'tool', push_stack_north: 'tool', msleep: 'wait', while: 'wait'};
+function lineFn(src, n) { const s = codeOnly(src, n); if (/^while/.test(s)) return 'while'; const m = /([A-Za-z_]\w*)\s*\(/.exec(s); return m ? m[1] : ''; }
+function callStack(src, n, m, t0) {
+  const fn = lineFn(src, n), dt = m - t0; let leaf = '';
+  const s = codeOnly(src, n);
+  if (fn === 'while') leaf = /LIGHT_START/.test(s) ? 'analog(LIGHT_START)' : 'seconds()  waiting on the clock';
+  else if (fn === 'move_in') leaf = 'mecanum() › motor()';
+  else if (['forward_in', 'arc_in', 'turn_deg'].includes(fn)) leaf = 'drive() › motor()';
+  else if (fn === 'forward_to_tape') leaf = 'analog(TOPHAT_L), analog(TOPHAT_R)';
+  else if (fn === 'follow_tape_east') leaf = 'analog(TOPHAT_L), digital(TOUCH_LANE), mecanum()';
+  else if (fn === 'drop_one_duck') leaf = dt < .3 ? 'set_servo_position(SERVO_GATE_B, GATE_CLOSED)' : dt < .6 ? 'set_servo_position(SERVO_GATE_A, GATE_OPEN)' : dt < 1.4 ? 'move_in(2.5, 0, SPEED_SLOW)' : dt < 1.65 ? 'set_servo_position(SERVO_GATE_A, GATE_CLOSED)' : 'set_servo_position(SERVO_GATE_B, GATE_OPEN)';
+  else if (fn === 'grab_red_pom') leaf = m < 59.2 ? 'set_servo_position(SERVO_ARM, ARM_DOWN)' : m < 60.2 ? 'camera_update(), get_object_center_x()' : m < 60.7 ? 'forward_in(2.0, 30)' : m < 61.1 ? 'set_servo_position(SERVO_CLAW, CLAW_CLOSED)' : m < 61.5 ? 'set_servo_position(SERVO_ARM, ARM_UP)' : m < 62.0 ? 'forward_in(-2.0, 30)' : 'unwind the scan rotation';
+  else if (fn === 'flip_cup_with_right_wing') leaf = dt < .3 ? 'set_servo_position(SERVO_HOOK, HOOK_DOWN)' : 'forward_in(push_in, SPEED_PUSH)';
+  else if (fn === 'push_stack_north') leaf = dt < 1.5 ? 'forward_in(3.5, SPEED_PUSH)' : 'forward_in(-3.5, SPEED_FAST)';
+  const head = fn && !['while', 'msleep', 'main', 'for', 'if'].includes(fn) ? fn + '()' : '';
+  return ['main()', head, leaf].filter(Boolean);
+}
+const S4R = {A: {src: 'A', first: 126, last: 182, S: SCHED_A, acc: COL.A, name: 'ROBOT A · DUCK RUNNER', file: 'robot_a_main.c'},
+             B: {src: 'B', first: 172, last: 243, S: SCHED_B, acc: COL.B, name: 'ROBOT B · POINT SCORER', file: 'robot_b_main.c'}};
+const VIS = 12;
+function codePanel4(R, x, y, w, m) {
+  const o = S4R[R], rows = []; for (let n = o.first; n <= o.last; n++) rows.push(n);
+  const i = schedAt(o.S, m), cur = o.S[i], prev = o.S[Math.max(0, i - 1)];
+  const tgt = n => clamp(n - o.first - 4, 0, rows.length - VIS);
+  const u = eio(clamp((m - cur[0]) / .45)), scroll = lerp(tgt(prev[1]), tgt(cur[1]), i === 0 ? 1 : u);
+  const hu = clamp((m - cur[0]) / .18);
+  const hh = 58, ch = VIS * 22, H_ = hh + ch + 12;
+  panel(x, y, w, H_, {fill: COL.panel, stroke: rgba(o.acc, .45)});
+  ctx.fillStyle = COL.panel2; ctx.fillRect(x + 1, y + 1, w - 2, hh - 2); ctx.fillStyle = COL.line2; ctx.fillRect(x + 1, y + hh - 1, w - 2, 1);
+  T(o.name, x + 16, y + 24, {size: 15, weight: 600, color: o.acc, ls: 1.5});
+  T(o.file + ' · main()', x + w - 16, y + 24, {mono: 1, size: 14, color: COL.dim, align: 'right'});
+  const st = callStack(R, cur[1], m, cur[0]);
+  let cx = x + 16; const maxW = w - 32;
+  ctx.save(); ctx.beginPath(); ctx.rect(x + 1, y + 28, w - 2, 28); ctx.clip();
+  st.forEach((s, k) => { const col = k === st.length - 1 ? COL.text : k === 1 ? o.acc : COL.mute; if (k) cx += T(' › ', cx, y + 48, {mono: 1, size: 15, color: COL.dim}); cx += T(s, cx, y + 48, {mono: 1, size: 15, color: col, weight: k === st.length - 1 ? 500 : 400}); });
+  ctx.restore();
+  codeView({x: x + 1, y: y + hh + 4, w: w - 2, h: ch, src: R, rows, scroll, accent: o.acc, hl: n => n === cur[1] ? (i === 0 ? 1 : hu) : n === prev[1] && prev !== cur ? 1 - hu : 0, dimOthers: true});
+  return H_;
+}
+const TL0 = 150, TL1 = 1060, tlx = m => TL0 + clamp(m, 0, 120) / 120 * (TL1 - TL0);
+function timeline(m, y) {
+  // slow bands
+  const tracks = [['A', y, SCHED_A, COL.A], ['B', y + 40, SCHED_B, COL.B]];
+  for (const [R, ty, S, acc] of tracks) {
+    T(R, 64, ty + 20, {mono: 1, size: 16, weight: 700, color: acc});
+    const blocks = [];
+    for (let i = 0; i < S.length; i++) {
+      const a = Math.max(0, S[i][0]), b = i < S.length - 1 ? S[i + 1][0] : 120; if (b <= 0) continue;
+      const fn = lineFn(R, S[i][1]), cat = FNCAT[fn] || 'io';
+      const last = blocks[blocks.length - 1];
+      if (last && last.fn === fn && fn !== 'drop_one_duck' && fn !== 'push_stack_north') { last.b = b; last.n++; } else blocks.push({a, b, fn, cat, n: 1});
+    }
+    for (const bk of blocks) {
+      const x0 = tlx(bk.a), x1 = tlx(bk.b), past = m >= bk.b ? 1 : m >= bk.a ? 1 : 0;
+      const al = {move: .38, sense: .62, tool: .95, wait: .14, io: .25}[bk.cat] * (past ? 1 : .45);
+      ctx.fillStyle = rgba(acc, al); ctx.fillRect(x0 + .5, ty, Math.max(1, x1 - x0 - 1), 28);
+      if (bk.cat === 'wait') { ctx.save(); ctx.beginPath(); ctx.rect(x0, ty, x1 - x0, 28); ctx.clip(); ctx.strokeStyle = rgba(acc, .3); for (let k = x0 - 30; k < x1; k += 7) { ctx.beginPath(); ctx.moveTo(k, ty + 28); ctx.lineTo(k + 28, ty); ctx.stroke(); } ctx.restore(); }
+      const lab = bk.fn === 'while' ? 'wait' : bk.fn + (bk.n > 1 && bk.cat === 'move' ? ' ×' + bk.n : '');
+      if (lab && x1 - x0 > TW(lab, {mono: 1, size: 14}) + 10) T(lab, x0 + 5, ty + 19, {mono: 1, size: 14, color: bk.cat === 'tool' ? '#071018' : COL.text, alpha: past ? 1 : .55});
+    }
+  }
+  // events
+  let d = 0;
+  for (const e of EVENTS) {
+    const x = tlx(e.t), on = m >= e.t;
+    if (e.duck) { d++; const ty = y; ctx.beginPath(); ctx.moveTo(x, ty - 4); ctx.lineTo(x + 6, ty - 10); ctx.lineTo(x, ty - 16); ctx.lineTo(x - 6, ty - 10); ctx.closePath(); ctx.fillStyle = on ? COL.A : COL.faint; ctx.fill(); T('×' + Math.max(1, d), x, ty - 22, {mono: 1, size: 14, weight: 700, color: on ? COL.A : COL.dim, align: 'center'}); }
+    else { const ty = y + 40 + 28; ctx.beginPath(); ctx.moveTo(x, ty + 4); ctx.lineTo(x + 6, ty + 10); ctx.lineTo(x, ty + 16); ctx.lineTo(x - 6, ty + 10); ctx.closePath(); ctx.fillStyle = on ? COL.B : COL.faint; ctx.fill(); T('+' + e.pts, x, ty + 34, {mono: 1, size: 14, weight: 700, color: on ? COL.B : COL.dim, align: 'center'}); }
+  }
+  const ay = y + 128;
+  ctx.fillStyle = COL.line2; ctx.fillRect(TL0, ay, TL1 - TL0, 1);
+  for (const [a, b] of SLOW) { ctx.fillStyle = rgba(COL.text, .55); ctx.fillRect(tlx(a), ay - 4, tlx(b) - tlx(a), 3); }
+  T('bars on the axis: played at 1×', TL1, ay + 48, {mono: 1, size: 14, color: COL.dim, align: 'right'});
+  for (let s = 0; s <= 120; s += 10) { ctx.fillRect(tlx(s), ay, 1, 6); T(s === 120 ? '120 s' : String(s), tlx(s), ay + 24, {mono: 1, size: 14, color: COL.dim, align: s === 120 ? 'right' : 'center'}); }
+  const px = tlx(m); ctx.fillStyle = COL.text; ctx.fillRect(px - 1, y - 30, 2, ay - y + 34);
+  ctx.beginPath(); ctx.moveTo(px - 6, y - 36); ctx.lineTo(px + 6, y - 36); ctx.lineTo(px, y - 28); ctx.closePath(); ctx.fill();
+}
+const CAP4 = [
+  [-2.4, 0, 'Both Wombats wait in their start boxes, spinning on `analog(LIGHT_START)`.'],
+  [0, 10.5, 'Light on. B arcs out of zone 5 toward the upper cup; A sits in `msleep(16000)` to stay out of its way.'],
+  [10.5, 16.5, 'B’s left plow wing rolls the upper cup upright and carries it into zone 2.'],
+  [16.5, 23, 'A strafes north to the centre tape. Mecanum: it never turns, its heading stays east.'],
+  [23, 41, '`follow_tape_east()`: tophats keep the lane mouth on the tape while five ducks are swallowed, until the lane-full switch trips.'],
+  [41, 48.5, 'A strafes into zone 2. B is parked at (68, 16) inside `while (seconds() < 50)`.'],
+  [48.5, 52, '`drop_one_duck()`: pin gate B, open exit gate A, creep 2.5 in. One duck stays in zone 2.'],
+  [52, 58.3, 'B hooks the lower cup with its right wing and pushes it west into zone 5.'],
+  [58.3, 63.5, '`grab_red_pom()`: turn until the red blob sits at x 70..90, approach, close the claw, unwind the scan.'],
+  [63.5, 69, 'Five pom stacks, east to west: `push_stack_north()` shoves each one off the tape into zone 1.'],
+  [69, 75, 'The robots never talk. Both are synchronised only by the clock: A holds in `while (seconds() < 74)`.'],
+  [75, 88, 'Each duck drop adds a zone to the multiplier while B finishes the stacks, +8 each.'],
+  [88, 104, 'B sweeps pickleball 1 off its post with the hook and pushes it under the platform.'],
+  [104, 113, 'The red pom goes alone on the platform: +51, the biggest single item in the match.'],
+  [113, 117.5, 'Last duck, zone 5: five zones hold exactly one duck. Multiplier ×5.'],
+  [117.5, 125, 'Both programs finish before `MATCH_END_S`. 146 points × 5 = 730.'],
+];
+function scene4(t) {
+  const r = t - S4[0], m = s4m(t), mc = clamp(m, 0, 120);
+  header('04 · THE MATCH, TRACED THROUGH THE CODE', 'One 120-second match, line by line', eo(seg(r, 0, .6)));
+  const b = {x: 92, y: 152, s: 10.4};
+  const M = drawField(b, mc, {trails: true, zoneGlow: true});
+  // axes
+  for (const v of [0, 20, 40, 60, 80, 93.08]) T(v === 93.08 ? '93.08 in' : String(v), M.X(v), M.Y(0) + 34, {mono: 1, size: 14, color: COL.dim, align: v === 0 ? 'left' : v === 93.08 ? 'right' : 'center'});
+  for (const v of [0, 20, 40.2]) T(String(v), M.X(0) - 14, M.Y(v) + 5, {mono: 1, size: 14, color: COL.dim, align: 'right'});
+  T('x →', M.X(0) + 30, M.Y(0) + 34, {mono: 1, size: 14, color: COL.mute}); T('y ↑', M.X(0) - 14, M.Y(10) + 5, {mono: 1, size: 14, color: COL.mute, align: 'right'});
+  // event chips
+  const bounds = [M.X(0) - 8, M.X(93.08) + 8, 128, M.Y(0) + 8], avoid = robotBoxes(M, mc);
+  for (const e of EVENTS) { const a = win(mc, e.t, e.t + 3.4, .25, .5) * (m >= e.t ? 1 : 0); if (a > 0) chip(e.text, M.X(e.pos[0]), M.Y(e.pos[1]), e.who === 'A' ? '#0aa9bd' : '#e39a26', a, bounds, avoid); }
+  timeline(mc, 668);
+  captions(CAP4.map(([a, b2, s]) => [a <= -2 ? S4[0] : sceneOfMatch(a), b2 >= 120 ? S4[1] + .4 : sceneOfMatch(b2), s]), t, 64, 900, {size: 25, maxW: 1000, lh: 36});
+  // code panels
+  codePanel4('A', 1120, 128, 736, m);
+  codePanel4('B', 1120, 478, 736, m);
+  // readouts
+  const sc = scoreAt(mc), y = 862;
+  T('MATCH CLOCK', 1120, y - 18, {mono: 1, size: 14, color: COL.mute, ls: 1.5});
+  T(mc.toFixed(1).padStart(5, '0') + ' s', 1120, y + 30, {mono: 1, size: 40, weight: 500});
+  const rate = m < 0 || m > 120 ? '' : rateAt(m).toFixed(1) + '×';
+  if (rate) T('playback ' + rate, 1120, y + 66, {mono: 1, size: 14, color: rateAt(m) < 1.3 ? COL.text : COL.dim});
+  const cell = (lab, val, x, col, sz = 40) => { T(lab, x, y - 18, {mono: 1, size: 14, color: COL.mute, ls: 1.5}); T(val, x, y + 30, {mono: 1, size: sz, weight: 600, color: col}); };
+  cell('SUBTOTAL', String(sc.sub), 1372, COL.B);
+  T('×', 1488, y + 26, {mono: 1, size: 30, color: COL.dim});
+  const lastDuck = EVENTS.filter(e => e.duck && e.t <= mc).pop(), flash = lastDuck ? 1 - seg(mc, lastDuck.t, lastDuck.t + 1.5) : 0;
+  if (flash > 0) { rr(1514, y - 40, 150, 84, 8); ctx.fillStyle = rgba(COL.A, .18 * flash); ctx.fill(); }
+  cell('MULTIPLIER', '×' + sc.mult, 1526, COL.A);
+  for (let k = 0; k < 5; k++) { rr(1528 + k * 24, y + 46, 18, 18, 3); ctx.fillStyle = k < sc.d ? COL.A : 'rgba(0,0,0,0)'; ctx.fill(); ctx.strokeStyle = k < sc.d ? COL.A : COL.faint; ctx.lineWidth = 1; ctx.stroke(); }
+  T('=', 1680, y + 26, {mono: 1, size: 30, color: COL.dim});
+  cell('TOTAL', String(sc.total), 1712, COL.text, 48);
+  T('zones with one duck', 1528, y + 92, {mono: 1, size: 14, color: COL.dim});
+}
+
+/* =========================================================== scene 5: final */
+function scene5(t) {
+  const r = t - S5[0], a = (x, d = .5) => eo(seg(r, x, x + d));
+  header('05 · FINAL BOARD', 'What the clock leaves behind, and what to test first', a(0));
+  withA(a(.2, .7), () => { const b = {x: 84, y: 170, s: 8.8}; drawField(b, 120, {trails: true, zoneGlow: true, labels: true}); });
+  const rows = [['Upper cup upright, off the tape', '21', 'B'], ['Lower cup upright, off the tape', '21', 'B'], ['5 pom stacks into zone 1  (5 × 8)', '40', 'B'], ['Pickleball under the platform', '8', 'B'], ['Red pom alone on the platform', '51', 'B'], ['5 small ducks, one per zone  (5 × 1)', '5', 'A']];
+  const X0 = 1010, X1 = 1856;
+  withA(a(.6), () => T('Score breakdown', X0, 186, {size: 26, weight: 600}));
+  rows.forEach(([lab, v, R], i) => withA(a(.9 + i * .3), () => {
+    const y = 240 + i * 50; ctx.fillStyle = R === 'A' ? COL.A : COL.B; ctx.fillRect(X0, y - 17, 3, 22);
+    T(lab, X0 + 16, y, {size: 22, color: COL.text}); T(v, X1, y, {mono: 1, size: 24, weight: 600, color: R === 'A' ? COL.A : COL.B, align: 'right'});
+    ctx.fillStyle = COL.line; ctx.fillRect(X0, y + 16, X1 - X0, 1);
+  }));
+  withA(a(3.0), () => {
+    T('subtotal', X0 + 16, 568, {size: 22, color: COL.mute}); T('146', X1, 568, {mono: 1, size: 26, weight: 600, align: 'right'});
+    T('× zones holding exactly one duck', X0 + 16, 614, {size: 22, color: COL.mute}); T('×5', X1, 614, {mono: 1, size: 26, weight: 600, color: COL.A, align: 'right'});
+  });
+  withA(a(3.8, .7), () => {
+    const sc = 1 + .06 * (1 - eo(seg(r, 3.8, 4.6)));
+    ctx.save(); ctx.translate(X1, 712); ctx.scale(sc, sc);
+    T('146 × 5 = 730', 0, 0, {mono: 1, size: 64, weight: 700, align: 'right'}); ctx.restore();
+  });
+  withA(a(6.5, .6), () => {
+    T('WHAT TO TEST FIRST', 84, 616, {mono: 1, size: 15, color: COL.mute, ls: 2});
+    const items = [
+      ['Run drop_one_duck() 50 times without a double drop.', 'A', 113, '/* release exactly one duck: pin holds duck #2, exit opens, robot creeps forward, exit shuts */', 112],
+      ['Calibrate TICKS_PER_INCH, STRAFE_FACTOR, TAPE_THRESHOLD, LIGHT_ON.', 'A', 0, ' * Every number marked CALIBRATE was budgeted, not measured: tune it on the', 6],
+      ['Replace B’s timed waits with an IR handshake.', 'B', 193, '/* 0-16 s: wait for Robot B to clear the upper cup (IR handshake could replace this) */', 133],
+    ];
+    items.forEach(([title, R, n, ref, refN], i) => withA(a(6.9 + i * .5), () => {
+      const y = 664 + i * 98;
+      T(String(i + 1), 84, y, {mono: 1, size: 24, weight: 700, color: COL.A});
+      T(title, 118, y, {size: 24, weight: 500});
+      const refLine = SRC.A.L[refN - 1];
+      T(`robot_a_main.c:${refN}`, 118, y + 30, {mono: 1, size: 14, color: COL.dim});
+      drawTokens(tokenize([refLine.trim()])[0], 300, y + 30, 68, 15);
+      if (i === 2) { T('robot_b_main.c:193', 118, y + 56, {mono: 1, size: 14, color: COL.dim}); codeStr(codeOnly('B', 193), 300, y + 56, 60, 15); }
+    }));
+  });
+  withA(a(9.5, .8), () => {
+    T('Style after @deedydas', 1856, 1000, {mono: 1, size: 15, color: COL.mute, align: 'right'});
+    T('Team Rochambotics · KIPR Botball 2026 Fall Game', X0, 1000, {mono: 1, size: 15, color: COL.dim});
+  });
+}
+
+/* =========================================================== render loop */
+const SCENES = [[S1, scene1], [S2, scene2], [S3, scene3], [S4, scene4], [S5, scene5]];
+const XF = .4;
+let VIEWK = 1;
+function draw() {
+  const t = CUR;
+  ctx.setTransform(VIEWK, 0, 0, VIEWK, 0, 0);
+  ctx.globalAlpha = 1; bg();
+  SCENES.forEach(([[a, b], fn], i) => {
+    const last = i === SCENES.length - 1;
+    if (t < a || t >= b + (last ? 1 : XF)) return;
+    const al = (i === 0 ? 1 : sstep(a, a + .5, t)) * (last ? 1 : 1 - sstep(b, b + XF, t));
+    if (al <= 0) return;
+    ctx.save(); ctx.globalAlpha = al; fn(t); ctx.restore();
+  });
+  chrome(t);
+}
+function fit() {
+  const s = Math.min(innerWidth / W, innerHeight / H), dpr = window.devicePixelRatio || 1;
+  const cw = Math.round(W * s), chh = Math.round(H * s);
+  cv.style.width = cw + 'px'; cv.style.height = chh + 'px';
+  cv.style.left = Math.round((innerWidth - cw) / 2) + 'px'; cv.style.top = Math.round((innerHeight - chh) / 2) + 'px';
+  cv.width = Math.round(cw * dpr); cv.height = Math.round(chh * dpr); VIEWK = cv.width / W;
+  if (window.__ready) draw();
+}
+
+/* audio: subtle ticks on score events (optional) */
+const AU = {ctx: null, g: null};
+function audioInit() { try { AU.ctx = AU.ctx || new (window.AudioContext || window.webkitAudioContext)(); AU.g = AU.ctx.createGain(); AU.g.gain.value = .18; AU.g.connect(AU.ctx.destination); } catch (e) { AU.ctx = null; } }
+function blip(t0, f, d, v) { const c = AU.ctx; if (!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(f, t0); g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(v, t0 + .005); g.gain.exponentialRampToValueAtTime(.0001, t0 + d); o.connect(g); g.connect(AU.g); o.start(t0); o.stop(t0 + d + .02); }
+const SFX = {tick: (t0) => blip(t0, 1400, .06, .5), score: (t0) => { blip(t0, 880, .18, .45); blip(t0 + .07, 1320, .22, .35); }, duck: (t0) => { blip(t0, 660, .2, .45); blip(t0 + .08, 990, .25, .4); }};
+const AEV = [];
+SCENES.forEach(([[a]], i) => { if (i) AEV.push({t: a, name: 'tick'}); });
+EVENTS.forEach(e => AEV.push({t: sceneOfMatch(e.t), name: e.duck ? 'duck' : 'score'}));
+AEV.sort((a, b) => a.t - b.t);
+
+/* playback */
+let CUR = 0, playing = false, lastTs = null, hudTimer = null;
+const hud = document.getElementById('hud'), pp = document.getElementById('pp'), scrub = document.getElementById('scrub'), tc = document.getElementById('tc');
+scrub.max = DUR;
+const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+function updHud() { scrub.value = CUR; tc.textContent = fmt(CUR) + ' / ' + fmt(DUR); pp.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;'; }
+function play() { if (CUR >= DUR - .01) CUR = 0; playing = true; lastTs = null; updHud(); }
+function pause() { playing = false; updHud(); }
+function toggle() { if (!AU.ctx) audioInit(); if (AU.ctx && AU.ctx.state === 'suspended') AU.ctx.resume(); playing ? pause() : play(); }
+function loop(ts) {
+  if (playing) {
+    if (lastTs != null) {
+      const prev = CUR; CUR = Math.min(DUR, CUR + (ts - lastTs) / 1000);
+      if (AU.ctx && AU.ctx.state === 'running') for (const e of AEV) if (e.t > prev && e.t <= CUR) SFX[e.name](AU.ctx.currentTime);
+      if (CUR >= DUR) playing = false;
+      draw(); updHud();
+    }
+    lastTs = ts;
+  }
+  requestAnimationFrame(loop);
+}
+function showHud() { hud.classList.add('on'); clearTimeout(hudTimer); hudTimer = setTimeout(() => hud.classList.remove('on'), 2500); }
+addEventListener('mousemove', showHud);
+addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); toggle(); showHud(); }
+  else if (e.code === 'ArrowRight') { CUR = Math.min(DUR, CUR + 5); draw(); updHud(); showHud(); }
+  else if (e.code === 'ArrowLeft') { CUR = Math.max(0, CUR - 5); draw(); updHud(); showHud(); }
+});
+cv.addEventListener('click', () => { toggle(); showHud(); });
+pp.addEventListener('click', () => toggle());
+scrub.addEventListener('input', () => { CUR = +scrub.value; draw(); updHud(); });
+addEventListener('resize', fit);
+
+window.__duration = DUR;
+window.__seek = t => { playing = false; CUR = clamp(+t || 0, 0, DUR); draw(); updHud(); };
+window.__video = {seek: t => window.__seek(t), duration: DUR, fps: 30, width: W, height: H, AU, AEV, SFX, audioInit};
+
+(async function boot() {
+  fit();
+  try {
+    await Promise.race([
+      Promise.all(['400 16px Inter', '500 16px Inter', '600 32px Inter', '700 96px Inter', '400 15px "JetBrains Mono"', '500 15px "JetBrains Mono"', '700 15px "JetBrains Mono"'].map(f => document.fonts.load(f))),
+      new Promise(r => setTimeout(r, 4000))]);
+  } catch (e) { /* offline: system fallbacks */ }
+  ctx.font = font(CODE_SZ, 400, true); CH = ctx.measureText('0000000000').width / 10;
+  window.__ready = true;
+  draw(); updHud();
+  requestAnimationFrame(loop);
+  if (!window.__noAutoplay) play();
+})();
+</script>
+</body>
+</html>

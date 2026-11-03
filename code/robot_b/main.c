@@ -154,7 +154,7 @@ static int grab_red_pom(void) {
     /* unwind the scan rotation back to the heading the caller assumes */
     if (labs(spun) > 20) {
         cmpc(LEFT);
-        if (spun > 0) drive(25, -25); else drive(-25, 25);
+        if (spun > 0) drive(-25, 25); else drive(25, -25);   /* spun>0 = turned right: turn back left */
         while (labs(gmpc(LEFT)) < labs(spun) && seconds() < MATCH_END_S) msleep(5);
         stop_all();
         msleep(200);
@@ -203,7 +203,7 @@ int main(void) {
 
     /* 63-86 s: five pom stacks, east to west, each pushed north into zone 1 */
     forward_in(-10.0, SPEED_FAST);              /* back east to x ~ 39.8 */
-    turn_deg(+90, SPEED_FAST);                  /* face north */
+    turn_deg(-90, SPEED_FAST);                  /* facing west -> clockwise 90 = face north */
     forward_to_tape(SPEED_FAST, 10.0);          /* lower tape: y ~ 12; give up after 10 in */
     forward_in(3.5, SPEED_FAST);                /* -> y ~ 15.5 */
     for (int k = 0; k < 5; k++) {

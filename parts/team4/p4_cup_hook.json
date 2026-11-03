@@ -1,0 +1,52 @@
+{
+  "name": "p4_cup_hook",
+  "dims_mm": [
+    157.0,
+    13.0,
+    62.0
+  ],
+  "islands": 1,
+  "volume_cm3": 17.46,
+  "manifold": true,
+  "non_manifold_edges": 0,
+  "triangles": 1910,
+  "notes": "print on its side (flat face down); lip 7.0 mm inward at 38.0 mm below the arm",
+  "print_check": {
+    "class": "team",
+    "part_dims_mm": [
+      157.0,
+      13.0,
+      62.0
+    ],
+    "part_dims_rounded_in": [
+      7,
+      1,
+      3
+    ],
+    "part_volume_rounded_in3": 21,
+    "class_dims_mm": [
+      220.0,
+      220.0,
+      250.0
+    ],
+    "class_dims_rounded_in": [
+      9,
+      9,
+      10
+    ],
+    "margin_mm": [
+      63.0,
+      207.0,
+      188.0
+    ],
+    "low_margin": false,
+    "fits_printer": true,
+    "pass_strict": true,
+    "pass_inch_box": true,
+    "pass_lenient": true
+  },
+  "stl": "C:\\Users\\Tigre\\robotics\\parts\\team4\\p4_cup_hook.stl",
+  "preview": "C:\\Users\\Tigre\\robotics\\parts\\team4\\p4_cup_hook.png",
+  "preview_top": "C:\\Users\\Tigre\\robotics\\parts\\team4\\p4_cup_hook_top.png",
+  "preview_under": "C:\\Users\\Tigre\\robotics\\parts\\team4\\p4_cup_hook_under.png"
+}
