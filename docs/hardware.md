@@ -310,7 +310,7 @@ Mecanum mounting rule from KIPR: the small rollers' diagonals must point toward 
 
 ## 6. KIPR example STL files
 
-Downloaded from https://www.kipr.org/wp-content/uploads/2026%20Botball/ into `docs/official/kipr-stl/` (7 files, binary STL, units mm, all with minimum corner at the origin). Bounding boxes computed with numpy (`tools/stl_bbox.py`: vertex min/max; volume from the signed tetrahedron sum). Hole analysis: `tools/stl_holes2.py` (boundary loops of planar faces).
+Downloaded from https://www.kipr.org/wp-content/uploads/2026%20Botball/ (7 files, binary STL, units mm; removed from the repo on 2026-11-03 because we print only our own 4 parts; re-download from that folder if needed; all with minimum corner at the origin). Bounding boxes computed with numpy (`tools/stl_bbox.py`: vertex min/max; volume from the signed tetrahedron sum). Hole analysis: `tools/stl_holes2.py` (boundary loops of planar faces).
 
 | File | Triangles | Bounding box mm (X x Y x Z) | Bounding box in | Mesh volume cm3 | Whole-inch rounded box (R p.12 method) |
 |---|---|---|---|---|---|
