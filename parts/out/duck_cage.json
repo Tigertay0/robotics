@@ -1,0 +1,52 @@
+{
+  "name": "duck_cage",
+  "dims_mm": [
+    127.21,
+    197.1,
+    54.0
+  ],
+  "islands": 1,
+  "volume_cm3": 82.25,
+  "manifold": true,
+  "non_manifold_edges": 0,
+  "triangles": 9848,
+  "notes": "channel 65.7 mm wide, 3 slots x 46.0 mm, mouth 120.0 mm; flap axles at Y=53.0/105.0/157.0, Z=42.0 above wall bottom; mount wall bottom 2.0 mm above the FRP; print upside down (rails on the bed)",
+  "print_check": {
+    "class": "mid",
+    "part_dims_mm": [
+      127.209,
+      197.105,
+      54.0
+    ],
+    "part_dims_rounded_in": [
+      6,
+      8,
+      3
+    ],
+    "part_volume_rounded_in3": 144,
+    "class_dims_mm": [
+      220.0,
+      220.0,
+      80.0
+    ],
+    "class_dims_rounded_in": [
+      9,
+      9,
+      4
+    ],
+    "margin_mm": [
+      92.79,
+      22.9,
+      26.0
+    ],
+    "low_margin": false,
+    "fits_printer": true,
+    "pass_strict": true,
+    "pass_inch_box": true,
+    "pass_lenient": true
+  },
+  "stl": "C:\\Users\\Tigre\\robotics\\parts\\out\\duck_cage.stl",
+  "preview": "C:\\Users\\Tigre\\robotics\\parts\\out\\duck_cage.png",
+  "preview_top": "C:\\Users\\Tigre\\robotics\\parts\\out\\duck_cage_top.png",
+  "preview_under": "C:\\Users\\Tigre\\robotics\\parts\\out\\duck_cage_under.png"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "d_strong",
+  "description": "HYPOTHETICAL strong two-robot run, about nine objectives in 120 s: Botguy to the platform, Big Duck swapped into Botguy's start, Mystery Red Pom alone on the platform, both cups flipped upright (on tape, bonus only), 2 pickleballs under the platform, the 4 visible reds sorted into zone 3, ducks one-each in zones 2/3/4 (3x) plus a 4th duck under the platform. No rings. Not a measurement; a plausible target for a top team once both robots are reliable.",
+  "zones": {
+    "2": {"ducks": 1},
+    "3": {"ducks": 1, "poms": {"red": 4}},
+    "4": {"ducks": 1}
+  },
+  "ducks": {"under_platform": 1},
+  "platform": {"poms": {"red": 1}, "mystery_red_pom": true},
+  "pickleballs": {"under_platform": 2},
+  "cups": {
+    "nested": false,
+    "pieces": [
+      {"upright": true, "on_tape": true, "touching_board": true},
+      {"upright": true, "on_tape": true, "touching_board": true}
+    ]
+  },
+  "botguy": "platform",
+  "big_duck": "botguy_start"
+}

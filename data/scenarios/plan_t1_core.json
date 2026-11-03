@@ -1,0 +1,10 @@
+{
+  "name": "plan_t1_core",
+  "description": "OUR PLAN, Tier 1 (build first): Duck bot puts one duck in each of zones 1-5; Platform bot knocks PB4 under the platform, flips Cup 1 upright off tape, and puts the Mystery Red Pom alone on the platform.",
+  "zones": {"1": {"ducks": 1}, "2": {"ducks": 1}, "3": {"ducks": 1}, "4": {"ducks": 1}, "5": {"ducks": 1}},
+  "platform": {"poms": {"red": 1}, "mystery_red_pom": true},
+  "pickleballs": {"under_platform": 1},
+  "cups": {"nested": false, "pieces": [
+    {"upright": true, "on_tape": false, "touching_board": true},
+    {"upright": false, "on_tape": true, "touching_board": true}]}
+}

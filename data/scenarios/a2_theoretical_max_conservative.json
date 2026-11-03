@@ -1,0 +1,38 @@
+{
+  "name": "a2_theoretical_max_conservative",
+  "description": "Ceiling when EVERY ambiguity is ruled against us (zone 5 excluded -> 4x max, no base on special-scoring pieces, pom group replaces base, only 1 ring per neck, inverted nests don't count) and only physically plausible piece states are used: cups = outer cup flat + nested (40, inner cup cannot touch the board); 3 rings on necks (one per bottle) + 3 touching bottles; 4 ducks in zones 1-4 (4x), 5th duck under the platform (3). Compare with a_theoretical_max to see how much the rulings are worth.",
+  "interpretation": {
+    "zone5_counts_for_multiplier": false,
+    "tape_duck_policy": "spoil",
+    "pom_groups_per_zone": "merge",
+    "pom_base_additive": false,
+    "special_base_additive": false,
+    "platform_counts_as_board_surface": false,
+    "inverted_nest_counts_as_nested": false,
+    "max_rings_per_neck": 1,
+    "any_red_pom_is_mystery": false,
+    "big_duck_counts_for_multiplier": true,
+    "unmoved_botguy_scores_base": false
+  },
+  "zones": {
+    "1": {"poms": {"yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "2": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "3": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "4": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "5": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}}
+  },
+  "ducks": {"under_platform": 1},
+  "platform": {"poms": {"red": 1}, "mystery_red_pom": true},
+  "pickleballs": {"under_platform": 4},
+  "rings": {"on_neck": 3, "on_neck_per_bottle": [1, 1, 1], "touching_bottle": 3},
+  "cups": {
+    "nested": true,
+    "nest_orientation": "upright",
+    "pieces": [
+      {"upright": true, "on_tape": false, "touching_board": true},
+      {"upright": false, "on_tape": false, "touching_board": false}
+    ]
+  },
+  "botguy": "platform",
+  "big_duck": "botguy_start"
+}

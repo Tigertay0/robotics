@@ -1,0 +1,7 @@
+{
+  "name": "e_ducks_under_platform",
+  "description": "Alternative use of the 5 ducks: all under the Raised Platform (3 pts + Base 1 each, no multiplier), Botguy untouched (+1 Base). Scores 21 versus 30 for b_ducks_only. A mixed split beats both when nothing else scores (3 zone ducks + 2 under the platform = 36), but once the rest of the subtotal reaches 8 points all 5 ducks belong in zones (tools/score.py best_duck_allocation).",
+  "ducks": {
+    "under_platform": 5
+  }
+}

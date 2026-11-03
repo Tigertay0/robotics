@@ -1,0 +1,850 @@
+--- page 1 ---
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+2026 Fall Botball  
+Game Review 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Version 1.0 (9/12/2025) 
+
+--- page 2 ---
+ 
+ 
+2 
+ 
+Contents 
+Contents ....................................................................................................................................................... 2 
+Revision History ............................................................................................................................................ 4 
+Contributors.................................................................................................................................................. 4 
+Director’s Note ............................................................................................................................................. 4 
+Sponsors ....................................................................................................................................................... 5 
+This Year’s Game .......................................................................................................................................... 7 
+Game Board Areas .......................................................................................................................................... 8 
+Game Piece ................................................................................................................................................... 10 
+Scoring Pieces ............................................................................................................................................... 10 
+Starting Positions .......................................................................................................................................... 10 
+Scoring Rules ................................................................................................................................................. 13 
+Tie Breakers & Special Scoring Conditions ................................................................................................... 13 
+Game Play ..................................................................................................................................................... 14 
+Fair Play and Spirit of Botball ....................................................................................................................... 14 
+Team T-Shirts ................................................................................................................................................ 14 
+Inspections ............................................................................................................................................... 14 
+Setup – Before Hands-Off ............................................................................................................................. 15 
+Before the Game Begins – After Hands-Off .................................................................................................. 15 
+Timeout Card ................................................................................................................................................ 15 
+After the Game Begins – Lights On ............................................................................................................... 16 
+End of Game ................................................................................................................................................. 16 
+Final Scoring and Rulings .............................................................................................................................. 16 
+Challenges ..................................................................................................................................................... 17 
+Acknowledgements ...................................................................................................................................... 17 
+Seeding Rounds ............................................................................................................................................ 17 
+Double Elimination (DE) Rounds .................................................................................................................. 18 
+Scoring .......................................................................................................................................................... 18 
+Virtual Tournaments ................................................................................................................................... 18 
+Construction Rules ........................................................................................................................................ 19 
+Kit Rules ........................................................................................................................................................ 19 
+3D Print Rules ............................................................................................................................................... 21 
+Robot Logistics .............................................................................................................................................. 22 
+
+--- page 3 ---
+ 
+ 
+3 
+ 
+Safety ............................................................................................................................................................ 24 
+External Communication .............................................................................................................................. 24 
+Overall Winner Calculations ....................................................................................................................... 25 
+Documentation Scoring Formula .................................................................................................................. 25 
+Seeding Scoring Formula .............................................................................................................................. 25 
+Double Elimination Bracket Scoring Formula ............................................................................................... 25 
+Double Seeding Scoring Formula (GCER Only) ............................................................................................. 25 
+ 
+ 
+ 
+ 
+
+--- page 4 ---
+ 
+ 
+4 
+ 
+Revision History 
+Version 1.0 – Initial Draft 
+Contributors 
+Game Design Chair, Timothy Corbly 
+Numerous KIPR staff members and KIPR Community Members 
+Director’s Note 
+Botball Community, 
+We are excited to welcome you to the 2026 Botball Fall Game! Once again, I want to thank our 
+dedicated staff and the amazing volunteers who bring this program to life each year. Their 
+creativity, hard work, and passion make it possible for us to deliver another thrilling challenge. 
+This year’s game, Pallet Pushers, drops Botguy and the robots into the fast-paced world of an 
+automated warehouse. Teams will face the challenge of moving pallets, stacking products, sorting 
+items, and coordinating shipments to the loading docks. Efficiency, precision, and teamwork will 
+be the keys to success. 
+As always, Botball provides more than just a competition — it’s an opportunity to develop real-
+world problem-solving skills, test innovative ideas, and have fun along the way. I can’t wait to see 
+the clever solutions, unique strategies, and collaborative spirit that our Botball community will 
+bring to the floor this December during the virtual competition. 
+Let the stacking begin! 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Respectfully, 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Steve Goodgame 
+ 
+ 
+ 
+ 
+ 
+ 
+KIPR Executive Director 
+ 
+ 
+ 
+
+--- page 5 ---
+ 
+ 
+5 
+ 
+Sponsors 
+ 
+National Sponsors  
+ 
+
+--- page 6 ---
+ 
+ 
+6 
+ 
+Regional Sponsors  
+ 
+ 
+
+--- page 7 ---
+ 
+ 
+7 
+ 
+This Year’s Game 
+  
+Pallet Pushers: Delivering the Future 
+Robots are stepping onto a bustling factory floor as the newest workers. Raw materials arrive at 
+the Outdoor Unloading Dock and must be transported inside to Work Stations for processing. 
+Finished goods are stacked on pallets, stored in the Lower and Upper Storage areas, or moved 
+onto the Raised Loading Dock for shipment through the Outdoor Loading Dock. Along the way, 
+robots may need to sort colorful poms into the Pom Sorter or carefully place them into baskets. 
+Traffic cones act as safety markers that robots must avoid, while Botguy serves as the plant 
+supervisor, needing to be relocated to oversee production. 
+Teams score by showing how efficiently their robots can keep the factory running—moving 
+materials to the right stations, organizing storage, and preparing shipments—while navigating the 
+challenges of a crowded, fast-paced workplace. 
+ 
+ 
+ 
+Figure 1 - Game Overview 
+ 
+ 
+
+--- page 8 ---
+ 
+ 
+8 
+ 
+Game Board Areas 
+Official game board specifications are on the Team Homebase. All tournament boards and game pieces will 
+fulfill the following specifications within +/- 0.25” per 4’ or up to 1% of the specification. 
+The game board is composed of four ~4’ x 4’, reusable modules whose surfaces are pebble grain white 
+fiberglass reinforced plastic panel (FRP). A fully assembled game board will be ~8’ x 8’. A panel channel or 
+black or white duct tape is used to close exposed seams where modules abut.  
+The game board is separated into defined areas for each team.  
+ 
+                                                             Figure 2 – Game Board Areas 
+Starting Boxes – The area delineated by the inside edge of the PVC pipes and black tape lines in the bottom 
+left corner of a team’s side and in the area to the left of the area in the bottom right corner. The Starting 
+Box height is 12” tall. 
+Work Stations – The ten surfaces of the game table delineated by the inside edge of the PVC pipes and 
+black tape lines that does not include the Pom Storage areas or Outdoor Loading and Unloading Docks. This 
+does include the Starting Boxes, Lower Storage, and Pom Sorters. This does not include the black tape. 
+Lower Storage – The area delineated by the inside edge of the PVC pipes and black tape lines directly 
+between the Starting Boxes. 
+Pom Sorter – The area delineated by the inside edge of the PVC pipes and black tape lines directly to the 
+right of the rightmost Starting Box and below the Upper Storage platform. 
+Upper Storage – The top of the corrugated plastic platform that sits directly above the Pom Sorter. 
+
+--- page 9 ---
+ 
+ 
+9 
+ 
+Raised Loading Dock – The top of the corrugated plastic platform in the top right corner of the board. 
+Pom Storage – The areas delineated by the inside edge of the PVC pipes and black tape lines, with one 
+directly to the right of the Raised Loading Dock and the other two sections to the right of that. 
+Outdoor Loading Dock – The two areas delineated by the inside edge of the PVC pipes on the top outside 
+edge of the table. One of these areas is on the left-hand side of the Outdoor Unloading Dock and the other 
+on the right-hand side. 
+Outdoor Unloading Dock – The area delineated by the inside edge of the PVC pipes on the top outside edge 
+of the table. It sits in the center between the two Outdoor Loading Docks. 
+Storage Posts – The two posts on the edge of the game table. One sits on the bottom edge of the leftmost 
+start box. The other is centered on the black tape line dividing the two rightmost Work Stations at the top of 
+the board. 
+ 
+ 
+
+--- page 10 ---
+ 
+ 
+10 
+ 
+Game Piece 
+Scoring Pieces 
+• 
+1 – Botguy 
+• 
+1 – 4” Red Cube 
+• 
+1 – 4” Brown Cube 
+• 
+1 – 4” Green Cube 
+• 
+2 – Baskets 
+• 
+2 – Traffic Cones 
+• 
+4 – Pallets 
+• 
+4 – 2” Red Cubes 
+• 
+4 – 2” Yellow Cubes 
+• 
+4 – 2” Green Cubes 
+• 
+8 – 2” PVC Pipes 
+• 
+12 – 2” Orange Poms 
+• 
+12 – 2” Blue Poms 
+ 
+ 
+Figure 3 - Game Pieces 
+Starting Positions 
+• 
+Botguy – Will be placed facing the Start Boxes on top of two Pallets in the bottom right corner of 
+the Upper Storage. 
+• 
+4” Cubes – Will be placed on top of the Upper Storage with the red cube on the left corner, the 
+green cube on the right corner and the brown cube in the center. There should be 6” of space 
+between the cubes. 
+• 
+Baskets – Will start in the Pom Sorter area beneath the Upper Storage. Each basket will start 
+pushed back into the PVC corner of the area. 
+• 
+Traffic Cones – Will be roughly centered on the black tape intersections of the bottom right edge of 
+each Pom Storage area. 
+
+--- page 11 ---
+ 
+ 
+11 
+ 
+• 
+Pallets – Will be placed one each in the top and bottom right corners of the Raised Loading Dock 
+and two on top of the Upper Storage in the bottom right corner, flush with each other along the 
+edge closest to the Starting Box. 
+• 
+2” Cubes – Will be placed in the bottom left and right corners of the Lower Storage  in a stack with 
+one color on top and two colors on the bottom. The position of the colors of cubes in each stack 
+will be randomized, although each pair of a color will stay together. The cubes in the left corner will 
+have the flat face of the stack face the PVC pipe and the cubes in the right corner will have the flat 
+face of the stack face the Start Box. 
+• 
+2” PVC Pipes – Will be placed in the bottom left and right sides of the Outdoor Unloading Dock. 4 
+pipes each will start on each side with the holes facing towards the Lower Storage and flush with 
+the bottom pipe. The circular edge of the pipe closest to each side will be flush with the edge of the 
+T-connector that sticks out over the bottom pipe. The rest of the pipes will be flush with each of 
+these. 
+• 
+Poms – Will start inside the Pom Storage areas. In the left Pom Storage area, the poms will be in 
+rows of three with 2.5” between the centers of each pom. The center of the first blue pom in the 
+corner will start 1” from each of the PVC walls. The center of each row after that will be placed 2.5” 
+from the center of the previous row, alternating colors. In the right Pom Storage area, the poms will 
+be dropped in randomly and contained by the black tape and the PVC pipe. 
+
+--- page 12 ---
+ 
+ 
+12 
+ 
+ 
+ 
+
+--- page 13 ---
+ 
+ 
+13 
+ 
+Scoring Rules 
+1. Black Tape Rule: Any game piece touching any (Black Tape), does not score, excluding those scoring 
+via the Volume Rule. 
+2. General Scoring Rule: A game piece must touch the surface of the scoring area to score, except 
+game pieces following the Volume Rule. 
+3. Volume Rule: To score in the Baskets, some part of a pom must break the volume of the scoring 
+area. If two volumes overlap, game pieces will score inside the first volume that they break, rather 
+than the one they score the highest in. To score a 2” PVC Pipe on a Storage Post, the post must 
+break the volume of the pipe. 
+4. Sorting Rule: Cubes and poms are the only game pieces that may be sorted. Only cubes may break 
+a cubes sort and only poms may break a pom sort. There must be at least two of the same color of 
+a game piece and only one color on a pallet, in a basket, or in a scoring area to count as sorted 
+5. Electricity Rule: Cubes that are stacked on top of other cubes or pallets will count as if they are 
+touching the surface below the lowest cube or pallet in the stack. 
+6. Traffic Cone Rule: If a traffic cone is touching the surface of the game table or platform in an area 
+and not touching black tape, all other objects in that area as delineated by black tape, PVC, or 
+ledges on platforms, will not score. To store a traffic cone, it must be touching the top of the 1” PVC 
+pipes on the bottom side of the Lower Storage and not touching the surface of the game table. 
+7. Basket Rule: In order for a basket to count as returned, it must be touching only the surface of the 
+game table in the Pom Sorter. 
+8. Highest Scoring Rule: A game piece can only score in one scoring area and will be scored as if it is in 
+the highest scoring area, as determined by base score without multipliers. A game piece that acts 
+as a multiplier will only multiply in the area that results in the greatest increase in base points for 
+an area. 
+9. Robot Rule: For the purposes of scoring, a robot is defined minimally as a KIPR Robot Controller 
+with at least two motors connected to it. A robot with 2 controllers counts as a single robot. 
+10. Final Scoring Rule: The score is determined by final object location, not by how it got there. Judges 
+will wait until any scoring objects still in motion have come to rest before scoring a game. 
+Tie Breakers & Special Scoring Conditions 
+If one team never breaks any border of the Starting Box, including the 12” ceiling, then they lose the 
+round. If both teams break the boundary of their Starting Box and one team's robot does not shut down their 
+motors or does not stop commanding their servos to move at the end, then they lose the round. In the case 
+of a tie score, a team wins if none of the above conditions apply and they are the: 
+1. Largest number of sorted cubes on the Outdoor Loading Docks. 
+2. Largest number of cubes on pallets. 
+3. Largest number of sorted poms in baskets. 
+4. Largest number of pipes on Storage Poles. 
+5. Largest number of stored traffic cones. 
+6. Tallest stack of scored cubes. 
+7. Largest number of work stations with both pom colors. 
+
+--- page 14 ---
+ 
+ 
+14 
+ 
+8. Botguy in Lower Storage. 
+9. Botguy in Start Box. 
+10. Team with largest number of different types of objects scoring in work stations. 
+11. Fewest number of game pieces on black tape. 
+12. Team with the robot (defined by the KIPR Robot Controller power switch) closest to Botguy. This 
+tiebreaker will only be used if a match has already been replayed once.  
+In the finals of a tournament, tie breakers will not be used to indicate a winner; the match will be replayed 
+until one team scores more points than the other. 
+Game Play 
+Fair Play and Spirit of Botball 
+An adult mentor must be present at all times during the virtual competition. 
+Botball is about the development of student skills. Once a team enters the pits with their robots, we 
+require that the robots not leave the pits for any purpose until the conclusion of the tournament or 
+suspension of play for the day. Adults are not allowed into the pits, except to help teams carry in equipment 
+as they arrive in the morning. All adults accompanying a team should understand that responsible Botball 
+mentorship does not include working on the robot entries or programming the robot entries for the students 
+but does allow for appropriate mentor guidance of the team. Teams hosting a tournament at their school 
+must check their robots into the pit area at least one-hour prior to the start of the seeding rounds. 
+Spirit of Botball: This is a 100% student-driven experience. 
+ 
+Students know this, and adults know better! 
+ 
+Mentors, parents, adults, or other non-students who wish to actively participate in the construction, 
+programming, testing, or documentation of a robot are invited to participate in other activities such as the 
+KIPR Aerial. 
+Team T-Shirts 
+Botball teams are encouraged to design and wear their own Botball competition t-shirts.  Graphics must 
+be family and school appropriate and not explicit or suggestive of inappropriate content. If teams are wanting 
+to wear their shirts to the table, it is recommended that the shirts contain mostly neutral colors so as not to 
+potentially confuse any cameras on robots at the table. 
+Inspections 
+Adult mentors are required to attest that their teams game board is built to correct specifications and 
+that their robots are not breaking any of the construction rules. 
+
+--- page 15 ---
+ 
+ 
+15 
+ 
+In the Spirit of Botball, teams that notice part violations or construction violations on other teams’ robots 
+should inform the team or the head judge before any competition rounds. Encouraging other teams to 
+challenge part violations prior to or during competition rounds is not in the Spirit of Botball. 
+Setup – Before Hands-Off 
+Up to two students from a team may bring the team's robot(s) to the tournament table and perform the 
+setup. Switching out members at the table is allowed at the discretion of the head judge. If at any point during 
+or after setup, a team is observed with a laptop near the game table and appears to be reprogramming their 
+robot, then the team may be disqualified by the Head Judge. If a wait_for_light function needs to be 
+uncommented or added to the code, a student may ask the Head Judge to observe them while it is added 
+back in at the Head Judge’s discretion.  
+Teams will have 90 seconds to complete their setup and calibration. Teams will place their robot(s) within 
+their Starting Box as desired. Teams must position their light sensors to sense the lights that will be on the 
+outside edge of the starting boxes. 
+• 
+Teams may use starting lights attached to their game table, similar to ours, or handheld lights that 
+teams use to trigger the light sensor when the judge indicates to start. 
+• 
+If judges determine a team is taking too long to calibrate, then they will issue a warning and set a 
+timer for 60 seconds. A team that is not ready after 60 seconds may be disqualified from the round. 
+The maximum setup time, which may be extended at the judges’ discretion, is 90 seconds.   
+Before the Game Begins – After Hands-Off 
+Once “Hands-Off” has been declared, the team members will position themselves so as not to block the 
+view of the table by the camera. No part of a team’s robot(s) may leave the Starting Box(s) until the round 
+has begun. Movement is okay so long as the Starting Box(s) boundary isn’t violated. If a moving violation 
+happens, then the judges will call a fault on the team. Team members may not move the starting lights at 
+any time after hands-off. A judge may move the light to avoid potential damage to a light. Team members 
+may not signal to their robots after “Hands-Off” to start their robots. Team members will be asked to stand 
+on the side of the game table furthest from the camera. If a team member at the table is wearing a shirt with 
+large solid colors that are similar to game pieces on the table, they will be asked to crouch during the round 
+if the robots are using cameras. 
+Timeout Card 
+Each team will have a single red Timeout that may be used once during the virtual tournament. The 
+timeout can only be used before "Hands-Off", which will give a 3-minute timeout. The team may spend that 
+time working on their robot. Teams are advised to save their timeout card for the Double Elimination rounds, 
+as Seeding rounds are the best 2 out of 3. 
+If, during virtual robot inspections, your robot is deemed to have an illegal part during seeding rounds, 
+then you may use your time-out card to take your robot to the pit to remove the part. It is highly 
+recommended that teams carefully and meticulously review the parts on their robot before the virtual 
+
+--- page 16 ---
+ 
+ 
+16 
+ 
+tournament. It is in the Spirit of Botball for teams to notify other teams and/or judges of observed violations 
+by other teams. 
+If any parts were added or modifications made to the robot during the time-out period, the head judge 
+may ask to have the robot inspected for any parts violations once it re-enters the game table. Teams may not 
+trade out robots or bring additional independent structures to the game table during a time-out. 
+After the Game Begins – Lights On 
+Once the starting lights have turned on, the round counts unless a judge rules otherwise. At the start of 
+the game, the starting lights turn on and robots are then allowed to leave the Starting Box. 
+The round lasts two minutes (120 seconds). The judge will keep track of the time and notify teams when 
+there are 5 seconds remaining.  
+End of Game 
+Robots must stop driving their motors and stop servo motion by the end of the round or that team will 
+lose the round in all situations except against a team that does not break the boundary of a Starting Box (in 
+Seeding, this condition will give a score of 0). Incidental motion from a servo holding a position under load is 
+OK. 
+Scoring is based on the location of pieces at the end, not how the pieces got there. Scoring takes place 
+when the round has ended and items have come to rest. 
+If all motion has stopped before 120 seconds, the judges may ask the teams if their robots are done and 
+if so, then they may end the round at that time. Both teams must agree in order for this to end the round. 
+Final Scoring and Rulings 
+If your team does not agree with the score as calculated, then they must immediately notify the table 
+judge(s) before leaving the table and before any items have been moved on the table. If they do not agree 
+with the table judge’s ruling, then they may ask to speak with the Head Judge. The Head Judge will spend no 
+more than 5 minutes on the decision. Teams must initial the score sheet before leaving the table, signifying 
+acceptance of the ruling. If they do not agree with the ruling, the Head Judge can sign for the team to progress 
+the event forward. 
+There are no instant replays. No external videos will be used for scoring. If a team disagrees with a 
+judge's decision, then only the two team members at the table may politely discuss the issue with the table 
+judge and/or head judge. Issues with the scoring after the teams have signed the score sheet may not be 
+considered.  
+ 
+The head judge reserves the right to make rulings on specific rules or wording in the game review 
+that will be in effect for the remainder of the tournament. 
+ 
+Spirit of Botball: Mentors, spectators, and team members should respect teams’ and judges’ final 
+decisions. A head judge may overrule any previous rule or loophole that they believe to violate the Spirit 
+
+--- page 17 ---
+ 
+ 
+17 
+ 
+of Botball. 
+Challenges 
+Challenges may only come from judges and only the four (two per team) members at the table. 
+Challenges from judges will not disqualify a team from playing the round (i.e. robot height, fitting in start box, 
+obvious part violations). If either team wants to challenge the validity of the robots they are facing, they must 
+bring it to the table judges’ attention during the inspection period, and the Head Judge will come over. Teams 
+should bring the list of parts to the table to aid in the inspection. Challenges must be specific. Teams are 
+encouraged to have a parts list for each robot they bring to the table to minimize the likelihood of a robot's 
+construction being challenged. There is a parts list on the Team Homebase, which can be used to specify 
+which kit parts are allowed to be used for the robots at the table. 
+The Head Judge is the final arbiter of a challenge and can dismiss what they believe to be spurious or 
+irrelevant challenges. This includes challenges to robots and or parts that they deem to not provide any 
+competitive advantage or are against the Spirit of Botball to the team. An Example of against the Spirit of 
+Botball, would be a team knowing about the issue and planning to challenge prior to the robot inspection 
+at the game table. If the team knows prior to arriving at the table in the Spirit of Botball they will let the 
+other team or a KIPR official know so that the team has the opportunity to correct the issue. Teams 
+determined by the judges to be in safety or performance-changing violation will be given 60 seconds by the 
+judges to make a correction, remove offending pieces, or take the robot off the table; otherwise, the robot 
+must be removed for the round or the team can forfeit. A robot determined before the start of a round to 
+be in a safety or performance-changing violation of the construction rules will not be allowed to play while 
+in that state. A robot ruled to be unsafe for humans will not be allowed to run until modified. 
+If a team wants to execute a challenge, then they must wager their round. If the team that makes the 
+challenge is correct, then they win the round, and the other team is disqualified for that round. However, if 
+the team that makes the challenge is incorrect or deemed spurious by the Head Judge, they will be 
+disqualified for that round and the other team will win. In the case that both teams wish to make a 
+challenge, the one to approach the judge with the challenge first will be the determining challenge. 
+If a team notices that another team has a challengeable issue during seeding, another double 
+elimination round, or any other time and is not facing that team, in the Spirit of Botball and fair play, they 
+should inform the Head Judge so that the Head Judge may consult with the team.  
+Acknowledgements 
+The KIPR Robot Controller is a powerful device, but the use of threading can cause unpredictable 
+results, such as the robot not stopping when utilizing the shutdown in function. Teams are encouraged to 
+limit their use of threading and to make sure they take precautionary steps to stop their robot within the 
+time limit of the game. If the robot fails to stop moving after the time limit, then it will result in a score of 0 
+for a Seeding round or a disqualification for a Double Elimination round. 
+Seeding Rounds 
+Seeding rounds take place before Double Elimination. There will be three Seeding rounds. The order in 
+
+--- page 18 ---
+ 
+ 
+18 
+ 
+which teams appear in each round is set by tournament software and is the same for each round. In Seeding, 
+a team plays the game unopposed, and the score for both sides counts, where your Seeding Round score is 
+(the score for your side) + (the score for the other side). Note that Seeding scores are the sum of the entire 
+board and teams are encouraged to cross sides and use the whole board for scoring during Seeding. 
+Seed scores of less than 0 will be counted as 0. A team’s Seed Score is the average of their best two 
+Seeding rounds. The tableside used by a team for a Seeding round (the side from which the robots will start) 
+is determined when teams arrive at the table and at the judges’ discretion for their turn in a Seeding round. 
+A coach or team member must bring any concerns about the posted seeding round scores to the 
+attention of the Head Judge before the bracketing for the double elimination rounds. Bracketing occurs 
+within ~5 minutes of the completion of the last seeding round. Only math errors or incorrect placement of 
+scores will be accounted for. 
+Double Elimination (DE) Rounds 
+A team is out of the Double Elimination tournament when it has lost two games. Initial matches are 
+decided by KIPR tournament software using Seeding round scores. As the tournament progresses, the order 
+of matches and table sides for the competing teams are determined using KIPR tournament software. The 
+two teams play each other and the highest score at the end of the game wins, subject to tie breakers and 
+special scoring conditions. The size of Double Elimination scores does not affect ranking, only wins and losses. 
+Scoring 
+Alliance rounds will follow all of the same scoring rules as a regular Seeding round. The total Alliance 
+score is (Your side's score) + (Ally side's score). The Alliance team with the highest combined score from a 
+single run will win the Alliance Tournament. Alliance matches will be conducted until tournament officials 
+suspend play (usually when the final Double Elimination rounds are near complete).  
+ 
+ 
+Virtual Tournaments 
+Virtual Tournaments will require an adult mentor present at all times and teams to have a competition 
+game board that meets the requirements, access to the internet, and two cameras (one static to display the 
+game board and one mobile for robot inspection and judges’ scoring questions) to participate. The head 
+judge may accommodate some exceptions to rules related to game board setup. 
+ 
+ 
+
+--- page 19 ---
+ 
+ 
+19 
+ 
+Construction Rules 
+The official construction rules for the 2024 Botball Game consist of the latest revision of this 2024 Botball 
+Game Review document and any updated game rules posted on the Discord FAQ. Posts on the 2024 Discord 
+FAQ in the Game Rules Question area will be used to update the document and provide notice of any rule 
+changes or adjustments. 
+Kit Rules 
+1. Sensors from the 2017, 2018, 2019 and 2020-24 kit may be used so long as they don’t exceed the 
+type or number in the 2025 kit. 
+2. KIPR Metal Parts – Only the metal chassis (steel) will be allowed in robot construction. 
+3. Robots may be constructed out of any or all of this year’s kit parts except: the boxes, bags, wrapping 
+or packing material, the chargers, download cables, wrenches, screwdriver and color stickers. 
+Materials supplied at the workshop for creating your game board (e.g., Botguy, poms, etc.) are not 
+part of the kit and cannot be used on your entry. The included camera is the only USB device that 
+may be plugged into a robot during the game. Consult the official parts lists for allowable kit parts! 
+4. Small removable mounting dots/strips such as those produced by Glue Dots, UGlu and/or Scotch 
+Brand Restickable Dots/Strips, blue tack (acquired at team's expense) may be used for construction 
+purposes. They may not be exposed for sticking things otherwise in any manner. In particular, this 
+means you may not use your mounting dots/strips to contact the game board, game elements, or 
+the other team’s entry. Note that neither hot melt glue nor any other adhesives, other than 
+removable mounting dots/strips, are allowed in robot construction.  
+5. Mounting dots/strips are available at stores such as Home Depot, and online from vendors such as 
+Amazon. 
+6. Wire management: 
+a. Tape (no game piece colors) may be used for managing and/or labelling wires. It may not be 
+used for construction or structural purposes. 
+b. Twist ties may be used for managing wires. They may not be used for construction or 
+structural purposes. 
+7. Judges may require excessive adhesive to be removed. Teams should always try to come up with a 
+mechanical means for construction and only resort to using adhesive methods as a last resort.  
+8. Supplied servo accessories such as grommets, screws, washers, etc. may only be used to mount 
+pieces to the servo horn.  
+9. Servos and motors may be mounted to structural pieces using the supplied machine screws.  
+10. Teams may trim the connector potting material as needed to ease insertion or mounting of sensors. 
+Damaged pieces will be replaced at the team’s expense.  
+11. Plastic servo horns may be trimmed as desired. Damaged pieces will be replaced at the team’s 
+expense.  
+12. Teams are allowed to add the following pieces to their entry:  
+a. Up to 100cm of thread, string or fishing line (maximum diameter 1mm, non-metallic only) 
+may be used as desired except for offensive measures such as entanglement and 
+entrapment.  
+
+--- page 20 ---
+ 
+ 
+20 
+ 
+b. Paper (maximum 20#) so long as all the pieces can be taken from the same single standard 
+US letter-sized (8.5” X 11”) or A4-sized (210mm x 297mm) sheet. See rule 13. 
+c. Standard 3/16” thick foam board or corrugated plastic as long as all the pieces can be taken 
+from the same single standard US letter-sized or #1, A4 footprint. See rule 13.  
+d. Up to 10 standard office rubber bands of maximum size #19 may be used (#19 is 3.5” x 1/16” 
+x 1/32”). 
+e. Up to 10 Paper Clips, smooth, metal (between 1” and 1 ½” in length). Paper clips can be bent 
+in any fashion but cannot be cut, broken or plugged into any wire or robot controller.  
+f. 
+Coins, up to 250 grams (~100 U.S. pennies) to be used as a counterweight only. Please be 
+prepared to prove that it is within the legal weight limit if necessary. Coins may be rolled in 
+wrappers, paper, or tape (up to two rolls) to make it easier to weigh. 
+13. If the team’s entry uses paper and/or foam core board or corrugated plastic and it appears to be 
+more than allowable or is hard for the head judge to determine the amount used, then the head 
+judge MAY ask to see their template showing how the material being used was cut out of ONE 8.5” 
+X 11” (or A4) paper sheet and one 8.5” X 11” (or A4) 3/16” foam core or corrugated plastic sheet. The 
+paper/foam core board or corrugated plastic may only be held in place through the use of other kit 
+parts (including removable mounting dots/strips detailed above if used as allowed for other kit parts). 
+Paper and foam core board or corrugated plastic may only be black or white; only grayscale may 
+be used for printing including official logos for sponsors of your team, or QR codes.  
+14. Rubber bands may not be glued or melted. Rubber bands may be cut, but only a total of ten whole 
+rubber bands or ten cut rubber bands may be used on a team's entry. For any combination having 
+both whole and cut rubber bands, the limit is 10.  
+15. The light sensors in the kit DO NOT require a light guide unless there is a lot of direct sunlight in 
+the room. Soda straws, paper, electrical tape and/or foil may be used as light guides for sensors (light 
+guides may be shielded by using tape, but not in a fashion that is for structural purposes or for 
+manipulation). Light guide materials are in addition to the allowable parts. 
+16. Teams are not allowed to shield robot sensors externally to their official entry (i.e., teams are not 
+allowed to stand between their robots and the audience to keep the robots from sensing the 
+audience). Teams should orient and calibrate the sensors on their robot appropriately so that this is 
+not an issue. Teams using cameras may request that anyone whose attire includes significant color 
+markings closely matching game object colors stand well back from the table. 
+17. Teams are limited to ten (10) 4” white zip ties (included in the kit), and they may be used for any 
+purpose. You may replace damaged ties with ones of equivalent size (black or white).  
+18. Lego parts cannot be physically modified. Threading axle holes with screws will be allowed as an 
+exception to this rule. 
+19. Metal parts may not be cut or broken to a smaller size. Only straps and plates as listed in the kit may 
+be bent if desired. Brackets cannot be bent. 
+a. If the edges of metal parts have sharp edges or burrs, they may be sanded or filed until 
+smooth.  
+b. Metal surfaces may be sanded to reduce friction. 
+c. Warning: At tournaments KIPR will not provide replacements for metal parts that have been 
+altered or damaged. Replacements may be purchased from the online Botball Store.  
+
+--- page 21 ---
+ 
+ 
+21 
+ 
+20. Teams are limited to using only 4’ of the ABS plastic rods they receive. Teams may buy more of this 
+at their own expense (Warning: some teams may have received up to 5’ last year). 
+3D Print Rules 
+1. Only PLA may be used to print parts. 
+a. Parts must be printed using a grayscale-colored PLA material. 
+b. PLA material must only contain PLA. 
+c. PLA must be printed and not in its raw unprinted form. 
+2. The number of 3D printed parts may not exceed 4 total between both robots at the table. 
+a. A part is a single static piece. 
+b. If parts are connected by material with the intent of skirting this rule then they will not be 
+allowed. 
+c. If there are moving parts in a 3D printed assembly, each movable part counts towards the 4 
+total parts. Examples include, a chain with 10 links in one print would still count as 10 parts, 
+two or more parts tethered by a piece of material will be counted as two or more parts. 
+d. Only four 3D printed parts for use on the robot may be brought to the On-Deck area, 
+excluding the required duplicate identical copies for measurement and any jigs being used 
+for positioning the robots. 
+3. A single part cannot exceed the print volume of an Ender 3 V3 SE. The print volume of an Ender 3 
+V3 SE is 220 mm x 220 mm x 250 mm. 
+a. If using a part on a robot, a second identical copy of the part may be required for judges to 
+check the measurements. If a second identical copy of the part cannot be provided to the 
+judge, the robot it is attached to may be disqualified for the round. 
+b. A second identical copy of the part may be needed for onsite presentations. 
+c. A box for measuring parts will be provided throughout both practice and tournament for 
+teams to check part dimensions. 
+d. At tournaments, judges may have a box of the correct dimensions that a part must fit in. 
+4. A STL file must be submitted for each part that may be in use on a robot prior to the tournament. 
+a. The STL file(s) for regional tournaments must be submitted during the 3rd period of 
+documentation for the region. 
+i. Teams will be asked to show proof of STL file submission to the judge at the table if 
+they are using a 3D printed part outside of the KIPR parts lists. 
+b. The STL file(s) for GCER or the fall game may be submitted during the first practice each day 
+of GCER or before the start of competition in the fall game. 
+i. Teams should email any new parts to stls@kipr.org 
+ii. Teams should check in any new parts during the first practice of each day and 
+receive a confirmation from KIPR staff that part will be allowed. 
+c. STL files will be released to the whole Botball community on the team home base after the 
+last regional tournament and after GCER. 
+
+--- page 22 ---
+ 
+ 
+22 
+ 
+d. STL files specifically provided by KIPR from the parts lists do not need to be submitted. 
+e. STL files previously submitted in other years  should be attributed but still sent into KIPR 
+during documentation for regionals or by email for GCER and the fall. 
+5. 3D printing of jigs or other objects to assist in positioning robots in the start box is highly 
+encouraged 
+a. These parts will not count towards the part limit if they are not being used on the robots. 
+6. The surface of 3D printed parts may be sanded. The second identical copy of the part must also be 
+sanded in the same manner. 
+7. The head judge may deny the use of a 3D printed part, at their discretion, based factors of safety or 
+inappropriateness. 
+8. No 3D printing will be permitted at the event. Teams may use 3D printers in their own rooms at 
+GCER. 
+Robot Logistics 
+1. Each robot if named can only have a name (G-rated) approved by an adult team leader before the 
+tournament.  
+2. Multiple processors (such as two KIPR robot controllers) may exist on a single robot. 
+a. You may only use the Wombat controllers. 
+3. It is not necessary to use all the parts in a kit.  
+4. The Starting Box is 12" tall. A starting box is defined by the interior edge of the PVC and the interior 
+edge of the black tape around the perimeter of the starting box.  
+5. All elements of a team’s entry must be within the volume of a Starting Box at game start. A robot 
+may not cross over the boundary between two Starting Boxes at the start. 
+6. After the game starts, robots are allowed to expand in size.  
+7. While not always necessary, starting light sensors may be shielded as demonstrated in the 
+workshop slides and in the construction rules and neither sensor nor shielding may extend outside 
+the Starting Box. 
+ 
+8. All independent structures not under computer control should be clearly marked with the team’s 
+number. Maximum label size is 1” diameter (Avery #5410), or you may use permanent marker 
+directly on the structure. Teams may only run robots with their team number on them.  
+9. Robot teams can have a maximum of 4 independent structures on the game table at a time  
+a. A team's entry, including any supplied game pieces, must fit in the Starting Box without any 
+external restraint at game start (the Starting Box floor and border PVC is not an external 
+restraint). 
+b. Each structure must be large enough so that it does not, in the judge’s opinion, constitute a 
+jamming or entanglement hazard.  
+c. Examples of structures include: robots, barricades, detachable baskets, etc.  
+d. A team’s entry can contain as many robots up to the structures limit as can be constructed 
+from the parts in a single kit. 
+e. Items intentionally ejected from a robot count as structures (judges judge intention); there 
+are special rules regarding projectiles, discussed later.  
+f. 
+The ABS Plastic Rod must be permanently affixed to a robot (as defined by the Robot Rule) 
+
+--- page 23 ---
+ 
+ 
+23 
+ 
+by at least one end of the rod. Using the ABS Plastic Rod in a gear-driven system for motion 
+of a robot component counts as being affixed to the robot. The ABS Plastic Rod may not be 
+used as a projectile (even tethered) or as an independent structure. If the Head Judge deems 
+the use of the ABS Plastic Rod to be in violation of this rule, the offending team will be 
+disqualified for the round. 
+10. No electrical modifications may be made to any KIPR robot controller, any sensors, or any motors, 
+except for substitution of batteries with one approved by KIPR. 
+11. No wire extensions may be used except those provided in the kit.  
+12. Offensive entanglement strategies that involve a robot and/or independent structure are not in 
+line with the Spirit of Botball and may be subject to disqualification as determined by the Head 
+Judge. 
+ 
+ 
+ 
+
+--- page 24 ---
+ 
+ 
+24 
+ 
+Safety 
+1. Human & Robot Safety:  
+a. No untethered robot-launched projectiles, other than game pieces, are allowed. 
+b. No tethered projectiles containing metal pieces are allowed. 
+c. No metal pieces or wires are to be used in effectors that move or rotate at high speed. 
+d. No metal protrusions are to be used that are likely to cause electrical or safety risks for other 
+robots (including arms and projectiles). 
+e. Judges will determine how safe a robot is. Teams may alert judges to a potential safety or 
+entanglement hazard, but judges will interpret whether or not a robot is safe, needs to be 
+modified, or is not allowed to run. 
+2. Electrical tape, either black or white, may be used to cover metal pieces that are deemed to 
+otherwise be a safety risk to robots or humans. Judges might require this to be done at the game 
+table. Note that tape is not allowed to be used for structural purposes.  
+3. If the Head Judge decides that a robot is not considered safe, then the robot will not be allowed to 
+run until it has been modified or it will be removed from the table. 
+External Communication 
+1. No external communications (e.g., IR, Bluetooth, wireless, or semaphores) may be used during 
+tournament play with the exception of robot to robot. 
+2. Teams found to be programming a robot while at the table or in the on-deck or area during rounds, 
+excluding during the use of a timeout, will receive a DQ for the round. 
+3. The USB cables & chargers may not be used during game table tournament play. 
+4. Communication between robots for your team’s entry is allowed. 
+5. Your robot controller may have WiFi turned on or off at the tournament. 
+6. Any teams found in violation of any communication hacking or tampering with another team’s robots 
+or equipment is in violation of the “Spirit of Botball” and may be disqualified from the rest of the 
+tournament. 
+ 
+ 
+Teams found in violation of any communication rule may be disqualified from the tournament at the 
+discretion of the Head Judge. 
+ 
+ 
+
+--- page 25 ---
+ 
+ 
+25 
+ 
+Overall Winner Calculations 
+A team’s overall score is calculated as the sum of their Seeding, Double Elimination, and 
+Documentation scores. The overall score is between 0 and 3 for regional tournaments and between 0 and 4 
+for GCER. Documentation scores at GCER will only include the Onsite Documentation score. 
+Documentation Scoring Formula 
+𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷= 2
+10 (𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃1𝐷𝐷𝐷𝐷𝐷𝐷%) + 2
+10 (𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃2𝐷𝐷𝐷𝐷𝐷𝐷%) + 2
+10 (𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃𝑃3𝐷𝐷𝐷𝐷𝐷𝐷%) + 4
+10 (𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂𝑂%) 
+ 
+Seeding Scoring Formula 
+𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆= 3
+4 ൬𝑛𝑛−𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆𝑆+ 1
+𝑛𝑛
+൰+ 1
+4 ൬𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇
+𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀൰ 
+ 
+Double Elimination Bracket Scoring Formula 
+𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷= ൬𝑛𝑛−𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷+ 1
+𝑛𝑛
+൰ 
+ 
+Double Seeding Scoring Formula (GCER Only) 
+𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷= 2
+3 ൬𝑛𝑛−𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷𝐷+ 1
+𝑛𝑛
+൰+ 1
+3 ൬𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇𝑇
+𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀𝑀൰ 
+ 
+Note: For all formulas n = Number of Teams at Tournament or in bracket 
+Note #2: Weighting of brackets and number of brackets will be released at GCER 

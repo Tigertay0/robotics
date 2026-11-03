@@ -1,0 +1,4586 @@
+{
+ "meta": {
+  "title": "2026 Botball Fall Game - field map",
+  "units": "inch",
+  "version": 1,
+  "coordinate_convention": {
+   "origin": "bottom-left corner of the board in docs/official/Fall_Game_Table_Overhead.png",
+   "X": "along the 96 in length, left -> right: X = (1.2192 - y_blender) / 0.0254",
+   "Y": "across the 48 in width, bottom -> top: Y = (x_blender + 1.2192) / 0.0254",
+   "Z": "height above the FRP surface: Z = (z_blender - 0.0213) / 0.0254"
+  },
+  "sources": {
+   "cad_tight_boxes": "data/glb_objects_tight.json (vertex-based, from Fall_Game_Table.glb via tools/extract_glb_profiles.py)",
+   "cad_profiles": "data/glb_profiles.json",
+   "rules": "docs/official/Botball_Fall_Game_Rule_Summary.txt (v1.0)",
+   "build_drawings": "Fall_Game_Table.pdf (9 sheets)",
+   "zone_image": "docs/official/Fall_Game_Zones.png",
+   "not_used": "data/glb_objects_raw.json: Object.bound_box AABBs are inflated for meshes rotated by non-90 degree angles (30 of 146 meshes differ by >0.02 in, up to 0.7 in)"
+  },
+  "src_legend": {
+   "cad": "measured from the GLB",
+   "rules": "stated in the rules PDF",
+   "pdf": "stated in the build PDF",
+   "derived": "computed from those",
+   "inferred": "our reading, not stated"
+  },
+  "generated_by": "tools/build_field_map.py"
+ },
+ "board": {
+  "outline": {
+   "x": [
+    0.0,
+    96.0
+   ],
+   "y": [
+    0.0,
+    48.0
+   ]
+  },
+  "polygon": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    96.0,
+    0.0
+   ],
+   [
+    96.0,
+    48.0
+   ],
+   [
+    0.0,
+    48.0
+   ]
+  ],
+  "surface_z": 0.0,
+  "frp_thickness_in": 0.077,
+  "particle_board_thickness_in": 0.75,
+  "surface_note": "FRP 'bumpy side up' (PDF sheet 3): textured white surface",
+  "playing_interior": {
+   "x": [
+    1.462,
+    94.538
+   ],
+   "y": [
+    1.462,
+    41.662
+   ],
+   "note": "PVC inner edges; PDF sheet 8 gives 93.08 x 40.20 (checked)"
+  },
+  "src": "cad+pdf"
+ },
+ "pvc": {
+  "nominal_pipe": "1 in SCH 40 (BOM calls it '1 inch ID'); OD 1.315 in nominal, CAD pipe bbox ~1.30 in",
+  "pipe_top_z_standard": 1.46,
+  "fitting_top_z_in_plane": 1.623,
+  "fitting_top_z_with_vertical_socket": 2.498,
+  "bom_counts": {
+   "pipes": 31,
+   "elbows": 9,
+   "tees": 17
+  },
+  "counts_in_cad": {
+   "pipes": 31,
+   "elbows": 9,
+   "tees": 17
+  },
+  "pipes": [
+   {
+    "id": "pipe_1.75in_1",
+    "mesh": "1.75 inch pvc-1 - Part",
+    "bom_item": 1,
+    "nominal_length_in": 1.75,
+    "axis": "x",
+    "role": "internal_spacer",
+    "side": null,
+    "box": {
+     "x": [
+      92.75,
+      94.5
+     ],
+     "y": [
+      0.162,
+      1.462
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_1.75in_11",
+    "mesh": "1.75 inch pvc-11 - Part",
+    "bom_item": 1,
+    "nominal_length_in": 1.75,
+    "axis": "y",
+    "role": "internal_spacer",
+    "side": null,
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      1.75,
+      3.5
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_1.75in_2",
+    "mesh": "1.75 inch pvc-2 - Part",
+    "bom_item": 1,
+    "nominal_length_in": 1.75,
+    "axis": "x",
+    "role": "internal_spacer",
+    "side": null,
+    "box": {
+     "x": [
+      92.75,
+      94.5
+     ],
+     "y": [
+      11.038,
+      12.338
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_1.75in_4",
+    "mesh": "1.75 inch pvc-4 - Part",
+    "bom_item": 1,
+    "nominal_length_in": 1.75,
+    "axis": "x",
+    "role": "internal_spacer",
+    "side": null,
+    "box": {
+     "x": [
+      54.518,
+      56.268
+     ],
+     "y": [
+      41.662,
+      42.963
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_10in_1",
+    "mesh": "10 inch pvc-1 - Part",
+    "bom_item": 5,
+    "nominal_length_in": 10.0,
+    "axis": "x",
+    "role": "border",
+    "side": "top",
+    "box": {
+     "x": [
+      43.0,
+      53.0
+     ],
+     "y": [
+      41.664,
+      42.961
+     ],
+     "z": [
+      0.162,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.297,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_12in_1",
+    "mesh": "12 inch pvc-1 - Part",
+    "bom_item": 6,
+    "nominal_length_in": 12.0,
+    "axis": "y",
+    "role": "border",
+    "side": "left",
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      14.25,
+      26.25
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_12.875in_2",
+    "mesh": "12.875 inch pvc-2 - Part",
+    "bom_item": 7,
+    "nominal_length_in": 12.875,
+    "axis": "x",
+    "role": "border",
+    "side": "top",
+    "box": {
+     "x": [
+      28.75,
+      41.625
+     ],
+     "y": [
+      41.662,
+      42.963
+     ],
+     "z": [
+      0.164,
+      1.458
+     ]
+    },
+    "top_z": 1.458,
+    "od_in_cad": 1.294,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_13.875in_1",
+    "mesh": "13.875 inch pvc-1 - Part",
+    "bom_item": 8,
+    "nominal_length_in": 13.875,
+    "axis": "y",
+    "role": "border",
+    "side": "right",
+    "box": {
+     "x": [
+      94.538,
+      95.838
+     ],
+     "y": [
+      12.375,
+      26.25
+     ],
+     "z": [
+      0.164,
+      1.458
+     ]
+    },
+    "top_z": 1.458,
+    "od_in_cad": 1.294,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_14in_5",
+    "mesh": "14 inch pvc-5 - Part",
+    "bom_item": 9,
+    "nominal_length_in": 14.0,
+    "axis": "y",
+    "role": "border",
+    "side": "right",
+    "box": {
+     "x": [
+      94.538,
+      95.838
+     ],
+     "y": [
+      27.625,
+      41.625
+     ],
+     "z": [
+      0.164,
+      1.458
+     ]
+    },
+    "top_z": 1.458,
+    "od_in_cad": 1.294,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_14in_7",
+    "mesh": "14 inch pvc-7 - Part",
+    "bom_item": 9,
+    "nominal_length_in": 14.0,
+    "axis": "y",
+    "role": "border",
+    "side": "left",
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      27.625,
+      41.625
+     ],
+     "z": [
+      0.164,
+      1.458
+     ]
+    },
+    "top_z": 1.458,
+    "od_in_cad": 1.294,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_17.625in_1",
+    "mesh": "17.625 inch pvc-1 - Part",
+    "bom_item": 10,
+    "nominal_length_in": 17.625,
+    "axis": "x",
+    "role": "border",
+    "side": "bottom",
+    "box": {
+     "x": [
+      73.5,
+      91.125
+     ],
+     "y": [
+      0.162,
+      1.462
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    },
+    "top_z": 1.461,
+    "od_in_cad": 1.3,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_17.625in_2",
+    "mesh": "17.625 inch pvc-2 - Part",
+    "bom_item": 10,
+    "nominal_length_in": 17.625,
+    "axis": "x",
+    "role": "platform_inner_floor_pipe",
+    "side": null,
+    "box": {
+     "x": [
+      73.5,
+      91.125
+     ],
+     "y": [
+      11.039,
+      12.336
+     ],
+     "z": [
+      0.162,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.297,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_1",
+    "mesh": "2.5 inch pvc-1 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "z",
+    "role": "platform_leg",
+    "side": null,
+    "box": {
+     "x": [
+      91.163,
+      92.463
+     ],
+     "y": [
+      0.163,
+      1.462
+     ],
+     "z": [
+      1.498,
+      3.998
+     ]
+    },
+    "top_z": 3.998,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_10",
+    "mesh": "2.5 inch pvc-10 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "x",
+    "role": "bottle_enclosure_wall",
+    "side": null,
+    "box": {
+     "x": [
+      1.5,
+      4.0
+     ],
+     "y": [
+      12.913,
+      14.212
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    },
+    "top_z": 1.461,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_2",
+    "mesh": "2.5 inch pvc-2 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "z",
+    "role": "platform_leg",
+    "side": null,
+    "box": {
+     "x": [
+      72.163,
+      73.463
+     ],
+     "y": [
+      0.163,
+      1.462
+     ],
+     "z": [
+      1.498,
+      3.998
+     ]
+    },
+    "top_z": 3.998,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_3",
+    "mesh": "2.5 inch pvc-3 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "z",
+    "role": "platform_leg",
+    "side": null,
+    "box": {
+     "x": [
+      72.163,
+      73.463
+     ],
+     "y": [
+      11.038,
+      12.337
+     ],
+     "z": [
+      1.498,
+      3.998
+     ]
+    },
+    "top_z": 3.998,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_4",
+    "mesh": "2.5 inch pvc-4 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "z",
+    "role": "platform_leg",
+    "side": null,
+    "box": {
+     "x": [
+      91.163,
+      92.463
+     ],
+     "y": [
+      11.038,
+      12.337
+     ],
+     "z": [
+      1.498,
+      3.998
+     ]
+    },
+    "top_z": 3.998,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_2.5in_9",
+    "mesh": "2.5 inch pvc-9 - Part",
+    "bom_item": 2,
+    "nominal_length_in": 2.5,
+    "axis": "x",
+    "role": "bottle_enclosure_wall",
+    "side": null,
+    "box": {
+     "x": [
+      1.5,
+      4.0
+     ],
+     "y": [
+      3.538,
+      4.837
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    },
+    "top_z": 1.461,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_21.125in_1",
+    "mesh": "21.125 inch pvc-1 - Part",
+    "bom_item": 11,
+    "nominal_length_in": 21.125,
+    "axis": "x",
+    "role": "border",
+    "side": "bottom",
+    "box": {
+     "x": [
+      1.5,
+      22.625
+     ],
+     "y": [
+      0.162,
+      1.462
+     ],
+     "z": [
+      0.162,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.298,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_23.375in_1",
+    "mesh": "23.375 inch pvc-1 - Part",
+    "bom_item": 12,
+    "nominal_length_in": 23.375,
+    "axis": "x",
+    "role": "border",
+    "side": "bottom",
+    "box": {
+     "x": [
+      48.75,
+      72.125
+     ],
+     "y": [
+      0.164,
+      1.461
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.297,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_23.375in_3",
+    "mesh": "23.375 inch pvc-3 - Part",
+    "bom_item": 12,
+    "nominal_length_in": 23.375,
+    "axis": "x",
+    "role": "border",
+    "side": "bottom",
+    "box": {
+     "x": [
+      24.0,
+      47.375
+     ],
+     "y": [
+      0.162,
+      1.462
+     ],
+     "z": [
+      0.164,
+      1.457
+     ]
+    },
+    "top_z": 1.457,
+    "od_in_cad": 1.293,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_25.875in_1",
+    "mesh": "25.875 inch pvc-1 - Part",
+    "bom_item": 13,
+    "nominal_length_in": 25.875,
+    "axis": "x",
+    "role": "border",
+    "side": "top",
+    "box": {
+     "x": [
+      68.625,
+      94.5
+     ],
+     "y": [
+      41.663,
+      42.962
+     ],
+     "z": [
+      0.162,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.298,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_25.875in_3",
+    "mesh": "25.875 inch pvc-3 - Part",
+    "bom_item": 13,
+    "nominal_length_in": 25.875,
+    "axis": "x",
+    "role": "border",
+    "side": "top",
+    "box": {
+     "x": [
+      1.5,
+      27.375
+     ],
+     "y": [
+      41.664,
+      42.961
+     ],
+     "z": [
+      0.161,
+      1.46
+     ]
+    },
+    "top_z": 1.46,
+    "od_in_cad": 1.297,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_8in_10",
+    "mesh": "8 inch pvc-10 - Part",
+    "bom_item": 3,
+    "nominal_length_in": 8.0,
+    "axis": "y",
+    "role": "bottle_enclosure_wall",
+    "side": null,
+    "box": {
+     "x": [
+      4.038,
+      5.338
+     ],
+     "y": [
+      4.875,
+      12.875
+     ],
+     "z": [
+      0.163,
+      1.459
+     ]
+    },
+    "top_z": 1.459,
+    "od_in_cad": 1.296,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_8in_18",
+    "mesh": "8 inch pvc-18 - Part",
+    "bom_item": 3,
+    "nominal_length_in": 8.0,
+    "axis": "z",
+    "role": "ring_post",
+    "side": null,
+    "box": {
+     "x": [
+      22.663,
+      23.962
+     ],
+     "y": [
+      0.163,
+      1.462
+     ],
+     "z": [
+      1.498,
+      9.498
+     ]
+    },
+    "top_z": 9.498,
+    "od_in_cad": 1.299,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_8in_19",
+    "mesh": "8 inch pvc-19 - Part",
+    "bom_item": 3,
+    "nominal_length_in": 8.0,
+    "axis": "z",
+    "role": "ring_post",
+    "side": null,
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      26.29,
+      27.585
+     ],
+     "z": [
+      1.498,
+      9.498
+     ]
+    },
+    "top_z": 9.498,
+    "od_in_cad": 1.295,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_8in_4",
+    "mesh": "8 inch pvc-4 - Part",
+    "bom_item": 3,
+    "nominal_length_in": 8.0,
+    "axis": "y",
+    "role": "border",
+    "side": "left",
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      4.875,
+      12.875
+     ],
+     "z": [
+      0.163,
+      1.459
+     ]
+    },
+    "top_z": 1.459,
+    "od_in_cad": 1.296,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_9.5in_1",
+    "mesh": "9.5 inch pvc-1 - Part",
+    "bom_item": 4,
+    "nominal_length_in": 9.5,
+    "axis": "y",
+    "role": "platform_beam",
+    "side": null,
+    "box": {
+     "x": [
+      72.163,
+      73.463
+     ],
+     "y": [
+      1.5,
+      11.0
+     ],
+     "z": [
+      4.036,
+      5.336
+     ]
+    },
+    "top_z": 5.336,
+    "od_in_cad": 1.3,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_9.5in_2",
+    "mesh": "9.5 inch pvc-2 - Part",
+    "bom_item": 4,
+    "nominal_length_in": 9.5,
+    "axis": "y",
+    "role": "platform_beam",
+    "side": null,
+    "box": {
+     "x": [
+      91.163,
+      92.463
+     ],
+     "y": [
+      1.5,
+      11.0
+     ],
+     "z": [
+      4.036,
+      5.336
+     ]
+    },
+    "top_z": 5.336,
+    "od_in_cad": 1.3,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_9.5in_3",
+    "mesh": "9.5 inch pvc-3 - Part",
+    "bom_item": 4,
+    "nominal_length_in": 9.5,
+    "axis": "y",
+    "role": "border",
+    "side": "right",
+    "box": {
+     "x": [
+      94.538,
+      95.838
+     ],
+     "y": [
+      1.5,
+      11.0
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    },
+    "top_z": 1.461,
+    "od_in_cad": 1.3,
+    "src": "cad"
+   },
+   {
+    "id": "pipe_9.5in_6",
+    "mesh": "9.5 inch pvc-6 - Part",
+    "bom_item": 4,
+    "nominal_length_in": 9.5,
+    "axis": "x",
+    "role": "border",
+    "side": "top",
+    "box": {
+     "x": [
+      57.75,
+      67.25
+     ],
+     "y": [
+      41.662,
+      42.963
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    },
+    "top_z": 1.461,
+    "od_in_cad": 1.3,
+    "src": "cad"
+   }
+  ],
+  "fittings": [
+   {
+    "id": "elbow_1",
+    "mesh": "Elbow Connector-1 - Part",
+    "type": "elbow",
+    "role": "elbow_in_plane",
+    "box": {
+     "x": [
+      93.5,
+      96.0
+     ],
+     "y": [
+      0.0,
+      2.5
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_22",
+    "mesh": "Elbow Connector-22 - Part",
+    "type": "elbow",
+    "role": "elbow_in_plane",
+    "box": {
+     "x": [
+      0.0,
+      2.5
+     ],
+     "y": [
+      0.0,
+      2.5
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_23",
+    "mesh": "Elbow Connector-23 - Part",
+    "type": "elbow",
+    "role": "elbow_in_plane",
+    "box": {
+     "x": [
+      3.0,
+      5.5
+     ],
+     "y": [
+      11.875,
+      14.375
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_24",
+    "mesh": "Elbow Connector-24 - Part",
+    "type": "elbow",
+    "role": "elbow_in_plane",
+    "box": {
+     "x": [
+      3.0,
+      5.5
+     ],
+     "y": [
+      3.375,
+      5.875
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_3",
+    "mesh": "Elbow Connector-3 - Part",
+    "type": "elbow",
+    "role": "platform_beam_corner",
+    "box": {
+     "x": [
+      72.0,
+      73.625
+     ],
+     "y": [
+      0.0,
+      2.5
+     ],
+     "z": [
+      2.998,
+      5.498
+     ]
+    },
+    "top_z": 5.498,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_4",
+    "mesh": "Elbow Connector-4 - Part",
+    "type": "elbow",
+    "role": "platform_beam_corner",
+    "box": {
+     "x": [
+      91.0,
+      92.625
+     ],
+     "y": [
+      0.0,
+      2.5
+     ],
+     "z": [
+      2.998,
+      5.498
+     ]
+    },
+    "top_z": 5.498,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_5",
+    "mesh": "Elbow Connector-5 - Part",
+    "type": "elbow",
+    "role": "platform_beam_corner",
+    "box": {
+     "x": [
+      91.0,
+      92.625
+     ],
+     "y": [
+      10.0,
+      12.5
+     ],
+     "z": [
+      2.998,
+      5.498
+     ]
+    },
+    "top_z": 5.498,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_6",
+    "mesh": "Elbow Connector-6 - Part",
+    "type": "elbow",
+    "role": "platform_beam_corner",
+    "box": {
+     "x": [
+      72.0,
+      73.625
+     ],
+     "y": [
+      10.0,
+      12.5
+     ],
+     "z": [
+      2.998,
+      5.498
+     ]
+    },
+    "top_z": 5.498,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "elbow_7",
+    "mesh": "Elbow Connector-7 - Part",
+    "type": "elbow",
+    "role": "floor_to_leg_elbow",
+    "box": {
+     "x": [
+      72.0,
+      74.5
+     ],
+     "y": [
+      10.875,
+      12.5
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_2.5in_3"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_1",
+    "mesh": "T Connector-1 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      46.375,
+      49.75
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pickleball4"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_10",
+    "mesh": "T Connector-10 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      52.0,
+      55.375
+     ],
+     "y": [
+      41.5,
+      44.0
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": true,
+    "src": "cad"
+   },
+   {
+    "id": "T_12",
+    "mesh": "T Connector-12 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      55.375,
+      58.75
+     ],
+     "y": [
+      41.5,
+      43.125
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pickleball1"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_13",
+    "mesh": "T Connector-13 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      66.25,
+      69.625
+     ],
+     "y": [
+      41.5,
+      43.125
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pickleball2"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_14",
+    "mesh": "T Connector-14 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      40.625,
+      44.0
+     ],
+     "y": [
+      41.5,
+      44.0
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": true,
+    "src": "cad"
+   },
+   {
+    "id": "T_16",
+    "mesh": "T Connector-16 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      0.0,
+      2.5
+     ],
+     "y": [
+      40.625,
+      44.0
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": true,
+    "src": "cad"
+   },
+   {
+    "id": "T_2",
+    "mesh": "T Connector-2 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      21.625,
+      25.0
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_8in_18"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_3",
+    "mesh": "T Connector-3 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      71.125,
+      74.5
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_2.5in_2"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_30",
+    "mesh": "T Connector-30 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      0.0,
+      2.5
+     ],
+     "y": [
+      2.5,
+      5.875
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_39",
+    "mesh": "T Connector-39 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      26.375,
+      29.75
+     ],
+     "y": [
+      41.5,
+      44.0
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": true,
+    "src": "cad"
+   },
+   {
+    "id": "T_4",
+    "mesh": "T Connector-4 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      90.125,
+      93.5
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_2.5in_1"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_43",
+    "mesh": "T Connector-43 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      0.0,
+      1.625
+     ],
+     "y": [
+      25.25,
+      28.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_8in_19"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_44",
+    "mesh": "T Connector-44 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      94.375,
+      96.0
+     ],
+     "y": [
+      25.25,
+      28.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pickleball3"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_6",
+    "mesh": "T Connector-6 - Part",
+    "type": "T",
+    "role": "T_with_vertical_socket",
+    "box": {
+     "x": [
+      90.125,
+      93.5
+     ],
+     "y": [
+      10.875,
+      12.5
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    },
+    "top_z": 2.498,
+    "carries": [
+     "pipe_2.5in_4"
+    ],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_7",
+    "mesh": "T Connector-7 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      93.5,
+      96.0
+     ],
+     "y": [
+      10.0,
+      13.375
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_8",
+    "mesh": "T Connector-8 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      0.0,
+      2.5
+     ],
+     "y": [
+      11.875,
+      15.25
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": false,
+    "src": "cad"
+   },
+   {
+    "id": "T_9",
+    "mesh": "T Connector-9 - Part",
+    "type": "T",
+    "role": "T_in_plane",
+    "box": {
+     "x": [
+      93.5,
+      96.0
+     ],
+     "y": [
+      40.625,
+      44.0
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    },
+    "top_z": 1.623,
+    "carries": [],
+    "outward_stub_past_top_wall": true,
+    "src": "cad"
+   }
+  ],
+  "src": "cad"
+ },
+ "tape": [
+  {
+   "id": "tape_center_vertical",
+   "mesh": "Black duct tape 41.5 in-1 - Part",
+   "nominal_length_in": 41.5,
+   "rect": {
+    "x": [
+     47.125,
+     49.0
+    ],
+    "y": [
+     0.162,
+     41.663
+    ]
+   },
+   "length_in": 41.501,
+   "width_in": 1.875,
+   "orientation": "vertical",
+   "thickness_in": 0.01,
+   "src": "cad"
+  },
+  {
+   "id": "tape_lower_horizontal",
+   "mesh": "Black duct tape 89.5 in-1 - Part",
+   "nominal_length_in": 89.5,
+   "rect": {
+    "x": [
+     5.038,
+     94.537
+    ],
+    "y": [
+     12.713,
+     14.588
+    ]
+   },
+   "length_in": 89.499,
+   "width_in": 1.875,
+   "orientation": "horizontal",
+   "thickness_in": 0.01,
+   "src": "cad"
+  },
+  {
+   "id": "tape_upper_horizontal",
+   "mesh": "Black duct tape 93.5 in-2 - Part",
+   "nominal_length_in": 93.5,
+   "rect": {
+    "x": [
+     1.037,
+     94.538
+    ],
+    "y": [
+     25.963,
+     27.838
+    ]
+   },
+   "length_in": 93.501,
+   "width_in": 1.875,
+   "orientation": "horizontal",
+   "thickness_in": 0.01,
+   "src": "cad"
+  },
+  {
+   "id": "tape_short_vertical",
+   "mesh": "Black duct tape 12 in-1 - Part",
+   "nominal_length_in": 12.0,
+   "rect": {
+    "x": [
+     70.125,
+     72.0
+    ],
+    "y": [
+     0.713,
+     12.713
+    ]
+   },
+   "length_in": 12.0,
+   "width_in": 1.875,
+   "orientation": "vertical",
+   "thickness_in": 0.01,
+   "src": "cad"
+  }
+ ],
+ "tape_note": "Tape strips measure 1.875 in wide in the CAD (3M #3920 duct tape is 1-7/8 in), not 2 in; lengths 93.5 / 89.5 / 41.5 / 12 match the mesh names and PDF sheets 7-8.",
+ "zones": {
+  "zone1": {
+   "id": "zone1",
+   "name": "Zone 1 (top-left)",
+   "bbox": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     27.838,
+     41.662
+    ]
+   },
+   "polygon": [
+    [
+     1.462,
+     27.838
+    ],
+    [
+     47.125,
+     27.838
+    ],
+    [
+     47.125,
+     41.662
+    ],
+    [
+     1.462,
+     41.662
+    ]
+   ],
+   "width_in": 45.663,
+   "height_in": 13.824,
+   "area_sq_in": 631.245,
+   "counts_for_overall_multiplier": true,
+   "note": "bounded by left PVC inner edge, center tape left edge, upper tape top edge, top PVC inner edge",
+   "src": "derived"
+  },
+  "zone2": {
+   "id": "zone2",
+   "name": "Zone 2 (top-right)",
+   "bbox": {
+    "x": [
+     49.0,
+     94.538
+    ],
+    "y": [
+     27.838,
+     41.662
+    ]
+   },
+   "polygon": [
+    [
+     49.0,
+     27.838
+    ],
+    [
+     94.538,
+     27.838
+    ],
+    [
+     94.538,
+     41.662
+    ],
+    [
+     49.0,
+     41.662
+    ]
+   ],
+   "width_in": 45.538,
+   "height_in": 13.824,
+   "area_sq_in": 629.517,
+   "counts_for_overall_multiplier": true,
+   "note": "mirror of Zone 1 across the center tape",
+   "src": "derived"
+  },
+  "zone3": {
+   "id": "zone3",
+   "name": "Zone 3 (middle-left, pom side)",
+   "bbox": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     14.588,
+     25.963
+    ]
+   },
+   "polygon": [
+    [
+     1.462,
+     14.588
+    ],
+    [
+     47.125,
+     14.588
+    ],
+    [
+     47.125,
+     25.963
+    ],
+    [
+     1.462,
+     25.963
+    ]
+   ],
+   "width_in": 45.663,
+   "height_in": 11.375,
+   "area_sq_in": 519.417,
+   "counts_for_overall_multiplier": true,
+   "note": "between lower tape top edge and upper tape bottom edge; the 5 pom stacks sit on the upper tape (Z1/Z3 boundary)",
+   "src": "derived"
+  },
+  "zone4": {
+   "id": "zone4",
+   "name": "Zone 4 (middle-right, duck side)",
+   "bbox": {
+    "x": [
+     49.0,
+     94.538
+    ],
+    "y": [
+     14.588,
+     25.963
+    ]
+   },
+   "polygon": [
+    [
+     49.0,
+     14.588
+    ],
+    [
+     94.538,
+     14.588
+    ],
+    [
+     94.538,
+     25.963
+    ],
+    [
+     49.0,
+     25.963
+    ]
+   ],
+   "width_in": 45.538,
+   "height_in": 11.375,
+   "area_sq_in": 517.995,
+   "counts_for_overall_multiplier": true,
+   "note": "between lower tape top edge and upper tape bottom edge; the 5 small ducks sit on the upper tape (Z2/Z4 boundary)",
+   "src": "derived"
+  },
+  "zone5": {
+   "id": "zone5",
+   "name": "Zone 5 / large Starting Box (lower-left)",
+   "bbox": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     1.462,
+     12.713
+    ]
+   },
+   "polygon": [
+    [
+     1.462,
+     1.462
+    ],
+    [
+     47.125,
+     1.462
+    ],
+    [
+     47.125,
+     12.713
+    ],
+    [
+     5.5,
+     12.713
+    ],
+    [
+     5.5,
+     3.375
+    ],
+    [
+     1.462,
+     3.375
+    ]
+   ],
+   "width_in": 45.663,
+   "height_in": 11.251,
+   "area_sq_in": 476.048,
+   "counts_for_overall_multiplier": true,
+   "note": "L-shaped: rectangle minus the Bottle/Ring enclosure footprint on its left end. Doubles as the large Starting Box (rules p.3)",
+   "usable_start_rect": {
+    "x": [
+     5.5,
+     47.125
+    ],
+    "y": [
+     1.462,
+     12.713
+    ]
+   },
+   "src": "derived"
+  }
+ },
+ "start_box_small": {
+  "id": "start_box_small",
+  "name": "Small Starting Box",
+  "bbox": {
+   "x": [
+    49.0,
+    70.125
+   ],
+   "y": [
+    1.462,
+    12.713
+   ]
+  },
+  "polygon": [
+   [
+    49.0,
+    1.462
+   ],
+   [
+    70.125,
+    1.462
+   ],
+   [
+    70.125,
+    12.713
+   ],
+   [
+    49.0,
+    12.713
+   ]
+  ],
+  "width_in": 21.125,
+  "height_in": 11.251,
+  "virtual_ceiling_in": 12.0,
+  "stated_size_in": [
+   21.125,
+   11.25,
+   12
+  ],
+  "counts_for_overall_multiplier": false,
+  "note": "bounded by center tape right edge, short 12 in tape left edge, lower tape bottom edge and bottom PVC inner edge; matches the 21.125 x 11.25 stated in rules p.3 and PDF sheet 7",
+  "src": "derived"
+ },
+ "start_box_large": {
+  "same_as": "zone5",
+  "usable_rect": {
+   "x": [
+    5.5,
+    47.125
+   ],
+   "y": [
+    1.462,
+    12.713
+   ]
+  },
+  "src": "rules"
+ },
+ "bottle_ring_enclosure": {
+  "id": "bottle_ring_enclosure",
+  "name": "Bottle/Ring enclosure",
+  "outer_footprint": {
+   "x": [
+    0.0,
+    5.5
+   ],
+   "y": [
+    3.375,
+    14.375
+   ]
+  },
+  "outer_polygon": [
+   [
+    0.0,
+    3.375
+   ],
+   [
+    5.5,
+    3.375
+   ],
+   [
+    5.5,
+    14.375
+   ],
+   [
+    0.0,
+    14.375
+   ]
+  ],
+  "counts_for_overall_multiplier": false,
+  "src": "derived",
+  "interior": {
+   "x": [
+    1.462,
+    4.038
+   ],
+   "y": [
+    4.837,
+    12.913
+   ]
+  },
+  "interior_note": "pocket between the left wall pipe (inner edge x=1.462), the 8 in pipe (inner edge x=4.038), the lower 2.5 in pipe (top edge y=4.837) and the upper 2.5 in pipe (edge y=12.913): 2.58 x 8.08 in, walls are 1.46 in tall floor-level PVC on all 4 sides",
+  "open_side": "none: closed U of floor-level PVC; pieces enter over the 1.46 in walls (right side x~4.0-5.3 faces Zone 5)"
+ },
+ "raised_platform": {
+  "footprint": {
+   "x": [
+    72.0,
+    96.0
+   ],
+   "y": [
+    0.0,
+    12.5
+   ]
+  },
+  "polygon": [
+   [
+    72.0,
+    0.0
+   ],
+   [
+    96.0,
+    0.0
+   ],
+   [
+    96.0,
+    12.5
+   ],
+   [
+    72.0,
+    12.5
+   ]
+  ],
+  "top_z": 5.686,
+  "underside_z": 5.498,
+  "thickness_in": 0.188,
+  "size_in": [
+   24.0,
+   12.5
+  ],
+  "flush_edges": "right edge (x=96) and bottom edge (y=0) flush with the board edge",
+  "supports": "4 legs (2.5 in pipe, Z 1.5-4.0) at each corner of a 19 x 11 in rectangle on floor-level PVC, each topped by an elbow carrying a 9.5 in beam (Z 4.04-5.34) along Y at x~72.8 and x~91.8",
+  "src": "cad"
+ },
+ "skirt": {
+  "box": {
+   "x": [
+    72.0,
+    96.0
+   ],
+   "y": [
+    12.5,
+    12.687
+   ],
+   "z": [
+    -0.002,
+    5.498
+   ]
+  },
+  "height_in": 5.5,
+  "thickness_in": 0.187,
+  "face_y": 12.5,
+  "notch": {
+   "x": [
+    94.375,
+    96.0
+   ],
+   "z": [
+    0.0,
+    1.623
+   ],
+   "size_in": [
+    1.625,
+    1.623
+   ],
+   "note": "1.625 x 1.625 in cut (PDF sheet 6). In the CAD it is at the RIGHT end of the skirt (x 94.375-96), clearing T-connector T_7 which passes through the skirt plane; the PDF sheet 6 flat pattern draws it at the left end (mirror). It is not a usable gap (it is at the far right wall).",
+   "src": "cad+pdf"
+  },
+  "src": "cad"
+ },
+ "under_platform": {
+  "footprint": {
+   "x": [
+    72.0,
+    96.0
+   ],
+   "y": [
+    0.0,
+    12.5
+   ]
+  },
+  "polygon": [
+   [
+    72.0,
+    0.0
+   ],
+   [
+    96.0,
+    0.0
+   ],
+   [
+    96.0,
+    12.5
+   ],
+   [
+    72.0,
+    12.5
+   ]
+  ],
+  "ceiling_z": 5.498,
+  "open_side": {
+   "side": "left (-X), at x=72.0 facing the small Starting Box",
+   "plane_x": 72.0,
+   "gap_from_start_box_in": 1.875,
+   "gap_note": "the 12 in black tape (x 70.125-72.0) lies between the Starting Box and the opening"
+  },
+  "closed_sides": {
+   "+Y (toward table interior)": "5.5 in corrugated skirt at y=12.5-12.687, Z 0-5.498 (full height; notch only at far right)",
+   "-Y (bottom edge)": "board edge at y=0; floor-level PVC wall (pipe top Z 1.46) - nothing above it but the table edge",
+   "+X (right edge)": "board edge at x=96; floor-level PVC wall (Z<=1.46) - nothing above it but the table edge"
+  },
+  "entrance": {
+   "clear_height_under_beam_z": 4.036,
+   "clear_height_under_elbows_z": 2.998,
+   "floor_level_gap_between_legs_y": [
+    1.462,
+    11.038
+   ],
+   "floor_level_gap_between_floor_fittings_y": [
+    1.625,
+    10.875
+   ],
+   "floor_level_width_in": 9.25,
+   "narrow_gap_between_top_elbows_y": [
+    2.5,
+    10.0
+   ],
+   "narrow_width_in": 7.5,
+   "limiting_width_note": "9.25 in wide below Z=2.998; 7.5 in wide between the corner elbows for Z 2.998-4.036; blocked above Z=4.036 by the 9.5 in support beam",
+   "left_beam_box": {
+    "x": [
+     72.163,
+     73.463
+    ],
+    "y": [
+     1.5,
+     11.0
+    ],
+    "z": [
+     4.036,
+     5.336
+    ]
+   },
+   "left_legs": [
+    "pipe_2.5in_2",
+    "pipe_2.5in_3"
+   ],
+   "left_corner_elbows": [
+    "elbow_3",
+    "elbow_6"
+   ],
+   "left_floor_fittings": [
+    "T_3",
+    "elbow_7"
+   ],
+   "src": "cad"
+  },
+  "free_floor_rect": {
+   "x": [
+    72.0,
+    94.538
+   ],
+   "y": [
+    1.625,
+    10.875
+   ]
+  },
+  "free_floor_note": "board surface not covered by pipes/fittings: x 72.0 to right-wall inner edge, y between the two floor-level fittings at the entrance; the 17.625 in floor pipes sit at y 0.162-1.462 and 11.039-12.336",
+  "floor_obstructions": [
+   {
+    "id": "pipe_17.625in_1",
+    "what": "17.625 in floor pipe along the bottom edge",
+    "box": {
+     "x": [
+      73.5,
+      91.125
+     ],
+     "y": [
+      0.162,
+      1.462
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    }
+   },
+   {
+    "id": "pipe_17.625in_2",
+    "what": "17.625 in floor pipe just inside the skirt (floor-level wall, 1.3 in wide)",
+    "box": {
+     "x": [
+      73.5,
+      91.125
+     ],
+     "y": [
+      11.039,
+      12.336
+     ],
+     "z": [
+      0.162,
+      1.46
+     ]
+    }
+   },
+   {
+    "id": "pipe_9.5in_3",
+    "what": "right-wall floor pipe (9.5 in)",
+    "box": {
+     "x": [
+      94.538,
+      95.838
+     ],
+     "y": [
+      1.5,
+      11.0
+     ],
+     "z": [
+      0.161,
+      1.461
+     ]
+    }
+   },
+   {
+    "id": "elbow_1",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      93.5,
+      96.0
+     ],
+     "y": [
+      0.0,
+      2.5
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    }
+   },
+   {
+    "id": "elbow_7",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      72.0,
+      74.5
+     ],
+     "y": [
+      10.875,
+      12.5
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    }
+   },
+   {
+    "id": "T_3",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      71.125,
+      74.5
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    }
+   },
+   {
+    "id": "T_4",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      90.125,
+      93.5
+     ],
+     "y": [
+      0.0,
+      1.625
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    }
+   },
+   {
+    "id": "T_6",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      90.125,
+      93.5
+     ],
+     "y": [
+      10.875,
+      12.5
+     ],
+     "z": [
+      -0.002,
+      2.498
+     ]
+    }
+   },
+   {
+    "id": "T_7",
+    "what": "floor-level fitting",
+    "box": {
+     "x": [
+      93.5,
+      96.0
+     ],
+     "y": [
+      10.0,
+      13.375
+     ],
+     "z": [
+      -0.002,
+      1.623
+     ]
+    }
+   }
+  ],
+  "no_tape_under_platform": true,
+  "src": "cad"
+ },
+ "botguy_strip": {
+  "bbox": {
+   "x": [
+    0.0,
+    96.0
+   ],
+   "y": [
+    41.662,
+    48.0
+   ]
+  },
+  "note": "board surface beyond the top PVC wall (Y>41.66). Botguy and the Big Duck target sit here.",
+  "src": "derived"
+ },
+ "pieces": {
+  "botguy": {
+   "id": "botguy",
+   "parts": [
+    "Cut-Extrude2 - Part",
+    "Cut-Extrude2 - Part 2",
+    "Cut-Extrude2 - Part 3",
+    "Extrude7 - Part",
+    "Extrude8[1] - Part",
+    "Extrude8[2] - Part",
+    "Revolve2 - Part",
+    "Revolve2 - Part 2"
+   ],
+   "box": {
+    "x": [
+     44.586,
+     51.414
+    ],
+    "y": [
+     42.462,
+     45.501
+    ],
+    "z": [
+     -0.042,
+     8.515
+    ]
+   },
+   "top_z": 8.515,
+   "center_xy": [
+    48.0,
+    44.251
+   ],
+   "base_footprint": {
+    "x": [
+     44.586,
+     51.414
+    ],
+    "y": [
+     43.001,
+     45.501
+    ],
+    "z": [
+     -0.042,
+     2.497
+    ],
+    "note": "grey base/wheels part (Cut-Extrude2 Part 1)"
+   },
+   "torso_box": {
+    "x": [
+     46.519,
+     49.481
+    ],
+    "y": [
+     42.962,
+     45.463
+    ],
+    "z": [
+     0.515,
+     4.515
+    ]
+   },
+   "head_box": {
+    "x": [
+     46.5,
+     49.5
+    ],
+    "y": [
+     42.962,
+     45.463
+    ],
+    "z": [
+     4.515,
+     8.035
+    ]
+   },
+   "faces": "-Y (toward the table interior); visor/eyes at y 42.46-42.96, Z 5.4-6.1",
+   "start_pocket_between_T_stubs_x": [
+    44.0,
+    52.0
+   ],
+   "scores": "15 pts on top of Raised Platform (rules p.5-6)",
+   "src": "cad"
+  },
+  "big_duck": {
+   "id": "big_duck",
+   "parts": [
+    "Mirror3 - Part",
+    "Mirror3 - Part 2",
+    "Mirror3 - Part 3",
+    "Mirror3 - Part 4",
+    "Split Line2 - Part",
+    "Split Line2 - Part 2",
+    "Split Line2 - Part 3",
+    "Split Line2 - Part 4"
+   ],
+   "box": {
+    "x": [
+     72.131,
+     77.464
+    ],
+    "y": [
+     3.366,
+     8.135
+    ],
+    "z": [
+     5.631,
+     10.083
+    ]
+   },
+   "top_z": 10.083,
+   "center_xy": [
+    74.797,
+    5.75
+   ],
+   "size_in": [
+    5.333,
+    4.769,
+    4.452
+   ],
+   "facing": "-X (beak toward the Starting Box side); beak tip x=72.13 is 0.13 in from the platform edge",
+   "note": "two mirrored halves: Mirror3 (y 5.751-8.135) + Split Line2 (y 3.366-5.751)",
+   "start_surface": "top of Raised Platform (Z 5.686)",
+   "target": "Botguy's start footprint (see botguy.base_footprint) for 15 pts",
+   "src": "cad"
+  },
+  "small_ducks": [
+   {
+    "id": "duck_red",
+    "color": "red",
+    "box": {
+     "x": [
+      53.654,
+      55.921
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "body_box": {
+     "x": [
+      53.654,
+      55.713
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "center_xy": [
+     54.684,
+     26.9
+    ],
+    "size_in": [
+     2.267,
+     1.456,
+     1.457
+    ],
+    "faces": "+X (beak toward the right edge)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "duck_green",
+    "color": "green",
+    "box": {
+     "x": [
+      61.654,
+      63.921
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "body_box": {
+     "x": [
+      61.654,
+      63.713
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "center_xy": [
+     62.684,
+     26.9
+    ],
+    "size_in": [
+     2.267,
+     1.456,
+     1.457
+    ],
+    "faces": "+X (beak toward the right edge)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "duck_lavender",
+    "color": "lavender",
+    "box": {
+     "x": [
+      69.654,
+      71.921
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "body_box": {
+     "x": [
+      69.654,
+      71.713
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "center_xy": [
+     70.683,
+     26.9
+    ],
+    "size_in": [
+     2.267,
+     1.456,
+     1.457
+    ],
+    "faces": "+X (beak toward the right edge)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "duck_blue",
+    "color": "blue",
+    "box": {
+     "x": [
+      77.654,
+      79.921
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "body_box": {
+     "x": [
+      77.654,
+      79.713
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "center_xy": [
+     78.683,
+     26.9
+    ],
+    "size_in": [
+     2.267,
+     1.456,
+     1.457
+    ],
+    "faces": "+X (beak toward the right edge)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "duck_yellow",
+    "color": "yellow",
+    "box": {
+     "x": [
+      85.654,
+      87.921
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "body_box": {
+     "x": [
+      85.654,
+      87.713
+     ],
+     "y": [
+      26.172,
+      27.628
+     ],
+     "z": [
+      -0.002,
+      1.455
+     ]
+    },
+    "center_xy": [
+     86.683,
+     26.9
+    ],
+    "size_in": [
+     2.267,
+     1.456,
+     1.457
+    ],
+    "faces": "+X (beak toward the right edge)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   }
+  ],
+  "small_duck_order_left_to_right": [
+   "red",
+   "green",
+   "lavender",
+   "blue",
+   "yellow"
+  ],
+  "poms_visible_stacks": [
+   {
+    "id": "pom_stack_gold",
+    "cad_color": "gold",
+    "color": "yellow",
+    "center_xy": [
+     9.462,
+     26.9
+    ],
+    "poms": [
+     {
+      "mesh": "pom-gold-4 - Part",
+      "cad_color": "gold",
+      "color": "yellow",
+      "center": [
+       9.462,
+       26.9,
+       1.974
+      ],
+      "box": {
+       "x": [
+        8.713,
+        10.212
+       ],
+       "y": [
+        26.15,
+        27.65
+       ],
+       "z": [
+        1.225,
+        2.723
+       ]
+      },
+      "level": "top",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-gold-5 - Part",
+      "cad_color": "gold",
+      "color": "yellow",
+      "center": [
+       10.018,
+       26.236,
+       0.749
+      ],
+      "box": {
+       "x": [
+        9.268,
+        10.768
+       ],
+       "y": [
+        25.486,
+        26.985
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-gold-6 2 - Part",
+      "cad_color": "gold",
+      "color": "yellow",
+      "center": [
+       9.759,
+       27.713,
+       0.749
+      ],
+      "box": {
+       "x": [
+        9.01,
+        10.509
+       ],
+       "y": [
+        26.963,
+        28.463
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-gold-7 - Part",
+      "cad_color": "gold",
+      "color": "yellow",
+      "center": [
+       8.609,
+       26.751,
+       0.748
+      ],
+      "box": {
+       "x": [
+        7.86,
+        9.358
+       ],
+       "y": [
+        26.001,
+        27.501
+       ],
+       "z": [
+        -0.001,
+        1.496
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     }
+    ],
+    "count": 4,
+    "layout": "3 on the board in a triangle + 1 on top (top pom Z 1.22-2.72)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "pom_stack_turquoise",
+    "cad_color": "turquoise",
+    "color": "blue",
+    "center_xy": [
+     17.462,
+     26.9
+    ],
+    "poms": [
+     {
+      "mesh": "pom-turquoise-4 2 - Part",
+      "cad_color": "turquoise",
+      "color": "blue",
+      "center": [
+       17.462,
+       26.9,
+       1.974
+      ],
+      "box": {
+       "x": [
+        16.713,
+        18.212
+       ],
+       "y": [
+        26.15,
+        27.65
+       ],
+       "z": [
+        1.225,
+        2.723
+       ]
+      },
+      "level": "top",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-turquoise-5 - Part",
+      "cad_color": "turquoise",
+      "color": "blue",
+      "center": [
+       18.018,
+       26.236,
+       0.749
+      ],
+      "box": {
+       "x": [
+        17.268,
+        18.768
+       ],
+       "y": [
+        25.486,
+        26.985
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-turquoise-6 - Part",
+      "cad_color": "turquoise",
+      "color": "blue",
+      "center": [
+       17.76,
+       27.713,
+       0.749
+      ],
+      "box": {
+       "x": [
+        17.011,
+        18.509
+       ],
+       "y": [
+        26.963,
+        28.463
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-turquoise-7 - Part",
+      "cad_color": "turquoise",
+      "color": "blue",
+      "center": [
+       16.609,
+       26.751,
+       0.748
+      ],
+      "box": {
+       "x": [
+        15.86,
+        17.358
+       ],
+       "y": [
+        26.001,
+        27.501
+       ],
+       "z": [
+        -0.001,
+        1.496
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     }
+    ],
+    "count": 4,
+    "layout": "3 on the board in a triangle + 1 on top (top pom Z 1.22-2.72)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "pom_stack_lavender",
+    "cad_color": "lavender",
+    "color": "purple",
+    "center_xy": [
+     25.462,
+     26.9
+    ],
+    "poms": [
+     {
+      "mesh": "pom-lavender-4 - Part",
+      "cad_color": "lavender",
+      "color": "purple",
+      "center": [
+       25.462,
+       26.9,
+       1.974
+      ],
+      "box": {
+       "x": [
+        24.713,
+        26.212
+       ],
+       "y": [
+        26.15,
+        27.65
+       ],
+       "z": [
+        1.225,
+        2.723
+       ]
+      },
+      "level": "top",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-lavender-5 - Part",
+      "cad_color": "lavender",
+      "color": "purple",
+      "center": [
+       26.018,
+       26.236,
+       0.749
+      ],
+      "box": {
+       "x": [
+        25.268,
+        26.768
+       ],
+       "y": [
+        25.486,
+        26.985
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-lavender-6 - Part",
+      "cad_color": "lavender",
+      "color": "purple",
+      "center": [
+       25.76,
+       27.713,
+       0.749
+      ],
+      "box": {
+       "x": [
+        25.011,
+        26.509
+       ],
+       "y": [
+        26.963,
+        28.463
+       ],
+       "z": [
+        0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-lavender-7 2 - Part",
+      "cad_color": "lavender",
+      "color": "purple",
+      "center": [
+       24.609,
+       26.751,
+       0.748
+      ],
+      "box": {
+       "x": [
+        23.86,
+        25.358
+       ],
+       "y": [
+        26.001,
+        27.501
+       ],
+       "z": [
+        -0.001,
+        1.496
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     }
+    ],
+    "count": 4,
+    "layout": "3 on the board in a triangle + 1 on top (top pom Z 1.22-2.72)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "pom_stack_green",
+    "cad_color": "green",
+    "color": "green",
+    "center_xy": [
+     33.462,
+     26.9
+    ],
+    "poms": [
+     {
+      "mesh": "pom-green-4 - Part",
+      "cad_color": "green",
+      "color": "green",
+      "center": [
+       33.462,
+       26.9,
+       1.973
+      ],
+      "box": {
+       "x": [
+        32.712,
+        34.212
+       ],
+       "y": [
+        26.15,
+        27.65
+       ],
+       "z": [
+        1.223,
+        2.723
+       ]
+      },
+      "level": "top",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-green-5 2 - Part",
+      "cad_color": "green",
+      "color": "green",
+      "center": [
+       34.018,
+       26.236,
+       0.748
+      ],
+      "box": {
+       "x": [
+        33.268,
+        34.768
+       ],
+       "y": [
+        25.486,
+        26.986
+       ],
+       "z": [
+        -0.002,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-green-6 - Part",
+      "cad_color": "green",
+      "color": "green",
+      "center": [
+       33.76,
+       27.713,
+       0.748
+      ],
+      "box": {
+       "x": [
+        33.01,
+        34.51
+       ],
+       "y": [
+        26.963,
+        28.463
+       ],
+       "z": [
+        -0.002,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-green-7 - Part",
+      "cad_color": "green",
+      "color": "green",
+      "center": [
+       32.609,
+       26.751,
+       0.749
+      ],
+      "box": {
+       "x": [
+        31.86,
+        33.359
+       ],
+       "y": [
+        26.001,
+        27.501
+       ],
+       "z": [
+        -0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     }
+    ],
+    "count": 4,
+    "layout": "3 on the board in a triangle + 1 on top (top pom Z 1.22-2.72)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   },
+   {
+    "id": "pom_stack_red",
+    "cad_color": "red",
+    "color": "red",
+    "center_xy": [
+     41.462,
+     26.9
+    ],
+    "poms": [
+     {
+      "mesh": "pom-red-1 - Part",
+      "cad_color": "red",
+      "color": "red",
+      "center": [
+       42.018,
+       26.236,
+       0.748
+      ],
+      "box": {
+       "x": [
+        41.268,
+        42.768
+       ],
+       "y": [
+        25.486,
+        26.986
+       ],
+       "z": [
+        -0.002,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-red-2 - Part",
+      "cad_color": "red",
+      "color": "red",
+      "center": [
+       41.76,
+       27.713,
+       0.748
+      ],
+      "box": {
+       "x": [
+        41.01,
+        42.51
+       ],
+       "y": [
+        26.963,
+        28.463
+       ],
+       "z": [
+        -0.002,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-red-3 - Part",
+      "cad_color": "red",
+      "color": "red",
+      "center": [
+       40.609,
+       26.751,
+       0.749
+      ],
+      "box": {
+       "x": [
+        39.86,
+        41.359
+       ],
+       "y": [
+        26.001,
+        27.501
+       ],
+       "z": [
+        -0.001,
+        1.498
+       ]
+      },
+      "level": "floor",
+      "under_cup": null
+     },
+     {
+      "mesh": "pom-red-4 - Part",
+      "cad_color": "red",
+      "color": "red",
+      "center": [
+       41.462,
+       26.9,
+       1.973
+      ],
+      "box": {
+       "x": [
+        40.712,
+        42.212
+       ],
+       "y": [
+        26.15,
+        27.65
+       ],
+       "z": [
+        1.223,
+        2.723
+       ]
+      },
+      "level": "top",
+      "under_cup": null
+     }
+    ],
+    "count": 4,
+    "layout": "3 on the board in a triangle + 1 on top (top pom Z 1.22-2.72)",
+    "starts_on_tape": "tape_upper_horizontal",
+    "src": "cad"
+   }
+  ],
+  "poms_hidden": [
+   {
+    "mesh": "pom-gold-6 - Part",
+    "cad_color": "gold",
+    "color": "yellow",
+    "center": [
+     48.389,
+     27.754,
+     0.749
+    ],
+    "box": {
+     "x": [
+      47.64,
+      49.138
+     ],
+     "y": [
+      27.004,
+      28.504
+     ],
+     "z": [
+      0.001,
+      1.498
+     ]
+    },
+    "level": "floor",
+    "under_cup": "cup2"
+   },
+   {
+    "mesh": "pom-green-5 - Part",
+    "cad_color": "green",
+    "color": "green",
+    "center": [
+     48.648,
+     26.277,
+     0.748
+    ],
+    "box": {
+     "x": [
+      47.898,
+      49.397
+     ],
+     "y": [
+      25.527,
+      27.027
+     ],
+     "z": [
+      -0.002,
+      1.498
+     ]
+    },
+    "level": "floor",
+    "under_cup": "cup2"
+   },
+   {
+    "mesh": "pom-lavender-7 - Part",
+    "cad_color": "lavender",
+    "color": "purple",
+    "center": [
+     47.239,
+     26.792,
+     0.748
+    ],
+    "box": {
+     "x": [
+      46.489,
+      47.988
+     ],
+     "y": [
+      26.042,
+      27.542
+     ],
+     "z": [
+      -0.001,
+      1.496
+     ]
+    },
+    "level": "floor",
+    "under_cup": "cup2"
+   },
+   {
+    "mesh": "pom-red-1 2 - Part",
+    "cad_color": "red",
+    "color": "red",
+    "center": [
+     47.825,
+     13.364,
+     0.748
+    ],
+    "box": {
+     "x": [
+      47.075,
+      48.575
+     ],
+     "y": [
+      12.614,
+      14.114
+     ],
+     "z": [
+      -0.002,
+      1.498
+     ]
+    },
+    "level": "floor",
+    "under_cup": "cup1"
+   },
+   {
+    "mesh": "pom-turquoise-4 - Part",
+    "cad_color": "turquoise",
+    "color": "blue",
+    "center": [
+     48.091,
+     26.941,
+     1.974
+    ],
+    "box": {
+     "x": [
+      47.342,
+      48.841
+     ],
+     "y": [
+      26.191,
+      27.691
+     ],
+     "z": [
+      1.225,
+      2.723
+     ]
+    },
+    "level": "top",
+    "under_cup": "cup2"
+   }
+  ],
+  "poms_hidden_by_cup_cad": {
+   "cup1": [
+    "red"
+   ],
+   "cup2": [
+    "gold",
+    "green",
+    "lavender",
+    "turquoise"
+   ]
+  },
+  "cups": [
+   {
+    "id": "cup1",
+    "cad_color": "black",
+    "rules_color": "green or teal (assignment not stated)",
+    "box": {
+     "x": [
+      46.204,
+      49.827
+     ],
+     "y": [
+      11.809,
+      15.432
+     ],
+     "z": [
+      -0.002,
+      5.698
+     ]
+    },
+    "center_xy": [
+     48.015,
+     13.62
+    ],
+    "mouth_diameter_in": 3.626,
+    "base_diameter_in_approx": 2.508,
+    "height_in": 5.7,
+    "start_orientation": "upside-down: open mouth on the board (mouth is the wide end, base at Z~5.7)",
+    "starts_on_tape": [
+     "tape_center_vertical",
+     "tape_lower_horizontal"
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "cup2",
+    "cad_color": "black",
+    "rules_color": "green or teal (assignment not stated)",
+    "box": {
+     "x": [
+      46.239,
+      49.862
+     ],
+     "y": [
+      25.093,
+      28.716
+     ],
+     "z": [
+      -0.002,
+      5.698
+     ]
+    },
+    "center_xy": [
+     48.05,
+     26.905
+    ],
+    "mouth_diameter_in": 3.626,
+    "base_diameter_in_approx": 2.508,
+    "height_in": 5.7,
+    "start_orientation": "upside-down: open mouth on the board (mouth is the wide end, base at Z~5.7)",
+    "starts_on_tape": [
+     "tape_center_vertical",
+     "tape_upper_horizontal"
+    ],
+    "src": "cad"
+   }
+  ],
+  "bottles": [
+   {
+    "id": "bottle1",
+    "mesh": "Blue Bottle-3 - Part",
+    "center_xy": [
+     2.897,
+     6.126
+    ],
+    "box": {
+     "x": [
+      1.635,
+      4.16
+     ],
+     "y": [
+      4.864,
+      7.388
+     ],
+     "z": [
+      -0.002,
+      4.948
+     ]
+    },
+    "top_z": 4.948,
+    "order": "bottle1 is lowest (y~6.1), bottle3 highest (y~11.6)",
+    "src": "cad"
+   },
+   {
+    "id": "bottle2",
+    "mesh": "Blue Bottle-2 - Part",
+    "center_xy": [
+     2.897,
+     8.876
+    ],
+    "box": {
+     "x": [
+      1.635,
+      4.16
+     ],
+     "y": [
+      7.614,
+      10.138
+     ],
+     "z": [
+      -0.002,
+      4.948
+     ]
+    },
+    "top_z": 4.948,
+    "order": "bottle1 is lowest (y~6.1), bottle3 highest (y~11.6)",
+    "src": "cad"
+   },
+   {
+    "id": "bottle3",
+    "mesh": "Blue Bottle-1 - Part",
+    "center_xy": [
+     2.897,
+     11.626
+    ],
+    "box": {
+     "x": [
+      1.635,
+      4.16
+     ],
+     "y": [
+      10.364,
+      12.888
+     ],
+     "z": [
+      -0.002,
+      4.948
+     ]
+    },
+    "top_z": 4.948,
+    "order": "bottle1 is lowest (y~6.1), bottle3 highest (y~11.6)",
+    "src": "cad"
+   }
+  ],
+  "bottle_spec": {
+   "height_in": 4.948,
+   "body_diameter_in": 2.526,
+   "neck_outer_diameter_in": 1.06,
+   "neck_inner_diameter_in": 1.0,
+   "neck_flange_diameter_in": 1.3,
+   "neck_flange_z": [
+    4.0,
+    4.2
+   ],
+   "neck_start_z": 3.8,
+   "neck_height_in": 1.148,
+   "shoulder_z": [
+    2.7,
+    3.8
+   ],
+   "ring_seat_z_estimate": 3.67,
+   "note": "estimated from radial slices of the mesh (data/glb_profiles.json): body OD 2.53 to Z~2.7, shoulder tapers to neck at Z~3.8, neck OD ~1.06 up to Z 4.95 with a flange of OD ~1.30 at Z~4.1. A ring (ID 1.414) comes to rest on the shoulder at Z~3.67; three rings stack to Z~4.75 (< 4.95 neck top).",
+   "src": "cad (estimated from mesh slices)"
+  },
+  "ring_posts": [
+   {
+    "id": "post_left",
+    "mesh": "8 inch pvc-19 - Part",
+    "center_xy": [
+     0.812,
+     26.938
+    ],
+    "box": {
+     "x": [
+      0.162,
+      1.462
+     ],
+     "y": [
+      26.29,
+      27.585
+     ],
+     "z": [
+      1.498,
+      9.498
+     ]
+    },
+    "top_z": 9.498,
+    "exposed_above_fitting_z": [
+     2.5,
+     9.498
+    ],
+    "seated_in_fitting": "T_43",
+    "pipe_od_in": 1.3,
+    "src": "cad"
+   },
+   {
+    "id": "post_bottom",
+    "mesh": "8 inch pvc-18 - Part",
+    "center_xy": [
+     23.312,
+     0.812
+    ],
+    "box": {
+     "x": [
+      22.663,
+      23.962
+     ],
+     "y": [
+      0.163,
+      1.462
+     ],
+     "z": [
+      1.498,
+      9.498
+     ]
+    },
+    "top_z": 9.498,
+    "exposed_above_fitting_z": [
+     2.5,
+     9.498
+    ],
+    "seated_in_fitting": "T_2",
+    "pipe_od_in": 1.299,
+    "src": "cad"
+   }
+  ],
+  "rings": [
+   {
+    "id": "ring1",
+    "mesh": "Ring 1.75in-1 - Part",
+    "post": "post_left",
+    "center_xy": [
+     0.824,
+     26.934
+    ],
+    "box": {
+     "x": [
+      -0.253,
+      1.879
+     ],
+     "y": [
+      25.871,
+      28.004
+     ],
+     "z": [
+      2.463,
+      2.823
+     ]
+    },
+    "stack_level": 1,
+    "z_range": [
+     2.463,
+     2.823
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "ring2",
+    "mesh": "Ring 1.75in-2 - Part",
+    "post": "post_left",
+    "center_xy": [
+     0.824,
+     26.934
+    ],
+    "box": {
+     "x": [
+      -0.253,
+      1.879
+     ],
+     "y": [
+      25.871,
+      28.004
+     ],
+     "z": [
+      2.823,
+      3.183
+     ]
+    },
+    "stack_level": 2,
+    "z_range": [
+     2.823,
+     3.183
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "ring3",
+    "mesh": "Ring 1.75in-3 - Part",
+    "post": "post_left",
+    "center_xy": [
+     0.824,
+     26.934
+    ],
+    "box": {
+     "x": [
+      -0.253,
+      1.879
+     ],
+     "y": [
+      25.871,
+      28.004
+     ],
+     "z": [
+      3.183,
+      3.543
+     ]
+    },
+    "stack_level": 3,
+    "z_range": [
+     3.183,
+     3.543
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "ring4",
+    "mesh": "Ring 1.75in-4 - Part",
+    "post": "post_bottom",
+    "center_xy": [
+     23.324,
+     0.811
+    ],
+    "box": {
+     "x": [
+      22.246,
+      24.378
+     ],
+     "y": [
+      -0.254,
+      1.879
+     ],
+     "z": [
+      2.463,
+      2.823
+     ]
+    },
+    "stack_level": 1,
+    "z_range": [
+     2.463,
+     2.823
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "ring5",
+    "mesh": "Ring 1.75in-5 - Part",
+    "post": "post_bottom",
+    "center_xy": [
+     23.324,
+     0.811
+    ],
+    "box": {
+     "x": [
+      22.246,
+      24.378
+     ],
+     "y": [
+      -0.254,
+      1.879
+     ],
+     "z": [
+      2.823,
+      3.183
+     ]
+    },
+    "stack_level": 2,
+    "z_range": [
+     2.823,
+     3.183
+    ],
+    "src": "cad"
+   },
+   {
+    "id": "ring6",
+    "mesh": "Ring 1.75in-6 - Part",
+    "post": "post_bottom",
+    "center_xy": [
+     23.324,
+     0.811
+    ],
+    "box": {
+     "x": [
+      22.246,
+      24.378
+     ],
+     "y": [
+      -0.254,
+      1.879
+     ],
+     "z": [
+      3.183,
+      3.543
+     ]
+    },
+    "stack_level": 3,
+    "z_range": [
+     3.183,
+     3.543
+    ],
+    "src": "cad"
+   }
+  ],
+  "ring_spec": {
+   "outer_diameter_in": 2.134,
+   "inner_diameter_in": 1.414,
+   "thickness_in": 0.36,
+   "note": "from mesh radial profile; the raw bbox in glb_objects_raw.json (2.71 in) is inflated. ID 1.414 vs post OD 1.30 and neck flange OD ~1.30 leaves only ~0.06 in per side.",
+   "src": "cad"
+  },
+  "pickleballs": [
+   {
+    "id": "pickleball1",
+    "mesh": "pickle ball 2-1 - Part",
+    "center": [
+     57.062,
+     42.312,
+     3.748
+    ],
+    "box": {
+     "x": [
+      55.608,
+      58.517
+     ],
+     "y": [
+      40.857,
+      43.768
+     ],
+     "z": [
+      2.292,
+      5.205
+     ]
+    },
+    "diameter_in": 2.909,
+    "top_z": 5.205,
+    "sits_on": "T_12",
+    "overhangs_board_edge": false,
+    "src": "cad",
+    "position_note": "top wall, x~57.0"
+   },
+   {
+    "id": "pickleball2",
+    "mesh": "pickle ball 2-2 - Part",
+    "center": [
+     67.938,
+     42.312,
+     3.748
+    ],
+    "box": {
+     "x": [
+      66.482,
+      69.393
+     ],
+     "y": [
+      40.856,
+      43.769
+     ],
+     "z": [
+      2.31,
+      5.187
+     ]
+    },
+    "diameter_in": 2.911,
+    "top_z": 5.187,
+    "sits_on": "T_13",
+    "overhangs_board_edge": false,
+    "src": "cad",
+    "position_note": "top wall, x~67.9"
+   },
+   {
+    "id": "pickleball3",
+    "mesh": "pickle ball 2-3 - Part",
+    "center": [
+     95.188,
+     26.938,
+     3.778
+    ],
+    "box": {
+     "x": [
+      93.731,
+      96.644
+     ],
+     "y": [
+      25.493,
+      28.382
+     ],
+     "z": [
+      2.34,
+      5.217
+     ]
+    },
+    "diameter_in": 2.913,
+    "top_z": 5.217,
+    "sits_on": "T_44",
+    "overhangs_board_edge": true,
+    "src": "cad",
+    "position_note": "right wall at the pom/duck lane row (y~26.9), overhangs the board edge by ~0.64 in"
+   },
+   {
+    "id": "pickleball4",
+    "mesh": "pickle ball 2-4 - Part",
+    "center": [
+     48.062,
+     0.812,
+     3.748
+    ],
+    "box": {
+     "x": [
+      46.613,
+      49.512
+     ],
+     "y": [
+      -0.643,
+      2.268
+     ],
+     "z": [
+      2.31,
+      5.187
+     ]
+    },
+    "diameter_in": 2.899,
+    "top_z": 5.187,
+    "sits_on": "T_1",
+    "overhangs_board_edge": true,
+    "src": "cad",
+    "position_note": "bottom wall directly under the center tape, overhangs the board edge by ~0.64 in; 1 in left of the Starting Box corner"
+   }
+  ],
+  "pom_spec": {
+   "diameter_in": 1.5,
+   "src": "cad"
+  },
+  "pickleball_spec": {
+   "diameter_in": 2.914,
+   "src": "cad (vertex extents)"
+  },
+  "small_duck_spec": {
+   "body_length_in": 2.06,
+   "body_width_in": 1.456,
+   "height_in": 1.455,
+   "with_beak_length_in": 2.27,
+   "src": "cad"
+  }
+ },
+ "named_items": {
+  "zone1": {
+   "kind": "area",
+   "xy": [
+    24.294,
+    34.75
+   ],
+   "rect": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     27.838,
+     41.662
+    ]
+   },
+   "z_top": null
+  },
+  "zone2": {
+   "kind": "area",
+   "xy": [
+    71.769,
+    34.75
+   ],
+   "rect": {
+    "x": [
+     49.0,
+     94.538
+    ],
+    "y": [
+     27.838,
+     41.662
+    ]
+   },
+   "z_top": null
+  },
+  "zone3": {
+   "kind": "area",
+   "xy": [
+    24.294,
+    20.276
+   ],
+   "rect": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     14.588,
+     25.963
+    ]
+   },
+   "z_top": null
+  },
+  "zone4": {
+   "kind": "area",
+   "xy": [
+    71.769,
+    20.276
+   ],
+   "rect": {
+    "x": [
+     49.0,
+     94.538
+    ],
+    "y": [
+     14.588,
+     25.963
+    ]
+   },
+   "z_top": null
+  },
+  "zone5": {
+   "kind": "area",
+   "xy": [
+    24.294,
+    7.087
+   ],
+   "rect": {
+    "x": [
+     1.462,
+     47.125
+    ],
+    "y": [
+     1.462,
+     12.713
+    ]
+   },
+   "z_top": null
+  },
+  "start_box": {
+   "kind": "area",
+   "xy": [
+    59.562,
+    7.087
+   ],
+   "rect": {
+    "x": [
+     49.0,
+     70.125
+    ],
+    "y": [
+     1.462,
+     12.713
+    ]
+   },
+   "z_top": 12.0
+  },
+  "start_box_large": {
+   "kind": "area",
+   "xy": [
+    26.312,
+    7.087
+   ],
+   "rect": {
+    "x": [
+     5.5,
+     47.125
+    ],
+    "y": [
+     1.462,
+     12.713
+    ]
+   },
+   "z_top": 12.0
+  },
+  "bottle_enclosure": {
+   "kind": "area",
+   "xy": [
+    2.75,
+    8.875
+   ],
+   "rect": {
+    "x": [
+     0.0,
+     5.5
+    ],
+    "y": [
+     3.375,
+     14.375
+    ]
+   },
+   "z_top": null
+  },
+  "platform": {
+   "kind": "area",
+   "xy": [
+    84.0,
+    6.25
+   ],
+   "rect": {
+    "x": [
+     72.0,
+     96.0
+    ],
+    "y": [
+     0.0,
+     12.5
+    ]
+   },
+   "z_top": 5.686
+  },
+  "platform_opening": {
+   "kind": "segment",
+   "xy": [
+    72.0,
+    6.25
+   ],
+   "rect": {
+    "x": [
+     72.0,
+     72.0
+    ],
+    "y": [
+     1.625,
+     10.875
+    ]
+   },
+   "z_top": 4.036
+  },
+  "under_platform": {
+   "kind": "area",
+   "xy": [
+    83.269,
+    6.25
+   ],
+   "rect": {
+    "x": [
+     72.0,
+     94.538
+    ],
+    "y": [
+     1.625,
+     10.875
+    ]
+   },
+   "z_top": null
+  },
+  "botguy": {
+   "kind": "piece",
+   "xy": [
+    48.0,
+    44.251
+   ],
+   "rect": {
+    "x": [
+     44.586,
+     51.414
+    ],
+    "y": [
+     43.001,
+     45.501
+    ]
+   },
+   "z_top": 8.515
+  },
+  "big_duck": {
+   "kind": "piece",
+   "xy": [
+    74.797,
+    5.75
+   ],
+   "rect": {
+    "x": [
+     72.131,
+     77.464
+    ],
+    "y": [
+     3.366,
+     8.135
+    ]
+   },
+   "z_top": 10.083
+  },
+  "duck_red": {
+   "kind": "piece",
+   "xy": [
+    54.684,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     53.654,
+     55.921
+    ],
+    "y": [
+     26.172,
+     27.628
+    ]
+   },
+   "z_top": 1.455
+  },
+  "duck_green": {
+   "kind": "piece",
+   "xy": [
+    62.684,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     61.654,
+     63.921
+    ],
+    "y": [
+     26.172,
+     27.628
+    ]
+   },
+   "z_top": 1.455
+  },
+  "duck_lavender": {
+   "kind": "piece",
+   "xy": [
+    70.683,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     69.654,
+     71.921
+    ],
+    "y": [
+     26.172,
+     27.628
+    ]
+   },
+   "z_top": 1.455
+  },
+  "duck_blue": {
+   "kind": "piece",
+   "xy": [
+    78.683,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     77.654,
+     79.921
+    ],
+    "y": [
+     26.172,
+     27.628
+    ]
+   },
+   "z_top": 1.455
+  },
+  "duck_yellow": {
+   "kind": "piece",
+   "xy": [
+    86.683,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     85.654,
+     87.921
+    ],
+    "y": [
+     26.172,
+     27.628
+    ]
+   },
+   "z_top": 1.455
+  },
+  "cup1": {
+   "kind": "piece",
+   "xy": [
+    48.015,
+    13.62
+   ],
+   "rect": {
+    "x": [
+     46.204,
+     49.827
+    ],
+    "y": [
+     11.809,
+     15.432
+    ]
+   },
+   "z_top": 5.698
+  },
+  "cup2": {
+   "kind": "piece",
+   "xy": [
+    48.05,
+    26.905
+   ],
+   "rect": {
+    "x": [
+     46.239,
+     49.862
+    ],
+    "y": [
+     25.093,
+     28.716
+    ]
+   },
+   "z_top": 5.698
+  },
+  "pom_stack_gold": {
+   "kind": "piece",
+   "xy": [
+    9.462,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     7.86,
+     10.768
+    ],
+    "y": [
+     25.486,
+     28.463
+    ]
+   },
+   "z_top": 2.723
+  },
+  "pom_stack_turquoise": {
+   "kind": "piece",
+   "xy": [
+    17.462,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     15.86,
+     18.768
+    ],
+    "y": [
+     25.486,
+     28.463
+    ]
+   },
+   "z_top": 2.723
+  },
+  "pom_stack_lavender": {
+   "kind": "piece",
+   "xy": [
+    25.462,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     23.86,
+     26.768
+    ],
+    "y": [
+     25.486,
+     28.463
+    ]
+   },
+   "z_top": 2.723
+  },
+  "pom_stack_green": {
+   "kind": "piece",
+   "xy": [
+    33.462,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     31.86,
+     34.768
+    ],
+    "y": [
+     25.486,
+     28.463
+    ]
+   },
+   "z_top": 2.723
+  },
+  "pom_stack_red": {
+   "kind": "piece",
+   "xy": [
+    41.462,
+    26.9
+   ],
+   "rect": {
+    "x": [
+     39.86,
+     42.768
+    ],
+    "y": [
+     25.486,
+     28.463
+    ]
+   },
+   "z_top": 2.723
+  },
+  "bottle1": {
+   "kind": "piece",
+   "xy": [
+    2.897,
+    6.126
+   ],
+   "rect": {
+    "x": [
+     1.635,
+     4.16
+    ],
+    "y": [
+     4.864,
+     7.388
+    ]
+   },
+   "z_top": 4.948
+  },
+  "bottle2": {
+   "kind": "piece",
+   "xy": [
+    2.897,
+    8.876
+   ],
+   "rect": {
+    "x": [
+     1.635,
+     4.16
+    ],
+    "y": [
+     7.614,
+     10.138
+    ]
+   },
+   "z_top": 4.948
+  },
+  "bottle3": {
+   "kind": "piece",
+   "xy": [
+    2.897,
+    11.626
+   ],
+   "rect": {
+    "x": [
+     1.635,
+     4.16
+    ],
+    "y": [
+     10.364,
+     12.888
+    ]
+   },
+   "z_top": 4.948
+  },
+  "post_left": {
+   "kind": "piece",
+   "xy": [
+    0.812,
+    26.938
+   ],
+   "rect": {
+    "x": [
+     0.162,
+     1.462
+    ],
+    "y": [
+     26.29,
+     27.585
+    ]
+   },
+   "z_top": 9.498
+  },
+  "post_bottom": {
+   "kind": "piece",
+   "xy": [
+    23.312,
+    0.812
+   ],
+   "rect": {
+    "x": [
+     22.663,
+     23.962
+    ],
+    "y": [
+     0.163,
+     1.462
+    ]
+   },
+   "z_top": 9.498
+  },
+  "pickleball1": {
+   "kind": "piece",
+   "xy": [
+    57.062,
+    42.312
+   ],
+   "rect": {
+    "x": [
+     55.608,
+     58.517
+    ],
+    "y": [
+     40.857,
+     43.768
+    ]
+   },
+   "z_top": 5.205
+  },
+  "pickleball2": {
+   "kind": "piece",
+   "xy": [
+    67.938,
+    42.312
+   ],
+   "rect": {
+    "x": [
+     66.482,
+     69.393
+    ],
+    "y": [
+     40.856,
+     43.769
+    ]
+   },
+   "z_top": 5.187
+  },
+  "pickleball3": {
+   "kind": "piece",
+   "xy": [
+    95.188,
+    26.938
+   ],
+   "rect": {
+    "x": [
+     93.731,
+     96.644
+    ],
+    "y": [
+     25.493,
+     28.382
+    ]
+   },
+   "z_top": 5.217
+  },
+  "pickleball4": {
+   "kind": "piece",
+   "xy": [
+    48.062,
+    0.812
+   ],
+   "rect": {
+    "x": [
+     46.613,
+     49.512
+    ],
+    "y": [
+     -0.643,
+     2.268
+    ]
+   },
+   "z_top": 5.187
+  }
+ },
+ "derived_edges": {
+  "xl": 1.462,
+  "xr": 94.538,
+  "yb": 1.462,
+  "yt": 41.662,
+  "tape_center_x": [
+   47.125,
+   49.0
+  ],
+  "tape_lower_y": [
+   12.713,
+   14.588
+  ],
+  "tape_upper_y": [
+   25.963,
+   27.838
+  ]
+ },
+ "clearances": {
+  "pvc_border_pipe_top_z": 1.46,
+  "pvc_fitting_top_z_in_plane": 1.623,
+  "pvc_fitting_top_z_with_socket": 2.498,
+  "ring_stack_top_z": 3.543,
+  "ring_post_top_z": 9.498,
+  "pickleball_z_range": [
+   2.29,
+   5.22
+  ],
+  "bottle_top_z": 4.948,
+  "cup_height_in": 5.698,
+  "pom_stack_top_z": 2.723,
+  "platform_entrance_clear_z": 4.036,
+  "platform_underside_z": 5.498,
+  "platform_top_z": 5.686,
+  "botguy_top_z": 8.515,
+  "big_duck_top_z": 10.083,
+  "start_ceiling_z": 12.0,
+  "src": "cad+rules"
+ }
+}

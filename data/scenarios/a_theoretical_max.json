@@ -1,0 +1,24 @@
+{
+  "name": "a_theoretical_max",
+  "description": "Ceiling of the written rules + scoresheet under the DEFAULT ruling (zone 5 counts, base additive, platform is not board). Every piece scores: 5 ducks one-per-zone for 5x; 4 rainbow/unique pom groups of 5 + one rainbow group of 4 (optimal split of the 24 non-mystery poms, checked by exhaustive DP in test_score.py); Mystery Red Pom alone on the platform; Botguy on platform; Big Duck swapped into Botguy's start; 4 pickleballs under the platform; all 6 rings on necks; cups nested AND both flat (60, as the scoresheet allows). Not physically attainable in 120 s; the nested+both-flat cup state is probably physically impossible (see rules-digest.md ambiguity A5).",
+  "zones": {
+    "1": {"poms": {"yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "2": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "3": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "4": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1},
+    "5": {"poms": {"red": 1, "yellow": 1, "green": 1, "blue": 1, "purple": 1}, "ducks": 1}
+  },
+  "platform": {"poms": {"red": 1}, "mystery_red_pom": true},
+  "pickleballs": {"under_platform": 4},
+  "rings": {"on_neck": 6, "on_neck_per_bottle": [2, 2, 2]},
+  "cups": {
+    "nested": true,
+    "nest_orientation": "upright",
+    "pieces": [
+      {"upright": true, "on_tape": false, "touching_board": true},
+      {"upright": true, "on_tape": false, "touching_board": true}
+    ]
+  },
+  "botguy": "platform",
+  "big_duck": "botguy_start"
+}
