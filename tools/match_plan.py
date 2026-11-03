@@ -171,26 +171,46 @@ def build():
     for (zone, td) in drops:
         x, y, _ = pose(A.keys, td)
         drop_pos[zone] = (td, x + A_EXIT, y)
-    # the lane is first in, first out: the red duck (swallowed first) leaves first
-    zone_for = dict(zip(["red", "green", "lavender", "blue", "yellow"], [z for z, _ in drops]))
-    for name in ["red", "green", "lavender", "blue", "yellow"]:
-        dx = DUCK_X[name]
-        tc = time_when(A.keys, lambda p: p[0] + A_MOUTH >= dx - R_DUCK, t_lane0, t_lane1)
-        td, px, py = drop_pos[zone_for[name]]
-        pieces.append({"name": f"duck {name}", "kind": "duck", "color": name, "r": R_DUCK, "h": 1.6,
-                       "track": [(0, dx, LANE_Y), (tc, dx, LANE_Y), (td, px, py), (120, px, py)],
-                       "carried_by": "A", "carried_from": tc, "carried_to": td,
-                       "contact": [{"robot": "A", "t0": tc - 0.6, "t1": tc + 0.1}, {"robot": "A", "t0": td - 0.1, "t1": td + 1.6}]})
-        events.append((round(td, 1), 1, 1, f"duck in {zone_for[name]}"))
+    # the lane is first in, first out: the red duck (swallowed first) leaves first. Inside the lane a duck
+    # keeps its place on the floor until the rear stack stops it, then rides with the robot.
+    order = ["red", "green", "lavender", "blue", "yellow"]
+    zone_for = dict(zip(order, [z for z, _ in drops]))
+    tc = {n: time_when(A.keys, lambda p, dx=DUCK_X[n]: p[0] + A_MOUTH >= dx - R_DUCK, t_lane0, t_lane1) for n in order}
+    td = {n: drop_pos[zone_for[n]][0] for n in order}
+    for n in order:
+        dx = DUCK_X[n]
+        end_t, px, py = drop_pos[zone_for[n]]
+        track = [(0, dx, LANE_Y), (tc[n], dx, LANE_Y)]
+        t, loc, ax_prev = tc[n] + 0.25, dx - pose(A.keys, tc[n])[0], pose(A.keys, tc[n])[0]
+        while t < end_t:
+            ax, ay, _ = pose(A.keys, t)
+            ahead = sum(1 for m in order if tc[m] < tc[n] and td[m] > t)        # ducks between this one and the exit
+            rear = A_EXIT + 1.4 + 2.4 * ahead
+            loc = max(rear, min(loc, loc - (ax - ax_prev)))     # east: the lane slides over it; west: the rear gate carries it
+            ax_prev = ax
+            track.append((t, ax + loc, ay))
+            t += 0.25
+        track += [(end_t, px, py), (120, px, py)]
+        pieces.append({"name": f"duck {n}", "kind": "duck", "color": n, "r": R_DUCK, "h": 1.6, "track": track,
+                       "carried_by": "A", "carried_from": tc[n], "carried_to": end_t,
+                       "contact": [{"robot": "A", "t0": tc[n] - 0.6, "t1": tc[n] + 0.1}, {"robot": "A", "t0": end_t - 0.1, "t1": end_t + 1.6}]})
+        events.append((round(end_t, 1), 1, 1, f"duck in {zone_for[n]}"))
 
-    up_final = (46.6, P["A_push_y"] + 5.43 + R_CUP)
-    red_final = (40.0, P["A_push_y"] + 5.43 + R_STACK)
-    pieces.append({"name": "stack red", "kind": "stack", "color": "red", "r": R_STACK, "h": 2.72,
-                   "track": [(0, STACK_X["red"], 25.4), (t_push0 + 1.0, STACK_X["red"], 25.4), (t_push1, *red_final), (120, *red_final)],
+    def pushed(x, r, final_gap=0.0):
+        """Track of a piece that A's top edge (y + 5.43) pushes north from the lane line."""
+        tr = [(0, x, 25.4)]
+        t = t_push0
+        while t < t_push1:
+            tr.append((t, x, max(25.4, pose(A.keys, t)[1] + A_FULL[3] + r)))
+            t += 0.1
+        tr.append((t_push1, x, pose(A.keys, t_push1)[1] + A_FULL[3] + r))
+        return tr + [(120, x, tr[-1][2])]
+    stack_tr = pushed(STACK_X["red"], R_STACK)
+    cup_tr = pushed(CUP_UP[0], R_CUP)
+    pieces.append({"name": "stack red", "kind": "stack", "color": "red", "r": R_STACK, "h": 2.72, "track": stack_tr,
                    "contact": [{"robot": "A", "t0": t_push0, "t1": t_push1 + 0.3}]})
     events.append((round(t_push1, 1), 8, 0, "red stack -> zone 1 (pushed by A)"))
-    pieces.append({"name": "cup upper", "kind": "cup", "color": "teal", "r": R_CUP, "h": 5.7,
-                   "track": [(0, *CUP_UP), (t_push0 + 1.2, *CUP_UP), (t_push1, *up_final), (120, *up_final)],
+    pieces.append({"name": "cup upper", "kind": "cup", "color": "teal", "r": R_CUP, "h": 5.7, "track": cup_tr,
                    "contact": [{"robot": "A", "t0": t_push0, "t1": t_push1 + 0.3}]})
     # its 2 hidden poms stay inside the upside-down cup and move with it
 
@@ -204,15 +224,25 @@ def build():
         pieces.append({"name": f"pom hidden {c}", "kind": "pom", "color": c, "r": R_POM, "h": 1.5,
                        "track": [(0, *CUP_LOW), (t_cup0, *CUP_LOW), (t_drag1, *cup_drag), (t_cup1, *spill[k]), (120, *spill[k])],
                        "contact": [{"robot": "B", "t0": t_cup0 - 0.3, "t1": t_grab + 0.5}]})
-    xg, yg, _ = pose(B.keys, t_grab)
+    xg, yg, hg = pose(B.keys, t_grab)
     red_at = (xg - 9.5, yg - 2.0)
-    xr, yr, _ = pose(B.keys, t_red)
-    plat = (xr + 12.5, yr)
-    pieces.append({"name": "mystery red pom", "kind": "pom", "color": "red", "r": R_POM, "h": 1.5,
-                   "track": [(0, *CUP_LOW), (t_cup0, *CUP_LOW), (t_drag1, *cup_drag), (t_cup1, *red_at), (t_grab + 2.5, *red_at),
-                             (t_red, *plat), (120, *plat)],
-                   "carried_by": "B", "carried_from": t_grab + 2.5, "carried_to": t_red,
-                   "contact": [{"robot": "B", "t0": t_cup0 - 0.3, "t1": t_grab + 2.6}]})
+    cth, sth = math.cos(math.radians(hg)), math.sin(math.radians(hg))
+    off0 = ((red_at[0] - xg) * cth + (red_at[1] - yg) * sth, -(red_at[0] - xg) * sth + (red_at[1] - yg) * cth)   # in B's frame
+    t_lift = t_grab + 2.5
+    red_tr = [(0, *CUP_LOW), (t_cup0, *CUP_LOW), (t_drag1, *cup_drag), (t_cup1, *red_at), (t_lift, *red_at)]
+    t = t_lift + 0.25
+    while t < t_red:
+        bx_, by_, bh_ = pose(B.keys, t)
+        u = min(1.0, max(0.0, (t - t_ball1) / (t_red - t_ball1)))               # the arm reaches out over the platform edge
+        ox, oy = off0[0] + (12.5 - off0[0]) * u, off0[1] * (1 - u)
+        c, s_ = math.cos(math.radians(bh_)), math.sin(math.radians(bh_))
+        red_tr.append((t, bx_ + ox * c - oy * s_, by_ + ox * s_ + oy * c))
+        t += 0.25
+    plat = red_tr[-1][1:]
+    red_tr += [(t_red, *plat), (120, *plat)]
+    pieces.append({"name": "mystery red pom", "kind": "pom", "color": "red", "r": R_POM, "h": 1.5, "track": red_tr,
+                   "carried_by": "B", "carried_from": t_lift, "carried_to": t_red,
+                   "contact": [{"robot": "B", "t0": t_cup0 - 0.3, "t1": t_lift + 0.1}]})
     events.append((round(t_red, 1), 51, 0, "red pom alone on the platform"))
     # the hook knocks the ball off its post; it then rides in front of the right plow wing
     ball_track = [(0, *PB4), (t_ball0, *PB4)]
@@ -257,4 +287,4 @@ def time_when(keys, cond, t0, t1, dt=0.02):
         if cond(pose(keys, t)):
             return t
         t += dt
-    return t1
+    raise ValueError(f"time_when: the condition never held between {t0:.1f} s and {t1:.1f} s")

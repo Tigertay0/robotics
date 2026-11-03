@@ -200,7 +200,7 @@ def mecanum(name, cx, cy, cz, d=60.0, w=28.0, dir_=None):
         bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=6, depth=w * 0.95)
         o = bpy.context.active_object
         o.data.transform(Matrix.Translation((cx + r * math.cos(a), cy, cz + r * math.sin(a)))
-                         @ Matrix.Rotation(-a, 4, "Y") @ Matrix.Rotation(math.radians(45 if cy > 0 else -45), 4, "X")
+                         @ Matrix.Rotation(-a, 4, "Y") @ Matrix.Rotation(math.radians(45 if (cy > 0) == (cx > 0) else -45), 4, "X")
                          @ Matrix.Rotation(math.radians(90), 4, "X"))
         put(o, name + " roller", M("roller"), dir_)
 
@@ -885,8 +885,12 @@ def split_claw(o):
         put(b, nm, M(mk), dir_)
     tf = LAST_STL["tf"]
     zc = 4.0 + 0.4 + 4.0                                       # p2: BASE_T + CLR + HUB_T / 2
-    piv = [tf @ Vector((x, 0.0, zc)) for x in (-12.6, 12.6)]    # p2: xL, xR = -/+ CENTRE / 2
-    left, right = sorted(piv, key=lambda p: -p.y)
+    cap = [v.co for v in base.data.vertices]                    # the printed pin's top face = finger L's axis
+    ztop = max(v.z for v in cap)
+    top = [v for v in cap if v.z > ztop - 0.05]
+    pl_ = Vector((sum(v.x for v in top) / len(top), sum(v.y for v in top) / len(top), ztop - 14.8 + zc))   # p2: pin cap top z = 14.8
+    pr_ = pl_ + tf.to_3x3() @ Vector((25.2, 0.0, 0.0))          # p2: CENTRE = 2 * PITCH_R + 1.2
+    left, right = sorted((pl_, pr_), key=lambda p: -p.y)
     return {"meshes": {"base": base.name, "finger_L": fingers[1].name, "finger_R": fingers[0].name},
             "pivots": {"finger_L": [round(v, 2) for v in left], "finger_R": [round(v, 2) for v in right]},
             "axis": [0, 0, 1], "open_deg": 25, "driven": "finger_R (servo) turns finger_L through the gears, opposite way"}
