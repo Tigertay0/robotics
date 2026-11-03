@@ -28,7 +28,10 @@ FACE_W = 70.0              # centre face, a stack is ~56 mm wide
 WING_L = 95.0
 WING_DEG = 50.0            # wings open forward, measured from the centre face line
 TIP_R = 7.0
-GROUND = 3.0               # set when mounting (rules nothing; just clear the FRP bumps)
+GROUND = 3.0               # plow bottom above the floor when mounted
+PLATE_UNDERSIDE = 22.0     # Robot B chassis plate underside above the floor (assembly in export_build_manual.py)
+TAB_T = 6.0
+TAB_TOP = PLATE_UNDERSIDE - GROUND   # tabs bolt UP into the plate: their top face touches its underside
 
 out = pl.out_dir_from_args()
 pl.reset()
@@ -52,17 +55,19 @@ for s in (-1, 1):
 # lever switch pocket in the centre face (lever pokes through to the front)
 pl.difference(plow, pl.box(T + 2, 28, 12, center=(T / 2, 0, 24)))
 for dy in (-11, 11):
-    pl.difference(plow, pl.cyl(2.2, 30, (T / 2, dy, 36), axis="X"))
+    pl.difference(plow, pl.cyl(pl.KIT_BRASS_CLEAR, 30, (T / 2, dy, 36), axis="X"))   # kit brass screws
 # rear mounting tabs with slots at 0.5 in pitch
 for s in (-1, 1):
-    tab = pl.box_from((-28, s * 18 - 10, 0), (0.5, s * 18 + 10, T + 2))
+    tab = pl.box_from((-28, s * 18 - 10, TAB_TOP - TAB_T), (0.5, s * 18 + 10, TAB_TOP))
     pl.union(plow, tab)
+    # gusset under each tab so it doesn't flex (and prints without supports standing up)
+    pl.union(plow, pl.wedge(16, 6, 0.01, TAB_TOP - TAB_T, center=(-8, s * 18, 0)))
     for k in range(2):
         x = -22 + k * 0.5 * IN
-        slot = pl.box(4.4, 8, 20, center=(x, s * 18, 3))
-        pl.difference(plow, slot)
+        zc = TAB_TOP - TAB_T / 2
+        pl.difference(plow, pl.box(4.4, 8, TAB_T + 4, center=(x, s * 18, zc)))
         for dy in (-4, 4):
-            pl.difference(plow, pl.cyl(4.4, 20, (x, s * 18 + dy, 3)))
+            pl.difference(plow, pl.cyl(4.4, TAB_T + 4, (x, s * 18 + dy, zc)))
 
 pl.finish(plow, "p3_pocket_plow", out, print_class="team",
           notes=f"print standing (wall height {H:.0f} mm up), no supports; mount with the bottom {GROUND} mm above the FRP")

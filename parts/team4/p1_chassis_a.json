@@ -6,15 +6,15 @@
     47.04
   ],
   "islands": 1,
-  "volume_cm3": 300.65,
+  "volume_cm3": 298.99,
   "manifold": true,
   "non_manifold_edges": 0,
-  "triangles": 47866,
-  "notes": "robot ~272 mm wide with wheels (start box 286); deck underside 46 mm, lane 45.7 mm wide stopping 4 mm above the floor; 448 accessory holes (4.4 mm on 8 mm); print deck-down, no supports",
+  "triangles": 48764,
+  "notes": "robot ~272 mm wide with wheels (start box 286); deck underside 46 mm, lane 45.7 mm wide stopping 4 mm above the floor; 460 accessory holes (4.4 mm on 8 mm); print deck-down, no supports",
   "robot_width_with_wheels_mm": 272.0,
   "deck_underside_mm": 46.04,
   "lane_floor_gap_mm": 4.0,
-  "accessory_holes": 448,
+  "accessory_holes": 460,
   "print_check": {
     "class": "team",
     "part_dims_mm": [

@@ -6,10 +6,10 @@
     72.0
   ],
   "islands": 1,
-  "volume_cm3": 106.14,
+  "volume_cm3": 107.39,
   "manifold": true,
   "non_manifold_edges": 0,
-  "triangles": 2292,
+  "triangles": 2344,
   "notes": "print standing (wall height 72 mm up), no supports; mount with the bottom 3.0 mm above the FRP",
   "print_check": {
     "class": "team",

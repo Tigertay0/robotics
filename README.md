@@ -1,16 +1,45 @@
 # Rochambotics: 2026 Botball Fall Game
 
-- **[STRATEGY.md](STRATEGY.md)**: the plan (scoring analysis, robot roles, 120 s timeline, failure plans, build notes), checked against the official rule summary and table model.
-- **[blender/](blender/README.md)**: 3D model of the official table and both proposed robots (kit parts only), plus the animated plan with a live score. Open `blender/out/fall_game_2026_animated.blend` in Blender and press Space.
-- **[docs/BUILD.md](docs/BUILD.md)**: the step-by-step manual: order of work, practice table, building each robot (where every part goes), wiring/ports, uploading and calibrating the code, tests, tournament day.
-- **[docs/animation/](docs/animation/robot_code_explainer.html)**: animation of how both robots' code runs during a match (open the HTML in a browser).
-- **[docs/ROBOTS.md](docs/ROBOTS.md)**: how each robot should look (renders), every part and what it does, printed vs kit parts, chassis note.
-- **[guide/](guide/index.html)**: the interactive assembly guide (open `index.html` in a browser; the 3D model builds up step by step). **[3D_PRINTS.md](3D_PRINTS.md)**: which 3D-printed parts are worth it.
-- **[code/](code/README.md)**: first Wombat programs for both robots.
-- `docs/`: the 2026 rule summary and kit part lists the plan is based on.
-- **[docs/rules-digest.md](docs/rules-digest.md)**: every rule that matters, the ambiguous ones and the questions to send KIPR (Zone 5 multiplier first). Also [field-map.md](docs/field-map.md) (every piece, zone and clearance in inches, renders in `docs/renders/`), [hardware.md](docs/hardware.md), [prior-art.md](docs/prior-art.md).
-- **`tools/score.py`**: exact scorer with a switch for each ambiguous rule. `python tools/score.py data/scenarios/plan_t1_core.json` (add `--conservative` or `--sensitivity`); tests: `python tools/test_score.py`.
-- **`tools/blender/`**: parametric 3D-print part generator. `python tools/blender/build_parts.py` writes the **4 team prints** to `parts/team4/` (team rule: 4 parts total, any size up to the bed; print-in-place counts as 1) and fails on any fit, watertightness, clearance or budget problem ([3D_PRINTS.md](3D_PRINTS.md), [docs/parts.md](docs/parts.md)).
-- [docs/strategy-alt.md](docs/strategy-alt.md): a second, independently derived plan kept for comparison; STRATEGY.md is the team plan.
-- `Fall_Game_Table.glb`, `STL Parts.zip`: official table and part geometry from the KIPR Team Home Base (needed to rebuild the model).
-- `Botball_Fall_Seeding_Scoresheet.xlsx`, `Fall_Game_Table.pdf`, `Botball Inventory.xlsx`: original uploads.
+Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5 zones for the ×5 multiplier) and **B "Point Scorer"** (cup, red pom, pom stacks, pickleball). Plan v3 scores **625** if everything lands; no two parts ever collide in the simulator.
+
+## Start here
+
+| I want to… | Open |
+|---|---|
+| **Build the robots** (picture manual: every part named, every screw hole shown, also a video) | [docs/manual/build_manual.html](docs/manual/build_manual.html) (download and open in a browser; add `?video=1` to the address for the video) |
+| Read the build steps as text (order of work, wiring, calibration, tournament day) | [docs/BUILD.md](docs/BUILD.md) |
+| See what the finished robots look like and what every part does | [docs/ROBOTS.md](docs/ROBOTS.md) |
+| **Print the 4 printed parts** | [3D_PRINTS.md](3D_PRINTS.md) → STL files in [parts/team4/](parts/team4/) |
+| Understand the plan and the score | [STRATEGY.md](STRATEGY.md) (section 4 = the 120 s timeline) |
+| **Watch how both robots' code runs in a match** | [docs/animation/robot_code_explainer.html](docs/animation/robot_code_explainer.html) |
+| Upload and calibrate the robot code | [code/README.md](code/README.md) → [robot_a/main.c](code/robot_a/main.c), [robot_b/main.c](code/robot_b/main.c) |
+| Check a rule | [docs/rules-digest.md](docs/rules-digest.md) (+ questions to send KIPR) |
+| Find a piece's position or a zone's size on the table | [docs/field-map.md](docs/field-map.md) |
+
+## Everything, by folder
+
+**Plan and rules**
+- [STRATEGY.md](STRATEGY.md): the team plan (scoring, robot roles, timeline, failure plans).
+- [docs/rules-digest.md](docs/rules-digest.md): every rule that matters and the ambiguous ones. Also [field-map.md](docs/field-map.md), [hardware.md](docs/hardware.md), [prior-art.md](docs/prior-art.md), [team-hardware-confirmed.md](docs/team-hardware-confirmed.md).
+- [docs/strategy-alt.md](docs/strategy-alt.md): a second plan kept only for comparison.
+- `docs/*.pdf`: the official 2026 rule summary and kit part lists. `docs/official/`: the rule-summary text and zone images.
+
+**Building**
+- [docs/manual/](docs/manual/): the step-by-step manual ([build_manual.html](docs/manual/build_manual.html)), the two 3D models it uses (`robot_a.glb`, `robot_b.glb`), `steps.json`, and [bom.md](docs/manual/bom.md). The BOM check proves every part and screw is in the 2026 kit and only 4 parts are printed.
+- [docs/BUILD.md](docs/BUILD.md), [docs/ROBOTS.md](docs/ROBOTS.md) (renders in `docs/robots/`), [docs/parts.md](docs/parts.md).
+- [3D_PRINTS.md](3D_PRINTS.md) and [parts/team4/](parts/team4/): the 4 prints (p1 Robot A chassis with duck lane, p2 geared claw, p3 pocket plow, p4 cup hook) as slicer-ready STLs with previews and [budget.md](parts/team4/budget.md).
+- [guide/](guide/index.html): the older interactive assembly guide.
+
+**Code and match plan**
+- [code/](code/README.md): the Wombat programs for both robots.
+- `tools/match_plan.py`: both robots' routes (plan v3). `python tools/match_sim.py` checks them every 0.05 s and must print **NO CONTACTS**; `--export` writes [docs/animation/match_data.json](docs/animation/match_data.json) for the video, and `python tools/match_plot.py` draws [plan_debug.png](docs/animation/plan_debug.png).
+- [docs/animation/robot_code_explainer.html](docs/animation/robot_code_explainer.html): the "How our robots think" video.
+
+**Tools** (Python 3; Blender 5.2 for the `tools/blender/` scripts)
+- `python tools/score.py data/scenarios/plan_t1_core.json` (add `--conservative` or `--sensitivity`) scores a scenario exactly, with a switch for each ambiguous rule. `python tools/test_score.py` runs its tests.
+- `python tools/blender/build_parts.py` regenerates the 4 prints. It fails on any fit, watertightness, clearance or 4-part-budget problem.
+- `blender -b --factory-startup --python tools/blender/export_build_manual.py -- docs/manual` regenerates the manual's models, steps and BOM check.
+- `data/`: kit counts (`kit_2026.json`), field map, robot footprints, score scenarios.
+- [blender/](blender/README.md): 3D model of the official table and the original animated plan (`blender/out/*.blend`).
+
+**Original uploads**: `Fall_Game_Table.glb`, `STL Parts.zip` (official table and part geometry from KIPR Team Home Base), `Botball_Fall_Seeding_Scoresheet.xlsx`, `Fall_Game_Table.pdf`, `Botball Inventory.xlsx`.

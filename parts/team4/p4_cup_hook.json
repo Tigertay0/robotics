@@ -2,20 +2,20 @@
   "name": "p4_cup_hook",
   "dims_mm": [
     157.0,
-    13.0,
+    14.5,
     62.0
   ],
   "islands": 1,
-  "volume_cm3": 17.46,
+  "volume_cm3": 20.04,
   "manifold": true,
   "non_manifold_edges": 0,
-  "triangles": 1910,
+  "triangles": 1200,
   "notes": "print on its side (flat face down); lip 7.0 mm inward at 38.0 mm below the arm",
   "print_check": {
     "class": "team",
     "part_dims_mm": [
       157.0,
-      13.0,
+      14.5,
       62.0
     ],
     "part_dims_rounded_in": [
@@ -36,7 +36,7 @@
     ],
     "margin_mm": [
       63.0,
-      207.0,
+      205.5,
       188.0
     ],
     "low_margin": false,

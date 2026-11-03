@@ -1,11 +1,13 @@
 /******************************************************************************
  * Robot B - "Point Scorer"                                  2026 Fall Game
- * KIPR Wombat, 2 gear motors (differential), servo arm + micro-servo claw,
- * cup-hook servo, camera, 2 tophats, ET, lever switch on the plow.
+ * KIPR Wombat, 2 gear motors (differential), servo arm + geared claw (print 2,
+ * driven by a standard servo), cup-hook servo, camera, 2 tophats, ET, plow lever.
  *
- * Implements the Robot B column of STRATEGY.md section 4:
- *   upper cup -> wait -> lower cup + red pom -> 5 pom stacks -> pickleball 1
- *   -> red pom on the platform.
+ * Implements Robot B's route of plan v3 (tools/match_plan.py, checked by
+ * tools/match_sim.py): starts in the small box facing west at (63.8, 7.15);
+ *   lower cup dragged west + flipped into Zone 5 -> red pom -> 4 pom stacks
+ *   -> pickleball 1 -> red pom on the platform.
+ * B's first run stays south of the duck lane: it never comes near a duck.
  * Numbers marked CALIBRATE were budgeted, not measured.
  *
  * Servo values are last season's measured ones (Botball robotics 2025_26.pdf)
@@ -20,7 +22,7 @@
 #define LEFT   0
 #define RIGHT  2
 #define SERVO_ARM    1            /* shoulder (regular servo)      */
-#define SERVO_CLAW   2            /* claw (micro servo)            */
+#define SERVO_CLAW   2            /* geared claw (standard servo)  */
 #define SERVO_HOOK   3            /* cup hook on the right side    */
 #define TOPHAT_L     0
 #define TOPHAT_R     1
@@ -34,16 +36,21 @@
 #define WHEEL_DIAM_IN   2.75               /* CALIBRATE: Solarbotics wheel; last year's were 3.0 */
 #define TICKS_PER_INCH  (TICKS_PER_REV / (M_PI * WHEEL_DIAM_IN))
 #define TICKS_PER_DEG   13.0               /* CALIBRATE: last year's pivot constant (angle * 13) */
+#define TRACK_IN        6.06               /* CALIBRATE: wheel centre to wheel centre (154 mm) */
 #define TAPE_THRESHOLD  2700               /* CALIBRATE: analog (12-bit) < this = black */
 #define LIGHT_ON        770
 #define SPEED_FAST      80
 #define SPEED_PUSH      45
 #define MATCH_END_S     118
 
+/* Hand-off time (s after the light): A has swallowed the ducks past the centre line.
+   Same as T_B_north in tools/match_plan.py, padded past the safe moment. CALIBRATE. */
+#define T_B_NORTH       26.0
+
 #define ARM_UP        860                  /* measured last season */
 #define ARM_DOWN     1750
 #define ARM_PLATFORM  600                  /* CALIBRATE: claw above the 5.7 in platform edge */
-#define CLAW_OPEN    2000
+#define CLAW_OPEN    2000                  /* CALIBRATE: geared claw on a standard servo now */
 #define CLAW_CLOSED  1200
 #define HOOK_UP      1000                  /* CALIBRATE */
 #define HOOK_DOWN    1900
@@ -77,39 +84,41 @@ static void turn_deg(double deg, int speed) {
                deg, labs(gmpc(LEFT)), target, seconds());
     msleep(200);
 }
-/* gentle arc: inner wheel at half speed. sign of deg = direction as in turn_deg */
-static void arc_in(double inches, double deg, int speed) {
-    long target = (long)(fabs(inches) * TICKS_PER_INCH);
-    cmpc(LEFT); cmpc(RIGHT);
-    if (deg > 0) drive(speed / 2, speed); else drive(speed, speed / 2);
-    while ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target && seconds() < MATCH_END_S) msleep(5);
+/* arc of a given radius (inches, to the robot centre); deg > 0 = left (CCW), as turn_deg */
+static void arc_r(double radius, double deg, int speed) {
+    double ro = radius + TRACK_IN / 2, ri = radius - TRACK_IN / 2;
+    int inner = (int)(speed * ri / ro);
+    long target = (long)(fabs(deg) * M_PI / 180.0 * ro * TICKS_PER_INCH);   /* outer wheel path */
+    int outer_port = deg > 0 ? RIGHT : LEFT;
+    cmpc(outer_port);
+    if (deg > 0) drive(inner, speed); else drive(speed, inner);
+    while (labs(gmpc(outer_port)) < target && seconds() < MATCH_END_S) msleep(5);
     stop_all();
-    if ((labs(gmpc(LEFT)) + labs(gmpc(RIGHT))) / 2 < target)
-        printf("arc_in(%.1f, %.1f) stopped short, t=%.1f s\n", inches, deg, seconds());
+    if (labs(gmpc(outer_port)) < target)
+        printf("arc_r(%.1f, %.1f) stopped short, t=%.1f s\n", radius, deg, seconds());
     msleep(150);                 /* settle, as forward_in and turn_deg do */
 }
-/* drive forward until a tophat sees tape, then stop. max_in bounds the blind drive so a
-   missed line does not push the robot into a wall for the rest of the match. */
-static void forward_to_tape(int speed, double max_in) {
-    long target = (long)(fabs(max_in) * TICKS_PER_INCH);
-    cmpc(LEFT);
-    drive(speed, speed);
-    while (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD
-           && labs(gmpc(LEFT)) < target && seconds() < MATCH_END_S) msleep(5);
-    stop_all();
-    if (analog(TOPHAT_L) >= TAPE_THRESHOLD && analog(TOPHAT_R) >= TAPE_THRESHOLD)
-        printf("forward_to_tape: no tape within %.1f in, t=%.1f s\n", max_in, seconds());
-    msleep(150);
+
+static double t_light;          /* seconds() when the start light came on */
+
+/* wait until t seconds after the start light */
+static void wait_until_s(double t) {
+    if (seconds() - t_light > t)       /* late: the hand-off is no longer guaranteed safe */
+        printf("late for the %.0f s hand-off: t=%.1f s\n", t, seconds() - t_light);
+    while (seconds() - t_light < t) msleep(20);
 }
 
 /* ---------------------------------------------------------------- tools */
-static void flip_cup_with_right_wing(double push_in) {
-    /* the cup is upside-down; the hook catches the rim, the wing rolls it upright
-       while the robot keeps pushing. CALIBRATE the hook height on the real cup. */
+/* The hook catches the upside-down lower cup's rim and drags it west along the lower
+   tape; a 20 deg pivot to the left then rolls it upright off the tape (the right plow
+   wing pushes its base). CALIBRATE the hook height on the real cup. */
+static void drag_and_flip_cup(double drag_in) {
     set_servo_position(SERVO_HOOK, HOOK_DOWN);
     msleep(300);
-    forward_in(push_in, SPEED_PUSH);
+    forward_in(drag_in, SPEED_PUSH);
+    turn_deg(+20, SPEED_PUSH);
     set_servo_position(SERVO_HOOK, HOOK_UP);
+    msleep(300);
 }
 
 /* Find the red pom with the camera, centre on it, grab it. Returns 1 on success.
@@ -162,10 +171,10 @@ static int grab_red_pom(void) {
     return found;
 }
 
-/* push one pom stack north off the tape: start 3.5 in south of the stack line */
-static void push_stack_north(void) {
-    forward_in(3.5, SPEED_PUSH);       /* stack ends ~2 in north of the tape edge */
-    forward_in(-3.5, SPEED_FAST);
+/* facing north on the travel line: push one pom stack into Zone 1 and back off */
+static void push_stack_north(double push_in) {
+    forward_in(push_in, SPEED_PUSH);
+    forward_in(-push_in, SPEED_FAST);
 }
 
 /* ---------------------------------------------------------------- main */
@@ -176,58 +185,49 @@ int main(void) {
     set_servo_position(SERVO_HOOK, HOOK_UP);
     printf("Robot B ready. Waiting for the light.\n");
     while (analog(LIGHT_START) > LIGHT_ON) msleep(10);
+    t_light = seconds();
     shut_down_in(119.0);
 
-    /* 0-16 s: out of zone 5 heading NE, left plow wing takes the upper cup north-east into zone 2 */
-    arc_in(5.0, +45, SPEED_FAST);               /* (33, 5.6) -> facing NE */
-    forward_in(17.5, SPEED_FAST);               /* -> ~(48.5, 21): wing meets the cup */
-    forward_in(12.0, SPEED_PUSH);               /* cup rolls upright and slides to ~(59.5, 34) */
-    arc_in(9.0, -45, SPEED_FAST);               /* -> ~(64, 32) facing east */
+    /* 0-7 s: the lower cup (hook side = right = north while facing west) */
+    forward_in(8.4, SPEED_PUSH);                /* (63.8, 7.15) -> (55.4, 7.15): hook meets the cup */
+    drag_and_flip_cup(18.4);                    /* -> (37, 7.15); cup upright at ~(27, 8.9), its poms spill */
+    forward_in(-2.5, SPEED_FAST);               /* back off along 200 deg -> (39.4, 8.0) */
+    turn_deg(-20, SPEED_FAST);                  /* square up facing west */
+    forward_in(-2.45, SPEED_FAST);              /* -> (41.8, 8.0): claw clear of the cup */
 
-    /* 17-32 s: loop down the east side; face west by the lower cup at (68, 16) */
-    arc_in(12.0, -60, SPEED_FAST);
-    forward_in(10.0, SPEED_FAST);
-    arc_in(8.0, -75, SPEED_FAST);               /* now heading west at ~(68, 16) */
-
-    /* 32-50 s: wait for A to finish the duck run and the first two drops */
-    while (seconds() < 50) msleep(50);
-
-    /* 50-58 s: flip the lower cup with the right wing + hook, push it west into zone 5 */
-    forward_in(11.4, SPEED_FAST);               /* -> (56.6, 16): wing meets the cup rim */
-    flip_cup_with_right_wing(28.0);             /* cup ends ~(18.5, 7.3); hidden poms spill */
-
-    /* 58-63 s: the red pom */
-    forward_in(-1.0, SPEED_FAST);
+    /* 7-10 s: the red pom */
     int have_red = grab_red_pom();
     if (!have_red) printf("red pom not found, skipping the platform\n");
 
-    /* 63-86 s: five pom stacks, east to west, each pushed north into zone 1 */
-    forward_in(-10.0, SPEED_FAST);              /* back east to x ~ 39.8 */
+    /* wait (holding the pom) until A has swallowed the ducks past the centre line */
+    wait_until_s(T_B_NORTH);
     turn_deg(-90, SPEED_FAST);                  /* facing west -> clockwise 90 = face north */
-    forward_to_tape(SPEED_FAST, 10.0);          /* lower tape: y ~ 12; give up after 10 in */
-    forward_in(3.5, SPEED_FAST);                /* -> y ~ 15.5 */
-    for (int k = 0; k < 5; k++) {
-        push_stack_north();
-        if (k < 4) {                            /* side-step 8 in west: back-arc then forward-arc */
-            arc_in(-6.0, -40, SPEED_FAST);
-            arc_in(6.0, +40, SPEED_FAST);
-        }
+    forward_in(9.5, SPEED_FAST);                /* -> (41.8, 17.5), the Zone 3 travel line */
+    turn_deg(+90, SPEED_FAST);                  /* face west */
+
+    /* 4 pom stacks, east to west, each pushed north into Zone 1 (A already moved the red one) */
+    const double stack_x[4] = { 32.0, 24.0, 16.0, 11.0 };     /* B centre; the gold stack is at x 8 */
+    const double push_in[4] = { 9.48, 9.48, 9.48, 5.48 };      /* gold only to y 29: clears turquoise */
+    double x = 41.8;
+    for (int k = 0; k < 4; k++) {
+        forward_in(x - stack_x[k], SPEED_FAST);
+        x = stack_x[k];
+        turn_deg(-90, SPEED_FAST);              /* face north */
+        push_stack_north(push_in[k]);
+        if (k < 3) turn_deg(+90, SPEED_FAST);   /* face west again */
     }
 
-    /* 86-97 s: down to the bottom wall and east to pickleball 1 */
-    forward_in(-5.0, SPEED_FAST);
-    turn_deg(-90, SPEED_FAST);                  /* face east at ~(6.5, 14) */
-    forward_in(27.5, SPEED_FAST);               /* -> (34, 14) */
-    arc_in(10.0, -35, SPEED_FAST);              /* -> ~(42, 8) */
-    arc_in(4.5, +35, SPEED_FAST);               /* -> (45, 5.3) facing east */
+    /* down to the bottom wall east of the cup, then east to pickleball 1 */
+    turn_deg(-90, SPEED_FAST);                  /* north -> east at (11, 17.5) */
+    forward_in(21.5, SPEED_FAST);               /* -> (32.5, 17.5) */
+    arc_r(5.0, -90, SPEED_PUSH);                /* -> (37.5, 12.5) facing south */
+    arc_r(4.9, +90, SPEED_PUSH);                /* -> (42.4, 7.6) facing east */
     set_servo_position(SERVO_HOOK, HOOK_DOWN);  /* hook sweeps the ball off its post */
     forward_in(2.5, SPEED_PUSH);
     set_servo_position(SERVO_HOOK, HOOK_UP);
+    forward_in(14.0, SPEED_PUSH);               /* -> (58.9, 7.6): ball rolls under the platform */
 
-    /* 97-104 s: push the ball under the platform, stop at x = 66 */
-    forward_in(18.5, SPEED_PUSH);
-
-    /* 104-112 s: red pom alone on the platform (big duck is allowed next to it) */
+    /* red pom alone on the platform (the big duck is allowed next to it) */
     if (have_red) {
         set_servo_position(SERVO_ARM, ARM_PLATFORM);
         msleep(1200);
@@ -238,6 +238,6 @@ int main(void) {
 
     stop_all();
     disable_servos();
-    printf("Robot B done at %.1f s\n", seconds());
+    printf("Robot B done at %.1f s\n", seconds() - t_light);
     return 0;
 }

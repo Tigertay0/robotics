@@ -58,7 +58,7 @@ Everything else: flips both cups, pushes the 5 pom stacks into zone 1, grabs the
 | Plate 4 × 12 (Metal), bent 90° | 2 | The V plow: pushes pom stacks as separate groups and shoves the pickleball |
 | Strap 1 × 10 (Metal), bent 90° | 1 | Cup hook: catches the cup rim and flips it upright |
 | Servo (Electronics) + servo bracket | 2 | One lifts the arm (shoulder), one swings the cup hook |
-| Micro servo + bracket | 1 | Opens and closes the claw |
+| Servo + Servo Bracket + Round Servo Horn | 1 | Opens and closes the claw |
 | LEGO liftarms 1 × 11 and claw fingers | 4 | The paralleling arm (keeps the claw level while it lifts) and the two claw fingers |
 | Camera (Electronics) | 1 | Finds the red pom by colour |
 | Channel 3 × 8 (Metal) | 1 | Camera mast |
@@ -75,7 +75,7 @@ We may print **4 parts in total, any size** up to the 220 × 220 × 250 mm bed; 
 | # | Part | Robot | Replaces | What it does |
 |---|---|---|---|---|
 | 1 | Chassis with built-in duck lane | A | metal chassis, 4 standoffs, 4 motor brackets, rear of the metal lane | Deck 46 mm up, lane walls 4 mm off the floor, gate slots, motor windows, Wombat holes, 448 accessory holes at the front, rear and on the deck |
-| 2 | Geared claw (print-in-place) | B | LEGO claw fingers + micro servo bracket | One micro servo opens both fingers through printed gears; pads cup the red pom |
+| 2 | Geared claw (print-in-place) | B | LEGO claw fingers + servo bracket | One standard servo opens both fingers through printed gears; pads cup the red pom |
 | 3 | Pocket plow | B | two bent 4×12 plates | Keeps each pushed pom stack as one group; lever-switch pocket |
 | 4 | Cup hook | B | bent 1×10 strap | Lipped tip catches the cup rim for the flip |
 

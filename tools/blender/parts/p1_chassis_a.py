@@ -110,16 +110,14 @@ for xw in (WHEEL_X, -WHEEL_X):
                                            (body_x1 + 0.4, s * side_y + 10, AXLE_Z + MOTOR_THK / 2 + 0.4)))
         ears = [(body_cx + dx, s * (side_y - SIDE_T / 2), AXLE_Z + dz)
                 for dx in (-EAR_PITCH / 2, EAR_PITCH / 2) for dz in (-EAR_ACROSS / 2, EAR_ACROSS / 2)]
-        pl.hole_grid(chassis, ears, 2.6, SIDE_T + 4, axis="Y", segments=16)
+        pl.hole_grid(chassis, ears, pl.KIT_8_32_CLEAR, SIDE_T + 4, axis="Y", segments=16)   # Screw 8-32 x 1/2" + Keps nut
 
 # ---- gate slots + servo holes; touch switch window
 for gx, sside in ((GATE_A_X, +1), (GATE_B_X, -1)):
+    # the gate servo sits in a kit Servo Bracket (micro servo: Micro Servo Mount) bolted to the deck grid
     pl.difference(chassis, pl.box(SLOT_W, LANE_W - 2, DECK_T + 4, center=(gx, 0, DECK_Z + DECK_T / 2)))
-    pads = [(gx + dx, sside * (half + LANE_T + 9), DECK_Z + DECK_T / 2)
-            for dx in (-SERVO_PITCH / 2, SERVO_PITCH / 2) if X_REAR + 4 < gx + dx < X_FRONT - 4]
-    pl.hole_grid(chassis, pads, 2.2, DECK_T + 4, segments=16)
 pl.difference(chassis, pl.box(14, LANE_T + 4, 10, center=(TOUCH_X, -(half + LANE_T / 2), 16)))
-pl.hole_grid(chassis, [(TOUCH_X + dx, -(half + LANE_T / 2), 16) for dx in (-9.5, 9.5)], 2.2, LANE_T + 4, axis="Y", segments=16)
+pl.hole_grid(chassis, [(TOUCH_X + dx, -(half + LANE_T / 2), 16) for dx in (-9.5, 9.5)], pl.KIT_BRASS_CLEAR, LANE_T + 4, axis="Y", segments=16)
 # front joint for the kit-metal intake extension (4x12 plates bolted outside the lane walls)
 pl.hole_grid(chassis, [(X_FRONT - dx, s * (half + LANE_T / 2), z) for s in (-1, 1) for dx in (8, 20) for z in (15, 35)],
              HOLE, LANE_T + 4, axis="Y", segments=16)
@@ -127,7 +125,7 @@ pl.hole_grid(chassis, [(X_FRONT - dx, s * (half + LANE_T / 2), z) for s in (-1, 
 # ---- Wombat holes, then the 8 mm accessory grid on the deck (kept clear of everything)
 wombat_pts = [(WOMBAT_C[0] + sx * WOMBAT[0] / 2, WOMBAT_C[1] + sy * WOMBAT[1] / 2)
               for sx in (-1, 1) for sy in (-1, 1)]
-pl.hole_grid(chassis, [(x, y, DECK_Z + DECK_T / 2) for x, y in wombat_pts], 3.2, DECK_T + 4, segments=16)
+pl.hole_grid(chassis, [(x, y, DECK_Z + DECK_T / 2) for x, y in wombat_pts], pl.KIT_8_32_CLEAR, DECK_T + 4, segments=16)
 
 
 def deck_free(x, y):
@@ -135,8 +133,8 @@ def deck_free(x, y):
         return False
     if abs(y) > side_y - SIDE_T - 3.5:                            # over a side wall
         return False
-    if any(abs(x - gx) < SLOT_W / 2 + 4 for gx in (GATE_A_X, GATE_B_X)) and abs(y) < half + LANE_T + 16:
-        return False                                              # gate slots + servo pads
+    if any(abs(x - gx) < SLOT_W / 2 + 3 for gx in (GATE_A_X, GATE_B_X)) and abs(y) < LANE_W / 2 + 2:
+        return False                                              # gate slots (brackets bolt to the grid beside them)
     if any(abs(x - xr) < 6 for xr in (-30.0, 30.0)) or abs(x - X_FRONT) < 8 or abs(x - X_REAR) < 8:
         return False                                              # ribs / bumpers
     if any((x - wx) ** 2 + (y - wy) ** 2 < 7 ** 2 for wx, wy in wombat_pts):
