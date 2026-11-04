@@ -31,8 +31,9 @@
 | Pin w/ Friction | 0 | 3 | 3 | 122 | yes |
 | Plate 4 x 12 | 2 | 0 | 2 | 4 | yes |
 | Round Servo Horn | 0 | 2 | 2 | 2 | yes |
-| Screw 8-32 x 1/2" (black) | 42 | 30 | 72 | 90 | yes |
-| Screw 8-32 x 1/4" (black) | 17 | 20 | 37 | 40 | yes |
+| Screw 8-32 x 1/2" (black) | 51 | 31 | 82 | 90 | yes |
+| Screw 8-32 x 1/4" (black) | 8 | 18 | 26 | 40 | yes |
+| Screw 8-32 x 3/4" (black) | 0 | 1 | 1 | 70 | yes |
 | Servo | 2 | 3 | 5 | 5 | yes |
 | Servo Bracket | 2 | 5 | 7 | 8 | yes |
 | Short Silver Servo Horn Screw (M3) | 2 | 3 | 5 | 6 | yes |

@@ -154,3 +154,8 @@ Run the whole 120 s match with both robots. Watch the code animation (`docs/anim
 4. Robots must be stopped by 120 s (the code stops at 118 s).
 5. Check the score with the judge before leaving the table; disagree there or not at all.
 6. One 3-minute timeout for the whole tournament: keep it for double elimination.
+
+## Known issues in the manual
+
+- **Robot B, shoulder arm (manual B step 4.5):** the 1×3 liftarm that the lower arm pivots on is drawn bolted next to the lower arm without a real support. The fastener positions there are not verified (`python tools/check_fasteners.py` reports them). Build it like this: stand the 1×3 liftarm upright on the outside of the lower arm, fix it to the chassis plate with an angle bracket, and pin the lower arm to it with the friction pin at the arm's pivot height. Check it against the real parts, then send a photo so the manual can be corrected.
+- All sizes of the kit parts in the 3D models come from the Blender table model, not from calipers. Measure the real parts first.

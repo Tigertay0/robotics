@@ -1,15 +1,15 @@
 """Embed the build-manual data into template.html -> a self-contained HTML file.
 
-usage: python build.py [template.html] [output.html]
+usage: python tools/build_manual_html.py   (writes docs/manual/build_manual.html from tools/manual_template.html)
 Reads docs/manual/robot_a.glb, robot_b.glb and steps.json (version 2) and replaces the
 single /*__DATA__*/ marker with `const GLB_A = "...";`, `const GLB_B = "...";`, `const STEPS = {...};`.
 """
 import base64, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = r'C:/Users/Tigre/robotics/docs/manual/'
-tpl_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'template.html')
-out_path = sys.argv[2] if len(sys.argv) > 2 else r'C:/Users/Tigre/ovwork/build_manual.html'
+SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs', 'manual') + os.sep
+tpl_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'manual_template.html')
+out_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(SRC, 'build_manual.html')
 
 tpl = open(tpl_path, encoding='utf-8').read()
 a = base64.b64encode(open(SRC + 'robot_a.glb', 'rb').read()).decode()
