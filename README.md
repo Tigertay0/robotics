@@ -7,6 +7,7 @@ Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5
 | I want to… | Open |
 |---|---|
 | **Build the robots** (picture manual: every part named, every screw hole shown, also a video) | [docs/manual/build_manual.html](docs/manual/build_manual.html) (download and open in a browser; add `?video=1` to the address for the video) |
+| **Watch the build manual** (the same manual as a 392 s, 1080p video, no audio) | [docs/manual/build_manual.mp4](docs/manual/build_manual.mp4) |
 | Read the build steps as text (order of work, wiring, calibration, tournament day) | [docs/BUILD.md](docs/BUILD.md) |
 | See what the finished robots look like and what every part does | [docs/ROBOTS.md](docs/ROBOTS.md) |
 | **Print the 4 printed parts** | [3D_PRINTS.md](3D_PRINTS.md) → STL files in [parts/team4/](parts/team4/) |
