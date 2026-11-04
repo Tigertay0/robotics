@@ -36,6 +36,7 @@ KIT = json.load(open(os.path.join(ROOT, "data", "kit_2026.json"), encoding="utf-
 IN = 25.4
 S14, S12, S34 = 'Screw 8-32 x 1/4" (black)', 'Screw 8-32 x 1/2" (black)', 'Screw 8-32 x 3/4" (black)'
 SLEN = {S14: 0.25 * IN, S12: 0.5 * IN, S34: 0.75 * IN}
+SLEN_TARGET = {'2-56 3/8" Micro Servo Mount Screw': 9.5, '2-56 1" Caster Screw': 25.4}   # only for the targets list
 KEPS = "Nut 8-32 Keps (black)"
 M3S, M3N = "Silver Servo Horn Machine Screw (M3)", "Silver Servo Horn Nut (M3)"
 HORNS = "Short Silver Servo Horn Screw (M3)"
@@ -142,7 +143,7 @@ def cyl(name, c, d, h, axis, m, verts=32, dir_=None, tf=None):
 def screw(kind, head_at, dir_, tf=None):
     """A kit screw: head sitting on the surface at head_at, shank going along dir_ (= insertion)."""
     d = Vector(dir_).normalized()
-    L = SLEN.get(kind, 0.5 * IN)
+    L = SLEN.get(kind) or SLEN_TARGET.get(kind, 0.5 * IN)
     hd, hh, sd = (7.2, 2.8, 4.1) if "8-32" in kind else (5.6, 2.2, 3.0) if "M3" in kind else (4.4, 1.8, 2.2)
     m = "silver" if ("M3" in kind or "2-56" in kind) else "brass" if "Brass" in kind else "screw"
     hp = Vector(head_at) - d * (hh / 2)
@@ -341,6 +342,30 @@ def shape_servo(cp, lo, hi, name, shaft, **_):
     sgn = -1.0 if sp[La] > c[La] else 1.0
     for k, key in enumerate(("wire_b", "wire_r", "wire_y")):
         cp.cyl(_place({La: tail + sgn * 6, Wa: c[Wa] + (k - 1) * 1.6, a: c[a] - s * 0.3 * d[a]}), 1.5, 12, _ax(La), key, 8)
+
+
+def servo_ear_fasteners(lo, hi, shaft_dir, kind=None):
+    """2 screws + 2 Keps nuts through two diagonal ear holes of a standard servo (the holes shape_servo
+    draws): screw along the shaft axis, head on the shaft side of the ear, nut just past the bracket flange."""
+    kind = kind or S12
+    a = max(range(3), key=lambda i: abs(shaft_dir[i]))
+    sg = 1.0 if shaft_dir[a] > 0 else -1.0
+    others = [i for i in range(3) if i != a]
+    d = [h - l for l, h in zip(lo, hi)]
+    La = max(others, key=lambda i: d[i])
+    Wa = [i for i in others if i != La][0]
+    c = [(l + h) / 2 for l, h in zip(lo, hi)]
+    face = hi[a] if sg > 0 else lo[a]
+    ez = face - sg * 0.22 * d[a]
+    for La_pos, w in ((lo[La] - 3.5, -0.25), (hi[La] + 3.5, 0.25)):
+        pt = [0.0, 0.0, 0.0]
+        pt[La], pt[Wa], pt[a] = La_pos, c[Wa] + w * d[Wa], ez + sg * 1.25
+        dr = [0.0, 0.0, 0.0]
+        dr[a] = -sg
+        screw(kind, tuple(pt), tuple(dr))
+        nt = list(pt)
+        nt[a] = pt[a] - sg * 6.5
+        nut(KEPS, tuple(nt), tuple(-v for v in dr))
 
 
 def shape_motor(cp, lo, hi, dir_, **_):
@@ -574,7 +599,7 @@ def motor_corner(xw, sy, detailed):
             zoom=(cx, sy * side_y, 30))
     box("Black Gear Motor", (x0, min(ya, yb), 19.85), (x1, max(ya, yb), 40.15), "motor", dir_=inward)
     box("Black Gear Motor (ear)", (x0 - 7, min(sy * side_y, sy * (side_y + 2.4)), 17), (x1 + 7, max(sy * side_y, sy * (side_y + 2.4)), 43), "motor", dir_=inward)
-    cyl("Black Gear Motor (shaft)", (xw, sy * (side_y + 15), 30), 5, 8, "Y", "metal", 16, inward)
+    cyl("Black Gear Motor (shaft)", (xw, sy * (side_y + 19), 30), 5, 22, "Y", "metal", 16, inward)
     if detailed:
         sub("4 screws through the motor ears into the wall.", [(S12, 4)], zoom=(cx, sy * side_y, 30))
     for dx in (-24.25, 24.25):
@@ -602,7 +627,7 @@ for xw in (88.0, -88.0):
 sub("One wheel screw in each hub.", [('M3 x 0.5" x 6" Mecanum Wheel Screw', 4)], zoom=(88, side_y + 46, 30))
 for xw in (88.0, -88.0):
     for sy in (-1, 1):
-        screw('M3 x 0.5" x 6" Mecanum Wheel Screw', (xw, sy * (side_y + 47), 30), (0, -sy, 0))
+        screw('M3 x 0.5" x 6" Mecanum Wheel Screw', (xw, sy * (side_y + 41.8), 30), (0, -sy, 0))
 
 step("Intake extension")
 for sy in (+1, -1):
@@ -630,7 +655,7 @@ for sy in (+1, -1):
         nut(KEPS, (xs, y0 + sy * 5.2, 14.4), (0, -sy, 0))
 
 
-def gate(label, gx, servo_kind, z_deck, x_side, note_place):
+def gate(label, gx, servo_kind, z_deck, x_side, note_place, fix_pts):
     """One duck gate: servo stands on a bracket with its shaft along X over the lane centre;
     the horn + liftarm flap hangs through the slot to 10 mm above the floor (closed) and
     swings up flat over the deck (open)."""
@@ -644,11 +669,13 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place):
         sub(f"{label}: micro servo into the micro servo mount, 2 small screws.",
             [("Micro Servo", 1), ("Micro Servo Mount", 1), ('2-56 3/8" Micro Servo Mount Screw', 2)], subassembly=label,
             zoom=(gx, 0, shaft_z))
-        box("Micro Servo Mount", (xs[0] - 2, -16, z_deck), (xs[1] + 2, 16, z_deck + 4), "metal", dir_=(0, 0, -1))
+        yb = max(abs(y) for _, y in fix_pts) + 2
+        box("Micro Servo Mount", (xs[0] - 2, -yb, z_deck), (xs[1] + 2, yb, z_deck + 4), "metal", dir_=(0, 0, -1))
     else:
         sub(f"{label}: servo into the servo bracket, 2 screws + 2 nuts through the servo ears.",
             [("Servo", 1), ("Servo Bracket", 1), (S12, 2), (KEPS, 2)], subassembly=label, zoom=(gx, 0, shaft_z))
-        box("Servo Bracket", (xs[0] - 2, -24, z_deck), (xs[1] + 2, 24, z_deck + 2), "metal", dir_=(0, 0, -1))
+        yb = max(abs(y) for _, y in fix_pts) + 2
+        box("Servo Bracket", (xs[0] - 2, -yb, z_deck), (xs[1] + 2, yb, z_deck + 2), "metal", dir_=(0, 0, -1))
         for sy_ in (-1, 1):
             box("Servo Bracket", (xs[0] - 2, sy_ * 12.2 - 1, z_deck), (xs[1] + 2, sy_ * 12.2 + 1, z_deck + sb[0] + 4), "metal", dir_=(0, 0, -1))
     box(servo_kind, (xs[0], -sb[1] / 2, z_deck + 4), (xs[1], sb[1] / 2, z_deck + 4 + sb[0]), "servo", dir_=(0, 0, -1),
@@ -657,9 +684,7 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place):
         for z in (z_deck + 8, z_deck + 22):
             screw('2-56 3/8" Micro Servo Mount Screw', (xs[0] + sb[2] / 2, 8.5, z), (0, -1, 0))
     else:
-        for z in (z_deck + 10, z_deck + 30):
-            screw(S12, (xs[0] + sb[2] / 2, 13.2, z), (0, -1, 0))
-            nut(KEPS, (xs[0] + sb[2] / 2, -13.8, z), (0, 1, 0))
+        servo_ear_fasteners((xs[0], -sb[1] / 2, z_deck + 4), (xs[1], sb[1] / 2, z_deck + 4 + sb[0]), (-x_side, 0, 0))
     hx = gx + x_side * 1.4
     if micro:
         sub(f"{label}: 1x5 liftarm flap on the servo's own horn, tied with 1 zip tie. Flap points DOWN.",
@@ -678,24 +703,28 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place):
             z = shaft_z - 12.7 * k
             screw(S12, (hx - x_side * 5.3, 0, z), (x_side, 0, 0))
             nut(KEPS, (hx + x_side * 1.3 + 1.6, 0, z), (-x_side, 0, 0))
-    sub(f"{label}: {note_place}", [(S14, 2), (KEPS, 2)], zoom=(gx, 0, z_deck), hint="gate_open_closed")
-    for sy_ in (-1, 1):
-        screw(S14, (xs[0] + sb[2] / 2, sy_ * 20, z_deck + (4 if micro else 2)), (0, 0, -1))
-        nut(KEPS, (xs[0] + sb[2] / 2, sy_ * 20, z_deck - DECK_T - 1.6 if z_deck == top else z_deck - 4), (0, 0, 1))
+    sub(f"{label}: {note_place}", [(S12, 2), (KEPS, 2)], zoom=(gx, 0, z_deck), hint="gate_open_closed")
+    thick = DECK_T if z_deck == top else 8.0                       # deck, or the 1x5 liftarm bridge
+    for fx, fy in fix_pts:
+        screw(S12, (fx, fy, z_deck + (4 if micro else 2)), (0, 0, -1))
+        nut(KEPS, (fx, fy, z_deck - thick - 1.6), (0, 0, 1))
 
 
 step("Duck gates", hint="gate_open_closed")
-gate("Exit gate A", X_REAR := -L / 2 + 10.0, "Servo", top, +1,
-     "bracket on the deck over the REAR slot, flap through the slot. 2 screws down, 2 nuts under the deck.")
+gate("Exit gate A", -L / 2 + 10.0, "Servo", top, +1,
+     "bracket on the deck over the REAR slot, flap through the slot. 2 screws down, 2 nuts under the deck.",
+     [(-L / 2 + 20.0, 32.0), (-L / 2 + 44.0, -32.0)])
 gate("Pin gate B", -L / 2 + 66.0, "Micro Servo", top, +1,
-     "mount on the deck over the MIDDLE slot. 2 screws down, 2 nuts under the deck.")
+     "mount on the deck over the MIDDLE slot. 2 screws down, 2 nuts under the deck.",
+     [(-L / 2 + 84.0, 16.0), (-L / 2 + 92.0, -16.0)])
 # intake gate C: on a bridge across the two extension plates, just behind the funnel
 sub("Intake gate C: a 1x5 liftarm bridge across the two plates (2 screws + 2 nuts).", [("1 x 5 Liftarm", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2 + 50, 0, 46))
 box("1 x 5 Liftarm", (L / 2 + 46, -half - LANE_T - 4, 46), (L / 2 + 54, half + LANE_T + 4, 54), "lego", dir_=(0, 0, -1))
 for sy in (-1, 1):
     screw(S12, (L / 2 + 50, sy * (half + LANE_T + 1), 54), (0, 0, -1))
     nut(KEPS, (L / 2 + 50, sy * (half + LANE_T + 1), 41), (0, 0, 1))
-gate("Intake gate C", L / 2 + 50.0, "Servo", 54.0, +1, "bracket on the liftarm bridge, flap down into the lane. 2 screws, 2 nuts.")
+gate("Intake gate C", L / 2 + 50.0, "Servo", 54.0, +1, "bracket on the liftarm bridge, flap down into the lane. 2 screws, 2 nuts.",
+     [(L / 2 + 52.5, 20.0), (L / 2 + 52.5, -20.0)])
 
 step("Sensors")
 sub("Lane-full touch switch into the window in the right lane wall, 2 brass screws.", [("Small Touch", 1), ("Brass Screws", 2)],
@@ -710,20 +739,20 @@ box("Angle Bracket", (L / 2, -40, 18), (L / 2 + 14, 40, 20), "metal", dir_=(-1, 
 for sy in (-1, 1):
     screw(S12, (L / 2 + 1, sy * 33, 28), (-1, 0, 0))
     nut(KEPS, (L / 2 - 5.6, sy * 33, 28), (1, 0, 0))
-sub("Two tophats under the bracket, looking down, 1 screw each.", [("Tophat (Reflectance)", 2), (S14, 2), (KEPS, 2)], zoom=(L / 2 + 8, 30, 14))
+sub("Two tophats under the bracket, looking down, 1 screw each.", [("Tophat (Reflectance)", 2), (S12, 2), (KEPS, 2)], zoom=(L / 2 + 8, 30, 14))
 for sy in (-1, 1):
-    cyl("Tophat (Reflectance)", (L / 2 + 8, sy * 30, 12), 16, 10, "Z", "sensor", 20, (0, 0, 1))
-    screw(S14, (L / 2 + 8, sy * 30, 20 + 2.8), (0, 0, -1))
-    nut(KEPS, (L / 2 + 8, sy * 30, 18.4 - 6.35), (0, 0, 1))
+    cyl("Tophat (Reflectance)", (L / 2 + 8, sy * 30, 13), 16, 10, "Z", "sensor", 20, (0, 0, 1))
+    screw(S12, (L / 2 + 8, sy * 30, 20), (0, 0, -1))
+    nut(KEPS, (L / 2 + 8, sy * 30, 15.4), (0, 0, 1))
 sub("Rangefinder (ET) on the front bumper grid, 2 screws + 2 nuts.", [("ET (Rangefinder)", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2, 54, 30))
 box("ET (Rangefinder)", (L / 2, 40, 22), (L / 2 + 10, 68, 38), "sensor", dir_=(-1, 0, 0))
 for dy in (44, 64):
     screw(S12, (L / 2 + 10, dy, 30), (-1, 0, 0))
     nut(KEPS, (L / 2 - 5.6, dy, 30), (1, 0, 0))
-sub("Start light sensor on the deck, front left, facing up, 1 screw + 1 nut.", [("Light", 1), (S14, 1), (KEPS, 1)], zoom=(76, 58, top))
+sub("Start light sensor on the deck, front left, facing up, 1 screw (through the corner of its board) + 1 nut.", [("Light", 1), (S12, 1), (KEPS, 1)], zoom=(72, 54, top))
 box("Light", (70, 52, top), (82, 64, top + 10), "sensor", dir_=(0, 0, -1))
-screw(S14, (76, 58, top + 10), (0, 0, -1))
-nut(KEPS, (76, 58, DECK_Z - 1.6), (0, 0, 1))
+screw(S12, (72, 54, top + 4.5), (0, 0, -1))
+nut(KEPS, (72, 54, DECK_Z - 1.6), (0, 0, 1))
 
 step("Wombat and battery")
 WZ = top + 50.8                      # Wombat raised 2 in so the gate servos fit under it
@@ -830,9 +859,7 @@ for x in (58.0, 86.0):
     nut(KEPS, (x, 33, PL0 - 1.6), (0, 0, 1))
 sub("Servo into the bracket, shaft to the left (outside). 2 screws + 2 nuts through the ears.", [("Servo", 1), (S12, 2), (KEPS, 2)], zoom=(72, 32, 45))
 box("Servo", (52, 22, PL1 + 2), (92.6, 42.3, PL1 + 38), "servo", dir_=(0, 0, -1), shaft=((0, 1, 0), (82, 0, 50)))
-for x in (54.0, 90.6):
-    screw(S12, (x, 22, 50), (0, 1, 0))
-    nut(KEPS, (x, 18.4, 50), (0, -1, 0))
+servo_ear_fasteners((52, 22, PL1 + 2), (92.6, 42.3, PL1 + 38), (0, 1, 0))
 sub("Round servo horn on the shaft, 1 horn screw.", [("Round Servo Horn", 1), (HORNS, 1)], zoom=(82, 44, 50))
 cyl("Round Servo Horn", (82, 43.6, 50), 24, 2.6, "Y", "metal", 24, (0, -1, 0))
 screw(HORNS, (82, 45, 50), (0, -1, 0))
@@ -912,9 +939,7 @@ sub("Claw servo into the bracket, shaft UP under the right finger. 2 screws + 2 
     zoom=(px - 9, py, cb_z - 20))
 box("Servo", (px - 29.2, py - 10.15, cb_z - 38), (px + 11.4, py + 10.15, cb_z - 2), "servo", dir_=(0, 0, 1),
     shaft=((0, 0, 1), (px, py, 0)))
-for dx in (-27.2, 9.4):
-    screw(S12, (px + dx, py + 10.15, cb_z - 12), (0, -1, 0))
-    nut(KEPS, (px + dx, py - 11.75, cb_z - 12), (0, 1, 0))
+servo_ear_fasteners((px - 29.2, py - 10.15, cb_z - 38), (px + 11.4, py + 10.15, cb_z - 2), (0, 0, 1))
 sub("Round servo horn in the pocket under the right finger: 1 horn screw, then 3 M3 screws + 3 M3 nuts (nuts go in the hex holes on top).",
     [("Round Servo Horn", 1), (HORNS, 1), (M3S, 3), (M3N, 3)], subassembly="Claw", zoom=(px, py, cb_z + 8))
 cyl("Round Servo Horn", (px, py, cb_z + 6.15), 24, 3.5, "Z", "metal", 24, (0, 0, 1))
@@ -951,9 +976,7 @@ for x in (14.0, 46.0):
     nut(KEPS, (x, -57.9, 16), (0, -1, 0))
 sub("Hook servo into the bracket, shaft to the RIGHT (outside). 2 screws + 2 nuts.", [("Servo", 1), (S12, 2), (KEPS, 2)], zoom=(30, -74, 42))
 box("Servo", (10, -84.0, PL1), (50.6, -63.7, PL1 + 36), "servo", dir_=(0, 1, 0), shaft=((0, -1, 0), (40, 0, 50.8)))
-for x in (12.0, 48.6):
-    screw(S12, (x, -84.0, 50), (0, 1, 0))
-    nut(KEPS, (x, -60.1, 50), (0, -1, 0))
+servo_ear_fasteners((10, -84.0, PL1), (50.6, -63.7, PL1 + 36), (0, -1, 0))
 sub("1x5 servo horn on the shaft, pointing forward, 1 horn screw.", [("1 x 5 Servo Horn", 1), (HORNS, 1)], zoom=(40, -86, 50))
 box("1 x 5 Servo Horn", (40 - 33, -86.6, 46), (40 + 33, -84, 55.5), "metal", dir_=(0, 1, 0))
 screw(HORNS, (40, -86.6, 50.8), (0, 1, 0))
@@ -986,14 +1009,14 @@ for sy in (-1, 1):
     cyl("Tophat (Reflectance)", (103, sy * 18, 13), 16, 14, "Z", "sensor", 20, (0, 0, 1))
     screw(S14, (103, sy * 18, PL0 - 2), (0, 0, 1))
     nut(KEPS, (103, sy * 18, PL1 + 1.6), (0, 0, -1))
-sub("Rangefinder (ET) on the plate, front right, 1 screw + 1 nut.", [("ET (Rangefinder)", 1), (S14, 1), (KEPS, 1)], zoom=(105, -46, PL1))
+sub("Rangefinder (ET) on the plate, front right, 1 long screw + 1 nut.", [("ET (Rangefinder)", 1), (S34, 1), (KEPS, 1)], zoom=(105, -46, PL1))
 box("ET (Rangefinder)", (100, -60, PL1), (110, -32, PL1 + 16), "sensor", dir_=(0, 0, -1))
-screw(S14, (105, -46, PL1 + 16), (0, 0, -1))
+screw(S34, (105, -46, PL1 + 16), (0, 0, -1))
 nut(KEPS, (105, -46, PL0 - 1.6), (0, 0, 1))
-sub("Start light sensor on the plate, 1 screw + 1 nut.", [("Light", 1), (S14, 1), (KEPS, 1)], zoom=(46, -54, PL1))
+sub("Start light sensor on the plate, 1 screw (through the corner of its board) + 1 nut.", [("Light", 1), (S12, 1), (KEPS, 1)], zoom=(42, -58, PL1))
 box("Light", (40, -60, PL1), (52, -48, PL1 + 10), "sensor", dir_=(0, 0, -1))
-screw(S14, (46, -54, PL1 + 10), (0, 0, -1))
-nut(KEPS, (46, -54, PL0 - 1.6), (0, 0, 1))
+screw(S12, (42, -58, PL1 + 4.5), (0, 0, -1))
+nut(KEPS, (42, -58, PL0 - 1.6), (0, 0, 1))
 
 step("Wiring", hint="wiring")
 sub("Motors: left 0, right 2. Servos: shoulder 1, claw 2, hook 3. Analog: tophat L 0, R 1, ET 2, light 3. Digital 0: plow lever. Camera on USB.",
