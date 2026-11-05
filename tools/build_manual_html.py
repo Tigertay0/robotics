@@ -11,14 +11,19 @@ SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
 tpl_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'manual_template.html')
 out_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(SRC, 'build_manual.html')
 
-tpl = open(tpl_path, encoding='utf-8').read()
-a = base64.b64encode(open(SRC + 'robot_a.glb', 'rb').read()).decode()
-b = base64.b64encode(open(SRC + 'robot_b.glb', 'rb').read()).decode()
-steps = json.load(open(SRC + 'steps.json', encoding='utf-8'))
+with open(tpl_path, encoding='utf-8') as f:
+    tpl = f.read()
+with open(SRC + 'robot_a.glb', 'rb') as f:
+    a = base64.b64encode(f.read()).decode()
+with open(SRC + 'robot_b.glb', 'rb') as f:
+    b = base64.b64encode(f.read()).decode()
+with open(SRC + 'steps.json', encoding='utf-8') as f:
+    steps = json.load(f)
 assert steps.get('version') == 2, 'expected steps.json version 2'
 st = json.dumps(steps, separators=(',', ':'), ensure_ascii=False).replace('</', '<' + chr(92) + '/')
 data = f'const GLB_A = "{a}";\nconst GLB_B = "{b}";\nconst STEPS = {st};'
 assert tpl.count('/*__DATA__*/') == 1, 'template must contain exactly one /*__DATA__*/ marker'
 out = tpl.replace('/*__DATA__*/', data)
-open(out_path, 'w', encoding='utf-8', newline='\n').write(out)
+with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
+    f.write(out)
 print(out_path, len(out))

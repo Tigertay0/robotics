@@ -177,7 +177,7 @@ def interp_track(track, t):
 
 # ------------------------------------------------------------------ simulation
 def run(plan, export=False):
-    robots, pieces, statics, events, meta = plan["robots"], plan["pieces"], plan["statics"], plan["events"], plan["meta"]
+    robots, pieces, statics, meta = plan["robots"], plan["pieces"], plan["statics"], plan["meta"]
     end = meta["end"]
     worst = {}
     first = {}
@@ -231,9 +231,6 @@ def run(plan, export=False):
         print("closest passes (ok, but < 1 in):")
         for k, (t, g) in tight[:12]:
             print(f"  t={t:6.2f}s  {k:28s} gap {g:+.2f} in")
-    score = 0
-    for ev in sorted(events, key=lambda e: e[0]):
-        pass
     if export:
         write_export(plan)
     return ok
@@ -254,7 +251,8 @@ def write_export(plan):
         "field": plan["meta"]["field"],
     }
     path = os.path.join(ROOT, "docs", "animation", "match_data.json")
-    json.dump(out, open(path, "w", encoding="utf-8"), indent=1)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=1)
     print("wrote", path)
 
 
