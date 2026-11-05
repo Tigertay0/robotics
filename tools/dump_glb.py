@@ -15,5 +15,6 @@ for o in bpy.data.objects:
             if n.type=='BSDF_PRINCIPLED':
                 col=[round(x,2) for x in n.inputs['Base Color'].default_value[:3]]
     out.append(dict(name=o.name, parent=o.parent.name if o.parent else None, min=[round(x,4) for x in mn], max=[round(x,4) for x in mx], verts=len(o.data.vertices), mats=mats, color=col))
-json.dump(out, open(argv[1],'w'), indent=1)
+with open(argv[1], 'w') as f:
+    json.dump(out, f, indent=1)
 print("MESHES", len(out))

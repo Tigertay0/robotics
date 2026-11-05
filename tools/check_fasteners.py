@@ -26,11 +26,11 @@ def dot(a, b):
 
 
 def main():
-    steps = json.load(open(PATH, encoding="utf-8"))
+    with open(PATH, encoding="utf-8") as f:
+        steps = json.load(f)
     bad = []
     for rk in ("robot_a", "robot_b"):
         for st in steps[rk]["steps"]:
-            tags = {t["tag"]: t for t in st["subs"]}
             targets = [(u["tag"], t) for u in st["subs"] for t in u["targets"]]
             screws = [(g, t) for g, t in targets if t["kind"] == "screw" and any(k in t["name"] for k in PAIRED)
                       and not t.get("into")]

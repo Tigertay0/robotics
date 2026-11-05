@@ -32,7 +32,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.abspath(sys.argv[sys.argv.index("--") + 1] if "--" in sys.argv else os.path.join(ROOT, "docs", "manual"))
 os.makedirs(OUT, exist_ok=True)
 TEAM4 = os.path.join(ROOT, "parts", "team4")
-KIT = json.load(open(os.path.join(ROOT, "data", "kit_2026.json"), encoding="utf-8"))
+with open(os.path.join(ROOT, "data", "kit_2026.json"), encoding="utf-8") as f:
+    KIT = json.load(f)
 IN = 25.4
 S14, S12, S34 = 'Screw 8-32 x 1/4" (black)', 'Screw 8-32 x 1/2" (black)', 'Screw 8-32 x 3/4" (black)'
 SLEN = {S14: 0.25 * IN, S12: 0.5 * IN, S34: 0.75 * IN}
@@ -1117,7 +1118,8 @@ lines += ["", f"Printed parts: {printed}/{KIT['printed_limit']}", "", "## Size c
 lines += [f"| {r} | {z['width_mm']} | {z['length_mm']} | {z['height_mm']} | {'yes' if z['fits'] else 'NO'} |" for r, z in SIZES.items()]
 lines += ["", "Problems: " + ("none" if not problems else "")]
 lines += [f"- {p}" for p in problems]
-open(os.path.join(OUT, "bom.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+with open(os.path.join(OUT, "bom.md"), "w", encoding="utf-8") as f:
+    f.write("\n".join(lines) + "\n")
 nsub = {r: sum(len(s["subs"]) for s in STEPS[r]) for r in "AB"}
 with open(os.path.join(OUT, "steps.json"), "w", encoding="utf-8") as f:
     json.dump({"version": 2, "units": "mm; +X forward, +Y left, +Z up from the floor",
