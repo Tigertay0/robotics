@@ -77,7 +77,9 @@ static double t_light;                 /* seconds() when the start light came on
 static void wait_until_s(double t) {
     if (seconds() - t_light > t)       /* late: the hand-off is no longer guaranteed safe */
         printf("late for the %.0f s hand-off: t=%.1f s\n", t, seconds() - t_light);
-    while (seconds() - t_light < t) msleep(20);
+    while (seconds() - t_light < t && seconds() < MATCH_END_S) msleep(20);
+    if (seconds() >= MATCH_END_S)      /* match clock ran out: say so, as every other wait does */
+        printf("wait_until_s(%.0f) hit MATCH_END_S at t=%.1f s\n", t, seconds() - t_light);
 }
 
 /* Drive a straight distance in inches; dx forward, dy left. Pass exactly one non-zero:
