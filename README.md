@@ -12,7 +12,7 @@ Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5
 | See what the finished robots look like and what every part does | [docs/ROBOTS.md](docs/ROBOTS.md) |
 | **Print the 4 printed parts** | [3D_PRINTS.md](3D_PRINTS.md) → STL files in [parts/team4/](parts/team4/) |
 | Understand the plan and the score | [STRATEGY.md](STRATEGY.md) (section 4 = the 120 s timeline) |
-| **Watch how both robots' code runs in a match** (made Nov 4: it shows the old chassis and claw, and the duck drop spots from before the Nov 10 correction; the routes and hand-offs are otherwise the same) | [docs/animation/robot_code_explainer.html](docs/animation/robot_code_explainer.html) |
+| **Watch how both robots' code runs in a match** (rebuilt Nov 10 with the current robots, parts and duck sequence) | [docs/animation/robot_code_explainer.html](docs/animation/robot_code_explainer.html) |
 | Upload and calibrate the robot code | [code/README.md](code/README.md) → [robot_a/main.c](code/robot_a/main.c), [robot_b/main.c](code/robot_b/main.c) |
 | Check a rule | [docs/rules-digest.md](docs/rules-digest.md) (+ questions to send KIPR) |
 | Find a piece's position or a zone's size on the table | [docs/field-map.md](docs/field-map.md) |
