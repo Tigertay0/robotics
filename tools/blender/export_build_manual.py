@@ -41,7 +41,7 @@ KEPS = "Nut 8-32 Keps (black)"
 M3S, M3N = "Silver Servo Horn Machine Screw (M3)", "Silver Servo Horn Nut (M3)"
 HORNS = "Short Silver Servo Horn Screw (M3)"
 ZIP = 'Zip tie 4" (white), structural'
-PRINTS = {"Printed chassis (print 1)", "Geared claw (print 2)", "Pocket plow (print 3)", "Cup hook (print 4)"}
+PRINTS = {"Printed chassis (print 1)", "Claw jaw (print 2)", "Pocket plow (print 3)", "Cup hook (print 4)"}
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 MATS = {}
@@ -105,7 +105,7 @@ def box(name, lo, hi, m, tf=None, dir_=None, shaft=None):
     """A kit part filling the box lo..hi. Recognisable kit parts (servos, motors, liftarms,
     horns, sensors, Wombat...) are drawn with their real features inside that box;
     shaft = (direction, point) for servos."""
-    shape = SHAPES.get(name)
+    shape = SHAPES.get(name) or SHAPES.get(name.split(" (finger")[0])
     if shape is not None:
         cp = Comp()
         shape(cp, [min(a, b) for a, b in zip(lo, hi)], [max(a, b) for a, b in zip(lo, hi)],
@@ -140,7 +140,7 @@ def cyl(name, c, d, h, axis, m, verts=32, dir_=None, tf=None):
     return put(o, name, M(m), dir_)
 
 
-def screw(kind, head_at, dir_, tf=None):
+def screw(kind, head_at, dir_, tf=None, into=None):
     """A kit screw: head sitting on the surface at head_at, shank going along dir_ (= insertion)."""
     d = Vector(dir_).normalized()
     L = SLEN.get(kind) or SLEN_TARGET.get(kind, 0.5 * IN)
@@ -151,6 +151,8 @@ def screw(kind, head_at, dir_, tf=None):
     sp = Vector(head_at) + d * (L / 2)
     b = cyl(kind + " (shank)", tuple(sp), sd, L, tuple(d), m, 10, dir_, tf)
     target("screw", kind, head_at, d, L, tf)
+    if into and CUR.get("targets"):
+        CUR["targets"][-1]["into"] = into           # threads into a part (no nut): the checker skips it
     return a, b
 
 
@@ -922,71 +924,44 @@ for z in (tip_z, tip_z - 16):
 
 
 
-def split_claw(o):
-    """Split print 2 into base / finger L / finger R so the manual can show and animate them."""
-    old = o.name
-    bpy.ops.object.select_all(action="DESELECT")
-    bpy.context.view_layer.objects.active = o
-    o.select_set(True)
-    bpy.ops.object.mode_set(mode="EDIT")
-    bpy.ops.mesh.select_all(action="SELECT")
-    bpy.ops.mesh.separate(type="LOOSE")
-    bpy.ops.object.mode_set(mode="OBJECT")
-    bodies = list(bpy.context.selected_objects)
-    assert len(bodies) == 3, f"claw has {len(bodies)} bodies, expected 3"
-    zmin = {b.name: min(v.co.z for v in b.data.vertices) for b in bodies}
-    base = min(bodies, key=lambda b: zmin[b.name])
-    fingers = sorted((b for b in bodies if b is not base),
-                     key=lambda b: sum(v.co.y for v in b.data.vertices) / len(b.data.vertices))
-    items = CUR["items"]
-    dir_ = next(i["dir"] for i in items if i["mesh"] == old)
-    items[:] = [i for i in items if i["mesh"] != old]
-    for b, nm, mk in ((base, "Geared claw (print 2)", "pla"), (fingers[1], "Geared claw (print 2) (finger L)", "claw_finger"),
-                      (fingers[0], "Geared claw (print 2) (finger R)", "claw_finger")):
-        put(b, nm, M(mk), dir_)
-    tf = LAST_STL["tf"]
-    zc = 4.0 + 0.4 + 4.0                                       # p2: BASE_T + CLR + HUB_T / 2
-    cap = [v.co for v in base.data.vertices]                    # the printed pin's top face = finger L's axis
-    ztop = max(v.z for v in cap)
-    top = [v for v in cap if v.z > ztop - 0.05]
-    pl_ = Vector((sum(v.x for v in top) / len(top), sum(v.y for v in top) / len(top), ztop - 14.8 + zc))   # p2: pin cap top z = 14.8
-    pr_ = pl_ + tf.to_3x3() @ Vector((25.2, 0.0, 0.0))          # p2: CENTRE = 2 * PITCH_R + 1.2
-    left, right = sorted((pl_, pr_), key=lambda p: -p.y)
-    return {"meshes": {"base": base.name, "finger_L": fingers[1].name, "finger_R": fingers[0].name},
-            "pivots": {"finger_L": [round(v, 2) for v in left], "finger_R": [round(v, 2) for v in right]},
-            "axis": [0, 0, 1], "open_deg": 25, "driven": "finger_R (servo) turns finger_L through the gears, opposite way"}
-
-
-step("Geared claw")
+step("Claw")
 cb_z = tip_z - 24
-sub("Claw (print 2): servo bracket under its base, 4 short screws + 4 nuts through the 4.4 mm grid.",
-    [("Geared claw (print 2)", 1), ("Servo Bracket", 1), (S14, 4), (KEPS, 4)], subassembly="Claw", zoom=(tip_x + 66, 57, cb_z))
-claw = stl("Geared claw (print 2)", "p2_geared_claw.stl", "pla", rot_z=-90, x=tip_x + 4, y=57, z=cb_z, dir_=(0, 0, -1))
-CLAW = split_claw(claw)
-px, py = CLAW["pivots"]["finger_R"][:2]              # the servo shaft sits right under the right finger's hub
+# print 2 (tools/blender/parts/p2_claw_jaw.py): ONE solid piece = base + fixed finger. Part frame -> robot frame:
+# the print is turned -90 deg, so part +Y = robot +X and part +X = robot -Y; base rear edge (part y = -54) at tip_x + 4.
+JAW = "Claw jaw (print 2)"
+px, py = tip_x + 4 + 54.0, 57 - 16.0                 # p2 PIVOT (16, 0): the servo shaft = the moving finger's pivot
+sub("Claw jaw (print 2): ONE printed piece (base + fixed finger). Servo bracket under its base, 4 screws down + 4 nuts under the bracket.",
+    [(JAW, 1), ("Servo Bracket", 1), (S12, 4), (KEPS, 4)], subassembly="Claw", zoom=(px - 9, py, cb_z))
+stl(JAW, "p2_claw_jaw.stl", "pla", rot_z=-90, x=tip_x + 4, y=57, z=cb_z, dir_=(0, 0, -1))
 box("Servo Bracket", (px - 31, py - 19, cb_z - 2), (px + 13, py + 19, cb_z), "metal", dir_=(0, 0, 1))
-for dx in (-25.0, 7.0):
+for dx in (-25.0, 7.0):                              # p2 BRACKET_HOLES
     for dy in (-15.0, 15.0):
-        screw(S14, (px + dx, py + dy, cb_z + 4), (0, 0, -1))
+        screw(S12, (px + dx, py + dy, cb_z + 4), (0, 0, -1))
         nut(KEPS, (px + dx, py + dy, cb_z - 3.6), (0, 0, 1))
-sub("Claw servo into the bracket, shaft UP under the right finger. 2 screws + 2 nuts.", [("Servo", 1), (S12, 2), (KEPS, 2)], subassembly="Claw",
-    zoom=(px - 9, py, cb_z - 20))
+sub("Claw servo into the bracket, shaft UP through the round hole in the jaw. 2 screws + 2 nuts through the servo ears.",
+    [("Servo", 1), (S12, 2), (KEPS, 2)], subassembly="Claw", zoom=(px - 9, py, cb_z - 20))
 box("Servo", (px - 29.2, py - 10.15, cb_z - 38), (px + 11.4, py + 10.15, cb_z - 2), "servo", dir_=(0, 0, 1),
     shaft=((0, 0, 1), (px, py, 0)))
 servo_ear_fasteners((px - 29.2, py - 10.15, cb_z - 38), (px + 11.4, py + 10.15, cb_z - 2), (0, 0, 1))
-sub("Round servo horn in the pocket under the right finger: 1 horn screw, then 3 M3 screws + 3 M3 nuts (nuts go in the hex holes on top).",
-    [("Round Servo Horn", 1), (HORNS, 1), (M3S, 3), (M3N, 3)], subassembly="Claw", zoom=(px, py, cb_z + 8))
-cyl("Round Servo Horn", (px, py, cb_z + 6.15), 24, 3.5, "Z", "metal", 24, (0, 0, 1))
-screw(HORNS, (px, py, cb_z + 7.9), (0, 0, -1))
-for adeg in (-90, 0, 180):                          # p2 HORN_SCREW_ANGLES (0, 90, 270) turned -90 deg with the print
-    a = math.radians(adeg)
-    p = (px + 7 * math.cos(a), py + 7 * math.sin(a))
-    screw(M3S, (p[0], p[1], cb_z + 4.4), (0, 0, 1))
-    nut(M3N, (p[0], p[1], cb_z + 11.2), (0, 0, -1))
+sub("Moving finger: put a 1x7 liftarm on a round servo horn, 2nd hole of the liftarm over the horn's centre. "
+    "2 M3 screws down through the liftarm's 1st and 3rd holes, 2 M3 nuts under the horn.",
+    [("Round Servo Horn", 1), ("1 x 7 Liftarm", 1), (M3S, 2), (M3N, 2)], subassembly="Claw", zoom=(px, py, cb_z + 10))
+cyl("Round Servo Horn", (px, py, cb_z + 4 + 1.75), 24, 3.5, "Z", "metal", 24, (0, 0, -1))
+box("1 x 7 Liftarm (finger R)", (px - 12, py - 4, cb_z + 7.5), (px + 44, py + 4, cb_z + 15.3), "lego", dir_=(0, 0, -1))
+for dx in (-8.0, 8.0):
+    screw(M3S, (px + dx, py, cb_z + 15.3), (0, 0, -1))
+    nut(M3N, (px + dx, py, cb_z + 4 - 1.2), (0, 0, 1))
+sub("Push the horn (with the finger) onto the servo shaft, finger pointing FORWARD next to the printed finger. "
+    "1 M3 screw down through the liftarm's 2nd hole into the shaft. The finger must swing out and back freely.",
+    [(M3S, 1)], subassembly="Claw", hint="claw_open_close", zoom=(px, py, cb_z + 12))
+screw(M3S, (px, py, cb_z + 15.3), (0, 0, -1), into="servo shaft")
 sub("Bolt the claw to the 1x5 liftarm at the arm tip: 2 screws + 2 nuts through the rear holes.", [(S12, 2), (KEPS, 2)], zoom=(tip_x + 6, 61, cb_z + 2))
 for dx in (8.0, 16.0):
-    screw(S12, (tip_x + dx + 4, 57, cb_z + 6), (0, 0, -1))
+    screw(S12, (tip_x + dx + 4, 57, cb_z + 4), (0, 0, -1))
     nut(KEPS, (tip_x + dx + 4, 57, cb_z - 5.2), (0, 0, 1))
+CLAW = {"meshes": {"base": "05.1|" + JAW, "finger_R": "05.3|1 x 7 Liftarm (finger R)"},
+        "pivots": {"finger_R": [round(px, 2), round(py, 2), round(cb_z + 11.4, 2)]}, "axis": [0, 0, 1], "open_deg": 35,
+        "driven": "the servo turns the liftarm finger; the printed finger is fixed"}
 
 step("Pocket plow")
 face_x = CL / 2 + 8
@@ -1061,7 +1036,7 @@ export(os.path.join(OUT, "robot_b.glb"))
 # ============================================================================ part cards
 CARDS = {
     "Printed chassis (print 1)": "Our 3D print 1: Robot A's frame. The duck channel runs down the middle; 4 motor windows; 4.4 mm holes everywhere.",
-    "Geared claw (print 2)": "Our 3D print 2: the claw. Grey base + 2 fingers with gear teeth (shown orange). The servo turns the right finger; the gears turn the left one the other way, so the claw opens and closes.",
+    "Claw jaw (print 2)": "Our 3D print 2: the claw jaw, ONE solid piece. A flat base with a fixed finger and a curved pad for the pom. The moving finger is not printed: it is a LEGO 1x7 liftarm on a servo horn.",
     "Pocket plow (print 3)": "Our 3D print 3: a wide scoop on Robot B's nose. Pushes pom stacks and the pickleball.",
     "Cup hook (print 4)": "Our 3D print 4: long arm with a hook lip at the tip. Catches the cup rim.",
     "Black Gear Motor": "Black KIPR drive motor: rectangular gearbox + round motor can, shaft on the side, 2 wires.",
@@ -1150,7 +1125,7 @@ with open(os.path.join(OUT, "steps.json"), "w", encoding="utf-8") as f:
                "items_dir": "insertion direction of each mesh (robot frame): the fly-in comes from -dir and travels along dir",
                "hints": {"mecanum_x": "top-view pictogram: rollers form an X", "gate_open_closed": "pictogram: flap DOWN = closed, flap UP (90 deg) = open",
                          "repeat_x3": "do the shown corner 3 more times", "repeat_x4": "x4", "repeat_x2": "x2", "repeat_x1": "mirror on the other side",
-                         "bend_35": "bend the strap 35 degrees outward", "print_check": "check the print", "wiring": "port map card"},
+                         "bend_35": "bend the strap 35 degrees outward", "claw_open_close": "the finger swings open and closed", "print_check": "check the print", "wiring": "port map card"},
                "robot_a": {"name": "Robot A - Duck Runner", "glb": "robot_a.glb", "steps": STEPS["A"], "substeps": nsub["A"]},
                "robot_b": {"name": "Robot B - Point Scorer", "glb": "robot_b.glb", "steps": STEPS["B"], "substeps": nsub["B"]},
                "claw": CLAW, "cards": CARDS, "size_check": SIZES,

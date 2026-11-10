@@ -11,6 +11,7 @@
   "repeat_x2": "x2",
   "repeat_x1": "mirror on the other side",
   "bend_35": "bend the strap 35 degrees outward",
+  "claw_open_close": "the finger swings open and closed",
   "print_check": "check the print",
   "wiring": "port map card"
  },
@@ -7288,15 +7289,15 @@
    },
    {
     "n": 5,
-    "title": "Geared claw",
+    "title": "Claw",
     "hint": null,
     "subs": [
      {
       "tag": "05.1",
-      "note": "3D PRINTED part. Claw (print 2): servo bracket under its base, 4 short screws + 4 nuts through the 4.4 mm grid.",
+      "note": "3D PRINTED part. Claw jaw (print 2): ONE printed piece (base + fixed finger). Servo bracket under its base, 4 screws down + 4 nuts under the bracket.",
       "parts": [
        {
-        "name": "Geared claw (print 2)",
+        "name": "Claw jaw (print 2)",
         "qty": 1,
         "kind": "print",
         "badge": "3D PRINTED"
@@ -7307,10 +7308,10 @@
         "kind": "kit"
        },
        {
-        "name": "Screw 8-32 x 1/4\" (black)",
+        "name": "Screw 8-32 x 1/2\" (black)",
         "qty": 4,
         "kind": "kit",
-        "length_mm": 6.3
+        "length_mm": 12.7
        },
        {
         "name": "Nut 8-32 Keps (black)",
@@ -7320,23 +7321,7 @@
       ],
       "items": [
        {
-        "mesh": "05.1|Geared claw (print 2)",
-        "dir": [
-         0,
-         0,
-         -1
-        ]
-       },
-       {
-        "mesh": "05.1|Geared claw (print 2) (finger L)",
-        "dir": [
-         0,
-         0,
-         -1
-        ]
-       },
-       {
-        "mesh": "05.1|Geared claw (print 2) (finger R)",
+        "mesh": "05.1|Claw jaw (print 2)",
         "dir": [
          0,
          0,
@@ -7352,7 +7337,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black)",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black)",
         "dir": [
          0,
          0,
@@ -7360,7 +7345,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank)",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank)",
         "dir": [
          0,
          0,
@@ -7376,7 +7361,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black).001",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black).001",
         "dir": [
          0,
          0,
@@ -7384,7 +7369,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).001",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank).001",
         "dir": [
          0,
          0,
@@ -7400,7 +7385,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black).002",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black).002",
         "dir": [
          0,
          0,
@@ -7408,7 +7393,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).002",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank).002",
         "dir": [
          0,
          0,
@@ -7424,7 +7409,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black).003",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black).003",
         "dir": [
          0,
          0,
@@ -7432,7 +7417,7 @@
         ]
        },
        {
-        "mesh": "05.1|Screw 8-32 x 1/4\" (black) (shank).003",
+        "mesh": "05.1|Screw 8-32 x 1/2\" (black) (shank).003",
         "dir": [
          0,
          0,
@@ -7451,10 +7436,10 @@
       "targets": [
        {
         "kind": "screw",
-        "name": "Screw 8-32 x 1/4\" (black)",
+        "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         207.5,
-         29.4,
+         187.5,
+         26.0,
          63.81
         ],
         "dir": [
@@ -7462,14 +7447,14 @@
          0.0,
          -1.0
         ],
-        "len_mm": 6.3
+        "len_mm": 12.7
        },
        {
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         207.5,
-         29.4,
+         187.5,
+         26.0,
          56.21
         ],
         "dir": [
@@ -7481,10 +7466,10 @@
        },
        {
         "kind": "screw",
-        "name": "Screw 8-32 x 1/4\" (black)",
+        "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         207.5,
-         59.4,
+         187.5,
+         56.0,
          63.81
         ],
         "dir": [
@@ -7492,14 +7477,14 @@
          0.0,
          -1.0
         ],
-        "len_mm": 6.3
+        "len_mm": 12.7
        },
        {
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         207.5,
-         59.4,
+         187.5,
+         56.0,
          56.21
         ],
         "dir": [
@@ -7511,10 +7496,10 @@
        },
        {
         "kind": "screw",
-        "name": "Screw 8-32 x 1/4\" (black)",
+        "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         239.5,
-         29.4,
+         219.5,
+         26.0,
          63.81
         ],
         "dir": [
@@ -7522,14 +7507,14 @@
          0.0,
          -1.0
         ],
-        "len_mm": 6.3
+        "len_mm": 12.7
        },
        {
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         239.5,
-         29.4,
+         219.5,
+         26.0,
          56.21
         ],
         "dir": [
@@ -7541,10 +7526,10 @@
        },
        {
         "kind": "screw",
-        "name": "Screw 8-32 x 1/4\" (black)",
+        "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         239.5,
-         59.4,
+         219.5,
+         56.0,
          63.81
         ],
         "dir": [
@@ -7552,14 +7537,14 @@
          0.0,
          -1.0
         ],
-        "len_mm": 6.3
+        "len_mm": 12.7
        },
        {
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         239.5,
-         59.4,
+         219.5,
+         56.0,
          56.21
         ],
         "dir": [
@@ -7571,8 +7556,8 @@
        }
       ],
       "zoom": [
-       220.5,
-       57,
+       203.5,
+       41.0,
        59.8
       ],
       "hint": null,
@@ -7580,7 +7565,7 @@
      },
      {
       "tag": "05.2",
-      "note": "Claw servo into the bracket, shaft UP under the right finger. 2 screws + 2 nuts.",
+      "note": "Claw servo into the bracket, shaft UP through the round hole in the jaw. 2 screws + 2 nuts through the servo ears.",
       "parts": [
        {
         "name": "Servo",
@@ -7662,8 +7647,8 @@
         "kind": "screw",
         "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         199.8,
-         39.33,
+         179.8,
+         35.92,
          51.14
         ],
         "dir": [
@@ -7677,8 +7662,8 @@
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         199.8,
-         39.33,
+         179.8,
+         35.92,
          44.64
         ],
         "dir": [
@@ -7692,8 +7677,8 @@
         "kind": "screw",
         "name": "Screw 8-32 x 1/2\" (black)",
         "at": [
-         247.4,
-         49.47,
+         227.4,
+         46.08,
          51.14
         ],
         "dir": [
@@ -7707,8 +7692,8 @@
         "kind": "nut",
         "name": "Nut 8-32 Keps (black)",
         "at": [
-         247.4,
-         49.47,
+         227.4,
+         46.08,
          44.64
         ],
         "dir": [
@@ -7720,8 +7705,8 @@
        }
       ],
       "zoom": [
-       223.5,
-       44.4,
+       203.5,
+       41.0,
        39.8
       ],
       "hint": null,
@@ -7729,7 +7714,7 @@
      },
      {
       "tag": "05.3",
-      "note": "Round servo horn in the pocket under the right finger: 1 horn screw, then 3 M3 screws + 3 M3 nuts (nuts go in the hex holes on top).",
+      "note": "Moving finger: put a 1x7 liftarm on a round servo horn, 2nd hole of the liftarm over the horn's centre. 2 M3 screws down through the liftarm's 1st and 3rd holes, 2 M3 nuts under the horn.",
       "parts": [
        {
         "name": "Round Servo Horn",
@@ -7737,18 +7722,18 @@
         "kind": "kit"
        },
        {
-        "name": "Short Silver Servo Horn Screw (M3)",
+        "name": "1 x 7 Liftarm",
         "qty": 1,
         "kind": "kit"
        },
        {
         "name": "Silver Servo Horn Machine Screw (M3)",
-        "qty": 3,
+        "qty": 2,
         "kind": "kit"
        },
        {
         "name": "Silver Servo Horn Nut (M3)",
-        "qty": 3,
+        "qty": 2,
         "kind": "kit"
        }
       ],
@@ -7758,19 +7743,11 @@
         "dir": [
          0,
          0,
-         1
-        ]
-       },
-       {
-        "mesh": "05.3|Short Silver Servo Horn Screw (M3)",
-        "dir": [
-         0,
-         0,
          -1
         ]
        },
        {
-        "mesh": "05.3|Short Silver Servo Horn Screw (M3) (shank)",
+        "mesh": "05.3|1 x 7 Liftarm (finger R)",
         "dir": [
          0,
          0,
@@ -7782,7 +7759,7 @@
         "dir": [
          0,
          0,
-         1
+         -1
         ]
        },
        {
@@ -7790,7 +7767,7 @@
         "dir": [
          0,
          0,
-         1
+         -1
         ]
        },
        {
@@ -7798,7 +7775,7 @@
         "dir": [
          0,
          0,
-         -1
+         1
         ]
        },
        {
@@ -7806,7 +7783,7 @@
         "dir": [
          0,
          0,
-         1
+         -1
         ]
        },
        {
@@ -7814,7 +7791,7 @@
         "dir": [
          0,
          0,
-         1
+         -1
         ]
        },
        {
@@ -7822,27 +7799,101 @@
         "dir": [
          0,
          0,
+         1
+        ]
+       }
+      ],
+      "targets": [
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         204.5,
+         41.0,
+         75.11
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         204.5,
+         41.0,
+         62.61
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 2.4
+       },
+       {
+        "kind": "screw",
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "at": [
+         220.5,
+         41.0,
+         75.11
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         -1.0
+        ],
+        "len_mm": 12.7
+       },
+       {
+        "kind": "nut",
+        "name": "Silver Servo Horn Nut (M3)",
+        "at": [
+         220.5,
+         41.0,
+         62.61
+        ],
+        "dir": [
+         0.0,
+         0.0,
+         1.0
+        ],
+        "len_mm": 2.4
+       }
+      ],
+      "zoom": [
+       212.5,
+       41.0,
+       69.8
+      ],
+      "hint": null,
+      "subassembly": "Claw"
+     },
+     {
+      "tag": "05.4",
+      "note": "Push the horn (with the finger) onto the servo shaft, finger pointing FORWARD next to the printed finger. 1 M3 screw down through the liftarm's 2nd hole into the shaft. The finger must swing out and back freely.",
+      "parts": [
+       {
+        "name": "Silver Servo Horn Machine Screw (M3)",
+        "qty": 1,
+        "kind": "kit"
+       }
+      ],
+      "items": [
+       {
+        "mesh": "05.4|Silver Servo Horn Machine Screw (M3)",
+        "dir": [
+         0,
+         0,
          -1
         ]
        },
        {
-        "mesh": "05.3|Silver Servo Horn Machine Screw (M3).002",
-        "dir": [
-         0,
-         0,
-         1
-        ]
-       },
-       {
-        "mesh": "05.3|Silver Servo Horn Machine Screw (M3) (shank).002",
-        "dir": [
-         0,
-         0,
-         1
-        ]
-       },
-       {
-        "mesh": "05.3|Silver Servo Horn Nut (M3).002",
+        "mesh": "05.4|Silver Servo Horn Machine Screw (M3) (shank)",
         "dir": [
          0,
          0,
@@ -7853,120 +7904,31 @@
       "targets": [
        {
         "kind": "screw",
-        "name": "Short Silver Servo Horn Screw (M3)",
-        "at": [
-         232.5,
-         44.4,
-         67.71
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         -1.0
-        ],
-        "len_mm": 12.7
-       },
-       {
-        "kind": "screw",
         "name": "Silver Servo Horn Machine Screw (M3)",
         "at": [
-         232.5,
-         37.4,
-         64.21
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         1.0
-        ],
-        "len_mm": 12.7
-       },
-       {
-        "kind": "nut",
-        "name": "Silver Servo Horn Nut (M3)",
-        "at": [
-         232.5,
-         37.4,
-         71.01
+         212.5,
+         41.0,
+         75.11
         ],
         "dir": [
          0.0,
          0.0,
          -1.0
         ],
-        "len_mm": 2.4
-       },
-       {
-        "kind": "screw",
-        "name": "Silver Servo Horn Machine Screw (M3)",
-        "at": [
-         239.5,
-         44.4,
-         64.21
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         1.0
-        ],
-        "len_mm": 12.7
-       },
-       {
-        "kind": "nut",
-        "name": "Silver Servo Horn Nut (M3)",
-        "at": [
-         239.5,
-         44.4,
-         71.01
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         -1.0
-        ],
-        "len_mm": 2.4
-       },
-       {
-        "kind": "screw",
-        "name": "Silver Servo Horn Machine Screw (M3)",
-        "at": [
-         225.5,
-         44.4,
-         64.21
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         1.0
-        ],
-        "len_mm": 12.7
-       },
-       {
-        "kind": "nut",
-        "name": "Silver Servo Horn Nut (M3)",
-        "at": [
-         225.5,
-         44.4,
-         71.01
-        ],
-        "dir": [
-         0.0,
-         0.0,
-         -1.0
-        ],
-        "len_mm": 2.4
+        "len_mm": 12.7,
+        "into": "servo shaft"
        }
       ],
       "zoom": [
-       232.5,
-       44.4,
-       67.8
+       212.5,
+       41.0,
+       71.8
       ],
-      "hint": null,
+      "hint": "claw_open_close",
       "subassembly": "Claw"
      },
      {
-      "tag": "05.4",
+      "tag": "05.5",
       "note": "Bolt the claw to the 1x5 liftarm at the arm tip: 2 screws + 2 nuts through the rear holes.",
       "parts": [
        {
@@ -7983,7 +7945,7 @@
       ],
       "items": [
        {
-        "mesh": "05.4|Screw 8-32 x 1/2\" (black)",
+        "mesh": "05.5|Screw 8-32 x 1/2\" (black)",
         "dir": [
          0,
          0,
@@ -7991,7 +7953,7 @@
         ]
        },
        {
-        "mesh": "05.4|Screw 8-32 x 1/2\" (black) (shank)",
+        "mesh": "05.5|Screw 8-32 x 1/2\" (black) (shank)",
         "dir": [
          0,
          0,
@@ -7999,7 +7961,7 @@
         ]
        },
        {
-        "mesh": "05.4|Nut 8-32 Keps (black)",
+        "mesh": "05.5|Nut 8-32 Keps (black)",
         "dir": [
          0,
          0,
@@ -8007,7 +7969,7 @@
         ]
        },
        {
-        "mesh": "05.4|Screw 8-32 x 1/2\" (black).001",
+        "mesh": "05.5|Screw 8-32 x 1/2\" (black).001",
         "dir": [
          0,
          0,
@@ -8015,7 +7977,7 @@
         ]
        },
        {
-        "mesh": "05.4|Screw 8-32 x 1/2\" (black) (shank).001",
+        "mesh": "05.5|Screw 8-32 x 1/2\" (black) (shank).001",
         "dir": [
          0,
          0,
@@ -8023,7 +7985,7 @@
         ]
        },
        {
-        "mesh": "05.4|Nut 8-32 Keps (black).001",
+        "mesh": "05.5|Nut 8-32 Keps (black).001",
         "dir": [
          0,
          0,
@@ -8038,7 +8000,7 @@
         "at": [
          166.5,
          57.0,
-         65.81
+         63.81
         ],
         "dir": [
          0.0,
@@ -8068,7 +8030,7 @@
         "at": [
          174.5,
          57.0,
-         65.81
+         63.81
         ],
         "dir": [
          0.0,
@@ -9720,24 +9682,18 @@
     ]
    }
   ],
-  "substeps": 34
+  "substeps": 35
  },
  "claw": {
   "meshes": {
-   "base": "05.1|Geared claw (print 2)",
-   "finger_L": "05.1|Geared claw (print 2) (finger L)",
-   "finger_R": "05.1|Geared claw (print 2) (finger R)"
+   "base": "05.1|Claw jaw (print 2)",
+   "finger_R": "05.3|1 x 7 Liftarm (finger R)"
   },
   "pivots": {
-   "finger_L": [
-    232.5,
-    69.6,
-    68.21
-   ],
    "finger_R": [
-    232.5,
-    44.4,
-    68.21
+    212.5,
+    41.0,
+    71.21
    ]
   },
   "axis": [
@@ -9745,12 +9701,12 @@
    0,
    1
   ],
-  "open_deg": 25,
-  "driven": "finger_R (servo) turns finger_L through the gears, opposite way"
+  "open_deg": 35,
+  "driven": "the servo turns the liftarm finger; the printed finger is fixed"
  },
  "cards": {
   "Printed chassis (print 1)": "Our 3D print 1: Robot A's frame. The duck channel runs down the middle; 4 motor windows; 4.4 mm holes everywhere.",
-  "Geared claw (print 2)": "Our 3D print 2: the claw. Grey base + 2 fingers with gear teeth (shown orange). The servo turns the right finger; the gears turn the left one the other way, so the claw opens and closes.",
+  "Claw jaw (print 2)": "Our 3D print 2: the claw jaw, ONE solid piece. A flat base with a fixed finger and a curved pad for the pom. The moving finger is not printed: it is a LEGO 1x7 liftarm on a servo horn.",
   "Pocket plow (print 3)": "Our 3D print 3: a wide scoop on Robot B's nose. Pushes pom stacks and the pickleball.",
   "Cup hook (print 4)": "Our 3D print 4: long arm with a hook lip at the tip. Catches the cup rim.",
   "Black Gear Motor": "Black KIPR drive motor: rectangular gearbox + round motor can, shaft on the side, 2 wires.",
@@ -9812,7 +9768,7 @@
   },
   "B": {
    "width_mm": 206.1,
-   "length_mm": 426.2,
+   "length_mm": 388.1,
    "height_mm": 161.6,
    "limit_mm": [
     285.8,
@@ -9856,10 +9812,10 @@
   "B": {
    "Chassis": 1,
    "Servo Bracket": 5,
-   "Screw 8-32 x 1/4\" (black)": 18,
+   "Screw 8-32 x 1/4\" (black)": 14,
    "Nut 8-32 Keps (black)": 42,
    "Black Gear Motor": 2,
-   "Screw 8-32 x 1/2\" (black)": 31,
+   "Screw 8-32 x 1/2\" (black)": 35,
    "Solarbotics Wheel": 2,
    "Caster": 1,
    "2-56 1\" Caster Screw": 2,
@@ -9869,14 +9825,15 @@
    "Zip tie 4\" (white), structural": 2,
    "Servo": 3,
    "Round Servo Horn": 2,
-   "Short Silver Servo Horn Screw (M3)": 3,
+   "Short Silver Servo Horn Screw (M3)": 2,
    "1 x 11 Liftarm": 2,
    "Silver Servo Horn Machine Screw (M3)": 7,
-   "Silver Servo Horn Nut (M3)": 7,
+   "Silver Servo Horn Nut (M3)": 6,
    "1 x 3 Liftarm": 1,
    "Pin w/ Friction": 3,
    "1 x 5 Liftarm": 1,
-   "Geared claw (print 2)": 1,
+   "Claw jaw (print 2)": 1,
+   "1 x 7 Liftarm": 1,
    "Pocket plow (print 3)": 1,
    "Lever": 1,
    "Brass Screws": 2,

@@ -26,9 +26,9 @@ Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5
 - `docs/*.pdf`: the official 2026 rule summary and kit part lists. `docs/official/`: the rule-summary text and zone images.
 
 **Building**
-- [docs/manual/](docs/manual/): the step-by-step manual ([build_manual.html](docs/manual/build_manual.html)), the two 3D models it uses (`robot_a.glb`, `robot_b.glb`), `steps.json`, and [bom.md](docs/manual/bom.md). The BOM check proves every part and screw is in the 2026 kit and only 4 parts are printed.
+- [docs/manual/](docs/manual/): the step-by-step manual ([build_manual.html](docs/manual/build_manual.html)), the two 3D models it uses (`robot_a.glb`, `robot_b.glb`, also as `.obj` with one object per part), `steps.json`, and [bom.md](docs/manual/bom.md). The BOM check proves every part and screw is in the 2026 kit and only 4 parts are printed, and its size table proves both robots fit the 11.25 × 21.125 × 12 in start-box limit.
 - [docs/BUILD.md](docs/BUILD.md), [docs/ROBOTS.md](docs/ROBOTS.md) (renders in `docs/robots/`), [docs/parts.md](docs/parts.md).
-- [3D_PRINTS.md](3D_PRINTS.md) and [parts/team4/](parts/team4/): the 4 prints (p1 Robot A chassis with duck lane, p2 geared claw, p3 pocket plow, p4 cup hook) as slicer-ready STLs with previews and [budget.md](parts/team4/budget.md).
+- [3D_PRINTS.md](3D_PRINTS.md) and [parts/team4/](parts/team4/): the 4 prints (p1 Robot A chassis with duck lane, p2 claw jaw, p3 pocket plow, p4 cup hook) as slicer-ready **STL and OBJ** files with previews and [budget.md](parts/team4/budget.md).
 - [guide/](guide/index.html): the older interactive assembly guide.
 
 **Code and match plan**

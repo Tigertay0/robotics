@@ -15,3 +15,11 @@ Options (rules allow 2 controllers on one robot, but we only have 2 Wombats and 
 1. Robot A: mecanum drive on motor ports 0-3, arm on a **servo** (arm motor goes to Robot B as a 3rd motor for its lift).
 2. Robot A: 2-motor drive (diagonal or front pair) + arm motor — loses mecanum strafing.
 Recommended: option 1.
+
+## Measured game pieces
+
+| Piece | Measured (Nov 10, 2026) | Was assumed |
+|---|---|---|
+| Small duck | **60 × 60 mm, 53 mm tall** | 58 × 37 × 37 mm (game documents) |
+
+Used by `tools/blender/parts/p1_chassis_a.py` (`DUCK_W`, `DUCK_H`) and `tools/match_plan.py` (`R_DUCK`, `H_DUCK`, lane pitch).
