@@ -2,7 +2,7 @@
 
 | Slot | Part | Robot | Copies | Class | Size mm | Whole-inch box | Min margin mm | Plastic cm3 | Checks |
 |---|---|---|---:|---|---|---|---:|---:|---|
-| 1/4 | `p1_chassis_a` | A | 1 | team | 214 x 180 x 47 | 9 x 8 x 2 | 6.0 | 298.99 | pass |
+| 1/4 | `p1_chassis_a` | A | 1 | team | 214 x 180 x 59 | 9 x 8 x 3 | 6.0 | 353.68 | pass |
 | 2/4 | `p2_geared_claw` | B | 1 | team | 90 x 143 x 18 | 4 x 6 x 1 | 76.5 | 42.46 | pass |
 | 3/4 | `p3_pocket_plow` | B | 1 | team | 108 x 206 x 72 | 5 x 9 x 3 | 13.9 | 107.39 | pass |
 | 4/4 | `p4_cup_hook` | B | 1 | team | 157 x 14 x 62 | 7 x 1 x 3 | 63.0 | 20.04 | pass |

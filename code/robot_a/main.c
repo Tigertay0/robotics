@@ -27,7 +27,7 @@
 #define TOPHAT_R       1      /* analog: right tape sensor                     */
 #define ET_FRONT       2      /* analog: ET rangefinder looking forward        */
 #define LIGHT_START    3      /* analog: starting-light sensor                 */
-#define TOUCH_LANE     0      /* digital: pressed when the 5th duck is in      */
+#define TOUCH_LANE     0      /* digital: pressed while a duck sits at the exit gate */
 
 /* ---------------------------------------------------------------- calibration */
 #define TICKS_PER_REV   1870.0
@@ -47,6 +47,10 @@
 #define T_A_EAST   12.0      /* B has dragged the lower cup west and backed off it  */
 #define T_A_WEST   60.0      /* B has left Zone 3 for the bottom wall               */
 #define T_A_DOWN   66.0      /* B is parked at the platform                         */
+
+/* A duck is 60 mm long and the exit flap sits 14 mm inside the chassis rear: the robot must move
+   60 + 14 + margin = 84 mm (3.3 in) for the rear duck to be completely out. CALIBRATE. */
+#define DROP_CREEP_IN   3.3
 
 /* servo positions, CALIBRATE on the built flaps */
 #define GATE_OPEN    1900
@@ -104,9 +108,9 @@ static void move_in(double dx, double dy, int speed) {
 static void follow_tape_east(double inches, int speed) {
     long target = (long)(inches * TICKS_PER_INCH);
     cmpc(FL);
-    /* the touch switch at the rear of the lane is the real stop condition; the distance
-       is only the backstop for a switch that never trips */
-    while (labs(gmpc(FL)) < target && !digital(TOUCH_LANE) && seconds() < MATCH_END_S) {
+    /* Distance is the stop condition. The switch at the rear is NOT: the first duck reaches the
+       exit gate (and presses it) while the others are still being swallowed. It is only logged. */
+    while (labs(gmpc(FL)) < target && seconds() < MATCH_END_S) {
         int l = analog(TOPHAT_L) < TAPE_THRESHOLD;
         int r = analog(TOPHAT_R) < TAPE_THRESHOLD;
         if (l && !r)      mecanum(speed, +20, 0);   /* drifted right: nudge left  */
@@ -115,7 +119,7 @@ static void follow_tape_east(double inches, int speed) {
         msleep(10);
     }
     stop_all();
-    printf("follow_tape_east: %ld/%ld ticks, lane full=%d, t=%.1f s\n",
+    printf("follow_tape_east: %ld/%ld ticks, duck at the exit gate=%d, t=%.1f s\n",
            labs(gmpc(FL)), target, digital(TOUCH_LANE), seconds());
 }
 
@@ -132,7 +136,7 @@ static void drop_one_duck(void) {
     msleep(300);
     set_servo_position(SERVO_GATE_A, GATE_OPEN);
     msleep(300);
-    move_in(2.5, 0, SPEED_SLOW);                     /* lane slides over the rear duck, it stays */
+    move_in(DROP_CREEP_IN, 0, SPEED_SLOW);           /* lane slides off the rear duck, it stays */
     set_servo_position(SERVO_GATE_A, GATE_CLOSED);
     msleep(250);
     set_servo_position(SERVO_GATE_B, GATE_OPEN);     /* remaining ducks settle to the rear */
@@ -163,29 +167,31 @@ int main(void) {
     move_in(0, -3.2, SPEED_FAST);                                  /* -> (39.3, 25.4), lane mouth on the tape */
 
     /* swallow the five ducks, line-following east */
-    follow_tape_east(36.6, SPEED_LINE);                            /* -> (75.9, 25.4), or the touch switch */
+    follow_tape_east(36.6, SPEED_LINE);                            /* -> (75.9, 25.4) */
     set_servo_position(SERVO_GATE_C, GATE_CLOSED);
 
     /* the lane is first in, first out: red leaves first */
     move_in(0, 7.6, SPEED_FAST);                                   /* -> (75.9, 33) */
-    drop_one_duck();                                               /* Zone 2: red duck at ~(70.6, 33) */
-    move_in(0, -15.4, SPEED_FAST);                                 /* -> (78.4, 17.6) */
-    move_in(-1.0, 0, SPEED_SLOW);                                  /* -> (77.4, 17.6) */
-    drop_one_duck();                                               /* Zone 4: green duck at ~(72.1, 17.6) */
-    move_in(0, 7.3, SPEED_FAST);                                   /* -> (79.9, 24.9) */
-    move_in(-30.6, 0, SPEED_FAST);                                 /* -> (49.3, 24.9), west along the empty lane */
-    move_in(0, 3.3, SPEED_FAST);                                   /* -> (49.3, 28.2) */
-    drop_one_duck();                                               /* Zone 1: lavender duck at ~(44, 28.2) */
-    move_in(0, -7.2, SPEED_FAST);                                  /* -> (51.8, 21) */
-    move_in(0.8, 0, SPEED_SLOW);                                   /* -> (52.6, 21), wait clear of B's descent */
+    /* a dropped duck stays 2.5 in behind the robot's centre (where the rear duck sat in the lane) */
+    drop_one_duck();                                               /* Zone 2: red duck at ~(73.4, 33); A -> (79.2, 33) */
+    move_in(0, -15.4, SPEED_FAST);                                 /* -> (79.2, 17.6) */
+    move_in(-2.8, 0, SPEED_SLOW);                                  /* -> (76.4, 17.6) */
+    drop_one_duck();                                               /* Zone 4: green duck at ~(73.9, 17.6); A -> (79.7, 17.6) */
+    move_in(0, 7.3, SPEED_FAST);                                   /* -> (79.7, 24.9) */
+    move_in(-33.2, 0, SPEED_FAST);                                 /* -> (46.5, 24.9), west along the empty lane */
+    move_in(0, 3.3, SPEED_FAST);                                   /* -> (46.5, 28.2) */
+    drop_one_duck();                                               /* Zone 1: lavender duck at ~(44, 28.2); A -> (49.8, 28.2) */
+    move_in(0, -7.2, SPEED_FAST);                                  /* -> (49.8, 21) */
+    move_in(2.8, 0, SPEED_SLOW);                                   /* -> (52.6, 21), wait clear of B's descent */
     wait_until_s(T_A_WEST);
 
     move_in(-14.1, 0, SPEED_FAST);                                 /* -> (38.5, 21), through Zone 3 */
     wait_until_s(T_A_DOWN);
     move_in(0, -14.2, SPEED_FAST);                                 /* -> (38.5, 6.8), into Zone 5 */
-    drop_one_duck();                                               /* Zone 5: blue duck at ~(33.2, 6.8) */
-    move_in(0, 14.2, SPEED_FAST);                                  /* -> (41, 21) */
-    drop_one_duck();                                               /* Zone 3: yellow duck at ~(35.7, 21) */
+    drop_one_duck();                                               /* Zone 5: blue duck at ~(36, 6.8); A -> (41.8, 6.8) */
+    move_in(0.5, 0, SPEED_SLOW);                                   /* -> (42.3, 6.8) */
+    move_in(0, 14.2, SPEED_FAST);                                  /* -> (42.3, 21) */
+    drop_one_duck();                                               /* Zone 3: yellow duck at ~(39.8, 21) */
 
     stop_all();
     disable_servos();

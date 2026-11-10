@@ -5,10 +5,12 @@ One print (team rule: 4 parts total, any size up to the Ender 3 V3 SE bed,
 and the rear of the metal duck lane.
 
 Layout (robot frame: +X forward, +Y left, Z up from the FLOOR, mm):
-  * deck: 214 x 180 x 5 mm, its underside 46 mm above the floor, so a 1.6 in
-    (40.6 mm) duck passes under it with 5 mm to spare;
-  * duck lane: two walls along the centre, 45.7 mm (1.8 in) apart, hanging from
-    the deck and stopping 4 mm ABOVE the floor (the channel never touches it);
+  * deck: 214 x 180 x 5 mm. The real duck (MEASURED by the team, Nov 10 2026:
+    60 x 60 mm, 53 mm tall) needs the deck underside 58 mm up. The team also asked for
+    the wheel (motor) holes 7 mm lower in the part (AXLE_DROP), which lifts the whole
+    chassis 7 mm more on 60 mm wheels: deck underside 65 mm, 12 mm above a duck;
+  * duck lane: two walls along the centre, 68 mm apart (4 mm each side of a duck), hanging from
+    the deck and stopping 11 mm ABOVE the floor (the channel never touches it);
     open at the rear (ducks leave there) and at the front (the kit-metal intake
     extension with the funnel and intake gate C bolts onto the wall ends);
   * gate slots through the deck for exit gate A and pin gate B, servo screw holes
@@ -37,17 +39,22 @@ IN = 25.4
 # ---- overall
 L, W = 214.0, 180.0                 # chassis footprint (bed is 220 x 220)
 DECK_T = 5.0
-DUCK_H = 1.6 * IN                   # 40.6 mm (STRATEGY.md); MEASURE
-DECK_Z = DUCK_H + 5.4               # deck underside height above the floor (46 mm)
-LANE_W = 1.8 * IN                   # inside width of the duck channel
+DUCK_W, DUCK_H = 60.0, 53.0         # MEASURED by the team (Nov 10 2026): 6 x 6 cm, 5.3 cm tall
+AXLE_DROP = 7.0                     # team request (Nov 10 2026): motor/wheel holes 7 mm lower in the part,
+                                    # i.e. everything except the motor windows sits 7 mm higher above the floor
+DECK_Z = DUCK_H + 5.0 + AXLE_DROP   # deck underside height above the floor (65 mm on 60 mm wheels)
+LANE_W = DUCK_W + 8.0               # inside width of the duck channel (68 mm)
+PLATE_SLOT = 3.0                    # gap between lane wall and front bumper: the kit intake plate slides in
 LANE_T = 3.5
-LANE_FLOOR_GAP = 4.0                # lane walls stop this far above the floor
+LANE_FLOOR_GAP = 4.0 + AXLE_DROP    # lane walls stop this far above the floor (11 mm)
 SIDE_T = 4.0
 SIDE_Z0 = 14.0                      # side walls stop 14 mm above the floor
 # ---- wheels and motors (KIPR black gear motor, servo-style case; estimates)
 WHEEL_D, WHEEL_W = 60.0, 28.0       # 60 mm mecanum
 AXLE_Z = WHEEL_D / 2
-WHEEL_X = 88.0                      # front/rear axle positions (+/-)
+WHEEL_X = 80.0                      # front/rear axle positions (+/-). Was 88: the outer ear holes landed on
+                                    # the end (bumper) walls, so the nuts could not go on (team, Nov 10 2026)
+NUT_ROOM = 8.0                      # free space needed around an ear hole centre for a Keps nut + driver
 MOTOR_LEN, MOTOR_THK = 40.6, 20.3   # body: length along X, thickness along Z
 SHAFT_FROM_END = 10.2               # shaft centre from the outer end of the body
 EAR_PITCH = 48.5                    # ear screw holes along the body
@@ -58,7 +65,7 @@ START_BOX_W = 11.25 * IN
 # ---- lane features (lane rear = chassis rear)
 X_REAR, X_FRONT = -L / 2, L / 2
 GATE_A_X = X_REAR + 10.0            # exit gate
-GATE_B_X = X_REAR + 66.0            # pin gate (2.6 in from the rear, as in the model)
+GATE_B_X = GATE_A_X + DUCK_W + 4.0  # pin gate: its flap drops between the rear duck and the 2nd one
 TOUCH_X = X_REAR + 31.0
 SLOT_W = 9.0
 SERVO_PITCH = 48.5
@@ -71,6 +78,7 @@ half, side_y = LANE_W / 2, W / 2
 total_w = W + 2 * (EAR_TO_FACE + SHAFT_STICKOUT + WHEEL_W)
 assert total_w <= START_BOX_W - 5, f"robot {total_w:.0f} mm wide > start box {START_BOX_W:.0f} mm"
 assert DECK_Z - DUCK_H >= 4, "duck would hit the deck"
+assert LANE_W - DUCK_W >= 6, "duck would jam between the lane walls"
 
 out = pl.out_dir_from_args()
 pl.reset()
@@ -88,8 +96,9 @@ for s in (-1, 1):
 # front and rear bumper plates either side of the lane (accessory mounting)
 BUMPER_T = 4.0
 for xb in (X_FRONT - BUMPER_T, X_REAR):
+    gap = PLATE_SLOT if xb > 0 else -0.5      # front: leave a slot beside the lane wall for the intake plate
     for s in (-1, 1):
-        y0, y1 = (half + LANE_T - 0.5, side_y - SIDE_T + 0.5) if s > 0 else (-side_y + SIDE_T - 0.5, -half - LANE_T + 0.5)
+        y0, y1 = (half + LANE_T + gap, side_y - SIDE_T + 0.5) if s > 0 else (-side_y + SIDE_T - 0.5, -half - LANE_T - gap)
         pl.union(chassis, pl.box_from((xb, y0, SIDE_Z0), (xb + BUMPER_T, y1, DECK_Z + 0.5)))
 # mid cross ribs between lane and side walls (stiffness), clear of the motors
 for xr in (-30.0, 30.0):
@@ -105,6 +114,9 @@ for xw in (WHEEL_X, -WHEEL_X):
     body_cx = (body_x0 + body_x1) / 2
     motor_boxes.append((body_x0, body_x1))
     assert X_REAR + 2 < body_cx - EAR_PITCH / 2 and body_cx + EAR_PITCH / 2 < X_FRONT - 2, "ear holes off the chassis"
+    for ex in (body_cx - EAR_PITCH / 2, body_cx + EAR_PITCH / 2):
+        assert X_REAR + BUMPER_T + NUT_ROOM <= ex <= X_FRONT - BUMPER_T - NUT_ROOM, f"ear hole at x={ex:.1f} is in an end wall"
+        assert all(abs(ex - xr) >= 2 + NUT_ROOM for xr in (-30.0, 30.0)), f"ear hole at x={ex:.1f} is in a cross rib"
     for s in (-1, 1):
         pl.difference(chassis, pl.box_from((body_x0 - 0.4, s * side_y - 10, AXLE_Z - MOTOR_THK / 2 - 0.4),
                                            (body_x1 + 0.4, s * side_y + 10, AXLE_Z + MOTOR_THK / 2 + 0.4)))
@@ -116,10 +128,11 @@ for xw in (WHEEL_X, -WHEEL_X):
 for gx, sside in ((GATE_A_X, +1), (GATE_B_X, -1)):
     # the gate servo sits in a kit Servo Bracket (micro servo: Micro Servo Mount) bolted to the deck grid
     pl.difference(chassis, pl.box(SLOT_W, LANE_W - 2, DECK_T + 4, center=(gx, 0, DECK_Z + DECK_T / 2)))
-pl.difference(chassis, pl.box(14, LANE_T + 4, 10, center=(TOUCH_X, -(half + LANE_T / 2), 16)))
-pl.hole_grid(chassis, [(TOUCH_X + dx, -(half + LANE_T / 2), 16) for dx in (-9.5, 9.5)], pl.KIT_BRASS_CLEAR, LANE_T + 4, axis="Y", segments=16)
+TOUCH_Z = 16.0 + AXLE_DROP
+pl.difference(chassis, pl.box(14, LANE_T + 4, 10, center=(TOUCH_X, -(half + LANE_T / 2), TOUCH_Z)))
+pl.hole_grid(chassis, [(TOUCH_X + dx, -(half + LANE_T / 2), TOUCH_Z) for dx in (-9.5, 9.5)], pl.KIT_BRASS_CLEAR, LANE_T + 4, axis="Y", segments=16)
 # front joint for the kit-metal intake extension (4x12 plates bolted outside the lane walls)
-pl.hole_grid(chassis, [(X_FRONT - dx, s * (half + LANE_T / 2), z) for s in (-1, 1) for dx in (8, 20) for z in (15, 35)],
+pl.hole_grid(chassis, [(X_FRONT - dx, s * (half + LANE_T / 2), z + AXLE_DROP) for s in (-1, 1) for dx in (8, 20) for z in (15, 35)],
              HOLE, LANE_T + 4, axis="Y", segments=16)
 
 # ---- Wombat holes, then the 8 mm accessory grid on the deck (kept clear of everything)
@@ -151,13 +164,15 @@ pl.hole_grid(chassis, grid_pts, HOLE, DECK_T + 4)
 bump_pts = []
 for xb in (X_FRONT - BUMPER_T / 2, X_REAR + BUMPER_T / 2):
     for y in ys:
-        if half + LANE_T + 4 < abs(y) < side_y - SIDE_T - 4:
+        if half + LANE_T + PLATE_SLOT + 4 < abs(y) < side_y - SIDE_T - 4:
             for z in (SIDE_Z0 + 6 + GRID * k for k in range(int((DECK_Z - SIDE_Z0 - 10) // GRID) + 1)):
                 bump_pts.append((xb, y, z))
 pl.hole_grid(chassis, bump_pts, HOLE, BUMPER_T + 4, axis="X")
 
 pl.finish(chassis, "p1_chassis_a", out, print_class="team",
           extra={"robot_width_with_wheels_mm": round(total_w, 1), "deck_underside_mm": DECK_Z,
+                 "lane_width_mm": LANE_W, "duck_mm": [DUCK_W, DUCK_W, DUCK_H], "axle_height_mm": AXLE_Z,
+                 "axle_below_deck_underside_mm": DECK_Z - AXLE_Z,
                  "lane_floor_gap_mm": LANE_FLOOR_GAP, "accessory_holes": len(grid_pts) + len(bump_pts)},
           notes=f"robot ~{total_w:.0f} mm wide with wheels (start box {START_BOX_W:.0f}); deck underside "
                 f"{DECK_Z:.0f} mm, lane {LANE_W:.1f} mm wide stopping {LANE_FLOOR_GAP:.0f} mm above the floor; "

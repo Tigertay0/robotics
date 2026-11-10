@@ -492,6 +492,17 @@ def export_stl(obj, path):
                           apply_modifiers=True, global_scale=1.0, ascii_format=False)
 
 
+def export_obj(obj, path):
+    """Same mesh as the STL, as Wavefront OBJ (millimetres, Z up, no material file)."""
+    for o in bpy.context.selected_objects:
+        o.select_set(False)
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.wm.obj_export(filepath=path, export_selected_objects=True, apply_modifiers=True, global_scale=1.0,
+                          forward_axis="Y", up_axis="Z", export_materials=False, export_uv=False,
+                          export_triangulated_mesh=True)
+
+
 def render_preview(obj, path, size=900, view=(1.0, -1.25, 0.9)):
     """Workbench render from a 3/4 view, auto-framed to the part."""
     scene = bpy.context.scene
@@ -549,6 +560,9 @@ def finish(obj, name, out_dir, print_class=None, notes="", render=True, extra=No
     stl = os.path.join(out_dir, name + ".stl")
     export_stl(obj, stl)
     report["stl"] = stl
+    obj_path = os.path.join(out_dir, name + ".obj")
+    export_obj(obj, obj_path)
+    report["obj"] = obj_path
     if render:
         png = os.path.join(out_dir, name + ".png")
         render_preview(obj, png)
