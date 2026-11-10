@@ -1,6 +1,6 @@
 # Part generator (Blender CLI)
 
-We print **4 parts in total** (team rule: any size up to the Ender 3 V3 SE bed, 220 × 220 × 250 mm; a moving assembly printed in one go counts as 1). Which 4 and why: [3D_PRINTS.md](../3D_PRINTS.md).
+We print **4 parts in total** (team rule: any size up to the Ender 3 V3 SE bed, 220 × 220 × 250 mm; each one a single solid piece). Which 4 and why: [3D_PRINTS.md](../3D_PRINTS.md).
 
 ```bash
 python tools/blender/build_parts.py
@@ -24,7 +24,7 @@ The build **fails** if any of these are true:
 | Script | Print |
 |---|---|
 | `p1_chassis_a.py` | Robot A chassis with the duck lane built in |
-| `p2_geared_claw.py` | Robot B print-in-place geared claw |
+| `p2_claw_jaw.py` | Robot B claw jaw: one solid piece (base + fixed finger); the moving finger is a kit liftarm |
 | `p3_pocket_plow.py` | Robot B pocket plow |
 | `p4_cup_hook.py` | Robot B cup hook |
 

@@ -27,7 +27,7 @@ DEFAULT_BLENDER = (os.environ.get("BLENDER") or shutil.which("blender")
 # (script[:part], slot label, robot, copies to print, planned class[, expected bodies])
 TEAM4 = [
     ("p1_chassis_a.py", "1/4", "A", 1, "team"),          # chassis + built-in duck lane
-    ("p2_geared_claw.py", "2/4", "B", 1, "team", 3),     # print-in-place: base + 2 fingers
+    ("p2_claw_jaw.py", "2/4", "B", 1, "team"),           # ONE solid piece; the moving finger is a kit liftarm
     ("p3_pocket_plow.py", "3/4", "B", 1, "team"),
     ("p4_cup_hook.py", "4/4", "B", 1, "team"),
 ]
@@ -131,7 +131,7 @@ def main() -> int:
         *rows,
         "",
         "Checks = manifold, expected number of bodies, positive volume, fits the size box in mm as exported, >= 1 mm margin."
-        + " Team rule: 4 parts total, each within 220 x 220 x 250 mm; print-in-place counts as 1.",
+        + " Team rule: 4 parts total, each within 220 x 220 x 250 mm; each print is one solid piece.",
         "",
         "Budget used: " + ", ".join(f"{used.get(k, 0)}/{v} {k}" for k, v in budget.items()),
         "",

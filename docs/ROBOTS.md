@@ -13,7 +13,7 @@ Collects all 5 ducks on the centre lane and drops exactly one in each of the 5 z
 | Side | ![A side](robots/robot_A_duck_runner_side.png) |
 | Top | ![A top](robots/robot_A_duck_runner_top.png) |
 
-**What it looks like:** a flat, wide 4-wheel mecanum car. The chassis floor is raised about 3" on standoffs, and a **12.5" long, 1.8" wide open-bottom lane** runs underneath it (the ducks ride through under the robot). Two flared straps at the front form a funnel that guides a duck into the lane. Wombat and battery sit on top. Nothing is taller than 6.5", so it passes under the 12" start ceiling with room to spare.
+**What it looks like:** a flat, wide 4-wheel mecanum car. The chassis floor is raised about 3" on standoffs, and a **12" long, 68 mm (2.7") wide open-bottom lane** runs underneath it (the ducks ride through under the robot). Two flared straps at the front form a funnel that guides a duck into the lane. Wombat and battery sit on top. Nothing is taller than 6.5", so it passes under the 12" start ceiling with room to spare.
 
 | Part (kit line) | Qty | What it does |
 |---|---:|---|
@@ -70,12 +70,12 @@ Everything else: flips both cups, pushes the 5 pom stacks into zone 1, grabs the
 
 ## 3D-printed parts (4 total: team rule)
 
-We may print **4 parts in total, any size** up to the 220 × 220 × 250 mm bed; a moving assembly printed in one go counts as 1. Full detail: [3D_PRINTS.md](../3D_PRINTS.md). STLs: [parts/team4](../parts/team4).
+We may print **4 parts in total, any size** up to the 220 × 220 × 250 mm bed; each one a single solid piece. Full detail: [3D_PRINTS.md](../3D_PRINTS.md). STLs: [parts/team4](../parts/team4).
 
 | # | Part | Robot | Replaces | What it does |
 |---|---|---|---|---|
-| 1 | Chassis with built-in duck lane | A | metal chassis, 4 standoffs, 4 motor brackets, rear of the metal lane | Deck 46 mm up, lane walls 4 mm off the floor, gate slots, motor windows, Wombat holes, 448 accessory holes at the front, rear and on the deck |
-| 2 | Geared claw (print-in-place) | B | LEGO claw fingers + servo bracket | One standard servo opens both fingers through printed gears; pads cup the red pom |
+| 1 | Chassis with built-in duck lane | A | metal chassis, 4 standoffs, 4 motor brackets, rear of the metal lane | Deck 65 mm up, 68 mm lane for the 60 × 60 × 53 mm ducks, lane walls 11 mm off the floor, gate slots, motor windows, Wombat holes, 452 accessory holes at the front, rear and on the deck |
+| 2 | Claw jaw (one solid piece) | B | LEGO claw fingers + servo bracket | Base + fixed finger with a pad that cups the red pom; a kit 1×7 liftarm on a servo horn is the moving finger |
 | 3 | Pocket plow | B | two bent 4×12 plates | Keeps each pushed pom stack as one group; lever-switch pocket |
 | 4 | Cup hook | B | bent 1×10 strap | Lipped tip catches the cup rim for the flip |
 

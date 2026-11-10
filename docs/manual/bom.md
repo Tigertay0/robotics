@@ -2,15 +2,15 @@
 
 | Part | Robot A | Robot B | Total | In kit | OK |
 |---|---:|---:|---:|---:|---|
+| Claw jaw (print 2) | 0 | 1 | 1 | print | yes |
 | Cup hook (print 4) | 0 | 1 | 1 | print | yes |
-| Geared claw (print 2) | 0 | 1 | 1 | print | yes |
 | Pocket plow (print 3) | 0 | 1 | 1 | print | yes |
 | Printed chassis (print 1) | 1 | 0 | 1 | print | yes |
 | 1 x 11 Liftarm | 0 | 2 | 2 | 10 | yes |
 | 1 x 3 Liftarm | 0 | 1 | 1 | 16 | yes |
 | 1 x 5 Liftarm | 0 | 1 | 1 | 11 | yes |
 | 1 x 5 Servo Horn | 2 | 1 | 3 | 4 | yes |
-| 1 x 7 Liftarm | 3 | 0 | 3 | 16 | yes |
+| 1 x 7 Liftarm | 3 | 1 | 4 | 16 | yes |
 | 2-56 1" Caster Screw | 0 | 2 | 2 | 5 | yes |
 | 2-56 3/8" Micro Servo Mount Screw | 2 | 0 | 2 | 6 | yes |
 | Angle Bracket | 0 | 1 | 1 | 2 | yes |
@@ -31,14 +31,14 @@
 | Pin w/ Friction | 0 | 3 | 3 | 122 | yes |
 | Plate 4 x 12 | 2 | 0 | 2 | 4 | yes |
 | Round Servo Horn | 0 | 2 | 2 | 2 | yes |
-| Screw 8-32 x 1/2" (black) | 45 | 31 | 76 | 90 | yes |
-| Screw 8-32 x 1/4" (black) | 12 | 18 | 30 | 40 | yes |
+| Screw 8-32 x 1/2" (black) | 45 | 35 | 80 | 90 | yes |
+| Screw 8-32 x 1/4" (black) | 12 | 14 | 26 | 40 | yes |
 | Screw 8-32 x 3/4" (black) | 0 | 1 | 1 | 70 | yes |
 | Servo | 2 | 3 | 5 | 5 | yes |
 | Servo Bracket | 2 | 5 | 7 | 8 | yes |
-| Short Silver Servo Horn Screw (M3) | 2 | 3 | 5 | 6 | yes |
+| Short Silver Servo Horn Screw (M3) | 2 | 2 | 4 | 6 | yes |
 | Silver Servo Horn Machine Screw (M3) | 0 | 7 | 7 | 10 | yes |
-| Silver Servo Horn Nut (M3) | 0 | 7 | 7 | 10 | yes |
+| Silver Servo Horn Nut (M3) | 0 | 6 | 6 | 10 | yes |
 | Small Touch | 1 | 0 | 1 | 4 | yes |
 | Solarbotics Wheel | 0 | 2 | 2 | 4 | yes |
 | Standoff 8-32 x 1" | 4 | 0 | 4 | 7 | yes |
@@ -58,6 +58,6 @@ Printed parts: 4/4
 | Robot | Width mm | Length mm | Height mm | Fits |
 |---|---:|---:|---:|---|
 | A | 271.3 | 400.0 | 160.8 | yes |
-| B | 206.1 | 426.2 | 161.6 | yes |
+| B | 206.1 | 388.1 | 161.6 | yes |
 
 Problems: none

@@ -32,7 +32,8 @@ def main():
         for st in steps[rk]["steps"]:
             tags = {t["tag"]: t for t in st["subs"]}
             targets = [(u["tag"], t) for u in st["subs"] for t in u["targets"]]
-            screws = [(g, t) for g, t in targets if t["kind"] == "screw" and any(k in t["name"] for k in PAIRED)]
+            screws = [(g, t) for g, t in targets if t["kind"] == "screw" and any(k in t["name"] for k in PAIRED)
+                      and not t.get("into")]
             nuts = [(g, t) for g, t in targets if t["kind"] == "nut" and any(k in t["name"] for k in ("8-32", "M3"))]
             if not nuts:                      # screws into standoffs / horns need no nut
                 continue

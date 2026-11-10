@@ -24,7 +24,7 @@ Jobs can run in parallel: one pair builds A, one pair builds B, one person does 
 
 1. **Count the kit** against [docs/2026 Electronics Kit.pdf](2026%20Electronics%20Kit.pdf): we need **6 gear motors** (4 A + 2 B), **5 servos + 1 micro servo**, **2 Wombats + 2 batteries**, 4 mecanum wheels, 2 Solarbotics wheels, 1 caster, **2 light sensors**, **4 tophats**, 2 ET rangefinders, 1 lever + 1 small touch switch, 1 camera, 2 chassis. Our inventory sheet lists no motors and no light sensors: find them first.
 2. **Chassis check**: the rules ban "the old KIPR aluminum chassis". Put a magnet on ours (steel sticks) and ask the Head Judge if unsure.
-3. **Buy the 2026 game pieces** (our "Parcour" bag is last year's game): 5 small rubber ducks (~2.25"), 1 big duck, 4 pickleballs, 2 cups (green + teal), 6 rings, 3 blue bottles, 25 pom-poms 1.5" (5 each: red, green, lavender, turquoise, gold), Botguy.
+3. **Buy the 2026 game pieces** (our "Parcour" bag is last year's game): 5 small rubber ducks (ours measure 60 × 60 × 53 mm), 1 big duck, 4 pickleballs, 2 cups (green + teal), 6 rings, 3 blue bottles, 25 pom-poms 1.5" (5 each: red, green, lavender, turquoise, gold), Botguy.
 4. **Measure the real pieces** (duck, cup rim, pom, ring) and write the numbers in `docs/team-hardware-confirmed.md`. Lane width, hook height and claw opening depend on them.
 
 ## 2. Practice table
@@ -37,7 +37,7 @@ Build it from [Fall_Game_Table.pdf](../Fall_Game_Table.pdf) (bill of materials o
 
 ![Robot A side view](robots/robot_A_duck_runner_side.png)
 
-The idea: a mecanum robot whose chassis is **print 1** ([3D_PRINTS.md](../3D_PRINTS.md)): a deck 46 mm above the floor with a **1.8"-wide duck channel built into its underside**, running front to back. The channel walls stop 4 mm above the floor. Ducks enter at the front, slide back, and one at a time is left on the floor. (The render above is the earlier kit-metal version of the same layout.)
+The idea: a mecanum robot whose chassis is **print 1** ([3D_PRINTS.md](../3D_PRINTS.md)): a deck 65 mm above the floor with a **68 mm-wide duck channel built into its underside** (ducks measure 60 × 60 × 53 mm), running front to back. The channel walls stop 11 mm above the floor. Ducks enter at the front, slide back, and one at a time is left on the floor. (The render above is the earlier kit-metal version of the same layout.)
 
 Coordinates are the chassis frame in mm: origin at the centre of the chassis footprint, +x forward, +y left, z up from the floor.
 
@@ -71,7 +71,7 @@ Start from the **KIPR base demobot + servo demobot** build guides, then add the 
 | B3 | Wombat + battery | Wombat at x = −1.2 on top; battery on top of it at the rear | |
 | B4 | Servo bracket + servo: **shoulder** | x = +3.2, y = +1.6, on the chassis | |
 | B5 | LEGO liftarm 1×11 (2) + 1×5 servo horn | **Paralleling arm**: two parallel liftarms from the shoulder, 25° up, at y = +0.95 and +2.25, so the claw stays level as it lifts | Claw does not tilt from down to up |
-| B6 | **Print 2 (geared claw)** + standard servo under its base | Bolted to the 1×5 liftarm at the arm tip; Servo Bracket under the base (4 screws + nuts), servo in the bracket shaft up under the right finger, Round Servo Horn in the pocket under that finger with 3 M3 screws + nuts (see the manual, B step 5) | Closes on the pom and holds it upside-down. (Until it's printed: the servo + 2 bent 3×7 liftarms.) |
+| B6 | **Print 2 (claw jaw, one piece)** + standard servo under its base | Bolted to the 1×5 liftarm at the arm tip; Servo Bracket under the base (4 screws + nuts), servo in the bracket with its shaft up through the round hole. The moving finger is a 1×7 liftarm bolted on a Round Servo Horn (2 M3 screws + nuts), pushed on the shaft and held by 1 M3 screw (see the manual, B step 5) | The liftarm closes the pom against the printed pad and holds it. |
 | B7 | **Print 3 (pocket plow)** (or, until printed, 2 Plate 4×12 bent 90° 2.5" from one end) | Rear tabs bolted to the front chassis flange, bottom 3 mm above the floor, centre face at x ≈ +7.6 | A pushed pom stack stays in the pocket as one group |
 | B8 | Lever switch | Centre of the plow, x = +7.6, 0.9" up | Clicks when the plow touches a wall or cup |
 | B9 | Servo bracket + servo: **cup hook** | Right side, x = +0.8, y = −3.4 | |
@@ -123,7 +123,7 @@ Write the results into the code and into `docs/team-hardware-confirmed.md`.
 
 ## 8. 3D prints
 
-**We print 4 parts in total** (team rule; any size up to the 220 × 220 × 250 mm bed; a moving part printed in one go counts as 1). Which 4 and why: [3D_PRINTS.md](../3D_PRINTS.md). Generate and check them with `python tools/blender/build_parts.py` (STLs land in `parts/team4/`). Update the `MEASURE` constants with the real pieces first. Print in **grey PLA**, 0.2 mm layers, 3 walls, no supports, in the orientations listed in 3D_PRINTS.md. **Submit all 4 STLs** on the Team Home Base schedule. Print 1 (escapement lane) first: it is the only print that touches the multiplier.
+**We print 4 parts in total** (team rule; any size up to the 220 × 220 × 250 mm bed; each one a single solid piece). Which 4 and why: [3D_PRINTS.md](../3D_PRINTS.md). Generate and check them with `python tools/blender/build_parts.py` (STLs land in `parts/team4/`). Update the `MEASURE` constants with the real pieces first. Print in **grey PLA**, 0.2 mm layers, 3 walls, no supports, in the orientations listed in 3D_PRINTS.md. **Submit all 4 STLs** on the Team Home Base schedule. Print 1 (escapement lane) first: it is the only print that touches the multiplier.
 
 ## 9. Testing
 
@@ -154,6 +154,17 @@ Run the whole 120 s match with both robots. Watch the code animation (`docs/anim
 4. Robots must be stopped by 120 s (the code stops at 118 s).
 5. Check the score with the judge before leaving the table; disagree there or not at all.
 6. One 3-minute timeout for the whole tournament: keep it for double elimination.
+
+## What changed on Nov 10, 2026
+
+- **Ducks are 60 × 60 × 53 mm.** The printed chassis (print 1) was resized for them and must be printed again: 68 mm channel, deck 65 mm up, motor holes 7 mm lower and 8 mm closer to the middle.
+- **Five ducks need 300 mm of lane.** The intake plates now use their full 152 mm length, intake gate C sits at their front end on a bent-strap bridge, and pin gate B moved forward (its flap drops between duck 1 and duck 2).
+- **Dropping a duck needs a 3.3 in creep** (was 2.5): the robot must move a whole duck length plus the 14 mm between the exit flap and the chassis rear.
+- **A dropped duck stays 2.5 in behind the robot's centre.** The drop positions in the plan and in `code/robot_a/main.c` were corrected for this (Zone 1 would have landed on tape).
+- **The switch at the rear of the lane no longer stops the duck run.** The first duck presses it long before the fifth is in. The run stops on distance.
+- **Tophats on Robot A** are on the outside of the intake plates. Nothing may cross the lane mouth.
+- **Claw (print 2) is one solid piece** with a kit liftarm as the moving finger.
+- **Sizes:** Robot A 271 × 400 × 161 mm, Robot B 206 × 388 × 162 mm. Limit 286 × 537 × 305 mm (11.25 × 21.125 × 12 in). The export fails if a robot grows past it.
 
 ## Known issues in the manual
 

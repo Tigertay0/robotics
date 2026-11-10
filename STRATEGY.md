@@ -27,7 +27,7 @@ side, y toward Botguy. The 3D model and animation in `blender/` use the same fra
 ## 2. Robot roles
 
 **Robot A, "Duck Runner"** (mecanum, 4 motors, 1 Wombat). A raised chassis with an open-bottom
-duck lane running under the robot (12.5" long, 1.8" wide). Three servo flaps: intake (front),
+duck lane running under the robot (12" long, 68 mm wide: ducks measure 60 × 60 × 53 mm). Three servo flaps: intake (front),
 pin (one duck from the rear), exit (rear). It line-follows the centre lane, swallows all 5 ducks,
 then visits the 5 zones and releases exactly one duck in each. It never touches anything else.
 
@@ -107,7 +107,7 @@ Checks the simulator runs every 0.05 s (`python tools/match_sim.py` must print N
 ## 6. Build notes (kit parts only)
 
 > Superseded for the actual build by [docs/BUILD.md](docs/BUILD.md) and the step-by-step manual
-> (`docs/manual/`): Robot A now uses printed chassis p1, Robot B the geared claw, pocket plow and
+> (`docs/manual/`): Robot A now uses printed chassis p1, Robot B the claw jaw, pocket plow and
 > cup hook prints (4 prints total, see [3D_PRINTS.md](3D_PRINTS.md)). The notes below are the
 > original all-metal design.
 

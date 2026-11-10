@@ -1,7 +1,7 @@
 /******************************************************************************
  * Robot B - "Point Scorer"                                  2026 Fall Game
- * KIPR Wombat, 2 gear motors (differential), servo arm + geared claw (print 2,
- * driven by a standard servo), cup-hook servo, camera, 2 tophats, ET, plow lever.
+ * KIPR Wombat, 2 gear motors (differential), servo arm + claw (printed jaw, print 2,
+ * with a liftarm finger on a standard servo), cup-hook servo, camera, 2 tophats, ET, plow lever.
  *
  * Implements Robot B's route of plan v3 (tools/match_plan.py, checked by
  * tools/match_sim.py): starts in the small box facing west at (63.8, 7.15);
@@ -22,7 +22,7 @@
 #define LEFT   0
 #define RIGHT  2
 #define SERVO_ARM    1            /* shoulder (regular servo)      */
-#define SERVO_CLAW   2            /* geared claw (standard servo)  */
+#define SERVO_CLAW   2            /* claw finger (standard servo)  */
 #define SERVO_HOOK   3            /* cup hook on the right side    */
 #define TOPHAT_L     0
 #define TOPHAT_R     1
@@ -50,7 +50,7 @@
 #define ARM_UP        860                  /* measured last season */
 #define ARM_DOWN     1750
 #define ARM_PLATFORM  600                  /* CALIBRATE: claw above the 5.7 in platform edge */
-#define CLAW_OPEN    2000                  /* CALIBRATE: geared claw on a standard servo now */
+#define CLAW_OPEN    2000                  /* CALIBRATE: liftarm finger swung out, away from the printed jaw */
 #define CLAW_CLOSED  1200
 #define HOOK_UP      1000                  /* CALIBRATE */
 #define HOOK_DOWN    1900
