@@ -19,7 +19,8 @@ const browser = await puppeteer.launch({
 });
 try {
   const page = await browser.newPage();
-  page.on('pageerror', e => console.error('PAGE ERROR', e.message));
+  const pageErrors = [];
+  page.on('pageerror', e => { console.error('PAGE ERROR', e.message); pageErrors.push(e.message); });
   // Serve three.js locally when a copy is installed (the CDN may be blocked, e.g. in a sandbox).
   const THREE_DIR = path.resolve(process.env.THREE_DIR || 'node_modules/three');
   if (fs.existsSync(path.join(THREE_DIR, 'build/three.module.js'))) {
@@ -42,7 +43,11 @@ try {
   const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', OUT],
     { stdio: ['pipe', 'ignore', 'inherit'] });
-  const done = new Promise((res, rej) => ff.on('close', c => c === 0 ? res() : rej(new Error('ffmpeg exit ' + c))));
+  const done = new Promise((res, rej) => {
+    ff.on('error', rej);
+    ff.on('close', c => c === 0 ? res() : rej(new Error('ffmpeg exit ' + c)));
+  });
+  ff.stdin.on('error', () => {}); // surfaced via the 'close'/'error' handlers above, not here
   for (let f = fStart; f < fEnd; f++) {
     await page.evaluate(t => new Promise(r => { window.__seek(t); requestAnimationFrame(() => requestAnimationFrame(r)); }), f / FPS);
     const img = await page.screenshot({ type: 'jpeg', quality: 92, optimizeForSpeed: true });
@@ -51,6 +56,7 @@ try {
   }
   ff.stdin.end();
   await done;
+  if (pageErrors.length) throw new Error(`${pageErrors.length} page error(s) during render; output may be corrupt`);
 } finally {
   await browser.close();
 }
