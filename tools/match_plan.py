@@ -25,22 +25,27 @@ import math
 
 from match_sim import Path, pose
 
-A_FULL = (-4.76, 11.40, -5.43, 5.43)
+A_FULL = (-4.33, 11.42, -5.43, 5.43)        # manual model (Nov 10 2026): rear wheels at -110 mm, funnel tip at +290 mm
 B_FULL = (-4.82, 11.89, -4.06, 4.06)
 B_LOW = (-4.82, 8.06, -4.06, 4.06)
-A_MOUTH, A_EXIT = 11.40, -5.30
+A_MOUTH = 11.42
+# Robot A's duck lane, in the robot frame (inches). The exit flap is 93 mm behind the centre, so the rear
+# duck (60 mm) sits centred 63 mm behind it; the next ones follow every 60 mm. A dropped duck stays where
+# the rear duck was: the robot creeps CREEP forward and the lane slides off it.
+LANE_REAR, LANE_PITCH, CREEP = -2.48, 2.36, 3.3
 LANE_Y = 25.44
 DUCK_X = {"red": 53.2, "green": 61.2, "lavender": 69.2, "blue": 77.2, "yellow": 85.2}
 STACK_X = {"gold": 8.0, "turquoise": 16.0, "lavender": 24.0, "green": 32.0, "red": 40.0}
 CUP_UP, CUP_LOW = (46.6, 25.4), (46.6, 12.2)
 PB4 = (46.6, -0.6)
-R_DUCK, R_STACK, R_CUP, R_POM, R_PB = 1.14, 1.10, 1.82, 0.75, 1.46
+R_DUCK, R_STACK, R_CUP, R_POM, R_PB = 1.18, 1.10, 1.82, 0.75, 1.46   # duck: measured 60 x 60 x 53 mm (Nov 10 2026)
+H_DUCK = 2.09
 POCKET = 4.92                      # B's plow pocket face, ahead of its centre
 
 # tunables (inches, seconds)
 P = {
     "A_start": (28.5, 5.7), "A_wait": (14.3, 17.9), "A_push_x": 39.26, "A_push_y": 28.6,
-    "A_z3_y": 21.0, "A_z5_x": 38.5, "A_z3_x": 41.0,
+    "A_z3_y": 21.0, "A_z5_x": 38.5, "A_z3_x": 42.3,
     "B_start": (63.8, 7.15), "B_approach": 8.4, "B_drag_to": 37.0, "B_pivot": 20.0, "B_backoff": 2.5, "B_grab_x": 41.8,
     "B_lane_y": 17.5, "B_gold_x": 11.0, "B_gold_to": 29.0,
     "B_descent_x": 32.5, "B_r1": 5.0, "B_r2": 4.9, "B_stop_x": 58.9,
@@ -100,19 +105,19 @@ def build():
         drops.append((zone, A.t))
         A.wait(0.8, label="A: drop_one_duck(): pin B closes, exit A opens")
         x, y, _ = A.state
-        A.go(x + 2.5, y, speed=4, label="A: drop_one_duck(): creep 2.5 in, exit A closes")
+        A.go(x + CREEP, y, speed=4, label="A: drop_one_duck(): creep 3.3 in, exit A closes")
 
     A.go(75.9, 33.0, label="A: move_in(0, 7.6): into Zone 2")
     drop("Z2")
-    A.go(78.4, 17.6, label="A: move_in(0, -15.4): down into Zone 4")
-    A.go(77.4, 17.6, label="A: move_in(-1, 0)")
+    A.go(79.2, 17.6, label="A: move_in(0, -15.4): down into Zone 4")
+    A.go(76.4, 17.6, label="A: move_in(-2.8, 0)")
     drop("Z4")
-    A.go(79.9, 24.9, label="A: move_in(0, 7.3): back onto the lane line")
-    A.go(49.3, 24.9, label="A: move_in(-30.6, 0): west along the empty lane")
-    A.go(49.3, 28.2, label="A: move_in(0, 3.3): Zone 1")
+    A.go(79.7, 24.9, label="A: move_in(0, 7.3): back onto the lane line")
+    A.go(46.5, 24.9, label="A: move_in(-33.2, 0): west along the empty lane")
+    A.go(46.5, 28.2, label="A: move_in(0, 3.3): Zone 1")
     drop("Z1")
-    A.go(51.8, P["A_z3_y"], label="A: move_in(0, -7.2): wait above the lower tape")
-    A.go(52.6, P["A_z3_y"], label="A: move_in(0.8, 0)")
+    A.go(49.8, P["A_z3_y"], label="A: move_in(0, -7.2): wait above the lower tape")
+    A.go(52.6, P["A_z3_y"], label="A: move_in(2.8, 0)")
 
     # ============================================================ Robot B, rest
     t_clear = time_when(A.keys, lambda p: p[0] >= 55.0, t_lane0, t_lane1)
@@ -163,14 +168,15 @@ def build():
     A.wait_until(handoff("T_A_down", t_down), label="A: wait until 66 s: B is parked at the platform")
     A.go(P["A_z5_x"], 6.8, label="A: move_in(0, -14.2): down into Zone 5")
     drop("Z5")
-    A.go(P["A_z3_x"], P["A_z3_y"], label="A: move_in(0, 14.2): back up into Zone 3")  # creep left A at x 41
+    A.go(P["A_z3_x"], 6.8, label="A: move_in(0.5, 0)")
+    A.go(P["A_z3_x"], P["A_z3_y"], label="A: move_in(0, 14.2): back up into Zone 3")
     drop("Z3")
     A.wait_until(118.0, label="A: done")
 
     drop_pos = {}
     for (zone, td) in drops:
         x, y, _ = pose(A.keys, td)
-        drop_pos[zone] = (td, x + A_EXIT, y)
+        drop_pos[zone] = (td, x + LANE_REAR, y)
     # the lane is first in, first out: the red duck (swallowed first) leaves first. Inside the lane a duck
     # keeps its place on the floor until the rear stack stops it, then rides with the robot.
     order = ["red", "green", "lavender", "blue", "yellow"]
@@ -185,15 +191,15 @@ def build():
         while t < end_t:
             ax, ay, _ = pose(A.keys, t)
             ahead = sum(1 for m in order if tc[m] < tc[n] and td[m] > t)        # ducks between this one and the exit
-            rear = A_EXIT + 1.4 + 2.4 * ahead
+            rear = LANE_REAR + LANE_PITCH * ahead
             loc = max(rear, min(loc, loc - (ax - ax_prev)))     # east: the lane slides over it; west: the rear gate carries it
             ax_prev = ax
             track.append((t, ax + loc, ay))
             t += 0.25
         track += [(end_t, px, py), (120, px, py)]
-        pieces.append({"name": f"duck {n}", "kind": "duck", "color": n, "r": R_DUCK, "h": 1.6, "track": track,
+        pieces.append({"name": f"duck {n}", "kind": "duck", "color": n, "r": R_DUCK, "h": H_DUCK, "track": track,
                        "carried_by": "A", "carried_from": tc[n], "carried_to": end_t,
-                       "contact": [{"robot": "A", "t0": tc[n] - 0.6, "t1": tc[n] + 0.1}, {"robot": "A", "t0": end_t - 0.1, "t1": end_t + 1.6}]})
+                       "contact": [{"robot": "A", "t0": tc[n] - 0.6, "t1": tc[n] + 0.1}, {"robot": "A", "t0": end_t - 0.1, "t1": end_t + 0.8 + CREEP / 4.0 + 0.05}]})
         events.append((round(end_t, 1), 1, 1, f"duck in {zone_for[n]}"))
 
     def pushed(x, r, final_gap=0.0):

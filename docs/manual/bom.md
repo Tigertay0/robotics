@@ -8,12 +8,12 @@
 | Printed chassis (print 1) | 1 | 0 | 1 | print | yes |
 | 1 x 11 Liftarm | 0 | 2 | 2 | 10 | yes |
 | 1 x 3 Liftarm | 0 | 1 | 1 | 16 | yes |
-| 1 x 5 Liftarm | 2 | 1 | 3 | 11 | yes |
+| 1 x 5 Liftarm | 0 | 1 | 1 | 11 | yes |
 | 1 x 5 Servo Horn | 2 | 1 | 3 | 4 | yes |
-| 1 x 7 Liftarm | 2 | 0 | 2 | 16 | yes |
+| 1 x 7 Liftarm | 3 | 0 | 3 | 16 | yes |
 | 2-56 1" Caster Screw | 0 | 2 | 2 | 5 | yes |
 | 2-56 3/8" Micro Servo Mount Screw | 2 | 0 | 2 | 6 | yes |
-| Angle Bracket | 1 | 1 | 2 | 2 | yes |
+| Angle Bracket | 0 | 1 | 1 | 2 | yes |
 | Black Camera | 0 | 1 | 1 | 1 | yes |
 | Black Gear Motor | 4 | 2 | 6 | 8 | yes |
 | Brass Screws | 2 | 2 | 4 | 10 | yes |
@@ -27,12 +27,12 @@
 | Mecanum Wheel | 4 | 0 | 4 | 4 | yes |
 | Micro Servo | 1 | 0 | 1 | 2 | yes |
 | Micro Servo Mount | 1 | 0 | 1 | 2 | yes |
-| Nut 8-32 Keps (black) | 51 | 42 | 93 | 170 | yes |
+| Nut 8-32 Keps (black) | 49 | 42 | 91 | 170 | yes |
 | Pin w/ Friction | 0 | 3 | 3 | 122 | yes |
 | Plate 4 x 12 | 2 | 0 | 2 | 4 | yes |
 | Round Servo Horn | 0 | 2 | 2 | 2 | yes |
-| Screw 8-32 x 1/2" (black) | 51 | 31 | 82 | 90 | yes |
-| Screw 8-32 x 1/4" (black) | 8 | 18 | 26 | 40 | yes |
+| Screw 8-32 x 1/2" (black) | 45 | 31 | 76 | 90 | yes |
+| Screw 8-32 x 1/4" (black) | 12 | 18 | 30 | 40 | yes |
 | Screw 8-32 x 3/4" (black) | 0 | 1 | 1 | 70 | yes |
 | Servo | 2 | 3 | 5 | 5 | yes |
 | Servo Bracket | 2 | 5 | 7 | 8 | yes |
@@ -44,7 +44,7 @@
 | Standoff 8-32 x 1" | 4 | 0 | 4 | 7 | yes |
 | Standoff 8-32 x 1/2" | 0 | 4 | 4 | 12 | yes |
 | Standoff 8-32 x 2" | 2 | 0 | 2 | 2 | yes |
-| Strap 1 x 10 | 2 | 0 | 2 | 6 | yes |
+| Strap 1 x 10 | 3 | 0 | 3 | 6 | yes |
 | Threaded Rod 8-32 x 1" | 2 | 0 | 2 | 10 | yes |
 | Tophat (Reflectance) | 2 | 2 | 4 | 4 | yes |
 | Wombat | 1 | 1 | 2 | 2 | yes |
@@ -52,5 +52,12 @@
 | Zip tie 4" (white), structural | 2 | 2 | 4 | 5 | yes |
 
 Printed parts: 4/4
+
+## Size check (start-box limit 11.25 x 21.125 x 12 in = 285.8 x 536.6 x 304.8 mm)
+
+| Robot | Width mm | Length mm | Height mm | Fits |
+|---|---:|---:|---:|---|
+| A | 271.3 | 400.0 | 160.8 | yes |
+| B | 206.1 | 426.2 | 161.6 | yes |
 
 Problems: none

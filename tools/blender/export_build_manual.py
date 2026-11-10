@@ -571,6 +571,9 @@ def export(path):
     for o in bpy.context.scene.objects:
         o.select_set(o.name in coll.objects)
     bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_yup=True)
+    bpy.ops.wm.obj_export(filepath=os.path.splitext(path)[0] + ".obj", export_selected_objects=True, apply_modifiers=True,
+                          forward_axis="Y", up_axis="Z", export_materials=True, export_uv=False,
+                          export_triangulated_mesh=True)          # mm, Z up, one object per part (named like the GLB meshes)
     for o in list(coll.objects):
         bpy.data.objects.remove(o, do_unlink=True)
 
@@ -578,14 +581,33 @@ def export(path):
 # ============================================================================ ROBOT A
 ROBOT["cur"] = "A"
 L, W = 214.0, 180.0
-DECK_Z, DECK_T = 46.0, 5.0
-half, LANE_T = 1.8 * IN / 2, 3.5
+DECK_Z, DECK_T = 65.0, 5.0          # p1: deck underside 65 mm up (53 mm duck + 5 + the 7 mm axle drop)
+half, LANE_T = 68.0 / 2, 3.5        # p1: LANE_W = 68 mm for the measured 60 mm duck
+LANE_GAP, DZ = 11.0, 7.0            # p1: lane walls stop 11 mm above the floor; AXLE_DROP
+WHEEL_X = 80.0                      # p1: axle positions (+/-)
+PLATE_Z = (6.0, 56.8)               # kit Plate 4 x 12 on edge (50.8 mm tall), 6 mm above the floor
+PLATE_X = (L / 2 - 26.0, L / 2 - 26.0 + 152.4)      # 12 holes long: 5 ducks of 60 mm need the lane this long
+START_BOX_MM = (11.25 * IN, 21.125 * IN, 12.0 * IN)  # rule summary: every robot fits 11.25 x 21.125 x 12 in at the start
+SIZES = {}
+
+
+def check_size(robot):
+    """Bounding box of everything exported for this robot vs the start-box limit (either way round)."""
+    pts = [o.matrix_world @ Vector(c) for o in coll.objects if o.type == "MESH" for c in o.bound_box]
+    dx, dy, dz = (max(p[i] for p in pts) - min(p[i] for p in pts) for i in range(3))
+    wid, length = sorted((dx, dy))
+    ok = wid <= START_BOX_MM[0] and length <= START_BOX_MM[1] and dz <= START_BOX_MM[2]
+    SIZES[robot] = {"width_mm": round(wid, 1), "length_mm": round(length, 1), "height_mm": round(dz, 1),
+                    "limit_mm": [round(v, 1) for v in START_BOX_MM], "fits": ok}
+    print("SIZE", robot, SIZES[robot])
+    if not ok:
+        raise SystemExit(f"Robot {robot} is {wid:.0f} x {length:.0f} x {dz:.0f} mm: over the 11.25 x 21.125 x 12 in limit")
 side_y = W / 2
 top = DECK_Z + DECK_T
 
 step("Printed chassis")
 sub("Print 1, deck side down. Clear every 4.4 mm hole with a drill.", [("Printed chassis (print 1)", 1)], hint="print_check")
-stl("Printed chassis (print 1)", "p1_chassis_a.stl", "pla", x=0, y=0, z=4.0, ref=("center", "center", "min"))
+stl("Printed chassis (print 1)", "p1_chassis_a.stl", "pla", x=0, y=0, z=LANE_GAP, ref=("center", "center", "min"))
 
 
 def motor_corner(xw, sy, detailed):
@@ -614,18 +636,18 @@ def motor_corner(xw, sy, detailed):
 
 SIDE_T = 4.0
 step("Drive motors", hint="repeat_x4")
-motor_corner(88.0, +1, True)
+motor_corner(WHEEL_X, +1, True)
 sub("Same for the other 3 corners.", [("Black Gear Motor", 3), (S12, 12), (KEPS, 12)], hint="repeat_x3")
-for xw, sy in ((88.0, -1), (-88.0, +1), (-88.0, -1)):
+for xw, sy in ((WHEEL_X, -1), (-WHEEL_X, +1), (-WHEEL_X, -1)):
     motor_corner(xw, sy, False)
 
 step("Mecanum wheels", hint="mecanum_x")
 sub("Wheels on the shafts. Look from above: the rollers must make an X.", [("Mecanum Wheel", 4)], hint="mecanum_x")
-for xw in (88.0, -88.0):
+for xw in (WHEEL_X, -WHEEL_X):
     for sy in (-1, 1):
         mecanum("Mecanum Wheel", xw, sy * (side_y + 32), 30, dir_=(0, -sy, 0))
-sub("One wheel screw in each hub.", [('M3 x 0.5" x 6" Mecanum Wheel Screw', 4)], zoom=(88, side_y + 46, 30))
-for xw in (88.0, -88.0):
+sub("One wheel screw in each hub.", [('M3 x 0.5" x 6" Mecanum Wheel Screw', 4)], zoom=(WHEEL_X, side_y + 46, 30))
+for xw in (WHEEL_X, -WHEEL_X):
     for sy in (-1, 1):
         screw('M3 x 0.5" x 6" Mecanum Wheel Screw', (xw, sy * (side_y + 41.8), 30), (0, -sy, 0))
 
@@ -634,25 +656,29 @@ for sy in (+1, -1):
     y0 = sy * (half + LANE_T)
     side = "left" if sy > 0 else "right"
     sub(f"Plate on the outside of the {side} lane wall, front end.", [("Plate 4 x 12", 1)], zoom=(L / 2, y0, 25))
-    box("Plate 4 x 12", (L / 2 - 26, min(y0, y0 + sy * 2), 4), (L / 2 + 80, max(y0, y0 + sy * 2), 46), "metal", dir_=(0, -sy, 0))
-    sub("4 screws from INSIDE the lane, heads stay inside.", [(S12, 4)], zoom=(L / 2 - 14, 0, 25))
+    box("Plate 4 x 12", (PLATE_X[0], min(y0, y0 + sy * 2), PLATE_Z[0]), (PLATE_X[1], max(y0, y0 + sy * 2), PLATE_Z[1]), "metal", dir_=(0, -sy, 0))
+    sub("4 screws from INSIDE the lane, heads stay inside.", [(S12, 4)], zoom=(L / 2 - 14, 0, 25 + DZ))
     for dx in (8, 20):
-        for z in (15, 35):
+        for z in (15 + DZ, 35 + DZ):
             screw(S12, (L / 2 - dx, sy * half, z), (0, sy, 0))
-    sub("4 Keps nuts outside, tighten.", [(KEPS, 4)], zoom=(L / 2 - 14, y0, 25))
+    sub("4 Keps nuts outside, tighten.", [(KEPS, 4)], zoom=(L / 2 - 14, y0, 25 + DZ))
     for dx in (8, 20):
-        for z in (15, 35):
+        for z in (15 + DZ, 35 + DZ):
             nut(KEPS, (L / 2 - dx, y0 + sy * 3.6, z), (0, -sy, 0))
 for sy in (+1, -1):
     y0 = sy * (half + LANE_T)
-    sub("Strap on the front end of the plate (2 screws + 2 nuts), then bend it 35 degrees out.",
-        [("Strap 1 x 10", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2 + 78, y0, 14), hint="bend_35")
+    sub("Strap along the outside of the plate's front half (2 screws from INSIDE the lane + 2 nuts outside). "
+        "Bend the part that sticks out past the plate 35 degrees outward: that is the funnel.",
+        [("Strap 1 x 10", 1), (S12, 2), (KEPS, 2)], zoom=(PLATE_X[1] - 20, y0, 14), hint="bend_35")
+    FREE = 68.0                                          # strap length past the plate end (the flared part)
+    box("Strap 1 x 10", (PLATE_X[1] - (127.0 - FREE), min(y0 + sy * 2, y0 + sy * 4), 8), (PLATE_X[1], max(y0 + sy * 2, y0 + sy * 4), 20.7),
+        "metal", dir_=(0, -sy, 0))
     a = math.radians(sy * 35)
-    tf = Matrix.Translation((L / 2 + 66, y0 + sy * 3.0, 0)) @ Matrix.Rotation(a, 4, "Z") @ Matrix.Translation((50.8, 0, 0))
-    box("Strap 1 x 10", (-63.5, -1.0, 8), (63.5, 1.0, 20.7), "metal", tf, dir_=(0, -sy, 0))
-    for xs in (L / 2 + 62, L / 2 + 74):
-        screw(S12, (xs, sy * half, 14.4), (0, sy, 0))
-        nut(KEPS, (xs, y0 + sy * 5.2, 14.4), (0, -sy, 0))
+    tf = Matrix.Translation((PLATE_X[1], y0 + sy * 3.0, 0)) @ Matrix.Rotation(a, 4, "Z") @ Matrix.Translation((FREE / 2, 0, 0))
+    box("Strap 1 x 10", (-FREE / 2, -1.0, 8), (FREE / 2, 1.0, 20.7), "metal", tf, dir_=(0, -sy, 0))
+    for xs in (PLATE_X[1] - 50.8, PLATE_X[1] - 25.4):
+        screw(S12, (xs, y0, 14.4), (0, sy, 0))
+        nut(KEPS, (xs, y0 + sy * 5.6, 14.4), (0, -sy, 0))
 
 
 def gate(label, gx, servo_kind, z_deck, x_side, note_place, fix_pts):
@@ -669,13 +695,17 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place, fix_pts):
         sub(f"{label}: micro servo into the micro servo mount, 2 small screws.",
             [("Micro Servo", 1), ("Micro Servo Mount", 1), ('2-56 3/8" Micro Servo Mount Screw', 2)], subassembly=label,
             zoom=(gx, 0, shaft_z))
-        yb = max(abs(y) for _, y in fix_pts) + 2
-        box("Micro Servo Mount", (xs[0] - 2, -yb, z_deck), (xs[1] + 2, yb, z_deck + 4), "metal", dir_=(0, 0, -1))
+        box("Micro Servo Mount", (xs[0] - 2, -16, z_deck), (xs[1] + 2, 16, z_deck + 4), "metal", dir_=(0, 0, -1))
+        for fx, fy in fix_pts:
+            sg = 1 if fy > 0 else -1
+            box("Micro Servo Mount", (fx - 5, min(sg * 15, fy + sg * 5), z_deck), (fx + 5, max(sg * 15, fy + sg * 5), z_deck + 4), "metal", dir_=(0, 0, -1))
     else:
         sub(f"{label}: servo into the servo bracket, 2 screws + 2 nuts through the servo ears.",
             [("Servo", 1), ("Servo Bracket", 1), (S12, 2), (KEPS, 2)], subassembly=label, zoom=(gx, 0, shaft_z))
-        yb = max(abs(y) for _, y in fix_pts) + 2
-        box("Servo Bracket", (xs[0] - 2, -yb, z_deck), (xs[1] + 2, yb, z_deck + 2), "metal", dir_=(0, 0, -1))
+        box("Servo Bracket", (xs[0] - 2, -24, z_deck), (xs[1] + 2, 24, z_deck + 2), "metal", dir_=(0, 0, -1))
+        for fx, fy in fix_pts:
+            sg = 1 if fy > 0 else -1
+            box("Servo Bracket", (fx - 5, min(sg * 23, fy + sg * 5), z_deck), (fx + 5, max(sg * 23, fy + sg * 5), z_deck + 2), "metal", dir_=(0, 0, -1))
         for sy_ in (-1, 1):
             box("Servo Bracket", (xs[0] - 2, sy_ * 12.2 - 1, z_deck), (xs[1] + 2, sy_ * 12.2 + 1, z_deck + sb[0] + 4), "metal", dir_=(0, 0, -1))
     box(servo_kind, (xs[0], -sb[1] / 2, z_deck + 4), (xs[1], sb[1] / 2, z_deck + 4 + sb[0]), "servo", dir_=(0, 0, -1),
@@ -687,24 +717,24 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place, fix_pts):
         servo_ear_fasteners((xs[0], -sb[1] / 2, z_deck + 4), (xs[1], sb[1] / 2, z_deck + 4 + sb[0]), (-x_side, 0, 0))
     hx = gx + x_side * 1.4
     if micro:
-        sub(f"{label}: 1x5 liftarm flap on the servo's own horn, tied with 1 zip tie. Flap points DOWN.",
-            [("1 x 5 Liftarm", 1), (ZIP, 1)], subassembly=label, hint="gate_open_closed", zoom=(hx, 0, shaft_z - 20))
-        box("1 x 5 Liftarm", (hx - 1.0 - 3.6, -4, 10), (hx - 1.0 + 3.6, 4, shaft_z + 4), "lego", dir_=(-x_side, 0, 0))
+        sub(f"{label}: 1x7 liftarm flap on the servo's own horn, tied with 1 zip tie. Flap points DOWN.",
+            [("1 x 7 Liftarm", 1), (ZIP, 1)], subassembly=label, hint="gate_open_closed", zoom=(hx, 0, shaft_z - 20))
+        box("1 x 7 Liftarm", (hx - 1.0 - 3.6, -4, shaft_z + 4 - 56), (hx - 1.0 + 3.6, 4, shaft_z + 4), "lego", dir_=(-x_side, 0, 0))
         box("Zip tie", (hx - 5, -5, shaft_z - 3), (hx + 5, 5, shaft_z - 1.8), "zip", dir_=(-x_side, 0, 0))
     else:
         sub(f"{label}: 1x5 servo horn on the shaft, pointing DOWN; 1 horn screw in the middle.",
             [("1 x 5 Servo Horn", 1), (HORNS, 1)], subassembly=label, hint="gate_open_closed", zoom=(hx, 0, shaft_z))
         box("1 x 5 Servo Horn", (hx - 1.3, -4.25, shaft_z - 32), (hx + 1.3, 4.25, shaft_z + 32), "metal", dir_=(-x_side, 0, 0))
         screw(HORNS, (hx - x_side * 1.3, 0, shaft_z), (x_side, 0, 0))
-        sub(f"{label}: 1x7 liftarm on the lower 2 horn holes, 2 screws + 2 nuts. Its tip is 10 mm above the floor.",
+        sub(f"{label}: 1x7 liftarm on the lower 2 horn holes, 2 screws + 2 nuts. Its tip hangs about 20 mm above the floor, lower than a duck's top (53 mm).",
             [("1 x 7 Liftarm", 1), (S12, 2), (KEPS, 2)], subassembly=label, zoom=(hx, 0, shaft_z - 25))
-        box("1 x 7 Liftarm", (hx - x_side * 1.3 - 4, -4, 10), (hx - x_side * 1.3 + 4, 4, shaft_z - 6), "lego", dir_=(-x_side, 0, 0))
+        box("1 x 7 Liftarm", (hx - x_side * 1.3 - 4, -4, shaft_z - 6 - 56), (hx - x_side * 1.3 + 4, 4, shaft_z - 6), "lego", dir_=(-x_side, 0, 0))
         for k in (1, 2):
             z = shaft_z - 12.7 * k
             screw(S12, (hx - x_side * 5.3, 0, z), (x_side, 0, 0))
             nut(KEPS, (hx + x_side * 1.3 + 1.6, 0, z), (-x_side, 0, 0))
     sub(f"{label}: {note_place}", [(S12, 2), (KEPS, 2)], zoom=(gx, 0, z_deck), hint="gate_open_closed")
-    thick = DECK_T if z_deck == top else 8.0                       # deck, or the 1x5 liftarm bridge
+    thick = DECK_T if z_deck == top else 1.5                       # deck, or the bent-strap bridge
     for fx, fy in fix_pts:
         screw(S12, (fx, fy, z_deck + (4 if micro else 2)), (0, 0, -1))
         nut(KEPS, (fx, fy, z_deck - thick - 1.6), (0, 0, 1))
@@ -713,42 +743,45 @@ def gate(label, gx, servo_kind, z_deck, x_side, note_place, fix_pts):
 step("Duck gates", hint="gate_open_closed")
 gate("Exit gate A", -L / 2 + 10.0, "Servo", top, +1,
      "bracket on the deck over the REAR slot, flap through the slot. 2 screws down, 2 nuts under the deck.",
-     [(-L / 2 + 20.0, 32.0), (-L / 2 + 44.0, -32.0)])
-gate("Pin gate B", -L / 2 + 66.0, "Micro Servo", top, +1,
+     [(-L / 2 + 20.0, 48.0), (-L / 2 + 52.0, -48.0)])
+gate("Pin gate B", -L / 2 + 74.0, "Micro Servo", top, +1,             # p1: GATE_B_X = GATE_A_X + 60 + 4
      "mount on the deck over the MIDDLE slot. 2 screws down, 2 nuts under the deck.",
-     [(-L / 2 + 84.0, 16.0), (-L / 2 + 92.0, -16.0)])
+     [(-L / 2 + 92.0, 48.0), (-L / 2 + 92.0, -48.0)])
 # intake gate C: on a bridge across the two extension plates, just behind the funnel
-sub("Intake gate C: a 1x5 liftarm bridge across the two plates (2 screws + 2 nuts).", [("1 x 5 Liftarm", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2 + 50, 0, 46))
-box("1 x 5 Liftarm", (L / 2 + 46, -half - LANE_T - 4, 46), (L / 2 + 54, half + LANE_T + 4, 54), "lego", dir_=(0, 0, -1))
+BX, BY = PLATE_X[1] - 6.35, half + LANE_T + 2     # bridge on the plates' last hole column; outer face of the plates
+GATE_C_X = BX - 12.5                              # the flap hangs just behind the bridge: 5 ducks fit between flaps A and C
+assert (GATE_C_X + 0.1 - 4.0) - (-L / 2 + 10.0 + 0.1 + 4.0) >= 5 * 60.0 + 3.0, "lane too short for 5 ducks"
+BTOP = PLATE_Z[1] - 6.35 - 6.0 + 24.0             # leg hole on the plate's top hole row, 24 mm legs
+sub("Intake gate C bridge: bend a Strap 1x10 into a U (flat middle as wide as the two plates, 2 short legs down). "
+    "Legs on the OUTSIDE of the plates, top hole row, last hole: 1 short screw from INSIDE the lane + 1 nut outside, each side.",
+    [("Strap 1 x 10", 1), (S14, 2), (KEPS, 2)], zoom=(BX, 0, BTOP - 10))
+box("Strap 1 x 10", (BX - 6.35, -BY - 1.5, BTOP - 1.5), (BX + 6.35, BY + 1.5, BTOP), "metal", dir_=(0, 0, -1))
 for sy in (-1, 1):
-    screw(S12, (L / 2 + 50, sy * (half + LANE_T + 1), 54), (0, 0, -1))
-    nut(KEPS, (L / 2 + 50, sy * (half + LANE_T + 1), 41), (0, 0, 1))
-gate("Intake gate C", L / 2 + 50.0, "Servo", 54.0, +1, "bracket on the liftarm bridge, flap down into the lane. 2 screws, 2 nuts.",
-     [(L / 2 + 52.5, 20.0), (L / 2 + 52.5, -20.0)])
+    box("Strap 1 x 10", (BX - 6.35, min(sy * BY, sy * (BY + 1.5)), BTOP - 24), (BX + 6.35, max(sy * BY, sy * (BY + 1.5)), BTOP), "metal", dir_=(0, 0, -1))
+    screw(S14, (BX, sy * (BY - 2), BTOP - 18), (0, sy, 0))
+    nut(KEPS, (BX, sy * (BY + 1.5 + 1.6), BTOP - 18), (0, -sy, 0))
+gate("Intake gate C", GATE_C_X, "Servo", BTOP, +1, "bracket on the strap bridge, flap down into the lane. 2 screws down, 2 nuts under the strap.",
+     [(BX, 25.4), (BX, -25.4)])
 
 step("Sensors")
 sub("Lane-full touch switch into the window in the right lane wall, 2 brass screws.", [("Small Touch", 1), ("Brass Screws", 2)],
-    zoom=(-76, -half - LANE_T, 16))
-box("Small Touch", (-83, -half - LANE_T - 7, 11), (-69, -half - LANE_T, 21), "sensor", dir_=(0, 1, 0))
+    zoom=(-76, -half - LANE_T, 16 + DZ))
+box("Small Touch", (-83, -half - LANE_T - 7, 11 + DZ), (-69, -half - LANE_T, 21 + DZ), "sensor", dir_=(0, 1, 0))
 for dx in (-9.5, 9.5):
-    screw("Brass Screws", (-76 + dx, -half - LANE_T - 7, 16), (0, 1, 0))
-sub("Angle bracket on the front bumper, 2 screws + 2 nuts.", [("Angle Bracket", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2, 0, 22))
-box("Angle Bracket", (L / 2 - 1, -40, 18), (L / 2 + 1, -26, 34), "metal", dir_=(-1, 0, 0))
-box("Angle Bracket", (L / 2 - 1, 26, 18), (L / 2 + 1, 40, 34), "metal", dir_=(-1, 0, 0))
-box("Angle Bracket", (L / 2, -40, 18), (L / 2 + 14, 40, 20), "metal", dir_=(-1, 0, 0))
+    screw("Brass Screws", (-76 + dx, -half - LANE_T - 7, 16 + DZ), (0, 1, 0))
+sub("Two tophats on the OUTSIDE of the intake plates, looking down, 6 mm above the floor: 1 short screw from INSIDE "
+    "the lane + 1 nut outside, each. Nothing may cross the lane mouth: the ducks pass there.",
+    [("Tophat (Reflectance)", 2), (S14, 2), (KEPS, 2)], zoom=(L / 2 + 40, half + LANE_T + 12, 14))
 for sy in (-1, 1):
-    screw(S12, (L / 2 + 1, sy * 33, 28), (-1, 0, 0))
-    nut(KEPS, (L / 2 - 5.6, sy * 33, 28), (1, 0, 0))
-sub("Two tophats under the bracket, looking down, 1 screw each.", [("Tophat (Reflectance)", 2), (S12, 2), (KEPS, 2)], zoom=(L / 2 + 8, 30, 14))
-for sy in (-1, 1):
-    cyl("Tophat (Reflectance)", (L / 2 + 8, sy * 30, 13), 16, 10, "Z", "sensor", 20, (0, 0, 1))
-    screw(S12, (L / 2 + 8, sy * 30, 20), (0, 0, -1))
-    nut(KEPS, (L / 2 + 8, sy * 30, 15.4), (0, 0, 1))
+    yp = sy * (half + LANE_T + 2)                       # outer face of the plate
+    cyl("Tophat (Reflectance)", (L / 2 + 40, yp + sy * 10.5, 13), 16, 14, "Z", "sensor", 20, (0, -sy, 0))
+    screw(S14, (L / 2 + 40, yp - sy * 2, 22), (0, sy, 0))
+    nut(KEPS, (L / 2 + 40, yp + sy * (3.5 + 1.6), 22), (0, -sy, 0))
 sub("Rangefinder (ET) on the front bumper grid, 2 screws + 2 nuts.", [("ET (Rangefinder)", 1), (S12, 2), (KEPS, 2)], zoom=(L / 2, 54, 30))
-box("ET (Rangefinder)", (L / 2, 40, 22), (L / 2 + 10, 68, 38), "sensor", dir_=(-1, 0, 0))
-for dy in (44, 64):
-    screw(S12, (L / 2 + 10, dy, 30), (-1, 0, 0))
-    nut(KEPS, (L / 2 - 5.6, dy, 30), (1, 0, 0))
+box("ET (Rangefinder)", (L / 2, 44, 20), (L / 2 + 10, 72, 36), "sensor", dir_=(-1, 0, 0))
+for dy in (48, 64):                                     # p1 front bumper grid: y multiples of 8, z 20 / 28 / 36
+    screw(S12, (L / 2 + 10, dy, 28), (-1, 0, 0))
+    nut(KEPS, (L / 2 - 5.6, dy, 28), (1, 0, 0))
 sub("Start light sensor on the deck, front left, facing up, 1 screw (through the corner of its board) + 1 nut.", [("Light", 1), (S12, 1), (KEPS, 1)], zoom=(72, 54, top))
 box("Light", (70, 52, top), (82, 64, top + 10), "sensor", dir_=(0, 0, -1))
 screw(S12, (72, 54, top + 4.5), (0, 0, -1))
@@ -780,6 +813,7 @@ box("Zip tie", (78, -73, top), (81, -31, top + 26.5), "zip", dir_=(0, 0, -1))
 step("Wiring", hint="wiring")
 sub("Motors FR 0, FL 1, BR 2, BL 3. Servos: intake C 0, pin B 1, exit A 2. Analog: tophat L 0, R 1, ET 2, light 3. Digital 0: lane-full switch.",
     [], hint="wiring")
+check_size("A")
 export(os.path.join(OUT, "robot_a.glb"))
 
 # ============================================================================ ROBOT B
@@ -1021,6 +1055,7 @@ nut(KEPS, (42, -58, PL0 - 1.6), (0, 0, 1))
 step("Wiring", hint="wiring")
 sub("Motors: left 0, right 2. Servos: shoulder 1, claw 2, hook 3. Analog: tophat L 0, R 1, ET 2, light 3. Digital 0: plow lever. Camera on USB.",
     [], hint="wiring")
+check_size("B")
 export(os.path.join(OUT, "robot_b.glb"))
 
 # ============================================================================ part cards
@@ -1102,7 +1137,10 @@ for name in sorted(total, key=lambda n: (n not in PRINTS, n)):
     kit = "print" if name in PRINTS else KIT["parts"].get(name, "NOT IN KIT")
     ok = name in PRINTS or (isinstance(kit, int) and total[name] <= kit)
     lines.append(f"| {name} | {use['A'][name]} | {use['B'][name]} | {total[name]} | {kit} | {'yes' if ok else 'NO'} |")
-lines += ["", f"Printed parts: {printed}/{KIT['printed_limit']}", "", "Problems: " + ("none" if not problems else "")]
+lines += ["", f"Printed parts: {printed}/{KIT['printed_limit']}", "", "## Size check (start-box limit 11.25 x 21.125 x 12 in = 285.8 x 536.6 x 304.8 mm)", "",
+          "| Robot | Width mm | Length mm | Height mm | Fits |", "|---|---:|---:|---:|---|"]
+lines += [f"| {r} | {z['width_mm']} | {z['length_mm']} | {z['height_mm']} | {'yes' if z['fits'] else 'NO'} |" for r, z in SIZES.items()]
+lines += ["", "Problems: " + ("none" if not problems else "")]
 lines += [f"- {p}" for p in problems]
 open(os.path.join(OUT, "bom.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 nsub = {r: sum(len(s["subs"]) for s in STEPS[r]) for r in "AB"}
@@ -1115,7 +1153,7 @@ with open(os.path.join(OUT, "steps.json"), "w", encoding="utf-8") as f:
                          "bend_35": "bend the strap 35 degrees outward", "print_check": "check the print", "wiring": "port map card"},
                "robot_a": {"name": "Robot A - Duck Runner", "glb": "robot_a.glb", "steps": STEPS["A"], "substeps": nsub["A"]},
                "robot_b": {"name": "Robot B - Point Scorer", "glb": "robot_b.glb", "steps": STEPS["B"], "substeps": nsub["B"]},
-               "claw": CLAW, "cards": CARDS,
+               "claw": CLAW, "cards": CARDS, "size_check": SIZES,
                "bom": {r: dict(use[r]) for r in "AB"}}, f, indent=1)
 print("\n".join(lines))
 print("SUBSTEPS", nsub)
