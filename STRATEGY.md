@@ -63,7 +63,7 @@ crossing the red duck and the two robots meeting at the lower cup. In plan v3, A
 upper cup out of the lane upside down; it ends on the centre tape and scores nothing.
 
 Stretch goals, in order of value per second (all ×5): **flip the upper cup with B after 62 s**
-(+21 = +105, B and A are both done by 72 s), rings on bottle necks (+16 base each), nesting the
+(+21 = +105, B and A are both done by 74 s), rings on bottle necks (+16 base each), nesting the
 cups (+20), pickleball 2 on the right wall (+8), complete pom sets by adding the freed hidden pom
 of the same colour (+22 per colour), Botguy on platform (+15), big duck at Botguy's start (+15).
 
@@ -81,10 +81,10 @@ move for move. Frame: inches from the inside corner of the bottom-left PVC. Robo
 | 3-12 | Waits (**hand-off 12 s**) | 6 s: pivots 20°, the cup rolls upright off the tape at (27, 8.9) in zone 5, its 3 poms spill; 7-10 s: grabs the red pom with the camera + claw |
 | 12-17 | East under the red stack, side-pushes the red stack + upper cup north into zone 1 | Waits holding the red pom (**hand-off 26 s**) |
 | 17-25 | Line-follows east 39 in, swallowing red, green, lavender, blue, yellow; shuts intake gate C behind the fifth and backs 2.5 in | same |
-| 24-36 | Drops: zone 2 (70.6, 33), zone 4 (72.1, 17.6), zone 1 (44, 28.2). The lane is first in, first out | 27-50: pushes the green, lavender, turquoise and gold stacks north into zone 1 |
+| 24-36 | Drops: zone 2 (73.4, 33), zone 4 (73.9, 17.6), zone 1 (44, 28.2). Before each drop after the first it rolls 2.4 in forward so the next duck is at the exit gate. The lane is first in, first out | 27-50: pushes the green, lavender, turquoise and gold stacks north into zone 1 |
 | 36-60 | Waits at (52.6, 21) (**hand-off 60 s**) | 51-57: east along zone 3, arcs down to the bottom wall east of the cup |
 | 57-62 | same | Hook knocks pickleball 1 off its post, the plow pushes it under the platform; red pom on the platform, stops at 62 s |
-| 60-72 | West through zone 3; waits (**hand-off 66 s**); drops in zone 5 (33.2, 6.8) and zone 3 (35.7, 21), stops at 74 s | Stopped |
+| 60-74 | West through zone 3; waits (**hand-off 66 s**); drops in zone 5 (36, 6.8) and zone 3 (42.2, 21), stops at 74 s | Stopped |
 
 Checks the simulator runs every 0.05 s (`python tools/match_sim.py` must print NO CONTACTS):
 - both robots' true footprints never come within 0.25" of each other;
