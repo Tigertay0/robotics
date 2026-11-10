@@ -1,4 +1,6 @@
-# Printed duck lane for Robot A
+# Printed duck lane for Robot A (earlier design, not printed)
+
+> **Status, Nov 10 2026:** superseded by print 1, the chassis with the duck lane built in ([3D_PRINTS.md](../3D_PRINTS.md), `parts/team4/p1_chassis_a.stl`). The team may print only 4 parts, and the ducks measure 60 × 60 × 53 mm: this lane's 45.7 mm channel is too narrow for them. Kept for reference.
 
 Two parts, both within the **mid-size** print allowance (220 × 220 × 80 mm). They replace the four
 bent 4×12 plates, the two splice straps, the two angle brackets and the two funnel straps of the

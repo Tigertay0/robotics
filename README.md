@@ -29,7 +29,8 @@ Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5
 - [docs/manual/](docs/manual/): the step-by-step manual ([build_manual.html](docs/manual/build_manual.html)), the two 3D models it uses (`robot_a.glb`, `robot_b.glb`, also as `.obj` with one object per part), `steps.json`, and [bom.md](docs/manual/bom.md). The BOM check proves every part and screw is in the 2026 kit and only 4 parts are printed, and its size table proves both robots fit the 11.25 × 21.125 × 12 in start-box limit.
 - [docs/BUILD.md](docs/BUILD.md), [docs/ROBOTS.md](docs/ROBOTS.md) (renders in `docs/robots/`), [docs/parts.md](docs/parts.md).
 - [3D_PRINTS.md](3D_PRINTS.md) and [parts/team4/](parts/team4/): the 4 prints (p1 Robot A chassis with duck lane, p2 claw jaw, p3 pocket plow, p4 cup hook) as slicer-ready **STL and OBJ** files with previews and [budget.md](parts/team4/budget.md).
-- [guide/](guide/index.html): the older interactive assembly guide.
+- [guide/](guide/index.html): the older interactive assembly guide. [prints/](prints/README.md): an earlier two-half printed duck lane (not printed: superseded by print 1, too narrow for the measured ducks).
+- [index.html](index.html): the GitHub Pages front page.
 
 **Code and match plan**
 - [code/](code/README.md): the Wombat programs for both robots.
@@ -41,6 +42,6 @@ Two robots: **A "Duck Runner"** (mecanum, puts exactly one duck in each of the 5
 - `python tools/blender/build_parts.py` regenerates the 4 prints. It fails on any fit, watertightness, clearance or 4-part-budget problem.
 - `blender -b --factory-startup --python tools/blender/export_build_manual.py -- docs/manual` regenerates the manual's models, steps and BOM check.
 - `data/`: kit counts (`kit_2026.json`), field map, robot footprints, score scenarios.
-- [blender/](blender/README.md): 3D model of the official table and the original animated plan (`blender/out/*.blend`).
+- [blender/](blender/README.md): 3D model of the official table and the original animated plan (`blender/out/*.blend`), with three close-up videos (`blender/out/closeup_*.mp4`). It shows the first strategy, not plan v3.
 
 **Original uploads**: `Fall_Game_Table.glb`, `STL Parts.zip` (official table and part geometry from KIPR Team Home Base), `Botball_Fall_Seeding_Scoresheet.xlsx`, `Fall_Game_Table.pdf`, `Botball Inventory.xlsx`.

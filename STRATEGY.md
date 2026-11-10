@@ -164,4 +164,4 @@ the code. See `code/README.md`.
   starting-light threshold (analog < 770) and the camera's red channel. They are used in `code/`.
   Still to measure: the mecanum and Solarbotics wheel diameters and the actual speed at 80% power,
   then update the per-segment times above.
-- Submit the STLs of the printed lane (`prints/out/`) before the tournament deadline.
+- Submit the STLs of the 4 printed parts (`parts/team4/`, see [3D_PRINTS.md](3D_PRINTS.md)) before the tournament deadline. The two-half printed lane in `prints/` is an earlier design: it is not one of the 4 prints, and its 45.7 mm channel is too narrow for the measured 60 mm ducks.
