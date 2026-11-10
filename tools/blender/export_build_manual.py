@@ -64,7 +64,8 @@ C = {
     "pla": ((0.62, 0.64, 0.68), 0.0, 0.6), "metal": ((0.78, 0.79, 0.81), 0.8, 0.35),
     "motor": ((0.06, 0.06, 0.07), 0.0, 0.6), "servo": ((0.10, 0.10, 0.12), 0.0, 0.5),
     "sensor": ((0.13, 0.42, 0.85), 0.0, 0.4), "wombat": ((0.05, 0.05, 0.06), 0.0, 0.4),
-    "screen": ((0.12, 0.45, 0.62), 0.0, 0.2), "battery": ((0.18, 0.22, 0.62), 0.0, 0.5),
+    "pcb": ((0.05, 0.06, 0.06), 0.0, 0.5), "conn": ((0.92, 0.90, 0.82), 0.0, 0.5), "yellow": ((0.95, 0.78, 0.10), 0.0, 0.5),
+    "screen": ((0.12, 0.45, 0.62), 0.0, 0.2), "battery": ((0.07, 0.07, 0.08), 0.0, 0.5),
     "roller": ((0.25, 0.25, 0.27), 0.0, 0.7), "lego": ((0.55, 0.57, 0.60), 0.0, 0.5),
     "screw": ((0.12, 0.12, 0.13), 0.6, 0.35), "silver": ((0.80, 0.80, 0.82), 0.9, 0.25),
     "hub": ((0.85, 0.85, 0.85), 0.2, 0.4), "zip": ((0.95, 0.95, 0.93), 0.0, 0.6),
@@ -372,33 +373,27 @@ def servo_ear_fasteners(lo, hi, shaft_dir, kind=None):
 
 
 def shape_motor(cp, lo, hi, dir_, **_):
-    """Black gear motor: gearbox block + round motor can + label + 2 wires; shaft faces -dir_."""
+    """Black Gear Motor (2026 Electronics Kit picture): a black servo-shaped box; label on top, red + black lead.
+    Its ears and output shaft are drawn by the caller. The shaft faces -dir_."""
     a = max(range(3), key=lambda i: abs(dir_[i]))
     s = -1.0 if dir_[a] > 0 else 1.0                   # shaft side
     d = [b - x for x, b in zip(lo, hi)]
     c = [(x + b) / 2 for x, b in zip(lo, hi)]
     others = [i for i in range(3) if i != a]
-    front = hi[a] if s > 0 else lo[a]
-    split = front - s * 0.55 * d[a]
-    g_lo, g_hi = list(lo), list(hi)
-    g_lo[a], g_hi[a] = sorted((front, split))
-    cp.box(g_lo, g_hi, "motor")
-    can_d = 0.95 * min(d[i] for i in others)
-    back = lo[a] if s > 0 else hi[a]
-    can_c = list(c)
-    can_c[a] = (split + back) / 2
-    cp.cyl(can_c, can_d, abs(split - back), _ax(a), "can", 24)
-    lab_lo, lab_hi = list(g_lo), list(g_hi)
+    cp.box(lo, hi, "motor")
     o0 = max(others, key=lambda i: d[i])
-    lab_lo[o0], lab_hi[o0] = c[o0] - 0.3 * d[o0], c[o0] + 0.3 * d[o0]
     o1 = [i for i in others if i != o0][0]
+    lab_lo, lab_hi = list(lo), list(hi)
+    lab_lo[o0], lab_hi[o0] = c[o0] - 0.3 * d[o0], c[o0] + 0.3 * d[o0]
+    lab_lo[a], lab_hi[a] = c[a] - 0.3 * d[a], c[a] + 0.3 * d[a]
     lab_lo[o1], lab_hi[o1] = hi[o1] - 0.1, hi[o1] + 0.4
     cp.box(lab_lo, lab_hi, "label")
+    back = lo[a] if s > 0 else hi[a]
     for k, key in enumerate(("wire_r", "wire_b")):
-        p = list(can_c)
-        p[a] = back - s * 5
-        p[o0] += (k - 0.5) * 4
-        cp.cyl(p, 1.6, 10, _ax(a), key, 8)
+        pt = list(c)
+        pt[a] = back - s * 5
+        pt[o0] += (k - 0.5) * 4
+        cp.cyl(pt, 1.6, 10, _ax(a), key, 8)
 
 
 def shape_wombat(cp, lo, hi, **_):
@@ -416,21 +411,22 @@ def shape_wombat(cp, lo, hi, **_):
 
 
 def shape_battery(cp, lo, hi, **_):
+    """Wombat Battery (kit picture): black pack with a yellow label, red + black lead, yellow plug."""
     cp.box(lo, hi, "battery")
     d, order = _split_axes(lo, hi)
     La = order[2]
     c = [(a + b) / 2 for a, b in zip(lo, hi)]
     lab_lo, lab_hi = [v - 0.2 for v in lo], [v + 0.2 for v in hi]
-    lab_lo[La], lab_hi[La] = c[La] - 0.18 * d[La], c[La] + 0.18 * d[La]
-    cp.box(lab_lo, lab_hi, "label")
+    lab_lo[La], lab_hi[La] = c[La] - 0.22 * d[La], c[La] + 0.22 * d[La]
+    cp.box(lab_lo, lab_hi, "yellow")
     for k, key in enumerate(("wire_r", "wire_b")):
-        p = list(c)
-        p[La] = hi[La] + 7
-        p[order[1]] += (k - 0.5) * 4
-        cp.cyl(p, 2.0, 14, _ax(La), key, 8)
-    p = list(c)
-    p[La] = hi[La] + 16
-    cp.box([v - 3.5 for v in p], [v + 3.5 for v in p], "wombat")
+        pt = list(c)
+        pt[La] = hi[La] + 7
+        pt[order[1]] += (k - 0.5) * 4
+        cp.cyl(pt, 2.0, 14, _ax(La), key, 8)
+    pt = list(c)
+    pt[La] = hi[La] + 16
+    cp.box([v - 3.5 for v in pt], [v + 3.5 for v in pt], "yellow")
 
 
 def shape_zip(cp, lo, hi, **_):
@@ -443,33 +439,37 @@ def shape_zip(cp, lo, hi, **_):
 
 
 def shape_et(cp, lo, hi, **_):
-    """ET rangefinder: blue board, two round lenses on the +X (sensing) face, 3-pin plug."""
-    cp.box(lo, hi, "sensor")
+    """ET rangefinder (kit picture): black board, two round lenses on the +X (sensing) face, white plug behind."""
+    cp.box(lo, hi, "pcb")
     cy, cz = (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2
     dy = 0.27 * (hi[1] - lo[1])
     for y in (cy - dy, cy + dy):
         cp.cyl((hi[0] + 1.5, y, cz), 8.0, 3.0, (1, 0, 0), "lens", 18)
-    cp.box((lo[0] - 3, cy - 4, cz - 2), (lo[0], cy + 4, cz + 2), "motor")
+    cp.box((lo[0] - 3, cy - 4, cz - 2), (lo[0], cy + 4, cz + 2), "conn")
 
 
 def shape_light(cp, lo, hi, **_):
-    """Light sensor: small board with a round light-dependent cell facing up."""
-    zt = lo[2] + 0.45 * (hi[2] - lo[2])
-    cp.box(lo, (hi[0], hi[1], zt), "sensor")
-    c = ((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2)
-    cp.cyl((c[0], c[1], (zt + hi[2]) / 2), 0.75 * (hi[0] - lo[0]), hi[2] - zt, (0, 0, 1), "dome", 18)
+    """Light sensor (kit picture): small black board, white plug, thin black light cell standing up."""
+    zt = lo[2] + 1.6
+    cp.box(lo, (hi[0], hi[1], zt), "pcb")
+    cx, cy = (lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2
+    cp.box((lo[0] + 1, cy - 3, zt), (lo[0] + 6, cy + 3, zt + 4), "conn")
+    cp.cyl((hi[0] - 3, cy, (zt + hi[2]) / 2), 4.0, hi[2] - zt, (0, 0, 1), "motor", 12)
+    cp.cyl((hi[0] - 3, cy, hi[2] + 0.3), 3.4, 0.6, (0, 0, 1), "lens", 12)
 
 
 def shape_touch(cp, lo, hi, **_):
-    """Small touch switch: body with a red push button on the +Y face (into the lane)."""
-    cp.box(lo, hi, "sensor")
-    cp.cyl(((lo[0] + hi[0]) / 2, hi[1] + 1.5, (lo[2] + hi[2]) / 2), 5.0, 3.0, (0, 1, 0), "button", 14)
+    """Small Touch (kit picture): small black board with a white push button on the +Y face (into the lane)."""
+    cp.box(lo, hi, "pcb")
+    cx, cz = (lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2
+    cp.box((cx - 3, hi[1], cz - 3), (cx + 3, hi[1] + 2, cz + 3), "motor")
+    cp.cyl((cx, hi[1] + 3, cz), 3.5, 2.0, (0, 1, 0), "conn", 12)
 
 
 def shape_lever(cp, lo, hi, **_):
-    """Lever switch: body at the back, metal lever reaching forward (+X) with a roller."""
+    """Lever switch (kit picture): red body at the back, long metal lever reaching forward (+X)."""
     xm = lo[0] + 0.45 * (hi[0] - lo[0])
-    cp.box(lo, (xm, hi[1], hi[2]), "sensor")
+    cp.box(lo, (xm, hi[1], hi[2]), "button")
     zc = (lo[2] + hi[2]) / 2
     cp.box((xm, lo[1] + 2, zc - 0.4), (hi[0] - 2, hi[1] - 2, zc + 0.4), "silver")
     cp.cyl((hi[0] - 2.5, (lo[1] + hi[1]) / 2, zc), 5.0, 4.0, (0, 0, 1), "silver", 14)
@@ -503,26 +503,31 @@ def shape_channel(cp, lo, hi, **_):
 
 
 def round_horn(cp, c, d, h, ax, m):
-    """Round servo horn: disc, raised hub, ring of 8 holes."""
+    """Round Servo Horn (kit picture): metal disc, splined centre hole, ring of 6 holes."""
     cp.cyl(c, d, h, ax, "metal", 28)
-    cp.cyl(c + ax * (h / 2), 9, 2.0, ax, "metal", 20)
     ref = Vector((1, 0, 0)) if abs(ax.x) < 0.9 else Vector((0, 1, 0))
     u = ax.cross(ref).normalized()
     v = ax.cross(u)
-    for k in range(8):
-        a = 2 * math.pi * k / 8
-        cp.cyl(c + (u * math.cos(a) + v * math.sin(a)) * 7.0, 2.6, h + 0.4, ax, "hole", 10)
-    cp.cyl(c, 3.2, h + 2.4, ax, "hole", 10)
+    for k in range(6):
+        a = 2 * math.pi * k / 6
+        cp.cyl(c + (u * math.cos(a) + v * math.sin(a)) * 7.5, 3.2, h + 0.4, ax, "hole", 10)
+    cp.cyl(c, 5.0, h + 0.6, ax, "hole", 14)
 
 
 def tophat(cp, c, d, h, ax, m):
-    """Tophat reflectance sensor: barrel, brim on top, IR emitter + receiver under it."""
-    cp.cyl(c, d * 0.75, h, ax, "sensor", 20)
-    cp.cyl(c + ax * (h / 2 - 1), d * 1.25, 2.0, ax, "sensor", 24)
-    ref = Vector((1, 0, 0)) if abs(ax.x) < 0.9 else Vector((0, 1, 0))
-    u = ax.cross(ref).normalized()
+    """Tophat reflectance sensor (kit picture): small black board with 2 mounting holes and a white plug;
+    the black sensor block (the "top hat") sticks out of it and looks along -ax (down at the floor)."""
+    zt = c.z + abs(h) / 2                       # ax is +/-Z in every use
+    zb = c.z - abs(h) / 2
+    r = d / 2
+    cp.box((c.x - r, c.y - 0.7 * r, zt - 1.6), (c.x + r, c.y + 0.7 * r, zt), "pcb")
+    cp.box((c.x - r + 1, c.y - 3, zt), (c.x - r + 6, c.y + 3, zt + 4), "conn")
     for sgn in (-1, 1):
-        cp.cyl(c - ax * (h / 2 + 0.4) + u * (sgn * d * 0.18), 3.5, 1.2, ax, "lens", 12)
+        cp.cyl((c.x + r - 3, c.y + sgn * 0.45 * r, zt - 0.8), 3.0, 1.9, (0, 0, 1), "hole", 10)
+    cp.box((c.x - 5, c.y - 4, zb + 3), (c.x + 5, c.y + 4, zt - 1.6), "motor")       # brim
+    cp.box((c.x - 3, c.y - 2.5, zb), (c.x + 3, c.y + 2.5, zb + 3), "motor")           # crown = sensing face
+    for sgn in (-1, 1):
+        cp.cyl((c.x + sgn * 1.4, c.y, zb - 0.2), 1.8, 0.5, (0, 0, 1), "lens", 8)
 
 
 def friction_pin(cp, c, d, h, ax, m):
@@ -796,13 +801,13 @@ POSTS = [(-15 + sx * 56.35, sy * 41.9) for sx in (-1, 1) for sy in (-1, 1)]
 sub("Front 2 posts: 2 in standoffs on the deck's Wombat holes, 1 short screw each from under the deck.",
     [('Standoff 8-32 x 2"', 2), (S14, 2)], zoom=(41.35, 41.9, top + 25))
 for (x, y) in POSTS[2:]:
-    cyl('Standoff 8-32 x 2"', (x, y, top + 25.4), 6.4, 50.8, "Z", "metal", 6, (0, 0, -1))
+    cyl('Standoff 8-32 x 2"', (x, y, top + 25.4), 6.4, 50.8, "Z", "screw", 6, (0, 0, -1))
     screw(S14, (x, y, DECK_Z), (0, 0, 1))
 sub("Rear 2 posts: two 1 in standoffs joined by a 1 in threaded rod, 1 short screw each from under the deck.",
     [('Standoff 8-32 x 1"', 4), ('Threaded Rod 8-32 x 1"', 2), (S14, 2)], zoom=(-71.35, 41.9, top + 25))
 for (x, y) in POSTS[:2]:
-    cyl('Standoff 8-32 x 1"', (x, y, top + 12.7), 6.4, 25.4, "Z", "metal", 6, (0, 0, -1))
-    cyl('Standoff 8-32 x 1"', (x, y, top + 38.1), 6.4, 25.4, "Z", "metal", 6, (0, 0, -1))
+    cyl('Standoff 8-32 x 1"', (x, y, top + 12.7), 6.4, 25.4, "Z", "screw", 6, (0, 0, -1))
+    cyl('Standoff 8-32 x 1"', (x, y, top + 38.1), 6.4, 25.4, "Z", "screw", 6, (0, 0, -1))
     screw(S14, (x, y, DECK_Z), (0, 0, 1))
 sub("Wombat on the 4 posts, screen up, 4 screws from above.", [("Wombat", 1), (S14, 4)], zoom=(-15, 0, WZ + 20))
 box("Wombat", (-85, -51, WZ), (55, 51, WZ + 33), "wombat", dir_=(0, 0, -1))
@@ -874,7 +879,7 @@ wcx = (WOM[0] + WOM[1]) / 2
 sub("4 standoffs (1/2 in) on the plate, screws from below.", [('Standoff 8-32 x 1/2"', 4), (S14, 4)], zoom=(wcx + 56, 42, PL1))
 for sx in (-1, 1):
     for sy in (-1, 1):
-        cyl('Standoff 8-32 x 1/2"', (wcx + sx * 56.35, sy * 41.9, PL1 + 6.35), 6.4, 12.7, "Z", "metal", 6, (0, 0, -1))
+        cyl('Standoff 8-32 x 1/2"', (wcx + sx * 56.35, sy * 41.9, PL1 + 6.35), 6.4, 12.7, "Z", "screw", 6, (0, 0, -1))
         screw(S14, (wcx + sx * 56.35, sy * 41.9, PL0), (0, 0, 1))
 wz0 = PL1 + 12.7
 sub("Wombat on the standoffs, screen up, 4 screws from above.", [("Wombat", 1), (S12, 4)], zoom=(wcx, 0, wz0 + 30))
@@ -1040,46 +1045,46 @@ CARDS = {
     "Claw jaw (print 2)": "Our 3D print 2: the claw jaw, ONE solid piece. A flat base with a fixed finger and a curved pad for the pom. The moving finger is not printed: it is a LEGO 1x7 liftarm on a servo horn.",
     "Pocket plow (print 3)": "Our 3D print 3: a wide scoop on Robot B's nose. Pushes pom stacks and the pickleball.",
     "Cup hook (print 4)": "Our 3D print 4: long arm with a hook lip at the tip. Catches the cup rim.",
-    "Black Gear Motor": "Black KIPR drive motor: rectangular gearbox + round motor can, shaft on the side, 2 wires.",
+    "Black Gear Motor": "Black drive motor. It looks like a big servo: a black box with 2 ears and a round output on top. Red + black wires.",
     "Mecanum Wheel": "Wheel with angled rollers. Rollers must form an X when seen from above.",
     "Solarbotics Wheel": "Round black rubber wheel, pushes onto the motor shaft.",
     "Servo": "Standard servo: black box with 2 ears (screw holes) and a spline shaft on top. 3 wires.",
     "Micro Servo": "Small servo, same shape as the standard servo but half size.",
-    "Round Servo Horn": "Disc with a ring of small holes. Pushes onto a servo shaft.",
+    "Round Servo Horn": "Metal disc with a ring of 6 holes and a toothed hole in the middle. Pushes onto a servo shaft.",
     "1 x 5 Servo Horn": "Flat bar with 5 holes. The middle hole goes on the servo shaft.",
     "1 x 3 Liftarm": "LEGO beam with 3 round holes.",
     "1 x 5 Liftarm": "LEGO beam with 5 round holes.",
     "1 x 7 Liftarm": "LEGO beam with 7 round holes.",
     "1 x 11 Liftarm": "LEGO beam with 11 round holes.",
     "Pin w/ Friction": "Black LEGO pin with a ridge in the middle. Push it through 2 beams.",
-    "Servo Bracket": "Bent metal plate that holds a servo by its ears.",
-    "Micro Servo Mount": "Small metal plate that holds the micro servo.",
+    "Servo Bracket": "Metal L-shaped bracket with a rectangular window: the servo sits in the window, held by its ears.",
+    "Micro Servo Mount": "Small flat metal frame that holds the micro servo.",
     "Angle Bracket": "Metal L-shaped bracket (90 degree corner).",
     "Plate 4 x 12": "Flat metal plate, 4 holes by 12 holes.",
     "Strap 1 x 10": "Flat metal strip with 10 holes in a row.",
     "Channel 3 x 8": "U-shaped metal channel, 3 holes wide, 8 holes long.",
     "Chassis": "Big flat KIPR metal plate with folded edges: Robot B's base.",
-    "Caster": "Small ball caster: square plate with a free-rolling ball underneath.",
+    "Caster": "Ball caster: a steel ball in a black cup, with its 2 round plates.",
     "Wombat": "KIPR Wombat controller: black box with a touch screen; ports on the sides.",
-    "Wombat Battery": "Battery pack with red + black wires and a plug.",
-    "Small Touch": "Small push-button switch (red button).",
-    "Lever": "Switch with a long metal lever and a roller at its tip.",
-    "Tophat (Reflectance)": "Small round blue sensor that looks down at the floor tape.",
-    "ET (Rangefinder)": "Blue distance sensor with 2 round eyes.",
-    "Light": "Small light sensor with a round yellow cell on top.",
-    "Black Camera": "USB camera: black box with a round lens.",
-    'Standoff 8-32 x 1/2"': "Silver hex post, 1/2 inch long, threaded inside at both ends.",
-    'Standoff 8-32 x 1"': "Silver hex post, 1 inch long.",
-    'Standoff 8-32 x 2"': "Silver hex post, 2 inches long.",
+    "Wombat Battery": "Black battery pack with a yellow label, red + black wires and a yellow plug.",
+    "Small Touch": "Small black board with a push button.",
+    "Lever": "Red switch with a long metal lever.",
+    "Tophat (Reflectance)": "Small black board with a black sensor block sticking out. The block looks down at the floor tape.",
+    "ET (Rangefinder)": "Black board with 2 round eyes: the distance sensor.",
+    "Light": "Small black board with a thin black light cell.",
+    "Black Camera": "USB camera: long black body with a round lens.",
+    'Standoff 8-32 x 1/2"': "Black hex post, 1/2 inch long, threaded inside at both ends.",
+    'Standoff 8-32 x 1"': "Black hex post, 1 inch long.",
+    'Standoff 8-32 x 2"': "Black hex post, 2 inches long.",
     'Threaded Rod 8-32 x 1"': "Short threaded rod: joins two standoffs end to end.",
     S14: "Black screw, 1/4 inch (6 mm) long.",
     S12: "Black screw, 1/2 inch (13 mm) long.",
     S34: "Black screw, 3/4 inch (19 mm) long.",
     KEPS: "Black nut with a toothed washer on one side (teeth face the part).",
-    M3S: "Small silver M3 screw (for servo horns).",
+    M3S: "Long silver M3 screw with a flat head (for servo horns).",
     M3N: "Small silver M3 nut.",
-    HORNS: "Short silver screw: holds a horn on the servo shaft.",
-    "Brass Screws": "Tiny brass screws for switches.",
+    HORNS: "Short silver screw with a round head: holds a horn on the servo shaft.",
+    "Brass Screws": "Small pointed brass screws for switches.",
     '2-56 3/8" Micro Servo Mount Screw': "Tiny silver screw for the micro servo mount.",
     '2-56 1" Caster Screw': "Long thin silver screw for the caster.",
     'M3 x 0.5" x 6" Mecanum Wheel Screw': "Screw that holds a mecanum wheel on its shaft.",
