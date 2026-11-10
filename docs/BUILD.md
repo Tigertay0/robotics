@@ -159,6 +159,8 @@ Run the whole 120 s match with both robots. Watch the code animation (`docs/anim
 
 - **Ducks are 60 × 60 × 53 mm.** The printed chassis (print 1) was resized for them and must be printed again: 68 mm channel, deck 65 mm up, motor holes 7 mm lower and 8 mm closer to the middle.
 - **Five ducks need 300 mm of lane.** The intake plates now use their full 152 mm length, intake gate C sits at their front end on a bent-strap bridge, and pin gate B moved forward (its flap drops between duck 1 and duck 2).
+- **The duck run is 39.1 in** (was 36.6): the fifth duck is only fully behind intake gate C once the robot's centre is 7 in west of it. The robot then closes gate C and backs 2.5 in off the right wall.
+- **Before every drop except the first, the robot rolls 2.4 in forward** (`settle_ducks()`, exit gate shut, pin gate open). After a drop the other ducks are still one place forward in the lane; this slides them back against the exit gate. Without it the next drop releases nothing.
 - **Dropping a duck needs a 3.3 in creep** (was 2.5): the robot must move a whole duck length plus the 14 mm between the exit flap and the chassis rear.
 - **A dropped duck stays 2.5 in behind the robot's centre.** The drop positions in the plan and in `code/robot_a/main.c` were corrected for this (Zone 1 would have landed on tape).
 - **The switch at the rear of the lane no longer stops the duck run.** The first duck presses it long before the fifth is in. The run stops on distance.

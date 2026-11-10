@@ -132,6 +132,17 @@ static void gates_init(void) {
     set_servo_position(SERVO_GATE_A, GATE_CLOSED);   /* exit shut */
 }
 
+/* After a drop the remaining ducks are one place forward in the lane: pin gate B carried them along.
+   Roll forward one duck length with exit A shut and pin B open: the ducks stay on the floor and end up
+   against the exit flap again. Call this before every drop except the first. CALIBRATE. */
+#define SETTLE_IN   2.4
+static void settle_ducks(void) {
+    set_servo_position(SERVO_GATE_A, GATE_CLOSED);
+    set_servo_position(SERVO_GATE_B, GATE_OPEN);
+    msleep(200);
+    move_in(SETTLE_IN, 0, SPEED_SLOW);
+}
+
 /* release exactly one duck: pin holds duck #2, exit opens, robot creeps forward, exit shuts */
 static void drop_one_duck(void) {
     set_servo_position(SERVO_GATE_B, GATE_CLOSED);   /* pin the second duck from the rear */
@@ -141,7 +152,7 @@ static void drop_one_duck(void) {
     move_in(DROP_CREEP_IN, 0, SPEED_SLOW);           /* lane slides off the rear duck, it stays */
     set_servo_position(SERVO_GATE_A, GATE_CLOSED);
     msleep(250);
-    set_servo_position(SERVO_GATE_B, GATE_OPEN);     /* remaining ducks settle to the rear */
+    set_servo_position(SERVO_GATE_B, GATE_OPEN);     /* the others move to the rear in settle_ducks() */
     msleep(400);
 }
 
@@ -169,31 +180,38 @@ int main(void) {
     move_in(0, -3.2, SPEED_FAST);                                  /* -> (39.3, 25.4), lane mouth on the tape */
 
     /* swallow the five ducks, line-following east */
-    follow_tape_east(36.6, SPEED_LINE);                            /* -> (75.9, 25.4) */
+    /* far enough for the 5th duck to be completely behind intake gate C: 4 ducks are stacked in front of it */
+    follow_tape_east(39.1, SPEED_LINE);                            /* -> (78.4, 25.4) */
     set_servo_position(SERVO_GATE_C, GATE_CLOSED);
+    msleep(300);
+    move_in(-2.5, 0, SPEED_FAST);                                  /* -> (75.9, 25.4): gate C carries the ducks back */
 
     /* the lane is first in, first out: red leaves first */
     move_in(0, 7.6, SPEED_FAST);                                   /* -> (75.9, 33) */
     /* a dropped duck stays 2.5 in behind the robot's centre (where the rear duck sat in the lane) */
     drop_one_duck();                                               /* Zone 2: red duck at ~(73.4, 33); A -> (79.2, 33) */
     move_in(0, -15.4, SPEED_FAST);                                 /* -> (79.2, 17.6) */
-    move_in(-2.8, 0, SPEED_SLOW);                                  /* -> (76.4, 17.6) */
+    move_in(-5.2, 0, SPEED_SLOW);                                  /* -> (74, 17.6) */
+    settle_ducks();                                                /* -> (76.4, 17.6) */
     drop_one_duck();                                               /* Zone 4: green duck at ~(73.9, 17.6); A -> (79.7, 17.6) */
     move_in(0, 7.3, SPEED_FAST);                                   /* -> (79.7, 24.9) */
-    move_in(-33.2, 0, SPEED_FAST);                                 /* -> (46.5, 24.9), west along the empty lane */
-    move_in(0, 3.3, SPEED_FAST);                                   /* -> (46.5, 28.2) */
+    move_in(-35.6, 0, SPEED_FAST);                                 /* -> (44.1, 24.9), west along the empty lane */
+    move_in(0, 3.3, SPEED_FAST);                                   /* -> (44.1, 28.2) */
+    settle_ducks();                                                /* -> (46.5, 28.2) */
     drop_one_duck();                                               /* Zone 1: lavender duck at ~(44, 28.2); A -> (49.8, 28.2) */
     move_in(0, -7.2, SPEED_FAST);                                  /* -> (49.8, 21) */
     move_in(2.8, 0, SPEED_SLOW);                                   /* -> (52.6, 21), wait clear of B's descent */
     wait_until_s(T_A_WEST);
 
-    move_in(-14.1, 0, SPEED_FAST);                                 /* -> (38.5, 21), through Zone 3 */
+    move_in(-16.5, 0, SPEED_FAST);                                 /* -> (36.1, 21), through Zone 3 */
     wait_until_s(T_A_DOWN);
-    move_in(0, -14.2, SPEED_FAST);                                 /* -> (38.5, 6.8), into Zone 5 */
+    move_in(0, -14.2, SPEED_FAST);                                 /* -> (36.1, 6.8), into Zone 5 */
+    settle_ducks();                                                /* -> (38.5, 6.8) */
     drop_one_duck();                                               /* Zone 5: blue duck at ~(36, 6.8); A -> (41.8, 6.8) */
     move_in(0.5, 0, SPEED_SLOW);                                   /* -> (42.3, 6.8) */
     move_in(0, 14.2, SPEED_FAST);                                  /* -> (42.3, 21) */
-    drop_one_duck();                                               /* Zone 3: yellow duck at ~(39.8, 21) */
+    settle_ducks();                                                /* -> (44.7, 21) */
+    drop_one_duck();                                               /* Zone 3: yellow duck at ~(42.2, 21); A -> (48, 21) */
 
     stop_all();
     disable_servos();

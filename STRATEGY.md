@@ -80,11 +80,11 @@ move for move. Frame: inches from the inside corner of the bottom-left PVC. Robo
 | 0-3 | North out of zone 5, then west to (14.3, 17.9): out of B's way | Hook down; drags the upside-down lower cup west along the lower tape |
 | 3-12 | Waits (**hand-off 12 s**) | 6 s: pivots 20°, the cup rolls upright off the tape at (27, 8.9) in zone 5, its 3 poms spill; 7-10 s: grabs the red pom with the camera + claw |
 | 12-17 | East under the red stack, side-pushes the red stack + upper cup north into zone 1 | Waits holding the red pom (**hand-off 26 s**) |
-| 17-24 | Line-follows east, swallowing red, green, lavender, blue, yellow | same |
+| 17-25 | Line-follows east 39 in, swallowing red, green, lavender, blue, yellow; shuts intake gate C behind the fifth and backs 2.5 in | same |
 | 24-36 | Drops: zone 2 (70.6, 33), zone 4 (72.1, 17.6), zone 1 (44, 28.2). The lane is first in, first out | 27-50: pushes the green, lavender, turquoise and gold stacks north into zone 1 |
 | 36-60 | Waits at (52.6, 21) (**hand-off 60 s**) | 51-57: east along zone 3, arcs down to the bottom wall east of the cup |
 | 57-62 | same | Hook knocks pickleball 1 off its post, the plow pushes it under the platform; red pom on the platform, stops at 62 s |
-| 60-72 | West through zone 3; waits (**hand-off 66 s**); drops in zone 5 (33.2, 6.8) and zone 3 (35.7, 21), stops at 72 s | Stopped |
+| 60-72 | West through zone 3; waits (**hand-off 66 s**); drops in zone 5 (33.2, 6.8) and zone 3 (35.7, 21), stops at 74 s | Stopped |
 
 Checks the simulator runs every 0.05 s (`python tools/match_sim.py` must print NO CONTACTS):
 - both robots' true footprints never come within 0.25" of each other;
@@ -146,7 +146,7 @@ Step-by-step assembly with the 3D model: `guide/index.html`.
    duck; A pushes the red stack and the upper cup out of the lane itself. The upper cup stays
    upside down in zone 1 (no flip bonus) — its flip is a stretch item. The old timeline had B
    crossing the red duck and the robots meeting at the lower cup; the simulator now proves
-   0 contacts. Everything ends by 72 s, leaving ~45 s of margin for slower real robots.
+   0 contacts. Everything ends by 74 s, leaving ~45 s of margin for slower real robots.
 
 ## 8. Code
 

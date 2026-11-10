@@ -33,6 +33,10 @@ A_MOUTH = 11.42
 # duck (60 mm) sits centred 63 mm behind it; the next ones follow every 60 mm. A dropped duck stays where
 # the rear duck was: the robot creeps CREEP forward and the lane slides off it.
 LANE_REAR, LANE_PITCH, CREEP = -2.48, 2.36, 3.3
+# After a drop the other ducks are still one place forward (pin gate B carried them along). Before the next
+# drop the robot rolls SETTLE forward with exit A shut and pin B open: the stack stays on the floor and ends
+# up against the exit flap again. Without this the next drop releases nothing.
+SETTLE = 2.4
 LANE_Y = 25.44
 DUCK_X = {"red": 53.2, "green": 61.2, "lavender": 69.2, "blue": 77.2, "yellow": 85.2}
 STACK_X = {"gold": 8.0, "turquoise": 16.0, "lavender": 24.0, "green": 32.0, "red": 40.0}
@@ -45,7 +49,7 @@ POCKET = 4.92                      # B's plow pocket face, ahead of its centre
 # tunables (inches, seconds)
 P = {
     "A_start": (28.5, 5.7), "A_wait": (14.3, 17.9), "A_push_x": 39.26, "A_push_y": 28.6,
-    "A_z3_y": 21.0, "A_z5_x": 38.5, "A_z3_x": 42.3,
+    "A_z3_y": 21.0, "A_z5_x": 36.1, "A_z3_x": 42.3,
     "B_start": (63.8, 7.15), "B_approach": 8.4, "B_drag_to": 37.0, "B_pivot": 20.0, "B_backoff": 2.5, "B_grab_x": 41.8,
     "B_lane_y": 17.5, "B_gold_x": 11.0, "B_gold_to": 29.0,
     "B_descent_x": 32.5, "B_r1": 5.0, "B_r2": 4.9, "B_stop_x": 58.9,
@@ -97,11 +101,19 @@ def build():
     t_push1 = A.t
     A.go(P["A_push_x"], LANE_Y, label="A: move_in(0, -3.2): onto the duck lane")
     t_lane0 = A.t
-    A.go(75.9, LANE_Y, speed=5.5, label="A: follow_tape_east(36.6): swallow the 5 ducks")
+    # the 5th duck (x 85.2) is fully behind intake gate C only when A's centre is 6.96 in west of it (78.24):
+    # 4 ducks of 2.36 in are already stacked from 2.48 in behind the centre
+    lane_end = DUCK_X["yellow"] - (LANE_REAR + 4 * LANE_PITCH) + 0.16
+    A.go(lane_end, LANE_Y, speed=5.5, label="A: follow_tape_east(39.1): swallow the 5 ducks")
     t_lane1 = A.t
+    A.wait(0.3, label="A: set_servo_position(SERVO_GATE_C, GATE_CLOSED): intake shut behind the 5th duck")
+    A.go(75.9, LANE_Y, label="A: move_in(-2.5, 0): back off the right wall, gate C carries the ducks")
     drops = []
 
     def drop(zone):
+        if drops:                                  # not before the first drop: the lane run already packed the stack
+            x, y, _ = A.state
+            A.go(x + SETTLE, y, speed=4, label="A: settle_ducks(): roll 2.4 in forward, the stack slides back to exit gate A")
         drops.append((zone, A.t))
         A.wait(0.8, label="A: drop_one_duck(): pin B closes, exit A opens")
         x, y, _ = A.state
@@ -110,11 +122,11 @@ def build():
     A.go(75.9, 33.0, label="A: move_in(0, 7.6): into Zone 2")
     drop("Z2")
     A.go(79.2, 17.6, label="A: move_in(0, -15.4): down into Zone 4")
-    A.go(76.4, 17.6, label="A: move_in(-2.8, 0)")
+    A.go(74.0, 17.6, label="A: move_in(-5.2, 0)")
     drop("Z4")
     A.go(79.7, 24.9, label="A: move_in(0, 7.3): back onto the lane line")
-    A.go(46.5, 24.9, label="A: move_in(-33.2, 0): west along the empty lane")
-    A.go(46.5, 28.2, label="A: move_in(0, 3.3): Zone 1")
+    A.go(44.1, 24.9, label="A: move_in(-35.6, 0): west along the empty lane")
+    A.go(44.1, 28.2, label="A: move_in(0, 3.3): Zone 1")
     drop("Z1")
     A.go(49.8, P["A_z3_y"], label="A: move_in(0, -7.2): wait above the lower tape")
     A.go(52.6, P["A_z3_y"], label="A: move_in(2.8, 0)")
@@ -163,8 +175,9 @@ def build():
 
     # ============================================================ Robot A, part 2 (after B has left Zone 3)
     A.wait_until(handoff("T_A_west", t_ball0), label="A: wait until 60 s: B has left Zone 3")
-    A.go(P["A_z5_x"], P["A_z3_y"], label="A: move_in(-14.1, 0): west through Zone 3")
-    t_down = time_when(B.keys, lambda p: p[0] - 4.82 >= P["A_z5_x"] + A_FULL[1] + 0.5, t_ball0, t_ball1)
+    A.go(P["A_z5_x"], P["A_z3_y"], label="A: move_in(-16.5, 0): west through Zone 3")
+    z5_front = P["A_z5_x"] + SETTLE + CREEP + A_FULL[1]          # A's front after the settle and the creep in Zone 5
+    t_down = time_when(B.keys, lambda p: p[0] - 4.82 >= z5_front + 0.5, t_ball0, t_ball1)
     A.wait_until(handoff("T_A_down", t_down), label="A: wait until 66 s: B is parked at the platform")
     A.go(P["A_z5_x"], 6.8, label="A: move_in(0, -14.2): down into Zone 5")
     drop("Z5")
@@ -187,15 +200,21 @@ def build():
         dx = DUCK_X[n]
         end_t, px, py = drop_pos[zone_for[n]]
         track = [(0, dx, LANE_Y), (tc[n], dx, LANE_Y)]
-        t, loc, ax_prev = tc[n] + 0.25, dx - pose(A.keys, tc[n])[0], pose(A.keys, tc[n])[0]
-        while t < end_t:
+        loc, ax_prev = dx - pose(A.keys, tc[n])[0], pose(A.keys, tc[n])[0]
+        # sample on a 0.1 s grid plus every keyframe of A, so a duck never lags the robot between samples
+        grid = {round(tc[n] + 0.1 * k, 3) for k in range(1, int((end_t - tc[n]) / 0.1) + 1)}
+        grid |= {round(k[0], 3) for k in A.keys if tc[n] < k[0] < end_t}
+        for t in sorted({g for g in grid if g < end_t} | {end_t}):
             ax, ay, _ = pose(A.keys, t)
-            ahead = sum(1 for m in order if tc[m] < tc[n] and td[m] > t)        # ducks between this one and the exit
+            # ducks between this one and the exit. A duck being dropped still counts until the creep is over:
+            # pin gate B holds the others in place meanwhile (they do not slide back during the creep)
+            ahead = sum(1 for m in order if tc[m] < tc[n] and td[m] + 0.8 + CREEP / 4.0 > t - 2e-3)
             rear = LANE_REAR + LANE_PITCH * ahead
             loc = max(rear, min(loc, loc - (ax - ax_prev)))     # east: the lane slides over it; west: the rear gate carries it
             ax_prev = ax
-            track.append((t, ax + loc, ay))
-            t += 0.25
+            if t < end_t:
+                track.append((t, ax + loc, ay))
+        assert abs(loc - LANE_REAR) < 0.05, f"duck {n} is not at the exit gate when its drop starts (lane position {loc:.2f} in)"
         track += [(end_t, px, py), (120, px, py)]
         pieces.append({"name": f"duck {n}", "kind": "duck", "color": n, "r": R_DUCK, "h": H_DUCK, "track": track,
                        "carried_by": "A", "carried_from": tc[n], "carried_to": end_t,

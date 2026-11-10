@@ -602,7 +602,9 @@ function buildIntro(R, data) {
     const insts = inf.subs.flatMap(s => s.insts);
     const base = insts.filter(it => it.kind === 'part').sort((a, b) => b.vol - a.vol)[0];
     const it = { label: inf.label, inf, insts, base, fingers: [], curves: [], open: 0, axis: new THREE.Vector3(0, 1, 0), P: base ? base.center.clone() : inf.center.clone() };
-    const fm = inf.meshes.filter(m => /\(finger\s*[LR]\)/i.test(m.label));
+    const fl = (clawD && clawD.finger_labels) || {};   /* a kit part can be a finger: its label is listed here */
+    const isF = (m, sd) => (sd === 'L' ? /\(finger\s*L\)/i : /\(finger\s*R\)/i).test(m.label) || fl[sd] === m.label;
+    const fm = inf.meshes.filter(m => isF(m, 'L') || isF(m, 'R'));
     const pv = clawD && clawD.pivots;
     const pivOf = sd => { if (!pv) return null; if (Array.isArray(pv)) return null; const v = pv['finger_' + sd] || pv[sd]; return Array.isArray(v) ? B2T(v) : null; };
     const pivList = Array.isArray(pv) ? pv.map(B2T) : pv ? Object.values(pv).filter(Array.isArray).map(B2T) : [];
@@ -610,7 +612,7 @@ function buildIntro(R, data) {
       it.axis = B2T(clawD.axis || [0, 0, 1]).normalize();
       it.open = THREE.MathUtils.degToRad(Number(clawD.open_deg) || 25);
       it.P = pivList.reduce((a, b) => a.add(b), new THREE.Vector3()).multiplyScalar(1 / pivList.length);
-      const sides = ['L', 'R'].map(sd => ({ sd, ms: fm.filter(m => (sd === 'L' ? /\(finger\s*L\)/i : /\(finger\s*R\)/i).test(m.label)) })).filter(x => x.ms.length);
+      const sides = ['L', 'R'].map(sd => ({ sd, ms: fm.filter(m => isF(m, sd)) })).filter(x => x.ms.length);
       const centers = sides.map(({ ms }) => { const b = new THREE.Box3(); ms.forEach(m => b.union(m.box)); return b.getCenter(new THREE.Vector3()); });
       sides.forEach(({ sd, ms }, i) => {
         const c = centers[i], p = pivOf(sd) || pivList.slice().sort((a, b) => a.distanceTo(c) - b.distanceTo(c))[0];
@@ -1106,7 +1108,12 @@ async function buildThumbs() {
     grp.traverse(o => { if (o.isMesh) o.material.dispose(); });
   };
   for (const R of RB) {
-    for (const pi of R.partInfo.values()) if (pi.type === 'part' && pi.inst) shot(R.def.key + '|' + pi.name, pi.inst.meshes);
+    for (const pi of R.partInfo.values()) {
+      if (pi.type !== 'part') continue;
+      /* a part drawn only as a tagged sub-mesh (e.g. the liftarm that is the claw's finger) still gets its picture */
+      const ms = pi.inst ? pi.inst.meshes : R.meshes.filter(m => m.part === pi.name);
+      if (ms.length) shot(R.def.key + '|' + pi.name, ms);
+    }
     for (const inf of R.labels.values()) shot(R.def.key + '|SA|' + inf.label, inf.meshes);
     await new Promise(r => setTimeout(r, 0));
   }

@@ -21,6 +21,8 @@ Both follow plan v3: `../tools/match_plan.py`, checked by `python ../tools/match
 4. Robot A's drop sequence is the single most important thing: run `drop_one_duck()` 50 times
    in a row on a bench and check that exactly one duck comes out each time. `DROP_CREEP_IN` (3.3 in)
    must move the robot far enough for the exit flap to close behind the dropped duck (60 mm ducks).
+   Test `settle_ducks()` the same way: after it, the next duck must sit against the exit flap, with
+   the pin flap able to drop behind it.
 
 ## Hand-off times
 The robots don't talk to each other. Each "wait for the other robot" is a fixed time after the start light (`wait_until_s`). Both programs record the light time in `t_light`.
